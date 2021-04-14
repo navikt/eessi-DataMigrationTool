@@ -19,6 +19,7 @@ import eu.ec.dgempl.eessi.rina.tool.migration.importer.dataimport.CaseImporter;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dataimport.ElasticTypeImporter;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.EElasticType;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.CaseFields;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.service.SequenceUpdateService;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.CasesUtils;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.ImporterUtils;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.ProgrammaticTransactionUtil;
@@ -71,6 +72,7 @@ public class AbstractCasesImporter extends AbstractDataImporter {
                         }
                     }
                 }
+                applicationContext.getBean(SequenceUpdateService.class).updateSequences();
             });
         } catch (Exception e) {
             logger.error("Error occurred when importing case: " + caseId, e);

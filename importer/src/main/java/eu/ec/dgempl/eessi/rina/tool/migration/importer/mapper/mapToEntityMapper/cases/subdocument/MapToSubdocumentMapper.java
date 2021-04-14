@@ -1,8 +1,10 @@
 package eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper.cases.subdocument;
 
+import static eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.DateUtils.*;
+
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -11,9 +13,16 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import eu.ec.dgempl.eessi.rina.commons.date.ZonedDateTimePeriod;
 import eu.ec.dgempl.eessi.rina.commons.transformation.RinaJsonMapper;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.ESubdocPrefillGroup;
-import eu.ec.dgempl.eessi.rina.model.jpa.entity.*;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity.Document;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity.IamUser;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity.RinaCase;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity.Subdocument;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity.SubdocumentAttachment;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity.SubdocumentBversion;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity.SubdocumentPrefill;
 import eu.ec.dgempl.eessi.rina.model.jpa.exception.EntityNotFoundEessiRuntimeException;
 import eu.ec.dgempl.eessi.rina.model.jpa.exception.UniqueIdentifier;
 import eu.ec.dgempl.eessi.rina.repo.DocumentRepo;
@@ -70,27 +79,43 @@ public class MapToSubdocumentMapper extends AbstractMapToEntityMapper<MapHolder,
     private void mapAttachments(final MapHolder a, final Subdocument b) {
         List<MapHolder> attachmentMapHolders = a.listToMapHolder("attachments");
         if (CollectionUtils.isNotEmpty(attachmentMapHolders)) {
-            attachmentMapHolders.stream().map(subdocument -> mapSubdocumentAttachment(subdocument, b)).forEach(b::addSubdocumentAttachment);
+            attachmentMapHolders.stream()
+                    .map(subdocument -> mapSubdocumentAttachment(subdocument, b))
+                    .forEach(b::addSubdocumentAttachment);
         }
     }
 
     private SubdocumentAttachment mapSubdocumentAttachment(final MapHolder a, final Subdocument b) {
         SubdocumentAttachment subdocumentAttachment = mapperFacade.map(a, SubdocumentAttachment.class);
+        List<SubdocumentBversion> subdocumentBversions = b.getSubdocumentBversions();
         List<MapHolder> versions = a.listToMapHolder("versions");
         if (CollectionUtils.isNotEmpty(versions)) {
-            versions.stream().map(version -> Integer.parseInt(version.string("id")))
-                    .map(versionId -> b.getSubdocumentBversions().stream().filter(bversion -> bversion.getId() == versionId).findAny())
-                    .filter(Optional::isPresent).map(Optional::get)
-                    .forEach(bversion -> bversion.addSubdocumentAttachment(subdocumentAttachment));
+            Map<ZonedDateTimePeriod, Integer> intervalPairs = getIntervalsMap(subdocumentBversions);
+
+            versions.forEach(
+                    version -> {
+                        ZonedDateTime creationDate = parseDate(version.string("date"));
+                        int intervalIndex = getIntervalIndex(intervalPairs, creationDate);
+                        if (intervalIndex > -1) {
+                            for (int idx = intervalIndex; idx < subdocumentBversions.size(); idx++) {
+                                subdocumentBversions.get(idx).addSubdocumentAttachment(subdocumentAttachment);
+                            }
+                        }
+                    }
+            );
+        } else {
+            subdocumentBversions.forEach(bversion -> bversion.addSubdocumentAttachment(subdocumentAttachment));
         }
+
         return subdocumentAttachment;
     }
 
     private void mapBVersions(final MapHolder a, final Subdocument b) {
         List<MapHolder> versions = a.listToMapHolder("versions");
         if (CollectionUtils.isNotEmpty(versions)) {
-            versions.stream().map(version -> mapperFacade.map(version, SubdocumentBversion.class))
-                    .peek(bversion -> bversion.setSubdocument(b)).forEach(b::addSubdocumentBversion);
+            versions.stream()
+                    .map(version -> mapperFacade.map(version, SubdocumentBversion.class))
+                    .forEach(b::addSubdocumentBversion);
         }
     }
 
@@ -168,5 +193,4 @@ public class MapToSubdocumentMapper extends AbstractMapToEntityMapper<MapHolder,
             return subdocumentPrefill;
         }).collect(Collectors.toList());
     }
-
 }

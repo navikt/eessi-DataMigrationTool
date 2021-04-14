@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import eu.ec.dgempl.eessi.rina.commons.es.LocalUuidUtil;
@@ -29,17 +30,16 @@ import eu.ec.dgempl.eessi.rina.model.jpa.entity.AssignmentPolicyRule;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.AssignmentPolicyRuleCountry;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.IamGroup;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.IamUser;
-import eu.ec.dgempl.eessi.rina.model.jpa.entity.Organisation;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.ProcessDef;
 import eu.ec.dgempl.eessi.rina.repo.IamGroupRepo;
 import eu.ec.dgempl.eessi.rina.repo.IamUserRepo;
-import eu.ec.dgempl.eessi.rina.repo.OrganisationRepo;
 import eu.ec.dgempl.eessi.rina.repo.ProcessDefRepo;
 import eu.ec.dgempl.eessi.rina.repo.RoleRepo;
 import eu.ec.dgempl.eessi.rina.repo.SectorRepo;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.AssignmentPolicyFields;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper._abstract.AbstractMapToEntityMapper;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.service.OrganisationService;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.RepositoryUtils;
 
 import ma.glasnost.orika.MappingContext;
@@ -49,17 +49,20 @@ public class MapToAssignmentPolicyRuleMapper extends AbstractMapToEntityMapper<M
 
     private final IamUserRepo iamUserRepo;
     private final IamGroupRepo iamGroupRepo;
-    private final OrganisationRepo organisationRepo;
     private final ProcessDefRepo processDefRepo;
     private final RoleRepo roleRepo;
     private final SectorRepo sectorRepo;
 
-    public MapToAssignmentPolicyRuleMapper(final IamUserRepo iamUserRepo, final IamGroupRepo iamGroupRepo,
-            final OrganisationRepo organisationRepo, final ProcessDefRepo processDefRepo,
+    @Autowired
+    private OrganisationService organisationService;
+
+    public MapToAssignmentPolicyRuleMapper(
+            final IamUserRepo iamUserRepo,
+            final IamGroupRepo iamGroupRepo,
+            final ProcessDefRepo processDefRepo,
             final RoleRepo roleRepo, final SectorRepo sectorRepo) {
         this.iamUserRepo = iamUserRepo;
         this.iamGroupRepo = iamGroupRepo;
-        this.organisationRepo = organisationRepo;
         this.processDefRepo = processDefRepo;
         this.roleRepo = roleRepo;
         this.sectorRepo = sectorRepo;
@@ -100,7 +103,7 @@ public class MapToAssignmentPolicyRuleMapper extends AbstractMapToEntityMapper<M
         if (CollectionUtils.isNotEmpty(organisations)) {
             organisations.stream()
                     .map(organisation -> organisation.string(AssignmentPolicyFields.ORGANISATION_ID))
-                    .map(organisation -> RepositoryUtils.findById(organisation, organisationRepo::findById, Organisation.class))
+                    .map(organisationService::getOrSaveOrganisation)
                     .forEach(b::addOrganisation);
         }
     }

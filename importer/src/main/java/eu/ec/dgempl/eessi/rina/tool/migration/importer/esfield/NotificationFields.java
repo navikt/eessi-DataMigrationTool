@@ -12,7 +12,8 @@ public class NotificationFields {
     public static final String DUE_DATE = "dueDate";
     public static final String IS_READ = "isRead";
     public static final String SOURCE_TYPE = "sourceType";
-    public static final String CREATOR = "creator.name";
+    public static final String CREATOR_ID = "creator.id";
+    public static final String CREATOR_NAME = "creator.name";
     public static final String SENDER = "creator.organisation.id";
     public static final String RECEIVER = "document.receiver";
     public static final String RECEIVER_ORGANISATION = "document.receiver.organisation";

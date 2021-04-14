@@ -2,6 +2,7 @@ package eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper
 
 import java.util.Arrays;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import eu.ec.dgempl.eessi.rina.model.enumtypes.portal.EColour;
@@ -31,6 +32,7 @@ public class MapToActivityMapper extends AbstractMapToEntityMapper<MapHolder, Ac
 
     @Override
     public void mapAtoB(final MapHolder a, final Activity b, final MappingContext context) {
+        mapId(a, b);
         mapRinaCase(a, b);
         mapColour(a, b);
         mapDate(a, ActivityFields.START_DATE, b::setStartDate);
@@ -40,6 +42,14 @@ public class MapToActivityMapper extends AbstractMapToEntityMapper<MapHolder, Ac
         b.setMessage(a.string(ActivityFields.MESSAGE));
 
         b.setTitle(a.string(ActivityFields.TITLE));
+    }
+
+    private void mapId(final MapHolder a, final Activity b) {
+        String activityId = a.string("id");
+        if (StringUtils.isBlank(activityId)) {
+            activityId = a.string("_id");
+        }
+        b.setId(activityId);
     }
 
     private void mapAudit(final MapHolder a, final Activity b) {

@@ -20,6 +20,7 @@ import eu.ec.dgempl.eessi.rina.buc.precondition.PreconditionsHelper;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.EDocumentStatus;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.Document;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.RinaCase;
+import eu.ec.dgempl.eessi.rina.repo.DocumentRepoExtended;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.service.ActionService;
 
 /**
@@ -29,6 +30,8 @@ import eu.ec.dgempl.eessi.rina.tool.migration.importer.service.ActionService;
 public abstract class AbstractByStatusAndParameterReceiveActionProducer implements ReceiveActionProducer {
 
     private static final Logger logger = LoggerFactory.getLogger(AbstractByStatusAndParameterReceiveActionProducer.class);
+
+    private DocumentRepoExtended documentRepo;
 
     @Autowired
     private ActionService actionService;
@@ -80,7 +83,8 @@ public abstract class AbstractByStatusAndParameterReceiveActionProducer implemen
     protected List<Document> getDocumentsToProcess(final RinaCase rinaCase, final Case buc) {
 
         // @formatter:off
-        return rinaCase.getDocuments()
+        List<Document> documents = documentRepo.findByRinaCaseId(rinaCase.getId());
+        return documents
                         .stream()
                         .filter(d -> getDocumentStatus().equals(d.getStatus()) && isParameterTrue(d, buc))
                         .collect(Collectors.toList());
@@ -181,4 +185,8 @@ public abstract class AbstractByStatusAndParameterReceiveActionProducer implemen
 
     }
 
+    @Autowired
+    public void setDocumentRepo(final DocumentRepoExtended documentRepo) {
+        this.documentRepo = documentRepo;
+    }
 }

@@ -7,12 +7,12 @@
     <parent>
         <groupId>eu.ec.dgempl.eessi</groupId>
         <artifactId>ES2SQL_data_migration</artifactId>
-        <version>2.0.1</version>
+        <version>2.0.2</version>
         <relativePath>../</relativePath>
     </parent>
 
     <artifactId>application</artifactId>
-    <version>2.0.1</version>
+    <version>2.0.2</version>
 
     <dependencies>
         <dependency>
@@ -68,8 +68,10 @@
                                         <include>field_mappings/*.*</include>
                                         <include>jpa/*.*</include>
                                         <include>sql/*.*</include>
+                                        <include>sql/post-merge/*.*</include>
                                         <include>application.properties</include>
                                         <include>log4j2.xml</include>
+                                        <include>Organisations.csv</include>
                                     </includes>
                                 </resource>
                             </resources>
@@ -91,6 +93,7 @@
                     <exclude>sql/*</exclude>
                     <exclude>application.properties</exclude>
                     <exclude>log4j2.xml</exclude>
+                    <exclude>Organisations.csv</exclude>
                 </excludes>
             </resource>
         </resources>

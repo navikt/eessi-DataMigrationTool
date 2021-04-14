@@ -72,4 +72,8 @@ public class DocumentFields {
     public static final String ATTACHMENT_CREATION_DATE = "creationDate";
     public static final String ATTACHMENT_LAST_UPDATE = "lastUpdate";
     public static final String ATTACHMENT_CREATOR_ID = "creator.id";
+
+    public static final String CASE_IDENTIFICATION = "caseIdentification";
+    public static final String PROTECTED_PERSON = "protectedPerson";
+    public static final String IS_PROTECTED_PERSON = "isProtectedPerson";
 }

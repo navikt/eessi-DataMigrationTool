@@ -3,8 +3,6 @@ package eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper
 import static eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.SearchDefinitionFields.*;
 import static eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.RepositoryUtils.*;
 
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -12,8 +10,8 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import eu.ec.dgempl.eessi.rina.model.enumtypes.EUserOrGroupType;
@@ -24,11 +22,11 @@ import eu.ec.dgempl.eessi.rina.model.jpa.entity.ProcessDef;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.SearchDefinition;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity._abstraction.Persistable;
 import eu.ec.dgempl.eessi.rina.repo.IamGroupRepo;
-import eu.ec.dgempl.eessi.rina.repo.OrganisationRepo;
+import eu.ec.dgempl.eessi.rina.repo.IamUserRepoExtended;
 import eu.ec.dgempl.eessi.rina.repo.ProcessDefRepo;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper._abstract.AbstractMapToEntityMapper;
-import eu.ec.dgempl.eessi.rina.repo.IamUserRepoExtended;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.service.OrganisationService;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.RepositoryUtils;
 
 import ma.glasnost.orika.MappingContext;
@@ -39,17 +37,17 @@ public class MapToSearchDefinitionMapper extends AbstractMapToEntityMapper<MapHo
     private final IamGroupRepo iamGroupRepo;
     private final IamUserRepoExtended iamUserRepo;
     private final ProcessDefRepo processDefRepo;
-    private final OrganisationRepo organisationRepo;
+
+    @Autowired
+    private OrganisationService organisationService;
 
     public MapToSearchDefinitionMapper(
             final IamUserRepoExtended iamUserRepo,
             final IamGroupRepo iamGroupRepo,
-            final ProcessDefRepo processDefRepo,
-            final OrganisationRepo organisationRepo) {
+            final ProcessDefRepo processDefRepo) {
         this.iamUserRepo = iamUserRepo;
         this.iamGroupRepo = iamGroupRepo;
         this.processDefRepo = processDefRepo;
-        this.organisationRepo = organisationRepo;
     }
 
     @Override
@@ -151,7 +149,7 @@ public class MapToSearchDefinitionMapper extends AbstractMapToEntityMapper<MapHo
 
     @NotNull
     private Organisation findOrganisationById(String id) {
-        return findById(id, organisationRepo::findBySimpleNaturalId, Organisation.class);
+        return organisationService.getOrSaveOrganisation(id);
     }
 
     private ProcessDef findProcessDefById(String id) {

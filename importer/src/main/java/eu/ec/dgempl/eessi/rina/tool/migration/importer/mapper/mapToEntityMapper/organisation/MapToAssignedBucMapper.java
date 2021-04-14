@@ -1,28 +1,18 @@
 package eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper.organisation;
 
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Component;
-
 import eu.ec.dgempl.eessi.rina.model.enumtypes.EApplicationRole;
 import eu.ec.dgempl.eessi.rina.model.exception.runtime.enums.EnumNotFoundEessiRuntimeException;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.AssignedBuc;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.ProcessDef;
-import eu.ec.dgempl.eessi.rina.model.jpa.entity._abstraction.Audit;
-import eu.ec.dgempl.eessi.rina.model.jpa.exception.EntityNotFoundEessiRuntimeException;
-import eu.ec.dgempl.eessi.rina.model.jpa.exception.UniqueIdentifier;
 import eu.ec.dgempl.eessi.rina.repo.ProcessDefRepo;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.AssignedBucFields;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper._abstract.AbstractMapToEntityMapper;
-
 import ma.glasnost.orika.MappingContext;
+import org.springframework.stereotype.Component;
 
 @Component
 public class MapToAssignedBucMapper extends AbstractMapToEntityMapper<MapHolder, AssignedBuc> {
-
     private final ProcessDefRepo processDefRepo;
 
     public MapToAssignedBucMapper(ProcessDefRepo processDefRepo) {
@@ -55,10 +45,8 @@ public class MapToAssignedBucMapper extends AbstractMapToEntityMapper<MapHolder,
     private void mapProcessDefinition(final MapHolder a, final AssignedBuc b) {
         String processDefName = a.string(AssignedBucFields.BUC_TYPE);
         ProcessDef processDef = processDefRepo.findById(processDefName);
-        if (processDef == null) {
-            throw new EntityNotFoundEessiRuntimeException(ProcessDef.class, UniqueIdentifier.name, processDefName);
-        }
 
+        // the processDef is null case will be checked on MapToOrganisationMapper
         b.setProcessDef(processDef);
     }
 

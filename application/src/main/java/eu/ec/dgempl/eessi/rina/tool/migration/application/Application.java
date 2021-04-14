@@ -30,6 +30,7 @@ import eu.ec.dgempl.eessi.rina.tool.migration.exporter.service.ValidationService
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dataimport.CaseImporter;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dataimport.DataImporter;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dataimport.ElasticTypeImporter;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.service.SequenceUpdateService;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.CasesUtils;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.ProgrammaticTransactionUtil;
 
@@ -234,6 +235,7 @@ public class Application implements CommandLineRunner, ApplicationContextAware {
                         importer.importData(caseId);
                     }
                 }
+                applicationContext.getBean(SequenceUpdateService.class).updateSequences();
             });
         } catch (Exception e) {
             logger.error("Error occurred when importing case: " + caseId, e);

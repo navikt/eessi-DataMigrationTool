@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -15,22 +16,22 @@ import eu.ec.dgempl.eessi.rina.model.enumtypes.EUserMessageStatus;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.Organisation;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.UserMessage;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.UserMessageResponse;
-import eu.ec.dgempl.eessi.rina.repo.OrganisationRepo;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.DocumentFields;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper._abstract.AbstractMapToEntityMapper;
-import eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.RepositoryUtils;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.service.OrganisationService;
 
 import ma.glasnost.orika.MappingContext;
 
 @Component
 public class MapToUserMessageMapper extends AbstractMapToEntityMapper<MapHolder, UserMessage> {
 
-    private final OrganisationRepo organisationRepo;
     private final RinaJsonMapper rinaJsonMapper;
 
-    public MapToUserMessageMapper(final OrganisationRepo organisationRepo, final RinaJsonMapper rinaJsonMapper) {
-        this.organisationRepo = organisationRepo;
+    @Autowired
+    private OrganisationService organisationService;
+
+    public MapToUserMessageMapper(final RinaJsonMapper rinaJsonMapper) {
         this.rinaJsonMapper = rinaJsonMapper;
     }
 
@@ -52,6 +53,8 @@ public class MapToUserMessageMapper extends AbstractMapToEntityMapper<MapHolder,
 
             // fix isMedical flag; in ES the field is named 'medical'; the DTOs use 'isMedical'
             fixMedicalFieldName(sbdh);
+            // fix isProtectedPerson flag; in ES the field is named 'protectedPerson'; the DTOs use 'isProtectedPerson'
+            fixProtectedFieldName(sbdh);
 
             b.setSbdh(rinaJsonMapper.mapToJson(sbdh));
         } catch (JsonProcessingException e) {
@@ -70,6 +73,15 @@ public class MapToUserMessageMapper extends AbstractMapToEntityMapper<MapHolder,
                     attachment.put(DocumentFields.IS_MEDICAL, isMedical);
                 }
             }
+        }
+    }
+
+    private void fixProtectedFieldName(Map<String, Object> sbdh) {
+        Map<String, Object> caseIdentification = (Map<String, Object>) sbdh.get(DocumentFields.CASE_IDENTIFICATION);
+        if (caseIdentification.containsKey(DocumentFields.PROTECTED_PERSON)) {
+            Boolean isProtectedPerson = (Boolean) caseIdentification.get(DocumentFields.PROTECTED_PERSON);
+            caseIdentification.remove(DocumentFields.PROTECTED_PERSON);
+            caseIdentification.put(DocumentFields.IS_PROTECTED_PERSON, isProtectedPerson);
         }
     }
 
@@ -103,6 +115,8 @@ public class MapToUserMessageMapper extends AbstractMapToEntityMapper<MapHolder,
         userMessageResponse.setId(a.string(DocumentFields.USER_MESSAGE_RESPONSE_ID));
         userMessageResponse.setDescription(a.string(DocumentFields.DESCRIPTION));
         mapDate(a, DocumentFields.USER_MESSAGE_RESPONSE_DATE, userMessageResponse::setLastUpdate);
+
+        b.setUserMessageResponse(userMessageResponse);
     }
 
     private void mapOrganisation(final MapHolder a, final String key, final Consumer<Organisation> organisationConsumer) {
@@ -111,7 +125,7 @@ public class MapToUserMessageMapper extends AbstractMapToEntityMapper<MapHolder,
 
     private Organisation findOrganisation(final MapHolder a, String key) {
         String orgId = a.string(key + ".id", true);
-        return RepositoryUtils.findById(orgId, organisationRepo::findById, Organisation.class);
+        return organisationService.getOrSaveOrganisation(orgId);
     }
 
 }

@@ -26,4 +26,19 @@ public class AssignmentPolicyServiceTest {
         actorName = service.getActorName("CP", "FB_BUC_01", "5340");
         Assert.assertEquals(ERole.UNAUTHORIZED_CLERK.name(), actorName);
     }
+
+    @Test
+    public void testGetActorNameNoRole() throws IOException {
+        String path = AssignmentPolicyServiceTest.class.getClassLoader().getResource("ProcessDefinitionAssignmentsNoRoles.json").getPath();
+        AssignmentPolicyService service = new AssignmentPolicyService(new RinaJsonMapper(new ObjectMapper()), path);
+
+        String actorName = service.getActorName("PO", "R_BUC_05", "7596");
+        Assert.assertNull(actorName);
+
+        actorName = service.getActorName("CP", "R_BUC_05", "6000");
+        Assert.assertNull(actorName);
+
+        actorName = service.getActorName("CP", "FB_BUC_01", "5340");
+        Assert.assertNull(actorName);
+    }
 }

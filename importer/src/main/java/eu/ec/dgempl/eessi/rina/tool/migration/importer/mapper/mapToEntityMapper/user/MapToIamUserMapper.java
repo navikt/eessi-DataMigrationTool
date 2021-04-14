@@ -2,6 +2,8 @@ package eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper
 
 import static eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.UserFields.*;
 
+import java.security.SecureRandom;
+import java.util.Base64;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -24,6 +26,7 @@ import ma.glasnost.orika.MappingContext;
 
 @Component
 public class MapToIamUserMapper extends AbstractMapToEntityMapper<MapHolder, IamUser> {
+    private static final SecureRandom SECURE_RANDOM = new SecureRandom();
 
     private final IamOriginRepo iamOriginRepo;
     private final TenantRepo tenantRepo;
@@ -51,8 +54,18 @@ public class MapToIamUserMapper extends AbstractMapToEntityMapper<MapHolder, Iam
         b.setFirstName(a.string(UserFields.FIRS_NAME));
         b.setLastName(a.string(UserFields.LAST_NAME));
         b.setEmail(a.string(UserFields.EMAIL));
+
+        if (a.string(UserFields.SALT) == null) {
+            if (a.string(UserFields.PASSWORD) != null) {
+                throw new RuntimeException("For user " + b.getUsername() + " the salt is null and the password is not null");
+            }
+            b.setSalt(generatePasswordSalt());
+        } else {
+            b.setSalt(a.string(UserFields.SALT));
+        }
+
         b.setPassword(a.string(UserFields.PASSWORD));
-        b.setSalt(a.string(UserFields.SALT));
+
         b.setIsSystem(false);
         b.setIsEnabled(a.bool(UserFields.IS_ENABLED));
         b.setIsDeleted(a.bool(UserFields.IS_DELETED));
@@ -87,5 +100,18 @@ public class MapToIamUserMapper extends AbstractMapToEntityMapper<MapHolder, Iam
             throw new EntityNotFoundEessiRuntimeException(Tenant.class, UniqueIdentifier.id, tenantId);
         }
         b.setTenant(tenant);
+    }
+
+    /**
+     * Generates a base64 encoded salt string for the password
+     *
+     * @return
+     */
+    private String generatePasswordSalt() {
+
+        byte[] bytes = new byte[10];
+        SECURE_RANDOM.nextBytes(bytes);
+        return Base64.getEncoder().encodeToString(bytes);
+
     }
 }

@@ -12,6 +12,7 @@ import org.springframework.util.StringUtils;
 import eu.ec.dgempl.eessi.rina.tool.migration.common.model.EEsIndex;
 import eu.ec.dgempl.eessi.rina.tool.migration.common.model.EEsType;
 import eu.ec.dgempl.eessi.rina.tool.migration.common.service.EsClientService;
+import eu.ec.dgempl.eessi.rina.tool.migration.common.service.OrganisationLoaderService;
 import eu.ec.dgempl.eessi.rina.tool.migration.common.util.PreconditionsHelper;
 import eu.ec.dgempl.eessi.rina.tool.migration.exporter.cache.CacheEntry;
 import eu.ec.dgempl.eessi.rina.tool.migration.exporter.model.EValidationResult;
@@ -30,11 +31,14 @@ public class ReferenceValidator extends AbstractValidator {
 
     private final EsClientService elasticClient;
     private final CacheService cacheService;
+    private final OrganisationLoaderService organisationLoaderService;
 
-    public ReferenceValidator(EsClientService elasticClient, CacheService cacheService, String... params) {
+    public ReferenceValidator(EsClientService elasticClient, CacheService cacheService, OrganisationLoaderService organisationLoaderService,
+            String... params) {
         super(params);
         this.elasticClient = elasticClient;
         this.cacheService = cacheService;
+        this.organisationLoaderService = organisationLoaderService;
     }
 
     @Override
@@ -62,7 +66,7 @@ public class ReferenceValidator extends AbstractValidator {
 
         // add a special handler for documents with status "empty" to ignore validation of creator.id and versions.user.id
         Object status = document.get("status");
-        if (status != null && status instanceof String && ((String) status).equalsIgnoreCase("empty")) {
+        if (status instanceof String && ((String) status).equalsIgnoreCase("empty")) {
             if (normalisedPath.equalsIgnoreCase("creator.id") || normalisedPath.equalsIgnoreCase("versions.user.id")) {
                 logger.info(
                         "Validation skipped. Documents with status=empty are created by the SYSTEM user. Context=[index={},type={},id={},path={},value={}]",
@@ -86,14 +90,24 @@ public class ReferenceValidator extends AbstractValidator {
                 return results;
             }
 
-            // add a special handler for user.id="System" and user.id="0" (a.k.a. system user)
+            // add a special handler for user.id="System" and user.id="0" and user.id="-1" (a.k.a. system user)
             if (index.equalsIgnoreCase(EEsIndex.IDENTITY_V1.value()) && type.equalsIgnoreCase(EEsType.USER.value())) {
-                if (((String) obj).equalsIgnoreCase("system") || ((String) obj).equalsIgnoreCase("0")) {
+                if (((String) obj).equalsIgnoreCase("system") || obj.equals("0") || obj.equals("-1")) {
                     logger.info("Validation skipped. SYSTEM user doesn't exist in ES. Context=[index={},type={},id={},path={},value={}]",
                             context.getDocument().getIndex(), context.getDocument().getType(), context.getDocument().getObjectId(), path,
                             obj);
 
                     // no need for validation
+                    results.add(ValidationResult.ok(path, obj));
+                    return results;
+                }
+            }
+
+            // add a special handler for inactive organisations; check if they exist in the organisation csv
+            // in the importer the organisation is fetched from the csv only if it does not exist in db
+            // for the validator, it's faster to check first in the csv and avoid querying in ES
+            if (index.equalsIgnoreCase(EEsIndex.ENTITIES.value()) && type.equalsIgnoreCase(EEsType.ORGANISATION.value())) {
+                if (organisationLoaderService.getOrganisationFromCsvById((String) obj) != null) {
                     results.add(ValidationResult.ok(path, obj));
                     return results;
                 }
@@ -169,6 +183,20 @@ public class ReferenceValidator extends AbstractValidator {
             } else {
                 String details = String.format("Invalid reference id [index=%s,type=%s,id=%s]", index, type, id);
                 results.add(ValidationResult.error(path, obj, EValidationResult.INVALID_REFERENCE, details));
+            }
+        } else if (obj instanceof Integer) {
+            // add a special handler for user.id=0 and user.id=-1 (a.k.a. system user)
+            if (index.equalsIgnoreCase(EEsIndex.IDENTITY_V1.value()) && type.equalsIgnoreCase(EEsType.USER.value())) {
+                int val = ((Integer) obj).intValue();
+                if (val == 0 || val == -1) {
+                    logger.info("Validation skipped. SYSTEM user doesn't exist in ES. Context=[index={},type={},id={},path={},value={}]",
+                            context.getDocument().getIndex(), context.getDocument().getType(), context.getDocument().getObjectId(), path,
+                            obj);
+
+                    // no need for validation
+                    results.add(ValidationResult.ok(path, obj));
+                    return results;
+                }
             }
         } else {
             results.add(ValidationResult.error(path, obj, EValidationResult.INVALID_REFERENCE));

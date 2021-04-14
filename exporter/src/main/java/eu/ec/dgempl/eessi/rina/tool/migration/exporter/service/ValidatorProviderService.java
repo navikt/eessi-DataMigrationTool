@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import eu.ec.dgempl.eessi.rina.tool.migration.common.service.EsClientService;
+import eu.ec.dgempl.eessi.rina.tool.migration.common.service.OrganisationLoaderService;
 import eu.ec.dgempl.eessi.rina.tool.migration.common.util.PreconditionsHelper;
 import eu.ec.dgempl.eessi.rina.tool.migration.exporter.model.FieldInfo;
 import eu.ec.dgempl.eessi.rina.tool.migration.exporter.util.FieldInfoProperty;
@@ -20,12 +21,15 @@ public class ValidatorProviderService {
     private final EsClientService elasticsearchService;
     private final CacheService cacheService;
     private final EnumService enumService;
+    private final OrganisationLoaderService organisationLoaderService;
 
     @Autowired
-    public ValidatorProviderService(EsClientService elasticsearchService, CacheService cacheService, EnumService enumService) {
+    public ValidatorProviderService(EsClientService elasticsearchService, CacheService cacheService, EnumService enumService,
+            OrganisationLoaderService organisationLoaderService) {
         this.elasticsearchService = elasticsearchService;
         this.cacheService = cacheService;
         this.enumService = enumService;
+        this.organisationLoaderService = organisationLoaderService;
     }
 
     /**
@@ -152,7 +156,7 @@ public class ValidatorProviderService {
         // select the type validator
         switch (valueProperty.getType().toLowerCase()) {
         case "reference":
-            validator = new ReferenceValidator(elasticsearchService, cacheService, valueProperty.getParams());
+            validator = new ReferenceValidator(elasticsearchService, cacheService, organisationLoaderService, valueProperty.getParams());
             break;
         case "duplicate":
             validator = new DuplicateValidator(valueProperty.getParams());

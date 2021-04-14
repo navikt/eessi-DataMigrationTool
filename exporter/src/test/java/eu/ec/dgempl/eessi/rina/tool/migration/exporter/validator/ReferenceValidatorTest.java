@@ -2,8 +2,8 @@ package eu.ec.dgempl.eessi.rina.tool.migration.exporter.validator;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doReturn;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -23,6 +23,7 @@ import com.google.gson.Gson;
 
 import eu.ec.dgempl.eessi.rina.tool.migration.common.model.EEsType;
 import eu.ec.dgempl.eessi.rina.tool.migration.common.service.EsClientService;
+import eu.ec.dgempl.eessi.rina.tool.migration.common.service.OrganisationLoaderService;
 import eu.ec.dgempl.eessi.rina.tool.migration.exporter.cache.CacheEntry;
 import eu.ec.dgempl.eessi.rina.tool.migration.exporter.model.EValidationResult;
 import eu.ec.dgempl.eessi.rina.tool.migration.exporter.model.EsDocument;
@@ -40,6 +41,8 @@ public class ReferenceValidatorTest {
     EsClientService elasticClient;
     @Mock
     CacheService cacheService;
+    @Mock
+    OrganisationLoaderService organisationLoaderService;
 
     private EsDocument mockedEsDocument;
     private EsDocument mockedEsDocumentParent;
@@ -98,7 +101,7 @@ public class ReferenceValidatorTest {
     }
 
     private void setUpReferenceValidatorWithParams(String param1, String param2) {
-        referenceValidator = new ReferenceValidator(elasticClient, cacheService, param1, param2);
+        referenceValidator = new ReferenceValidator(elasticClient, cacheService, organisationLoaderService, param1, param2);
     }
 
     /*
@@ -407,7 +410,8 @@ public class ReferenceValidatorTest {
         String param4 = "param4";
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            referenceValidator = new ReferenceValidator(elasticClient, cacheService, param1, param2, param3, param4);
+            referenceValidator = new ReferenceValidator(elasticClient, cacheService, organisationLoaderService, param1, param2, param3,
+                    param4);
         });
 
         assertEquals(exception.getClass(), IllegalArgumentException.class);
@@ -421,7 +425,7 @@ public class ReferenceValidatorTest {
         String param1 = "param1";
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            referenceValidator = new ReferenceValidator(elasticClient, cacheService, param1);
+            referenceValidator = new ReferenceValidator(elasticClient, cacheService, organisationLoaderService, param1);
         });
 
         assertEquals(exception.getClass(), IllegalArgumentException.class);
@@ -466,7 +470,7 @@ public class ReferenceValidatorTest {
         String type = "notFoundType";
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            referenceValidator = new ReferenceValidator(elasticClient, cacheService, index, type);
+            referenceValidator = new ReferenceValidator(elasticClient, cacheService, organisationLoaderService, index, type);
         });
 
         assertEquals(exception.getClass(), IllegalArgumentException.class);

@@ -88,40 +88,33 @@ public class AssignmentPolicyService {
     private void handleProcessDefinition(Map<String, Object> obj) {
         Object roles = obj.get("appRoles");
 
-        if (roles == null || (!(roles instanceof ArrayList))) {
-            throw new IllegalStateException("Could not extract the application roles from the process definition assignment file.");
-        }
+        if (roles instanceof ArrayList) {
+            for (Object role : (ArrayList) roles) {
+                Map<String, Object> roleAsMap = (Map<String, Object>) role;
+                String id = (String) roleAsMap.get("id");
 
-        for (Object role : (ArrayList) roles) {
-            Map<String, Object> roleAsMap = (Map<String, Object>) role;
-            String id = (String) roleAsMap.get("id");
-
-            Map<String, String> actorsMap = mapping.get(id);
-            if (actorsMap == null) {
-                actorsMap = new HashMap<>();
-            }
-
-            Object actors = roleAsMap.get("actors");
-
-            if (actors == null || (!(actors instanceof ArrayList))) {
-                throw new IllegalStateException("Could not extract the actors from the process definition assignment file.");
-            }
-
-            for (Object actor : (ArrayList) actors) {
-                Map<String, String> actorAsMap = (Map<String, String>) actor;
-                String actorId = actorAsMap.get("id");
-                String actorName = actorAsMap.get("name");
-
-                if (actorId == null || actorName == null) {
-                    throw new IllegalStateException("Could not extract the actor information from the process definition assignment file.");
+                Map<String, String> actorsMap = mapping.get(id);
+                if (actorsMap == null) {
+                    actorsMap = new HashMap<>();
                 }
 
-                ERole enumActorName = ERole.lookup(actorName).orElseThrow();
+                Object actors = roleAsMap.get("actors");
 
-                actorsMap.put(actorId, enumActorName.name());
+                if (actors instanceof ArrayList) {
+                    for (Object actor : (ArrayList) actors) {
+                        Map<String, String> actorAsMap = (Map<String, String>) actor;
+                        String actorId = actorAsMap.get("id");
+                        String actorName = actorAsMap.get("name");
+
+                        if (actorId != null && actorName != null) {
+                            ERole enumActorName = ERole.lookup(actorName).orElseThrow();
+                            actorsMap.put(actorId, enumActorName.name());
+                        }
+                    }
+
+                    mapping.put(id, actorsMap);
+                }
             }
-
-            mapping.put(id, actorsMap);
         }
     }
 

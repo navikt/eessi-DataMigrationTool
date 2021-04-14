@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import eu.ec.dgempl.eessi.rina.model.jpa.listener.AuditListener;
 import eu.ec.dgempl.eessi.rina.model.jpa.listener.LocalAuditorAware;
+import eu.ec.dgempl.eessi.rina.model.jpa.listener.LogListener;
 
 @Component("auditorAware")
 @Primary
@@ -19,7 +20,8 @@ public class AuditorAwareImpl implements LocalAuditorAware<String> {
     @PostConstruct
     public void setup() {
         synchronized (MUTEX) {
-            AuditListener.setAuditorAware(this);
+            AuditListener.setAuditorAware(null);
+            LogListener.setAuditorAware(null);
         }
     }
 

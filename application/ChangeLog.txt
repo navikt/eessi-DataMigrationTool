@@ -1,6 +1,31 @@
 EESSI-RINA-DATA-MIGRATION
 
-v2.0.1 -
+v2.0.2
+--------------------------------------
+Validator:
+- accept creator ids -1 and "1" as valid values
+- accept references to inactive organisations
+Importer:
+- fixed NPE related to documentBversions when mapping attachments
+- fixed cases with DummyChooseParts document types (this was used to MLC cases)
+- fixed missing SEDs creation date
+- fixed missing user messages ack link
+- fixed missing actions ADD/REMOVE ATTACHMENT
+- fixed single array object problem in sed content
+- fixed link between document conversations and document bversions
+- extended functionality to add missing organisations from different source coming from CSN
+- fixed parsing ProcessDefinitionAssignments that don't contain appRoles
+- fixed audit created/updated document info while creating timed actions
+- updated the algorithm for getting the last conversation date for timed actions
+- fixed missing id for resources of type Activity
+- fixed notification receiver organisation
+- fixed notification creator user
+- skip importing assigned BUCs linked to missing process definitions
+- fixed importing users with missing salt/password
+- fixed naming of SBDH fields (protectedPerson vs isProtectedPerson)
+- fix caseId collision by updating case_id_seq on import
+
+v2.0.1
 --------------------------------------
 Importer:
 - fixed linux paths
@@ -13,8 +38,7 @@ Importer:
 - fixed retrieval of business exceptions
 - improved logging
 
-
-v2.0.0 - published on 15.12.2020
+v2.0.0
 --------------------------------------
 Application bundles now the Validator and Importer
 
@@ -25,11 +49,11 @@ Validator:
 - added the case tenant in the case reports
 
 
-v1.0.2 - published on 10.12.2020
+v1.0.2
 --------------------------------------
 Fix for EESSI 7742: incorrect propagation of errors caused by unknown fields (fields that are not present in the aggregated Elasticsearch mapping),no other functionalities added or changed
 
 
-v1.0.1 - published on 02.12.2020
+v1.0.1
 --------------------------------------
 First release

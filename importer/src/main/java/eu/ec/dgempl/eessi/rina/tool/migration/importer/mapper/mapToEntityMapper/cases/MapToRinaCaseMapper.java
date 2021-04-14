@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import eu.ec.dgempl.eessi.rina.model.common.BucProcessDefinition;
@@ -28,7 +29,6 @@ import eu.ec.dgempl.eessi.rina.model.jpa.exception.EntityNotFoundEessiRuntimeExc
 import eu.ec.dgempl.eessi.rina.model.jpa.exception.UniqueIdentifier;
 import eu.ec.dgempl.eessi.rina.repo.DocumentTypeRepo;
 import eu.ec.dgempl.eessi.rina.repo.IamUserRepo;
-import eu.ec.dgempl.eessi.rina.repo.OrganisationRepo;
 import eu.ec.dgempl.eessi.rina.repo.ProcessDefVersionRepo;
 import eu.ec.dgempl.eessi.rina.repo.TenantRepo;
 import eu.ec.dgempl.eessi.rina.service.tx.util.ProcessDefUtil;
@@ -36,6 +36,7 @@ import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.EElasticType;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.CaseFields;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper._abstract.AbstractMapToEntityMapper;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.service.OrganisationService;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.RepositoryUtils;
 
 import ma.glasnost.orika.MappingContext;
@@ -45,18 +46,18 @@ public class MapToRinaCaseMapper extends AbstractMapToEntityMapper<MapHolder, Ri
 
     private final DocumentTypeRepo documentTypeRepo;
     private final IamUserRepo iamUserRepo;
-    private final OrganisationRepo organisationRepo;
     private final ProcessDefVersionRepo processDefVersionRepo;
     private final TenantRepo tenantRepo;
 
+    @Autowired
+    private OrganisationService organisationService;
+
     public MapToRinaCaseMapper(
             final DocumentTypeRepo documentTypeRepo, final IamUserRepo iamUserRepo,
-            final OrganisationRepo organisationRepo,
             final ProcessDefVersionRepo processDefVersionRepo,
             final TenantRepo tenantRepo) {
         this.documentTypeRepo = documentTypeRepo;
         this.iamUserRepo = iamUserRepo;
-        this.organisationRepo = organisationRepo;
         this.processDefVersionRepo = processDefVersionRepo;
         this.tenantRepo = tenantRepo;
     }
@@ -149,10 +150,7 @@ public class MapToRinaCaseMapper extends AbstractMapToEntityMapper<MapHolder, Ri
         List<CaseParticipant> caseParticipants = participants.stream()
                 .map(participant -> {
                     String organisationId = participant.string(ORGANISATION_ID, true);
-                    Organisation organisation = organisationRepo.findById(organisationId);
-                    if (organisation == null) {
-                        throw new EntityNotFoundEessiRuntimeException(Organisation.class, UniqueIdentifier.id, organisationId);
-                    }
+                    Organisation organisation = organisationService.getOrSaveOrganisation(organisationId);
 
                     String applicationRole = participant.string(ROLE);
                     EApplicationRole eApplicationRole = EApplicationRole.lookup(applicationRole).orElseThrow(

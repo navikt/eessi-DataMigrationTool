@@ -21,6 +21,7 @@ import eu.ec.dgempl.eessi.rina.buc.precondition.PreconditionsHelper;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.EDocumentStatus;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.Document;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.RinaCase;
+import eu.ec.dgempl.eessi.rina.repo.DocumentRepoExtended;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.service.ActionService;
 
 /**
@@ -31,8 +32,14 @@ public class ReceiveUpdateActionProducer implements ReceiveActionProducer {
 
     private static final Logger logger = LoggerFactory.getLogger(ReceiveUpdateActionProducer.class);
 
+    private final DocumentRepoExtended documentRepo;
+
     @Autowired
     private ActionService actionService;
+
+    public ReceiveUpdateActionProducer(final DocumentRepoExtended documentRepo) {
+        this.documentRepo = documentRepo;
+    }
 
     @Override
     public void createReceiveActions(RinaCase rinaCase, Case buc) throws Exception {
@@ -53,14 +60,15 @@ public class ReceiveUpdateActionProducer implements ReceiveActionProducer {
 
     /**
      * Returns a list of received {@link Document} objects for the given {@code caseId}
-     * 
+     *
      * @param rinaCase
      * @return
      */
     protected List<Document> getReceivedDocuments(final RinaCase rinaCase) {
 
         // @formatter:off
-        return rinaCase.getDocuments()
+        List<Document> documents = documentRepo.findByRinaCaseId(rinaCase.getId());
+        return documents
                         .stream()
                         .filter(d -> EDocumentStatus.RECEIVED.equals(d.getStatus()))
                         .collect(Collectors.toList());
@@ -72,7 +80,7 @@ public class ReceiveUpdateActionProducer implements ReceiveActionProducer {
      * For every document from the given {@code docs} list, will find in the {@code buc} definition if the document allows multiple
      * versions. If yes, it will create an action object with the type {@link EActionType#DOC_UPDATE_RECEIVE}. Method will return a
      * collection of all such actions.
-     * 
+     *
      * @param caseId
      * @param buc
      * @return
@@ -102,7 +110,7 @@ public class ReceiveUpdateActionProducer implements ReceiveActionProducer {
 
     /**
      * Returns {@code true} if the given document has multiple versions, {code false} othrwise.
-     * 
+     *
      * @param doc
      * @return
      */
@@ -123,7 +131,7 @@ public class ReceiveUpdateActionProducer implements ReceiveActionProducer {
 
     /**
      * Returns a new {@link ActionDO} object with {@link EActionType#DOC_RECEIVE} for the given {@code document} and {@code caseId}
-     * 
+     *
      * @param caseId
      * @param dbDocument
      * @param document
@@ -174,7 +182,7 @@ public class ReceiveUpdateActionProducer implements ReceiveActionProducer {
 
     /**
      * Filter admin docs
-     * 
+     *
      * @param dbDoc
      * @param bucDoc
      * @return

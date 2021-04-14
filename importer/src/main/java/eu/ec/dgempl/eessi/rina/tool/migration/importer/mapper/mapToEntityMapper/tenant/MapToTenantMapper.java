@@ -1,26 +1,22 @@
 package eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper.tenant;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.Organisation;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.Tenant;
-import eu.ec.dgempl.eessi.rina.model.jpa.exception.EntityNotFoundEessiRuntimeException;
-import eu.ec.dgempl.eessi.rina.model.jpa.exception.UniqueIdentifier;
-import eu.ec.dgempl.eessi.rina.repo.OrganisationRepo;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.TenantFields;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper._abstract.AbstractMapToEntityMapper;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.service.OrganisationService;
 
 import ma.glasnost.orika.MappingContext;
 
 @Component
 public class MapToTenantMapper extends AbstractMapToEntityMapper<MapHolder, Tenant> {
 
-    private final OrganisationRepo organisationRepo;
-
-    public MapToTenantMapper(OrganisationRepo organisationRepo) {
-        this.organisationRepo = organisationRepo;
-    }
+    @Autowired
+    private OrganisationService organisationService;
 
     @Override
     public void mapAtoB(MapHolder a, Tenant b, MappingContext context) {
@@ -37,11 +33,7 @@ public class MapToTenantMapper extends AbstractMapToEntityMapper<MapHolder, Tena
     }
 
     private void mapOrganisation(final MapHolder a, final Tenant b) {
-        Organisation organisation = organisationRepo.findById(a.string(TenantFields.ID));
-        if (organisation == null) {
-            throw new EntityNotFoundEessiRuntimeException(Organisation.class, UniqueIdentifier.id, a.string(TenantFields.ID));
-        }
-
+        Organisation organisation = organisationService.getOrSaveOrganisation(a.string(TenantFields.ID));
         b.setOrganisation(organisation);
     }
 }

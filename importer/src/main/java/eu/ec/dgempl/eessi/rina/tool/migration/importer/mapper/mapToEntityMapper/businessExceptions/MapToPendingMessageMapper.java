@@ -1,6 +1,19 @@
 package eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper.businessExceptions;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
+
 import eu.ec.dgempl.apclient.model.exception.StructureValidationException;
 import eu.ec.dgempl.apclient.sbdh.builder.SbdhBuilder;
 import eu.ec.dgempl.apclient.sbdh.model.CaseActionType;
@@ -12,59 +25,39 @@ import eu.ec.dgempl.eessi.rina.model.enumtypes.EApplicationRole;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.ECaseActionType;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.EMimeType;
 import eu.ec.dgempl.eessi.rina.model.exception.runtime.enums.EnumNotFoundEessiRuntimeException;
-import eu.ec.dgempl.eessi.rina.model.jpa.entity.Document;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.Organisation;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.PendingAttachment;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.PendingMessage;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.ProcessDefVersion;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.RinaCase;
-import eu.ec.dgempl.eessi.rina.model.jpa.exception.EntityNotFoundEessiRuntimeException;
-import eu.ec.dgempl.eessi.rina.model.jpa.exception.UniqueIdentifier;
-import eu.ec.dgempl.eessi.rina.repo.DocumentTypeRepo;
-import eu.ec.dgempl.eessi.rina.repo.OrganisationRepo;
 import eu.ec.dgempl.eessi.rina.repo.ProcessDefVersionRepo;
 import eu.ec.dgempl.eessi.rina.repo.RinaCaseRepo;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.PendingMessageFields;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper._abstract.AbstractMapToEntityMapper;
-import eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.RepositoryUtils;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.service.OrganisationService;
+
 import ma.glasnost.orika.MappingContext;
-import org.springframework.stereotype.Component;
-
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 
 @Component
 public class MapToPendingMessageMapper extends AbstractMapToEntityMapper<MapHolder, PendingMessage> {
-    
-    private final OrganisationRepo organisationRepo;
-    private final DocumentTypeRepo documentTypeRepo;
+
     private final ProcessDefVersionRepo processDefVersionRepo;
     private final RinaCaseRepo rinaCaseRepo;
-
     private final RinaJsonMapper rinaJsonMapper;
 
+    @Autowired
+    private OrganisationService organisationService;
+
     public MapToPendingMessageMapper(
-            final OrganisationRepo organisationRepo,
-            final DocumentTypeRepo documentTypeRepo,
             final ProcessDefVersionRepo processDefVersionRepo,
             final RinaCaseRepo rinaCaseRepo,
             final RinaJsonMapper rinaJsonMapper) {
 
-        this.organisationRepo = organisationRepo;
-        this.documentTypeRepo = documentTypeRepo;
         this.processDefVersionRepo = processDefVersionRepo;
         this.rinaCaseRepo = rinaCaseRepo;
         this.rinaJsonMapper = rinaJsonMapper;
     }
-
 
     @Override
     public void mapAtoB(final MapHolder a, final PendingMessage b, final MappingContext context) {
@@ -108,14 +101,14 @@ public class MapToPendingMessageMapper extends AbstractMapToEntityMapper<MapHold
 
     private void mapReceiver(MapHolder a, PendingMessage b) {
         String receiverId = a.string(PendingMessageFields.RECEIVER_ID, true);
-        Organisation receiver = RepositoryUtils.findById(receiverId, organisationRepo::findById, Organisation.class);
+        Organisation receiver = organisationService.getOrSaveOrganisation(receiverId);
 
         b.setReceiver(receiver);
     }
 
     private void mapSender(MapHolder a, PendingMessage b) {
         String senderId = a.string(PendingMessageFields.SENDER_ID, true);
-        Organisation sender = RepositoryUtils.findById(senderId, organisationRepo::findById);
+        Organisation sender = organisationService.getOrSaveOrganisation(senderId);
 
         b.setSender(sender);
     }
@@ -148,7 +141,7 @@ public class MapToPendingMessageMapper extends AbstractMapToEntityMapper<MapHold
         List<PendingAttachment> pendingAttachments = new ArrayList<>();
         List<MapHolder> attachments = a.listToMapHolder(PendingMessageFields.ATTACHMENT_IDENTIFICATIONS);
 
-        for (MapHolder attachment: attachments) {
+        for (MapHolder attachment : attachments) {
             String id = attachment.string(PendingMessageFields.ID);
 
             EMimeType mimeType = EMimeType.fromString(attachment.string(PendingMessageFields.MIME_TYPE));
@@ -164,7 +157,8 @@ public class MapToPendingMessageMapper extends AbstractMapToEntityMapper<MapHold
                 if (pathname.equals(attachmentsMap.get(id))) {
                     continue;
                 } else {
-                    throw new RuntimeException("Duplicate attachment id " + id + " but different location for pending message with id " + b.getId());
+                    throw new RuntimeException(
+                            "Duplicate attachment id " + id + " but different location for pending message with id " + b.getId());
                 }
             } else {
                 attachmentsMap.put(id, pathname);
@@ -177,7 +171,7 @@ public class MapToPendingMessageMapper extends AbstractMapToEntityMapper<MapHold
     }
 
     private EApplicationRole getCaseRole(List<MapHolder> participants, String participantId) {
-        for (MapHolder participant: participants) {
+        for (MapHolder participant : participants) {
             String organisationId = participant.string(PendingMessageFields.ORGANISATION_ID, true);
 
             if (organisationId != null && organisationId.equals(participantId)) {
@@ -193,14 +187,14 @@ public class MapToPendingMessageMapper extends AbstractMapToEntityMapper<MapHold
         SbdhBuilder sbdhBuilder = SbdhBuilder.standardBusinessDocumentHeader();
 
         String senderId = a.string(PendingMessageFields.SENDER_ID, true);
-        EApplicationRole senderRole =  getCaseRole(a.listToMapHolder(PendingMessageFields.PARTICIPANTS), senderId);
+        EApplicationRole senderRole = getCaseRole(a.listToMapHolder(PendingMessageFields.PARTICIPANTS), senderId);
 
         // fix Counterparty vs CounterParty
         String roleName = senderRole == EApplicationRole.CP ? ContactTypeIdentifier.COUNTERPARTY.value() : senderRole.getConstant();
 
         sbdhBuilder.withSender(senderId, ContactTypeIdentifier.fromValue(roleName));
 
-        for (MapHolder participant: a.listToMapHolder(PendingMessageFields.PARTICIPANTS)) {
+        for (MapHolder participant : a.listToMapHolder(PendingMessageFields.PARTICIPANTS)) {
             String participantId = participant.string(PendingMessageFields.ORGANISATION_ID, true);
 
             if (participantId != null && !participantId.equals(senderId)) {
@@ -233,8 +227,7 @@ public class MapToPendingMessageMapper extends AbstractMapToEntityMapper<MapHold
                 Date.from(creationDate.toInstant())
         );
 
-
-        for (PendingAttachment pendingAttachment: b.getPendingAttachments()) {
+        for (PendingAttachment pendingAttachment : b.getPendingAttachments()) {
             sbdhBuilder.withAddedAttachment(
                     InternetMediaType.fromValue(pendingAttachment.getMimeType().toString()),
                     pendingAttachment.getId(),

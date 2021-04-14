@@ -1,12 +1,7 @@
 package eu.ec.dgempl.eessi.rina.tool.migration.buc.timedaction;
 
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -23,17 +18,9 @@ import eu.ec.dgempl.eessi.rina.buc.core.model.EDocumentType;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.EConversationParticipantRole;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.EDocumentDirection;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.EDocumentStatus;
-import eu.ec.dgempl.eessi.rina.model.jpa.entity.CaseParticipant;
-import eu.ec.dgempl.eessi.rina.model.jpa.entity.ConversationParticipant;
-import eu.ec.dgempl.eessi.rina.model.jpa.entity.Document;
-import eu.ec.dgempl.eessi.rina.model.jpa.entity.DocumentConversation;
-import eu.ec.dgempl.eessi.rina.model.jpa.entity.DocumentTypeVersion;
-import eu.ec.dgempl.eessi.rina.model.jpa.entity.RinaCase;
-import eu.ec.dgempl.eessi.rina.model.jpa.listener.AuditListener;
-import eu.ec.dgempl.eessi.rina.repo.DocumentConversationRepo;
-import eu.ec.dgempl.eessi.rina.repo.DocumentRepo;
-import eu.ec.dgempl.eessi.rina.repo.DocumentTypeVersionRepo;
-import eu.ec.dgempl.eessi.rina.repo.RinaCaseRepo;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity.*;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity._abstraction.Audit;
+import eu.ec.dgempl.eessi.rina.repo.*;
 import eu.ec.dgempl.eessi.rina.tool.migration.buc.BucHandler;
 import eu.ec.dgempl.eessi.rina.tool.migration.common.util.PreconditionsHelper;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.service.ActionService;
@@ -48,23 +35,25 @@ public class TimedActionBucHandler implements BucHandler {
     private static final Logger logger = LoggerFactory.getLogger(TimedActionBucHandler.class);
 
     private final DocumentRepo documentRepo;
+    private final DocumentRepoExtended documentRepoExtended;
     private final DocumentConversationRepo documentConversationRepo;
     private final RinaCaseRepo rinaCaseRepo;
     private final DocumentTypeVersionRepo documentTypeVersionRepo;
     private final ActionService actionService;
 
-    private final Map<String, TimedActionDefinition> ACTION_DEFS = Stream.of(new TimedActionDefinition[] {
-            new TimedActionDefinition("PO_LA_BUC_02", EDocumentType.A_003, 60),
-            new TimedActionDefinition("PO_LA_BUC_03", EDocumentType.A_008, 30),
-            new TimedActionDefinition("PO_LA_BUC_04", EDocumentType.A_009, 30),
-            new TimedActionDefinition("PO_LA_BUC_05", EDocumentType.A_010, 30),
-            new TimedActionDefinition("PO_LA_BUC_06", EDocumentType.A_005, 30) })
+    private final Map<String, TimedActionDefinition> ACTION_DEFS = Stream
+            .of(new TimedActionDefinition[] { new TimedActionDefinition("PO_LA_BUC_02", EDocumentType.A_003, 60),
+                    new TimedActionDefinition("PO_LA_BUC_03", EDocumentType.A_008, 30),
+                    new TimedActionDefinition("PO_LA_BUC_04", EDocumentType.A_009, 30),
+                    new TimedActionDefinition("PO_LA_BUC_05", EDocumentType.A_010, 30),
+                    new TimedActionDefinition("PO_LA_BUC_06", EDocumentType.A_005, 30) })
             .collect(Collectors.toMap(TimedActionDefinition::getBucType, d -> d));
 
-    public TimedActionBucHandler(final DocumentRepo documentRepo,
+    public TimedActionBucHandler(final DocumentRepo documentRepo, final DocumentRepoExtended documentRepoExtended,
             final DocumentConversationRepo documentConversationRepo, final RinaCaseRepo rinaCaseRepo,
             final DocumentTypeVersionRepo documentTypeVersionRepo, final ActionService actionService) {
         this.documentRepo = documentRepo;
+        this.documentRepoExtended = documentRepoExtended;
         this.documentConversationRepo = documentConversationRepo;
         this.rinaCaseRepo = rinaCaseRepo;
         this.documentTypeVersionRepo = documentTypeVersionRepo;
@@ -196,7 +185,15 @@ public class TimedActionBucHandler implements BucHandler {
         document.addDocumentConversation(conversation);
 
         // setup the created on
-        AuditListener.setCreatedOn(document);
+        Audit audit = new Audit();
+
+        audit.setCreatedAt(ZonedDateTime.now());
+        audit.setUpdatedAt(ZonedDateTime.now());
+
+        audit.setCreatedBy("0");
+        audit.setUpdatedBy("0");
+
+        document.setAudit(audit);
 
         // persist
         documentRepo.saveAndFlush(document);
@@ -244,7 +241,9 @@ public class TimedActionBucHandler implements BucHandler {
         PreconditionsHelper.notNull(rinaCase, "rinaCase");
         PreconditionsHelper.notNull(documentType, "documentType");
         // @formatter:off
-        return rinaCase.getDocuments().stream()
+        List<Document> documents = documentRepoExtended.findByRinaCaseId(rinaCase.getId());
+
+        return documents.stream()
                 .filter(d ->
                         documentType.value().equals(d.getDocumentTypeVersion().getDocumentType().getType()) &&
                                 (
@@ -267,11 +266,35 @@ public class TimedActionBucHandler implements BucHandler {
         PreconditionsHelper.notNull(document, "document");
         // @formatter:off
         return document.getDocumentConversations().stream()
-                .sorted(Comparator.comparing(DocumentConversation::getDate))
-                .map(DocumentConversation::getDate)
-                .findFirst()
+                .map(this::getConversationDate)
+                .filter(Objects::nonNull)
+                .max(ZonedDateTime::compareTo)
                 .orElseThrow(() -> new IllegalStateException("Could not find the last conversation for document [documentId=" + document.getId()+" ]" ));
         // @formatter:on
+    }
+
+    private ZonedDateTime getConversationDate(DocumentConversation documentConversation) {
+        ZonedDateTime date = documentConversation.getDate();
+
+        if (date != null) {
+            return date;
+        }
+
+        // @formatter:off
+        date = documentConversation.getUserMessages().stream()
+                .map(UserMessage::getUserMessageResponse)
+                .filter(Objects::nonNull)
+                .map(UserMessageResponse::getLastUpdate)
+                .filter(Objects::nonNull)
+                .min(ZonedDateTime::compareTo)
+                .orElse(null);
+        // @formatter:on
+
+        if (date != null) {
+            return date;
+        }
+
+        return documentConversation.getDocument().getAudit().getUpdatedAt();
     }
 
     /**

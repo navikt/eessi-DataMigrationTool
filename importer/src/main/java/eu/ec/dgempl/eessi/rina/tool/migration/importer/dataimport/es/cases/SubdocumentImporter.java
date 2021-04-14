@@ -1,20 +1,18 @@
 package eu.ec.dgempl.eessi.rina.tool.migration.importer.dataimport.es.cases;
 
+import static eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.DateUtils.*;
 import static eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.RepositoryUtils.*;
 
-import java.time.ZonedDateTime;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.tuple.Pair;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 
+import eu.ec.dgempl.eessi.rina.commons.date.ZonedDateTimePeriod;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.Document;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.DocumentBversion;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.Subdocument;
@@ -97,8 +95,7 @@ public class SubdocumentImporter extends AbstractDataImporter implements CaseImp
                             Comparator.comparing(SubdocumentBversion::getId))
                             .collect(Collectors.toList());
 
-                    Map<Pair<ZonedDateTime, ZonedDateTime>, Integer> intervalPairs =
-                            getIntervalsMap(documentBversions);
+                    Map<ZonedDateTimePeriod, Integer> intervalPairs = getIntervalsMap(documentBversions);
 
                     subdocumentBversions.forEach(
                             subdocumentBversion -> {
@@ -117,37 +114,4 @@ public class SubdocumentImporter extends AbstractDataImporter implements CaseImp
 
         saveInBulk(() -> bversions, () -> subdocumentBversionRepo);
     }
-
-    @NotNull
-    private Map<Pair<ZonedDateTime, ZonedDateTime>, Integer> getIntervalsMap(final List<DocumentBversion> documentBversions) {
-        Map<Pair<ZonedDateTime, ZonedDateTime>, Integer> intervalPairs = new HashMap<>();
-        for (int i = 0; i < documentBversions.size(); i++) {
-            DocumentBversion first = documentBversions.get(i);
-
-            Pair<ZonedDateTime, ZonedDateTime> pair;
-
-            if (i == documentBversions.size() - 1) {
-                pair = Pair.of(first.getAudit().getCreatedAt(), ZonedDateTime.now());
-            } else {
-                DocumentBversion second = documentBversions.get(i + 1);
-                pair = Pair.of(first.getAudit().getCreatedAt(), second.getAudit().getCreatedAt());
-            }
-            intervalPairs.put(pair, i);
-        }
-        return intervalPairs;
-    }
-
-    private int getIntervalIndex(Map<Pair<ZonedDateTime, ZonedDateTime>, Integer> intervals, ZonedDateTime creationDate) {
-        Optional<Integer> first = intervals.entrySet()
-                .stream()
-                .filter(pairIntegerEntry -> {
-                    Pair<ZonedDateTime, ZonedDateTime> pair = pairIntegerEntry.getKey();
-                    return creationDate.isAfter(pair.getLeft()) && creationDate.isBefore(pair.getRight());
-                })
-                .map(Map.Entry::getValue)
-                .findFirst();
-
-        return first.orElse(-1);
-    }
-
 }

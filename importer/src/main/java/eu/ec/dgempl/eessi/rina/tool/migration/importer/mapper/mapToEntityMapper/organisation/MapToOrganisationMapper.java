@@ -1,23 +1,25 @@
 package eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper.organisation;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
-
 import eu.ec.dgempl.eessi.rina.model.enumtypes.ECountryCode;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.AssignedBuc;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.OrgContactMethod;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.Organisation;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.AssignedBucFields;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.OrganisationFields;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper._abstract.AbstractMapToEntityMapper;
-
 import ma.glasnost.orika.MappingContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class MapToOrganisationMapper extends AbstractMapToEntityMapper<MapHolder, Organisation> {
+    private static final Logger logger = LoggerFactory.getLogger(MapToOrganisationMapper.class);
 
     @Override
     public void mapAtoB(MapHolder a, Organisation b, MappingContext mappingContext) {
@@ -49,9 +51,20 @@ public class MapToOrganisationMapper extends AbstractMapToEntityMapper<MapHolder
 
         if (!CollectionUtils.isEmpty(assignedBucs)) {
             assignedBucs.stream()
-                    .map(mapHolder -> mapperFacade.map(mapHolder, AssignedBuc.class, mappingContext))
+                    .map(mapHolder -> {
+                        AssignedBuc assignedBuc = mapperFacade.map(mapHolder, AssignedBuc.class, mappingContext);
+                        if (assignedBuc.getProcessDef() == null) {
+                            String processDefName = mapHolder.string(AssignedBucFields.BUC_TYPE);
+                            logger.error("Failed to assign missing buc " + processDefName + " to organisation " + b.getId());
+                        }
+                        return assignedBuc;
+                    })
+                    .filter(assignedBuc -> assignedBuc.getProcessDef() != null)
                     .forEach(b::addAssignedBuc);
         }
+
+
+
     }
 
     private void mapAccessPoint(Organisation b, MapHolder a) {

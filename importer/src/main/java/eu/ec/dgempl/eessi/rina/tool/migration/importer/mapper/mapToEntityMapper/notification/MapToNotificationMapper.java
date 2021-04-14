@@ -3,6 +3,8 @@ package eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import eu.ec.dgempl.eessi.rina.model.enumtypes.*;
@@ -14,6 +16,7 @@ import eu.ec.dgempl.eessi.rina.repo.*;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.NotificationFields;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper._abstract.AbstractMapToEntityMapper;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.service.OrganisationService;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.RepositoryUtils;
 
 import ma.glasnost.orika.MappingContext;
@@ -22,19 +25,23 @@ import ma.glasnost.orika.MappingContext;
 public class MapToNotificationMapper extends AbstractMapToEntityMapper<MapHolder, Notification> {
 
     private final String SYSTEM = "system";
+    private final String SYSTEM_ID = "0";
     private final String NO_USERNAME = "-1";
 
+    private final IamUserRepo iamUserRepo;
     private final IamUserRepoExtended iamUserRepoExtended;
-    private final OrganisationRepo organisationRepo;
     private final DocumentTypeRepo documentTypeRepo;
     private final RinaCaseRepo rinaCaseRepo;
     private final RoleRepo roleRepo;
 
-    public MapToNotificationMapper(final IamUserRepoExtended iamUserRepoExtended, final OrganisationRepo organisationRepo,
+    @Autowired
+    private OrganisationService organisationService;
+
+    public MapToNotificationMapper(final IamUserRepo iamUserRepo, final IamUserRepoExtended iamUserRepoExtended,
             final DocumentTypeRepo documentTypeRepo, final RinaCaseRepo rinaCaseRepo, final RoleRepo roleRepo) {
 
+        this.iamUserRepo = iamUserRepo;
         this.iamUserRepoExtended = iamUserRepoExtended;
-        this.organisationRepo = organisationRepo;
         this.documentTypeRepo = documentTypeRepo;
         this.rinaCaseRepo = rinaCaseRepo;
         this.roleRepo = roleRepo;
@@ -74,15 +81,33 @@ public class MapToNotificationMapper extends AbstractMapToEntityMapper<MapHolder
     }
 
     private void mapCreator(final MapHolder a, final Notification b) {
-        final String username = getUsername(a);
+        IamUser iamUser = null;
 
-        IamUser iamUser = RepositoryUtils.getIamUser(() -> username, () -> iamUserRepoExtended);
+        final String userId = getUserId(a);
+        if (StringUtils.isNotBlank(userId)) {
+            iamUser = RepositoryUtils.findById(userId, iamUserRepo::findById);
+        }
+
+        if (iamUser == null) {
+            final String username = getUsername(a, NotificationFields.CREATOR_NAME);
+            iamUser = RepositoryUtils.getIamUser(() -> username, () -> iamUserRepoExtended);
+        }
 
         b.setCreator(iamUser);
     }
 
-    private String getUsername(MapHolder a) {
-        String username = a.string(NotificationFields.CREATOR, true);
+    private String getUserId(MapHolder a) {
+        String userId = a.string(NotificationFields.CREATOR_ID, true);
+
+        if (NO_USERNAME.equals(userId)) {
+            userId = SYSTEM_ID;
+        }
+
+        return userId;
+    }
+
+    private String getUsername(MapHolder a, String path) {
+        String username = a.string(path, true);
 
         if (username == null || username.equalsIgnoreCase(SYSTEM) || username.equals(NO_USERNAME)) {
             username = SYSTEM;
@@ -92,7 +117,7 @@ public class MapToNotificationMapper extends AbstractMapToEntityMapper<MapHolder
 
     private void mapSender(final MapHolder a, final Notification b) {
         String senderId = a.string(NotificationFields.SENDER, true);
-        Organisation sender = RepositoryUtils.findById(senderId, organisationRepo::findById);
+        Organisation sender = organisationService.getOrSaveOrganisation(senderId);
 
         b.setSender(sender);
     }
@@ -109,7 +134,18 @@ public class MapToNotificationMapper extends AbstractMapToEntityMapper<MapHolder
             receiverId = a.string(NotificationFields.RECEIVER_ORGANISATION_ID, true);
         }
 
-        Organisation receiver = RepositoryUtils.findById(receiverId, organisationRepo::findById);
+        Organisation receiver = organisationService.getOrSaveOrganisationWithDefault(receiverId, null);
+
+        if (receiver == null) {
+            final String username = getUsername(a, NotificationFields.RECEIVER_NAME);
+            try {
+                IamUser iamUser = RepositoryUtils.getIamUser(() -> username, () -> iamUserRepoExtended);
+                receiver = iamUser.getTenant().getOrganisation();
+            } catch (Exception e) {
+                // ignore exception
+            }
+
+        }
 
         b.setReceiver(receiver);
     }
