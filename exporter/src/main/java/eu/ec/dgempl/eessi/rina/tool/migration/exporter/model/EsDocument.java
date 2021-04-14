@@ -19,6 +19,10 @@ public class EsDocument {
         PreconditionsHelper.notEmpty(type, "type");
         PreconditionsHelper.notEmpty(objectId, "objectId");
 
+        if (index.matches("identity_v.*")) {
+            index = "identity";
+        }
+
         this.index = index;
         this.type = type;
         this.objectId = objectId;

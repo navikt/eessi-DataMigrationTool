@@ -1,6 +1,8 @@
 package eu.ec.dgempl.eessi.rina.tool.migration.importer.dto;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -271,6 +273,44 @@ public class MapHolder {
 
     public String addPath(String path) {
         return StringUtils.isNotBlank(this.path) ? this.path + "." + path : path;
+    }
+
+    public void put(String key, Object value) {
+        this.holding.put(key, value);
+    }
+
+    public void visitAll() {
+        this.walk(this.holding, path);
+    }
+
+    private void walk(Object field, String path) {
+
+        if (field == null) {
+            visitedFields.putIfAbsent(path, true);
+        }
+
+        if (field instanceof Map) {
+
+            String updatedPath = "".equals(path) ? path : path + ".";
+            ((Map<String, Object>) field).forEach((key, value) -> walk(value, updatedPath + key));
+
+        } else if (field instanceof ArrayList) {
+
+            ArrayList<Map<String, Object>> array = (ArrayList<Map<String, Object>>) field;
+
+            if (array.size() == 0) {
+                visitedFields.putIfAbsent(path, true);
+            }
+
+            if (!(array.get(0) instanceof HashMap)) {
+                visitedFields.putIfAbsent(path, true);
+            }
+
+            IntStream.range(0, array.size()).forEach(i -> walk(array.get(i), path + "[" + i + "]"));
+
+        } else {
+            visitedFields.putIfAbsent(path, true);
+        }
     }
 
     private void visit(final String key, final Object o) {

@@ -248,15 +248,7 @@ mayCreateH121=[false]
                 <!-- Check hasParticipantSelection - no need if isML(context)=false (in current BUC, isML(context)=false) -->
                 <parameter key="allowsAttachments">true</parameter> <!-- default is false -->
             </parameters>
-            <triggers>
-                <!-- for starter only, receivers -->
-                <createActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_RECEIVE_REPLY"
-                                     documentType="DA003A"/>
-
-            </triggers>
         </document>
-
-        <document type="DA003A"/>
 
         <!-- subprocess H_BUC_01 -->
 

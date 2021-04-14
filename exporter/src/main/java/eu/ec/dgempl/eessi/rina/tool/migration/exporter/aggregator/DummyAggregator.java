@@ -2,6 +2,7 @@ package eu.ec.dgempl.eessi.rina.tool.migration.exporter.aggregator;
 
 import eu.ec.dgempl.eessi.rina.tool.migration.common.util.PreconditionsHelper;
 import eu.ec.dgempl.eessi.rina.tool.migration.exporter.model.ValidationContext;
+import eu.ec.dgempl.eessi.rina.tool.migration.exporter.validator.Validator;
 
 /**
  * Dummy aggregator that provides a test implementation of {@link Aggregator}
@@ -27,4 +28,10 @@ public class DummyAggregator implements Aggregator<Boolean> {
 
         return true;
     }
+
+    @Override
+    public Boolean applyValidation(Validator v, String path, Object obj, ValidationContext context) {
+        return true;
+    }
+
 }

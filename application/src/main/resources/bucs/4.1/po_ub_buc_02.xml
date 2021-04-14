@@ -222,6 +222,10 @@
 				<parameter key="hasMultipleVersions">true</parameter> <!-- default is false -->
 				<parameter key="hasCancel">true</parameter> <!-- default is false -->
 			</parameters>	
+			<triggers>
+				<!-- create U010 - EESSIDEV-27199 -->					
+				<createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_CREATE" documentType="U010" />
+			</triggers>	
 		</document>
 		
 		<document type="U011">
@@ -230,6 +234,10 @@
 				<parameter key="hasMultipleVersions">true</parameter> <!-- default is false -->
 				<parameter key="hasCancel">true</parameter> <!-- default is false -->
 			</parameters>	
+			<triggers>
+				<!-- create U010 - EESSIDEV-27199 -->					
+				<createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_CREATE" documentType="U010" />
+			</triggers>				
 		</document>
 		
 		<document type="U012">

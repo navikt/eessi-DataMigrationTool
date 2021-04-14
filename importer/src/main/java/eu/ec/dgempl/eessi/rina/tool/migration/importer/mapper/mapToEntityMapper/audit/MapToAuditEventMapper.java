@@ -3,6 +3,9 @@ package eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import eu.ec.dgempl.eessi.rina.model.enumtypes.audit.EActionType;
@@ -24,14 +27,16 @@ import ma.glasnost.orika.MappingContext;
 @Component
 public class MapToAuditEventMapper extends AbstractMapToEntityMapper<MapHolder, AuditEvent> {
 
+    private static final Logger logger = LoggerFactory.getLogger(MapToAuditEventMapper.class);
+
     @Override
     public void mapAtoB(final MapHolder a, final AuditEvent b, final MappingContext context) {
         MapHolder message = a.getMapHolder(AuditEventFields.MESSAGE);
 
-        mapActionType(message, b);
         mapAudit(message, b);
         mapOutcomeType(message, b);
         mapSource(message, b);
+        mapActionType(message, b);
 
         b.setId(message.string(AuditEventFields.ID));
         b.setNetLocationIp(message.string(AuditEventFields.NETWORK_LOCATION_IP, true));
@@ -41,7 +46,7 @@ public class MapToAuditEventMapper extends AbstractMapToEntityMapper<MapHolder, 
         mapAuditedObjects(message, b);
         mapAuditedParticipants(message, b);
 
-        b.setUsername(a.string(AuditEventFields.USER_NAME));
+        b.setUsername(message.string(AuditEventFields.USER_NAME));
     }
 
     private void mapAuditedObjects(final MapHolder a, final AuditEvent b) {
@@ -64,6 +69,14 @@ public class MapToAuditEventMapper extends AbstractMapToEntityMapper<MapHolder, 
 
     private void mapSource(final MapHolder a, final AuditEvent b) {
         MapHolder source = a.getMapHolder(AuditEventFields.SOURCE);
+
+        if (source == null || source.getHolding() == null) {
+            throw new RuntimeException(String.format(
+                    "Could not map %s, %s, %s because message.source is null",
+                    AuditEventFields.CATEGORY_TYPE,
+                    AuditEventFields.COMPONENT_TYPE,
+                    AuditEventFields.EVENT_TYPE));
+        }
 
         String categoryType = source.string(AuditEventFields.CATEGORY_TYPE);
         ECategoryType eCategoryType = ECategoryType.lookup(categoryType).orElseThrow(
@@ -106,9 +119,18 @@ public class MapToAuditEventMapper extends AbstractMapToEntityMapper<MapHolder, 
 
     private void mapActionType(final MapHolder a, final AuditEvent b) {
         String action = a.string(AuditEventFields.ACTION);
-        EActionType eActionType = EActionType.lookup(action).orElseThrow(
-                () -> new DmtEnumNotFoundException(EActionType.class, a.addPath(AuditEventFields.ACTION), action)
-        );
-        b.setActionType(eActionType);
+        if (StringUtils.isEmpty(action)) {
+            if (b.getEventType() != null) {
+                b.setActionType(b.getEventType().getActionType());
+                logger.info("AuditEntry message action is null. Setting action from eventType with value: {}", b.getActionType().name());
+            } else {
+                throw new RuntimeException("AuditEntry message action is null. Tried to set value from eventType but it is also null. This AuditEntry document could not be imported because this value is unknown.");
+            }
+        } else {
+            EActionType eActionType = EActionType.lookup(action).orElseThrow(
+                    () -> new DmtEnumNotFoundException(EActionType.class, a.addPath(AuditEventFields.ACTION), action)
+            );
+            b.setActionType(eActionType);
+        }
     }
 }

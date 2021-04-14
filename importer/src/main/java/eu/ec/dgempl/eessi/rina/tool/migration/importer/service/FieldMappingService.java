@@ -5,11 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -53,7 +49,7 @@ public class FieldMappingService {
      * This method also created a directory to store all .txt containing the unreviewed fields found in the documents. If the directory
      * already exists, the method deletes it and its previous content.
      */
-    // @PostConstruct
+//    @PostConstruct
     public void loadIgnoredFields() {
         if (MapUtils.isEmpty(ignoredFields)) {
             ignoredFields = new HashMap<>();

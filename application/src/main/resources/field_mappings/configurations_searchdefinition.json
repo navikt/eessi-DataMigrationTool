@@ -42,14 +42,16 @@
   {
     "esPath": "participants.acronym",
     "esType": "string",
-    "sqlPath": "searchDefinition.organisations.acronym",
-    "sqlType": "VARCHAR(255)"
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "participants.activeSince",
     "esType": "string",
-    "sqlPath": "searchDefinition.organisations.activeSince",
-    "sqlType": "TIMESTAMP WITH TIME ZONE"
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "participants.address",
@@ -62,9 +64,9 @@
   {
     "esPath": "participants.countryCode",
     "esType": "string",
-    "sqlPath": "searchDefinition.organisations.countryCode",
-    "sqlType": "TEXT",
-    "value": "enum(ECountryCode)"
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "participants.id",
@@ -77,8 +79,38 @@
   {
     "esPath": "participants.name",
     "esType": "string",
-    "sqlPath": "searchDefinition.organisations.name",
-    "sqlType": "VARCHAR(255)"
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "participants.matchedBUC",
+    "esType": "object",
+    "ignorePath": true,
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "processDefinitions.appRoles.id",
+    "esType": "string",
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "processDefinitions.appRoles.name",
+    "esType": "string",
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "processDefinitions.displayName",
+    "esType": "string",
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "comment": "Reference to ProcessDefinition by id",
@@ -88,6 +120,13 @@
     "sqlPath": "searchDefinition.processDefinitions.id",
     "sqlType": "VARCHAR(255)",
     "value": "reference(configurations,processdefinition)"
+  },
+  {
+    "esPath": "processDefinitions.isLeaf",
+    "esType": "boolean",
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "processDefinitions.name",
@@ -143,6 +182,13 @@
     "sqlPath": "iamUser.username|iamGroup.name",
     "sqlType": "VARCHAR(255)",
     "importIgnore": true
+  },
+  {
+    "esPath": "userGroups.parentGroupId",
+    "esType": "string",
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "userGroups.type",

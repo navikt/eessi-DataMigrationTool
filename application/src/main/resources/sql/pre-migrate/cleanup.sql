@@ -18,6 +18,7 @@ DELETE FROM business_exception;
 DELETE FROM assignment_request;
 DELETE FROM notification_user;
 DELETE FROM notification;
+DELETE FROM notification_alarm;
 DELETE FROM assignment_group;
 DELETE FROM assignment_user;
 DELETE FROM assignment;
@@ -76,6 +77,7 @@ DELETE FROM rule_role;
 DELETE FROM rule_sector;
 DELETE FROM rule_creator_user;
 DELETE FROM rule_user;
+DELETE FROM rule_organisation;
 
 DELETE FROM ass_pol_ass_pol_target;
 DELETE FROM assignment_policy_target;
@@ -87,6 +89,8 @@ DELETE FROM field;
 DELETE FROM field_chooser;
 
 DELETE FROM search_def_user;
+DELETE FROM search_def_group;
+DELETE FROM search_def_org;
 DELETE FROM search_def_proc_def;
 DELETE from search_definition;
 
@@ -102,11 +106,13 @@ DELETE FROM business_exception_settings;
 DELETE FROM tenant_param;
 DELETE FROM tenant_param_group;
 DELETE FROM tenant;
+
+DELETE FROM org_contact_method;
 DELETE FROM organisation;
 
 DELETE FROM cluster_node;
 DELETE FROM business_key;
-DELETE FROM global_param;
+DELETE FROM global_param where key not in ('app.profile.installation.component.server.date','app.profile.installation.component.server.version');
 DELETE FROM global_param_group;
 
 DELETE FROM check_instance;

@@ -8,4 +8,5 @@ public class ActivityFields {
     public static final String USER_ID = "userId";
     public static final String COLOUR = "colour";
     public static final String CASE_ID = "caseId";
+    public static final String REPETITION_PARENT_ID = "repetitionParentId";
 }

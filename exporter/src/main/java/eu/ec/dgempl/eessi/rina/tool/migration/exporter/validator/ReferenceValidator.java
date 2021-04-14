@@ -91,7 +91,7 @@ public class ReferenceValidator extends AbstractValidator {
             }
 
             // add a special handler for user.id="System" and user.id="0" and user.id="-1" (a.k.a. system user)
-            if (index.equalsIgnoreCase(EEsIndex.IDENTITY_V1.value()) && type.equalsIgnoreCase(EEsType.USER.value())) {
+            if (index.equalsIgnoreCase(EEsIndex.IDENTITY.value()) && type.equalsIgnoreCase(EEsType.USER.value())) {
                 if (((String) obj).equalsIgnoreCase("system") || obj.equals("0") || obj.equals("-1")) {
                     logger.info("Validation skipped. SYSTEM user doesn't exist in ES. Context=[index={},type={},id={},path={},value={}]",
                             context.getDocument().getIndex(), context.getDocument().getType(), context.getDocument().getObjectId(), path,
@@ -186,7 +186,7 @@ public class ReferenceValidator extends AbstractValidator {
             }
         } else if (obj instanceof Integer) {
             // add a special handler for user.id=0 and user.id=-1 (a.k.a. system user)
-            if (index.equalsIgnoreCase(EEsIndex.IDENTITY_V1.value()) && type.equalsIgnoreCase(EEsType.USER.value())) {
+            if (index.equalsIgnoreCase(EEsIndex.IDENTITY.value()) && type.equalsIgnoreCase(EEsType.USER.value())) {
                 int val = ((Integer) obj).intValue();
                 if (val == 0 || val == -1) {
                     logger.info("Validation skipped. SYSTEM user doesn't exist in ES. Context=[index={},type={},id={},path={},value={}]",

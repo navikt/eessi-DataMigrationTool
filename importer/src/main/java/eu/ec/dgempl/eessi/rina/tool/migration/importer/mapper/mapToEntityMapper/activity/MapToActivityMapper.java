@@ -9,6 +9,7 @@ import eu.ec.dgempl.eessi.rina.model.enumtypes.portal.EColour;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.Activity;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.IamUser;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.RinaCase;
+import eu.ec.dgempl.eessi.rina.repo.ActivityRepo;
 import eu.ec.dgempl.eessi.rina.repo.IamUserRepo;
 import eu.ec.dgempl.eessi.rina.repo.RinaCaseRepo;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.DmtEnumNotFoundException;
@@ -22,10 +23,12 @@ import ma.glasnost.orika.MappingContext;
 @Component
 public class MapToActivityMapper extends AbstractMapToEntityMapper<MapHolder, Activity> {
 
+    private final ActivityRepo activityRepo;
     private final IamUserRepo iamUserRepo;
     private final RinaCaseRepo rinaCaseRepo;
 
-    public MapToActivityMapper(final IamUserRepo iamUserRepo, final RinaCaseRepo rinaCaseRepo) {
+    public MapToActivityMapper(final ActivityRepo activityRepo, final IamUserRepo iamUserRepo, final RinaCaseRepo rinaCaseRepo) {
+        this.activityRepo = activityRepo;
         this.iamUserRepo = iamUserRepo;
         this.rinaCaseRepo = rinaCaseRepo;
     }
@@ -37,11 +40,24 @@ public class MapToActivityMapper extends AbstractMapToEntityMapper<MapHolder, Ac
         mapColour(a, b);
         mapDate(a, ActivityFields.START_DATE, b::setStartDate);
         mapAudit(a, b);
+        mapParent(a, b);
 
         b.setIsDeleted(a.bool(ActivityFields.IS_DELETED, Boolean.FALSE));
         b.setMessage(a.string(ActivityFields.MESSAGE));
 
         b.setTitle(a.string(ActivityFields.TITLE));
+    }
+
+    private void mapParent(MapHolder a, Activity b) {
+        String parentId = a.string(ActivityFields.REPETITION_PARENT_ID);
+
+        if (StringUtils.isNotBlank(parentId)) {
+            Activity parent = RepositoryUtils.findById(parentId, activityRepo::findById);
+
+            if (parent != null) {
+                b.setParent(parent);
+            }
+        }
     }
 
     private void mapId(final MapHolder a, final Activity b) {

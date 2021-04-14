@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +18,7 @@ import eu.ec.dgempl.eessi.rina.model.enumtypes.EUserMessageStatus;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.Organisation;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.UserMessage;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.UserMessageResponse;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.DmtEnumNotFoundException;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.DocumentFields;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper._abstract.AbstractMapToEntityMapper;
@@ -52,6 +54,10 @@ public class MapToUserMessageMapper extends AbstractMapToEntityMapper<MapHolder,
     private void mapSbdh(final MapHolder a, final UserMessage b) {
         try {
             Map<String, Object> sbdh = a.getMap(DocumentFields.SBDH);
+
+            if (sbdh == null) {
+                throw new RuntimeException("Error getting sbdh from userMessage. Sbdh is null");
+            }
 
             // fix isMedical flag; in ES the field is named 'medical'; the DTOs use 'isMedical'
             fixMedicalFieldName(sbdh);
@@ -100,6 +106,14 @@ public class MapToUserMessageMapper extends AbstractMapToEntityMapper<MapHolder,
     }
 
     private void mapStatus(final MapHolder a, final UserMessage b) {
+        String status = a.string(DocumentFields.STATUS);
+
+        if (StringUtils.isNotBlank(status)) {
+            EUserMessageStatus eUserMessageStatus = EUserMessageStatus.lookup(status).orElseThrow(
+                    () -> new DmtEnumNotFoundException(EUserMessageStatus.class, a.addPath(DocumentFields.STATUS), status));
+            b.setStatus(eUserMessageStatus);
+        }
+
         Boolean isSent = a.bool(DocumentFields.IS_SENT, Boolean.FALSE);
         if (isSent) {
             b.setStatus(EUserMessageStatus.SENT);

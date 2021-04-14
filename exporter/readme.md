@@ -45,7 +45,7 @@ Currently, there are two types of reports:
 └── reports                     # the reporting folder
     ├── cases.json              # report for index cases
     ├── entities.json           # report for index entities
-    ├── identity_v1.json        # report for index identity_v1
+    ├── identity.json           # report for index identity
     ├── [...]                   # other reports
     └── cases                   # folder containing detailed case reports
         ├── case_1111.json      # aggregated report for case 1111 
@@ -83,7 +83,7 @@ As an example, a field mapping object may look like this:
     "required": true,
     "sqlPath": "iamUser.id",
     "sqlType": "VARCHAR(255)",
-    "value": "reference(identity_v1,user)"
+    "value": "reference(identity,user)"
 }
 ```
 

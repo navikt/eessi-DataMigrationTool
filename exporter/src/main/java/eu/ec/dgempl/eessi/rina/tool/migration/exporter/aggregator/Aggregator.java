@@ -3,11 +3,13 @@ package eu.ec.dgempl.eessi.rina.tool.migration.exporter.aggregator;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.lang.Nullable;
 
 import eu.ec.dgempl.eessi.rina.tool.migration.exporter.model.ValidationContext;
+import eu.ec.dgempl.eessi.rina.tool.migration.exporter.validator.Validator;
 
 /**
  * Interface that provides the contract for defining aggregator classes. Aggregators must provide methods for processing streams using
@@ -45,5 +47,7 @@ public interface Aggregator<T> {
      * @return the resulting object of type {@link T}
      */
     T accumulate(@NotNull T a, @NotNull T b);
+
+    T applyValidation(@NotNull Validator v, @NotBlank String path, @Nullable Object obj, @NotNull ValidationContext context);
 
 }

@@ -1,9 +1,12 @@
 package eu.ec.dgempl.eessi.rina.tool.migration.buc.receiveaction;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import eu.ec.dgempl.eessi.rina.buc.api.common.NamingHelper;
 import eu.ec.dgempl.eessi.rina.buc.api.model.ActionDO;
+import eu.ec.dgempl.eessi.rina.buc.api.model.EDocumentStatus;
 import eu.ec.dgempl.eessi.rina.buc.core.model.Case;
 import eu.ec.dgempl.eessi.rina.buc.core.model.EActionStatus;
 import eu.ec.dgempl.eessi.rina.buc.core.model.EActionType;
@@ -40,26 +44,35 @@ public class X013ReceiveActionProducer implements ReceiveActionProducer {
 
         String caseId = rinaCase.getId();
 
-        logger.debug("Creating X003 RECEIVE actions for case [id={}, type={}]", caseId, NamingHelper.getBucId(bucDefinition));
+        logger.debug("Creating X013 RECEIVE actions for case [id={}, type={}]", caseId, NamingHelper.getBucId(bucDefinition));
 
-        // select all X002
-        List<Document> x012 = getAllX012(caseId);
+        // select all X012
+        List<Document> x012 = getAllSentX012(caseId);
 
-        // for every X002 create DOC_RECEIVE with docType=X003 and parentDocumentId=X002.id
+        // for every X012 create DOC_RECEIVE with docType=X013 and parentDocumentId=X012.id
         x012.forEach(d -> actionService.saveAction(createX013Receive(caseId, d)));
 
     }
 
     /**
-     * Get all the X002, for which a RECEIVE action of X003 should be created
+     * Get all the X012, for which a RECEIVE action of X013 should be created
      *
      * @param caseId
      * @return
      */
-    protected List<Document> getAllX012(final String caseId) {
+    protected List<Document> getAllSentX012(final String caseId) {
         // @formatter:off
-        return documentRepo.
-                findByRinaCaseIdAndDocumentTypeVersionDocumentTypeType(caseId, EDocumentType.X_012.value());
+        List<Document> allX012 = documentRepo.findByRinaCaseIdAndDocumentTypeVersionDocumentTypeType(
+                caseId,
+                EDocumentType.X_012.value());
+
+        if (CollectionUtils.isNotEmpty(allX012)) {
+            return allX012.stream()
+                    .filter(d -> EDocumentStatus.SENT.name().equals(d.getStatus().name()))
+                    .collect(Collectors.toList());
+        }
+
+        return Collections.emptyList();
         // @formatter:on        
     }
 
@@ -83,10 +96,10 @@ public class X013ReceiveActionProducer implements ReceiveActionProducer {
     }
 
     /**
-     * Create an Action object for the DOC_RECEIVE of X003 as a reply to X002
+     * Create an Action object for the DOC_RECEIVE of X013 as a reply to X012
      *
      * @param caseId
-     * @param x002
+     * @param x012
      * @return
      */
     protected ActionDO createX013Receive(final String caseId, Document x012) {

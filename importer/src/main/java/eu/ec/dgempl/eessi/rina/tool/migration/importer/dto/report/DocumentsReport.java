@@ -3,8 +3,6 @@ package eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.report;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.EElasticType;
 
 /**
@@ -12,20 +10,23 @@ import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.EElasticType;
  */
 public class DocumentsReport {
 
-    @JsonIgnore
-    private final EElasticType eElasticType;
-
+    private final String index;
+    private final String type;
     private final AtomicLong total = new AtomicLong();
     private final AtomicLong processed = new AtomicLong();
     private List<ReportError> errors;
 
     public DocumentsReport(final EElasticType eElasticType) {
-        this.eElasticType = eElasticType;
+        this.index = eElasticType.getIndex();
+        this.type = eElasticType.getType();
     }
 
-    @JsonIgnore
-    public EElasticType getEElasticType() {
-        return eElasticType;
+    public String getIndex() {
+        return index;
+    }
+
+    public String getType() {
+        return type;
     }
 
     public AtomicLong getProcessed() {

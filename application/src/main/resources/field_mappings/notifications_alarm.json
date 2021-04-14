@@ -20,7 +20,7 @@
     "required": true,
     "sqlPath": "notificationAlarm.audit.createdBy",
     "sqlType": "VARCHAR(255)",
-    "value": "reference(identity_v1,user)",
+    "value": "reference(identity,user)",
     "importIgnore": true
   },
   {
@@ -33,16 +33,16 @@
   {
     "esPath": "creator.organisation.acronym",
     "esType": "string",
+    "importIgnore": true,
     "sqlPath": "",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "sqlType": ""
   },
   {
     "esPath": "creator.organisation.activeSince",
     "esType": "string",
+    "importIgnore": true,
     "sqlPath": "",
-    "sqlType": "TIMESTAMP WITH TIME ZONE",
-    "importIgnore": true
+    "sqlType": ""
   },
   {
     "esPath": "creator.organisation.address",
@@ -55,34 +55,30 @@
   {
     "esPath": "creator.organisation.countryCode",
     "esType": "string",
+    "importIgnore": true,
     "sqlPath": "",
-    "sqlType": "TEXT",
-    "value": "enum(ECountryCode)",
-    "importIgnore": true
+    "sqlType": ""
   },
   {
     "esPath": "creator.organisation.registryNumber",
     "esType": "string",
+    "importIgnore": true,
     "sqlPath": "",
-    "sqlType": "TEXT",
-    "value": "enum(ECountryCode)",
-    "importIgnore": true
+    "sqlType": ""
   },
   {
     "esPath": "creator.organisation.contactMethods",
     "esType": "string",
+    "importIgnore": true,
     "sqlPath": "",
-    "sqlType": "TEXT",
-    "value": "enum(ECountryCode)",
-    "importIgnore": true
+    "sqlType": ""
   },
   {
     "esPath": "creator.organisation.location",
     "esType": "string",
+    "importIgnore": true,
     "sqlPath": "",
-    "sqlType": "TEXT",
-    "value": "enum(ECountryCode)",
-    "importIgnore": true
+    "sqlType": ""
   },
   {
     "esPath": "creator.organisation.id",
@@ -95,9 +91,17 @@
   {
     "esPath": "creator.organisation.name",
     "esType": "string",
+    "importIgnore": true,
     "sqlPath": "",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "sqlType": ""
+  },
+  {
+    "esPath": "creator.organisation.matchedBUC",
+    "esType": "object",
+    "ignorePath": true,
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "creator.type",

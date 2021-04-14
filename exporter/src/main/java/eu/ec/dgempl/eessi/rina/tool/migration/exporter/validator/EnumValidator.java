@@ -3,6 +3,7 @@ package eu.ec.dgempl.eessi.rina.tool.migration.exporter.validator;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
@@ -14,6 +15,7 @@ import eu.ec.dgempl.eessi.rina.tool.migration.exporter.model.EValidationResult;
 import eu.ec.dgempl.eessi.rina.tool.migration.exporter.model.ValidationContext;
 import eu.ec.dgempl.eessi.rina.tool.migration.exporter.report.ValidationResult;
 import eu.ec.dgempl.eessi.rina.tool.migration.exporter.service.EnumService;
+import eu.ec.dgempl.eessi.rina.tool.migration.exporter.util.ContentNavigator;
 import eu.ec.dgempl.eessi.rina.tool.migration.exporter.util.JsonPathHelper;
 
 /**
@@ -44,14 +46,42 @@ public class EnumValidator extends AbstractValidator {
             } else {
                 // add exception for assignment policy
                 // rules.actor can also be 'Creator'
-                boolean isIndexConfigurations = context.getDocument().getIndex().equalsIgnoreCase(EEsIndex.CONFIGURATIONS.value());
-                boolean isTypeApplicationProfile = context.getDocument().getType().equalsIgnoreCase(EEsType.ASSIGNMENTPOLICY.value());
-                boolean isPathRulesActors = JsonPathHelper.normalisePath(path).equals("rules.actors");
-                boolean isValueCreator = ((String) obj).equalsIgnoreCase("creator");
-
-                if (isIndexConfigurations && isTypeApplicationProfile && isPathRulesActors && isValueCreator) {
+                boolean exceptionIndex = context.getDocument().getIndex().equalsIgnoreCase(EEsIndex.CONFIGURATIONS.value());
+                boolean exceptionType = context.getDocument().getType().equalsIgnoreCase(EEsType.ASSIGNMENTPOLICY.value());
+                boolean exceptionPath = JsonPathHelper.normalisePath(path).equals("rules.actors");
+                boolean exceptionValue = ((String) obj).equalsIgnoreCase("creator");
+                if (exceptionIndex && exceptionType && exceptionPath && exceptionValue) {
                     results.add(ValidationResult.ok(path, obj));
                     return results;
+                }
+                // add exception for cases_casestructuredmetadata
+                // caseAssignment.actors.name can also be 'System'
+                exceptionIndex = context.getDocument().getIndex().equalsIgnoreCase(EEsIndex.CASES.value());
+                exceptionType = context.getDocument().getType().equalsIgnoreCase(EEsType.CASESTRUCTUREDMETADATA.value());
+                exceptionPath = JsonPathHelper.normalisePath(path).equals("caseAssignment.actors.name");
+                exceptionValue = ((String) obj).equalsIgnoreCase("System");
+                if (exceptionIndex && exceptionType && exceptionPath && exceptionValue) {
+                    results.add(ValidationResult.ok(path, obj));
+                    return results;
+                }
+                // add exception for cases_document
+                // conversations.participants.role = 'CounterParty' and conversations.participants.organisation.id AT:*
+                exceptionIndex = context.getDocument().getIndex().equalsIgnoreCase(EEsIndex.CASES.value());
+                exceptionType = context.getDocument().getType().equalsIgnoreCase(EEsType.DOCUMENT.value());
+                exceptionPath = JsonPathHelper.normalisePath(path).equals("conversations.participants.role");
+                exceptionValue = ((String) obj).equalsIgnoreCase("CounterParty");
+                if (exceptionIndex && exceptionType && exceptionPath && exceptionValue) {
+                    Object orgId = ContentNavigator.getField(context.getDocument().getObject(), "conversations", "participants", "organisation", "id");
+                    if (orgId instanceof String) {
+                        String organisationId = (String) orgId;
+                        if (organisationId.startsWith("AT:")) {
+                            logger.info(String.format(
+                                    "Encountered conversations.participants.role with value CounterParty and country code AT in document with id %s. Skipping this validation. This value will be replaced by Receiver",
+                                    context.getDocument().getObjectId()));
+                            results.add(ValidationResult.ok(path, obj));
+                            return results;
+                        }
+                    }
                 }
 
                 try {

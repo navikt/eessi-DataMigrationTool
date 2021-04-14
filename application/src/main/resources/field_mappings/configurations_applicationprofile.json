@@ -220,6 +220,14 @@
     "sqlType": "VARCHAR(255)"
   },
   {
+    "esPath": "businessExceptionsSettings",
+    "esType": "object",
+    "ignorePath": true,
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
     "esPath": "casesRetentionPolicies.caseRetentionPoliciesTable.applicationRole",
     "esType": "string",
     "sqlPath": "casesRetentionPolicy.applicationRole",
@@ -461,108 +469,41 @@
     "sqlType": "VARCHAR(255)"
   },
   {
-    "esPath": "messagingSettings.institutionAliasMappings.organisation.accessPoint.accessPointIp",
-    "esType": "string",
-    "sqlPath": "tenantParam.value",
-    "sqlType": "VARCHAR(255)"
-  },
-  {
-    "esPath": "messagingSettings.institutionAliasMappings.organisation.accessPoint.accessPointPort",
-    "esType": "string",
-    "sqlPath": "tenantParam.value",
-    "sqlType": "VARCHAR(255)"
-  },
-  {
-    "esPath": "messagingSettings.institutionAliasMappings.organisation.accessPoint.channel",
-    "esType": "string",
-    "sqlPath": "tenantParam.value",
-    "sqlType": "VARCHAR(255)"
-  },
-  {
-    "esPath": "messagingSettings.institutionAliasMappings.organisation.accessPoint.countryCode",
-    "esType": "string",
-    "sqlPath": "tenantParam.value",
-    "sqlType": "VARCHAR(255)"
-  },
-  {
-    "esPath": "messagingSettings.institutionAliasMappings.organisation.accessPoint.id",
-    "esType": "string",
-    "sqlPath": "tenantParam.value",
-    "sqlType": "VARCHAR(255)"
-  },
-  {
-    "esPath": "messagingSettings.institutionAliasMappings.organisation.accessPoint.inboxService",
-    "esType": "string",
-    "sqlPath": "tenantParam.value",
-    "sqlType": "VARCHAR(255)"
-  },
-  {
-    "esPath": "messagingSettings.institutionAliasMappings.organisation.accessPoint.name",
-    "esType": "string",
-    "sqlPath": "tenantParam.value",
-    "sqlType": "VARCHAR(255)"
-  },
-  {
-    "esPath": "messagingSettings.institutionAliasMappings.organisation.accessPoint.outboxService",
-    "esType": "string",
-    "sqlPath": "tenantParam.value",
-    "sqlType": "VARCHAR(255)"
-  },
-  {
-    "esPath": "messagingSettings.institutionAliasMappings.organisation.accessPoint.protocol",
-    "esType": "string",
-    "sqlPath": "tenantParam.value",
-    "sqlType": "VARCHAR(255)"
-  },
-  {
-    "esPath": "messagingSettings.institutionAliasMappings.organisation.accessPoint.technicalChannel",
-    "esType": "string",
-    "sqlPath": "tenantParam.value",
-    "sqlType": "VARCHAR(255)"
-  },
-  {
-    "esPath": "messagingSettings.institutionAliasMappings.organisation.accessPoint.technicalInboxService",
-    "esType": "string",
-    "sqlPath": "tenantParam.value",
-    "sqlType": "VARCHAR(255)"
-  },
-  {
-    "esPath": "messagingSettings.institutionAliasMappings.organisation.accessPoint.technicalOutboxService",
-    "esType": "string",
-    "sqlPath": "tenantParam.value",
-    "sqlType": "VARCHAR(255)"
-  },
-  {
-    "esPath": "messagingSettings.institutionAliasMappings.organisation.accessPoint.technicalProtocol",
-    "esType": "string",
-    "sqlPath": "tenantParam.value",
-    "sqlType": "VARCHAR(255)"
+    "esPath": "messagingSettings.institutionAliasMappings.organisation.accessPoint",
+    "esType": "object",
+    "ignorePath": true,
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "messagingSettings.institutionAliasMappings.organisation.acronym",
     "esType": "string",
-    "sqlPath": "tenantParam.value",
-    "sqlType": "VARCHAR(255)"
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "messagingSettings.institutionAliasMappings.organisation.activeSince",
     "esType": "string",
-    "sqlPath": "tenantParam.value",
-    "sqlType": "VARCHAR(255)"
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "messagingSettings.institutionAliasMappings.organisation.assignedBUCs",
     "esType": "object",
     "ignorePath": true,
-    "sqlPath": "tenantParam.value",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "messagingSettings.institutionAliasMappings.organisation.countryCode",
     "esType": "string",
-    "sqlPath": "tenantParam.value",
-    "sqlType": "VARCHAR(255)"
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "messagingSettings.institutionAliasMappings.organisation.id",
@@ -573,8 +514,17 @@
   {
     "esPath": "messagingSettings.institutionAliasMappings.organisation.name",
     "esType": "string",
-    "sqlPath": "tenantParam.value",
-    "sqlType": "VARCHAR(255)"
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "messagingSettings.institutionAliasMappings.organisation.matchedBUC",
+    "esType": "object",
+    "ignorePath": true,
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "messagingSettings.institutionAliasMappings.password",
@@ -635,7 +585,8 @@
     "esPath": "nieSubscriptions.eventsSubscriptions.case",
     "esType": "boolean",
     "sqlPath": "nieSubscription.isCase",
-    "sqlType": "BOOL"
+    "sqlType": "BOOL",
+    "importIgnore": true
   },
   {
     "esPath": "nieSubscriptions.eventsSubscriptions.id",
@@ -660,12 +611,14 @@
   {
     "esPath": "nieSubscriptions.eventsSubscriptions.listeners.label",
     "esType": "string",
+    "importIgnore": true,
     "sqlPath": "nieSubscription.nieListeners.label",
     "sqlType": "VARCHAR(255)"
   },
   {
     "esPath": "nieSubscriptions.eventsSubscriptions.listeners.listener",
     "esType": "string",
+    "importIgnore": true,
     "required": true,
     "sqlPath": "nieSubscription.nieListeners.url",
     "sqlType": "VARCHAR(1024)"
@@ -836,11 +789,10 @@
     "sqlType": "VARCHAR(255)"
   },
   {
+    "comment": "removed required constraint; this field is bypassed by RINA",
     "esPath": "whoamiId",
     "esType": "string",
-    "required": true,
     "sqlPath": "globalParam.value",
-    "sqlType": "VARCHAR(255)",
-    "value": "reference(entities,organisation)"
+    "sqlType": "VARCHAR(255)"
   }
 ]

@@ -1,0 +1,599 @@
+{
+  "attachments": [
+    {
+      "fileName": "notes.eessi.BUC.export.20180220.pdf",
+      "creator": {
+        "name": "adespa",
+        "organisation": {
+          "activeSince": "2017-12-31T23:00:00Z",
+          "address": {
+            "country": "BE",
+            "town": null,
+            "street": null,
+            "postalCode": null,
+            "region": null
+          },
+          "registryNumber": null,
+          "acronym": "T-MOS1",
+          "countryCode": "BE",
+          "name": "Test 1",
+          "contactMethods": null,
+          "location": null,
+          "id": "BE:0201"
+        },
+        "id": "AWjcxt-vByfanyL",
+        "type": "User"
+      },
+      "versions": [
+        {
+          "date": "2019-10-07T09:17:19Z",
+          "id": "1",
+          "user": {
+            "name": "adespa",
+            "organisation": {
+              "activeSince": "2017-12-31T23:00:00Z",
+              "address": {
+                "country": "BE",
+                "town": null,
+                "street": null,
+                "postalCode": null,
+                "region": null
+              },
+              "registryNumber": null,
+              "acronym": "T-MOS1",
+              "countryCode": "BE",
+              "name": "Test 1",
+              "contactMethods": null,
+              "location": null,
+              "id": "BE:0201"
+            },
+            "id": "AWjcxt-vByfanyL",
+            "type": "User"
+          }
+        }
+      ],
+      "lastUpdate": "2019-10-07T09:17:19Z",
+      "caseId": "135175",
+      "name": "notes.eessi.BUC.export.20180220.pdf",
+      "documentId": "92239b7594414399b92a74d2",
+      "id": "3264ab109a054b4001a41c048",
+      "mimeType": "application/pdf",
+      "creationDate": "2019-10-07T09:17:19Z"
+    }
+  ],
+  "displayName": "Reimbursement Request",
+  "isDummyDocument": false,
+  "mimeType": "json",
+  "type": "U020",
+  "conversations": [
+    {
+      "date": "2019-10-07T09:59:19Z",
+      "versionId": "2",
+      "userMessages": [
+        {
+          "receiver": {
+            "address": {
+              "country": "BE"
+            },
+            "activeSince": "2017-12-31T23:00:00.000Z",
+            "acronym": "T-MOS2",
+            "countryCode": "BE",
+            "name": "Test 2",
+            "id": "BE:0202"
+          },
+          "sbdh": null,
+          "sender": {
+            "activeSince": "2017-12-31T23:00:00.000Z",
+            "address": {
+              "country": "BE",
+              "town": null,
+              "street": null,
+              "postalCode": null,
+              "region": null
+            },
+            "registryNumber": null,
+            "acronym": "T-MOS1",
+            "countryCode": "BE",
+            "name": "Test 1",
+            "contactMethods": null,
+            "location": null,
+            "id": "BE:0201"
+          },
+          "action": "New",
+          "isSent": true,
+          "id": "cd25eede33394dbc89bb467b0bf85"
+        },
+        {
+          "receiver": {
+            "activeSince": "2017-12-31T23:00:00Z",
+            "address": {
+              "country": "BE",
+              "town": null,
+              "street": null,
+              "postalCode": null,
+              "region": null
+            },
+            "registryNumber": null,
+            "acronym": "T-MOS2",
+            "countryCode": "BE",
+            "name": "Test 2",
+            "contactMethods": null,
+            "location": null,
+            "id": "BE:0202"
+          },
+          "sender": {
+            "activeSince": "2017-12-31T23:00:00Z",
+            "address": {
+              "country": "BE",
+              "town": null,
+              "street": null,
+              "postalCode": null,
+              "region": null
+            },
+            "registryNumber": null,
+            "acronym": "T-MOS1",
+            "countryCode": "BE",
+            "name": "Test 1",
+            "contactMethods": null,
+            "location": null,
+            "id": "BE:0201"
+          },
+          "sbdh": {
+            "headerVersion": "1.1",
+            "sender": {
+              "authority": "urn:eu:europa:ec:dgempl:eessi:ir",
+              "identifier": "BE:0201",
+              "contactTypeIdentifier": "CASE_OWNER"
+            },
+            "receivers": [
+              {
+                "authority": "urn:eu:europa:ec:dgempl:eessi:ir",
+                "identifier": "BE:0202",
+                "contactTypeIdentifier": "COUNTERPARTY"
+              }
+            ],
+            "documentIdentification": {
+              "type": "U020",
+              "schemaVersion": "4.1",
+              "identifier": "6868f8de72f54b24a00ef571b947d",
+              "setIdentifier": "92239b7594414399b92a74d2",
+              "version": "2",
+              "action": "NEW",
+              "creationDate": "2019-10-07T09:19:31.000Z"
+            },
+            "attachments": [
+              {
+                "identifier": "3264ab109a054b4001a41c048",
+                "internetMediaTypeCode": "APPLICATION_PDF",
+                "fileName": "notes.eessi.BUC.export.20180220.pdf",
+                "medical": false
+              }
+            ],
+            "caseIdentification": {
+              "identifier": "32f8145238a34c8ba7c4f34565d3",
+              "type": "UB_BUC_04",
+              "version": "4.1",
+              "protectedPerson": false
+            }
+          },
+          "ack": {
+            "id": "19fb0d4db5d94d8f9ea740c0afeb424",
+            "sender": {
+              "activeSince": "2017-12-31T23:00:00Z",
+              "address": {
+                "country": "BE",
+                "town": null,
+                "street": null,
+                "postalCode": null,
+                "region": null
+              },
+              "registryNumber": null,
+              "acronym": "T-MOS1",
+              "countryCode": "BE",
+              "name": "Test 1",
+              "contactMethods": null,
+              "location": null,
+              "id": "BE:0201"
+            },
+            "receiver": {
+              "activeSince": "2017-12-31T23:00:00Z",
+              "address": {
+                "country": "BE",
+                "town": null,
+                "street": null,
+                "postalCode": null,
+                "region": null
+              },
+              "registryNumber": null,
+              "acronym": "T-MOS2",
+              "countryCode": "BE",
+              "name": "Test 2",
+              "contactMethods": null,
+              "location": null,
+              "id": "BE:0202"
+            },
+            "date": "2019-10-07T10:01:34.860Z"
+          },
+          "isSent": true,
+          "id": "19fb0d4db5d94d8f9ea740c0afeb424"
+        }
+      ],
+      "id": "d2072e9d4e6f415abeebd19891232968",
+      "participants": [
+        {
+          "role": "Sender",
+          "organisation": {
+            "activeSince": "2017-12-31T23:00:00.000Z",
+            "address": {
+              "country": "BE",
+              "town": null,
+              "street": null,
+              "postalCode": null,
+              "region": null
+            },
+            "registryNumber": null,
+            "acronym": "T-MOS1",
+            "countryCode": "BE",
+            "name": "Test 1",
+            "contactMethods": null,
+            "location": null,
+            "id": "BE:0201"
+          },
+          "selected": true
+        },
+        {
+          "role": "Receiver",
+          "organisation": {
+            "address": {
+              "country": "BE"
+            },
+            "activeSince": "2017-12-31T23:00:00.000Z",
+            "acronym": "T-MOS2",
+            "countryCode": "BE",
+            "name": "Test 2",
+            "id": "BE:0202"
+          }
+        }
+      ]
+    },
+    {
+      "date": "2019-10-07T09:59:50Z",
+      "versionId": "2",
+      "userMessages": [
+        {
+          "receiver": {
+            "address": {
+              "country": "BE"
+            },
+            "activeSince": "2017-12-31T23:00:00.000Z",
+            "acronym": "T-MOS2",
+            "countryCode": "BE",
+            "name": "Test 2",
+            "id": "BE:0202"
+          },
+          "sender": {
+            "activeSince": "2017-12-31T23:00:00.000Z",
+            "address": {
+              "country": "BE",
+              "town": null,
+              "street": null,
+              "postalCode": null,
+              "region": null
+            },
+            "registryNumber": null,
+            "acronym": "T-MOS1",
+            "countryCode": "BE",
+            "name": "Test 1",
+            "contactMethods": null,
+            "location": null,
+            "id": "BE:0201"
+          },
+          "action": "New",
+          "isSent": true,
+          "id": "5a3270db6e874185af9f5d8488c3163a"
+        }
+      ],
+      "id": "2973babb4cb54ac19c0ad6b47ceaf48e",
+      "participants": [
+        {
+          "role": "Sender",
+          "organisation": {
+            "activeSince": "2017-12-31T23:00:00.000Z",
+            "address": {
+              "country": "BE",
+              "town": null,
+              "street": null,
+              "postalCode": null,
+              "region": null
+            },
+            "registryNumber": null,
+            "acronym": "T-MOS1",
+            "countryCode": "BE",
+            "name": "Test 1",
+            "contactMethods": null,
+            "location": null,
+            "id": "BE:0201"
+          },
+          "selected": true
+        },
+        {
+          "role": "Receiver",
+          "organisation": {
+            "address": {
+              "country": "BE"
+            },
+            "activeSince": "2017-12-31T23:00:00.000Z",
+            "acronym": "T-MOS2",
+            "countryCode": "BE",
+            "name": "Test 2",
+            "id": "BE:0202"
+          }
+        }
+      ]
+    },
+    {
+      "date": "2019-10-07T10:00:47Z",
+      "versionId": "2",
+      "userMessages": [
+        {
+          "receiver": {
+            "address": {
+              "country": "BE"
+            },
+            "activeSince": "2017-12-31T23:00:00.000Z",
+            "acronym": "T-MOS2",
+            "countryCode": "BE",
+            "name": "Test 2",
+            "id": "BE:0202"
+          },
+          "sender": {
+            "activeSince": "2017-12-31T23:00:00.000Z",
+            "address": {
+              "country": "BE",
+              "town": null,
+              "street": null,
+              "postalCode": null,
+              "region": null
+            },
+            "registryNumber": null,
+            "acronym": "T-MOS1",
+            "countryCode": "BE",
+            "name": "Test 1",
+            "contactMethods": null,
+            "location": null,
+            "id": "BE:0201"
+          },
+          "sbdh": {
+            "headerVersion": "1.1",
+            "sender": {
+              "authority": "urn:eu:europa:ec:dgempl:eessi:ir",
+              "identifier": "BE:0201",
+              "contactTypeIdentifier": "CASE_OWNER"
+            },
+            "receivers": [
+              {
+                "authority": "urn:eu:europa:ec:dgempl:eessi:ir",
+                "identifier": "BE:0202",
+                "contactTypeIdentifier": "COUNTERPARTY"
+              }
+            ],
+            "documentIdentification": {
+              "type": "U020",
+              "schemaVersion": "4.1",
+              "identifier": "6868f8de72f54b24a00e571b947d",
+              "setIdentifier": "92239b7594414399b92a74d2",
+              "version": "2",
+              "action": "NEW",
+              "creationDate": "2019-10-07T09:19:31.000Z"
+            },
+            "attachments": [
+              {
+                "identifier": "3264ab109a054b4001a41c048",
+                "internetMediaTypeCode": "APPLICATION_PDF",
+                "fileName": "notes.eessi.BUC.export.20180220.pdf",
+                "medical": false
+              }
+            ],
+            "caseIdentification": {
+              "identifier": "32f8145238a34c8ba7c4f34565d3",
+              "type": "UB_BUC_04",
+              "version": "4.1",
+              "protectedPerson": false
+            }
+          },
+          "action": "New",
+          "isSent": true,
+          "id": "999ffbd11a824bd8af73e8cb99b22718"
+        }
+      ],
+      "id": "c4e91efb121b474aa73e25251a7adffc",
+      "participants": [
+        {
+          "role": "Sender",
+          "organisation": {
+            "activeSince": "2017-12-31T23:00:00.000Z",
+            "address": {
+              "country": "BE",
+              "town": null,
+              "street": null,
+              "postalCode": null,
+              "region": null
+            },
+            "registryNumber": null,
+            "acronym": "T-MOS1",
+            "countryCode": "BE",
+            "name": "Test 1",
+            "contactMethods": null,
+            "location": null,
+            "id": "BE:0201"
+          },
+          "selected": true
+        },
+        {
+          "role": "Receiver",
+          "organisation": {
+            "address": {
+              "country": "BE"
+            },
+            "activeSince": "2017-12-31T23:00:00.000Z",
+            "acronym": "T-MOS2",
+            "countryCode": "BE",
+            "name": "Test 2",
+            "id": "BE:0202"
+          }
+        }
+      ]
+    },
+    {
+      "versionId": "2",
+      "id": "cbf6aa3121d0478eae01de9f65762807",
+      "participants": [
+        {
+          "role": "Sender",
+          "organisation": {
+            "activeSince": "2017-12-31T23:00:00.000Z",
+            "address": {
+              "country": "BE",
+              "town": null,
+              "street": null,
+              "postalCode": null,
+              "region": null
+            },
+            "registryNumber": null,
+            "acronym": "T-MOS1",
+            "countryCode": "BE",
+            "name": "Test 1",
+            "contactMethods": null,
+            "location": null,
+            "id": "BE:0201"
+          },
+          "selected": true
+        },
+        {
+          "role": "Receiver",
+          "organisation": {
+            "address": {
+              "country": "BE"
+            },
+            "activeSince": "2017-12-31T23:00:00.000Z",
+            "acronym": "T-MOS2",
+            "countryCode": "BE",
+            "name": "Test 2",
+            "id": "BE:0202"
+          }
+        }
+      ]
+    }
+  ],
+  "isSendExecuted": true,
+  "internalId": "135175_92239b7594414399b92a74d2",
+  "hasMultipleVersions": true,
+  "caseId": "135175",
+  "hasBusinessValidation": false,
+  "ParentType": "U020",
+  "id": "92239b7594414399b92a74d2",
+  "hasCancel": true,
+  "validation": {
+    "status": "valid"
+  },
+  "direction": "OUT",
+  "order": "1",
+  "hasLetter": false,
+  "creator": {
+    "name": "adespa",
+    "organisation": {
+      "activeSince": "2017-12-31T23:00:00Z",
+      "address": {
+        "country": "BE",
+        "town": null,
+        "street": null,
+        "postalCode": null,
+        "region": null
+      },
+      "registryNumber": null,
+      "acronym": "T-MOS1",
+      "countryCode": "BE",
+      "name": "Test 1",
+      "contactMethods": null,
+      "location": null,
+      "id": "BE:0201"
+    },
+    "id": "AWjcxt-vByfanyL",
+    "type": "User"
+  },
+  "hasReject": true,
+  "hasReplyClarify": false,
+  "starter": true,
+  "DMProcessId": "135175",
+  "isMLC": false,
+  "selectParticipants": true,
+  "subProcessId": "135178",
+  "isAdmin": false,
+  "referenceManager": {
+    "nextId": 2,
+    "missingIds": [],
+    "parentDocumentId": "92239b7594414399b92a74d2"
+  },
+  "hasClarify": true,
+  "createTemplate": null,
+  "toSenderOnly": false,
+  "typeVersion": "4.1",
+  "allowsAttachments": true,
+  "versions": [
+    {
+      "date": "2019-10-07T09:16:31.242Z",
+      "id": "1",
+      "user": {
+        "name": "adespa",
+        "organisation": {
+          "activeSince": "2017-12-31T23:00:00Z",
+          "address": {
+            "country": "BE",
+            "town": null,
+            "street": null,
+            "postalCode": null,
+            "region": null
+          },
+          "registryNumber": null,
+          "acronym": "T-MOS1",
+          "countryCode": "BE",
+          "name": "Test 1",
+          "contactMethods": null,
+          "location": null,
+          "id": "BE:0201"
+        },
+        "id": "AWjcxt-vByfanyL",
+        "type": "User"
+      }
+    },
+    {
+      "date": "2019-10-07T09:19:31Z",
+      "id": "2",
+      "user": {
+        "name": "adespa",
+        "organisation": {
+          "activeSince": "2017-12-31T23:00:00Z",
+          "address": {
+            "country": "BE",
+            "town": null,
+            "street": null,
+            "postalCode": null,
+            "region": null
+          },
+          "registryNumber": null,
+          "acronym": "T-MOS1",
+          "countryCode": "BE",
+          "name": "Test 1",
+          "contactMethods": null,
+          "location": null,
+          "id": "BE:0201"
+        },
+        "id": "AWjcxt-vByfanyL",
+        "type": "User"
+      }
+    }
+  ],
+  "bulk": true,
+  "isFirstDocument": true,
+  "status": "sent"
+}

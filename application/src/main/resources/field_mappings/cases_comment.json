@@ -19,7 +19,7 @@
     "esType": "string",
     "sqlPath": "iamUser.id",
     "sqlType": "VARCHAR(255)",
-    "value": "reference(identity_v1,user)"
+    "value": "reference(identity,user)"
   },
   {
     "esPath": "creator.name",
@@ -30,154 +30,12 @@
     "importIgnore": true
   },
   {
-    "esPath": "creator.organisation.accessPoint.accessPointIp",
-    "esType": "string",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.apIp",
-    "sqlType": "VARCHAR(255)"
-  },
-  {
-    "esPath": "creator.organisation.accessPoint.accessPointPort",
-    "esType": "string",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.apPort",
-    "sqlType": "INT4"
-  },
-  {
-    "esPath": "creator.organisation.accessPoint.channel",
-    "esType": "string",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.apChannel",
-    "sqlType": "VARCHAR(255)"
-  },
-  {
-    "esPath": "creator.organisation.accessPoint.countryCode",
-    "esType": "string",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.apCountryCode",
-    "sqlType": "TEXT",
-    "value": "enum(ECountryCode)"
-  },
-  {
-    "esPath": "creator.organisation.accessPoint.id",
-    "esType": "string",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.apId",
-    "sqlType": "VARCHAR(255)"
-  },
-  {
-    "esPath": "creator.organisation.accessPoint.inboxService",
-    "esType": "string",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.apInboxService",
-    "sqlType": "VARCHAR(255)"
-  },
-  {
-    "esPath": "creator.organisation.accessPoint.name",
-    "esType": "string",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.apName",
-    "sqlType": "VARCHAR(255)"
-  },
-  {
-    "esPath": "creator.organisation.accessPoint.outboxService",
-    "esType": "string",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.apOutboxService",
-    "sqlType": "VARCHAR(255)"
-  },
-  {
-    "esPath": "creator.organisation.accessPoint.protocol",
-    "esType": "string",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.apProtocol",
-    "sqlType": "VARCHAR(255)"
-  },
-  {
-    "esPath": "creator.organisation.accessPoint.technicalChannel",
-    "esType": "string",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.apTechnicalChannel",
-    "sqlType": "VARCHAR(255)"
-  },
-  {
-    "esPath": "creator.organisation.accessPoint.technicalInboxService",
-    "esType": "string",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.apTechnicalInboxService",
-    "sqlType": "VARCHAR(255)"
-  },
-  {
-    "esPath": "creator.organisation.accessPoint.technicalOutboxService",
-    "esType": "string",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.apTechnicalOutboxService",
-    "sqlType": "VARCHAR(255)"
-  },
-  {
-    "esPath": "creator.organisation.accessPoint.technicalProtocol",
-    "esType": "string",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.apTechnicalProtocol",
-    "sqlType": "VARCHAR(255)"
-  },
-  {
-    "esPath": "creator.organisation.acronym",
-    "esType": "string",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.acronym",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
-  },
-  {
-    "esPath": "creator.organisation.activeSince",
-    "esType": "date",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.activeSince",
-    "sqlType": "TIMESTAMP WITH TIME ZONE",
-    "importIgnore": true
-  },
-  {
-    "esPath": "creator.organisation.address",
+    "esPath": "creator.organisation",
     "esType": "object",
     "ignorePath": true,
     "importIgnore": true,
     "sqlPath": "",
     "sqlType": ""
-  },
-  {
-    "esPath": "creator.organisation.assignedBUCs.applicationRole",
-    "esType": "string",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.assignedBucs.applicationRole",
-    "sqlType": "TEXT",
-    "value": "enum(EApplicationRole)"
-  },
-  {
-    "esPath": "creator.organisation.assignedBUCs.bucType",
-    "esType": "string",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.assignedBucs.processDef.id",
-    "sqlType": "VARCHAR(255)"
-  },
-  {
-    "esPath": "creator.organisation.assignedBUCs.isEESSIReady",
-    "esType": "boolean",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.assignedBucs.isEessiReady",
-    "sqlType": "BOOL"
-  },
-  {
-    "esPath": "creator.organisation.assignedBUCs.validityStartDate",
-    "esType": "string",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.assignedBucs.validityStartDate",
-    "sqlType": "TIMESTAMP WITH TIME ZONE"
-  },
-  {
-    "esPath": "creator.organisation.countryCode",
-    "esType": "string",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.countryCode",
-    "sqlType": "TEXT",
-    "value": "enum(ECountryCode)",
-    "importIgnore": true
-  },
-  {
-    "esPath": "creator.organisation.id",
-    "esType": "string",
-    "required": true,
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.id",
-    "sqlType": "VARCHAR(50)",
-    "value": "reference(entities,organisation)",
-    "importIgnore": true
-  },
-  {
-    "esPath": "creator.organisation.name",
-    "esType": "string",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.name",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
   },
   {
     "comment": "should be user",

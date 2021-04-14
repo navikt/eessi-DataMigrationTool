@@ -1,0 +1,18 @@
+{
+  "lastName": "test",
+  "salt": "yv8qmzRRev05Jg\u003d\u003d",
+  "institutionId": "FR:FRNA10",
+  "creationDate": "2020-10-12T08:15:47.014+0000",
+  "firstName": "test",
+  "password": "njF3XBw+aSDALBEUS6ux4RORfFyJebDcYsuJ8WpE/gtyUKslcTJ/2dqHLAR/XLaQeXe+T7Sasugo1FE9gXX4dg\u003d\u003d",
+  "phoneNumber": "",
+  "isDeleted": false,
+  "keystoreAlias": "",
+  "isEnabled": true,
+  "isLocked": false,
+  "lastUpdate": "2020-10-12T08:15:47.014+0000",
+  "_id": "AXUb4TtG5TcFptbEfwJp",
+  "isAdministrator": false,
+  "email": "x@y.z",
+  "username": "IAM_MEDICAL_AUTH"
+}

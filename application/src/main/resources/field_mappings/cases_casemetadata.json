@@ -49,16 +49,16 @@
   {
     "esPath": "participants.organisation.acronym",
     "esType": "string",
-    "sqlPath": "rinaCase.caseParticipants.organisation.acronym",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "participants.organisation.activeSince",
     "esType": "string",
-    "sqlPath": "rinaCase.caseParticipants.organisation.activeSince",
-    "sqlType": "TIMESTAMP WITH TIME ZONE",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "participants.organisation.address",
@@ -71,10 +71,9 @@
   {
     "esPath": "participants.organisation.countryCode",
     "esType": "string",
-    "sqlPath": "rinaCase.caseParticipants.organisation.countryCode",
-    "sqlType": "TEXT",
-    "value": "enum(ECountryCode)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "participants.organisation.id",
@@ -86,18 +85,33 @@
     "importIgnore": true
   },
   {
+    "esPath": "participants.organisation.identifier",
+    "esType": "string",
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
     "esPath": "participants.organisation.location",
     "esType": "geo_point",
-    "sqlPath": "rinaCase.caseParticipants.organisation.location",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "participants.organisation.name",
     "esType": "string",
-    "sqlPath": "rinaCase.caseParticipants.organisation.name",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "participants.organisation.matchedBUC",
+    "esType": "object",
+    "ignorePath": true,
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "participants.role",

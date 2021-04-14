@@ -53,56 +53,24 @@
     "esPath": "subdocuments.attachments.creator.id",
     "esType": "string",
     "required": true,
-    "sqlPath": "iamUser.id",
+    "sqlPath": "subdocument.subdocumentAttachments.audit.createdBy",
     "sqlType": "VARCHAR(255)",
-    "value": "reference(identity_v1,user)"
+    "value": "reference(identity,user)"
   },
   {
     "esPath": "subdocuments.attachments.creator.name",
     "esType": "string",
     "sqlPath": "subdocument.subdocumentAttachments.audit.createdBy",
-    "sqlType": "VARCHAR(255)"
+    "sqlType": "VARCHAR(255)",
+    "importIgnore": true
   },
   {
-    "esPath": "subdocuments.attachments.creator.organisation.acronym",
-    "esType": "string",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.acronym",
-    "sqlType": "VARCHAR(255)"
-  },
-  {
-    "esPath": "subdocuments.attachments.creator.organisation.activeSince",
-    "esType": "date",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.activeSince",
-    "sqlType": "TIMESTAMP WITH TIME ZONE"
-  },
-  {
-    "esPath": "subdocuments.attachments.creator.organisation.address",
+    "esPath": "subdocuments.attachments.creator.organisation",
     "esType": "object",
     "ignorePath": true,
     "importIgnore": true,
     "sqlPath": "",
     "sqlType": ""
-  },
-  {
-    "esPath": "subdocuments.attachments.creator.organisation.countryCode",
-    "esType": "string",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.countryCode",
-    "sqlType": "TEXT",
-    "value": "enum(ECountryCode)"
-  },
-  {
-    "esPath": "subdocuments.attachments.creator.organisation.id",
-    "esType": "string",
-    "required": true,
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.id",
-    "sqlType": "VARCHAR(50)",
-    "value": "reference(entities,organisation)"
-  },
-  {
-    "esPath": "subdocuments.attachments.creator.organisation.name",
-    "esType": "string",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.name",
-    "sqlType": "VARCHAR(255)"
   },
   {
     "comment": "should be user",
@@ -111,7 +79,8 @@
     "required": true,
     "sqlPath": "",
     "sqlType": "VARCHAR(4)",
-    "value": "regex(User)"
+    "value": "regex(User)",
+    "importIgnore": true
   },
   {
     "esPath": "subdocuments.attachments.documentId",
@@ -178,7 +147,8 @@
     "esType": "string",
     "required": true,
     "sqlPath": "subdocument.subdocumentAttachments.subdocumentBversions.id",
-    "sqlType": "INT4"
+    "sqlType": "INT4",
+    "importIgnore": true
   },
   {
     "esPath": "subdocuments.attachments.versions.user.id",
@@ -186,54 +156,23 @@
     "required": true,
     "sqlPath": "iamUser.id",
     "sqlType": "VARCHAR(255)",
-    "value": "reference(identity_v1,user)"
+    "value": "reference(identity,user)",
+    "importIgnore": true
   },
   {
     "esPath": "subdocuments.attachments.versions.user.name",
     "esType": "string",
     "sqlPath": "subdocument.subdocumentAttachments.subdocumentBversions.audit.createdBy",
-    "sqlType": "VARCHAR(255)"
+    "sqlType": "VARCHAR(255)",
+    "importIgnore": true
   },
   {
-    "esPath": "subdocuments.attachments.versions.user.organisation.acronym",
-    "esType": "string",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.acronym",
-    "sqlType": "VARCHAR(255)"
-  },
-  {
-    "esPath": "subdocuments.attachments.versions.user.organisation.activeSince",
-    "esType": "date",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.activeSince",
-    "sqlType": "TIMESTAMP WITH TIME ZONE"
-  },
-  {
-    "esPath": "subdocuments.attachments.versions.user.organisation.address",
+    "esPath": "subdocuments.attachments.versions.user.organisation",
     "esType": "object",
     "ignorePath": true,
     "importIgnore": true,
     "sqlPath": "",
     "sqlType": ""
-  },
-  {
-    "esPath": "subdocuments.attachments.versions.user.organisation.countryCode",
-    "esType": "string",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.countryCode",
-    "sqlType": "TEXT",
-    "value": "enum(ECountryCode)"
-  },
-  {
-    "esPath": "subdocuments.attachments.versions.user.organisation.id",
-    "esType": "string",
-    "required": true,
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.id",
-    "sqlType": "VARCHAR(50)",
-    "value": "reference(entities,organisation)"
-  },
-  {
-    "esPath": "subdocuments.attachments.versions.user.organisation.name",
-    "esType": "string",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.name",
-    "sqlType": "VARCHAR(255)"
   },
   {
     "comment": "should be user",
@@ -242,7 +181,8 @@
     "required": true,
     "sqlPath": "",
     "sqlType": "VARCHAR(4)",
-    "value": "regex(User)"
+    "value": "regex(User)",
+    "importIgnore": true
   },
   {
     "comment": "if null, replace with the main caseId",
@@ -250,7 +190,8 @@
     "esType": "string",
     "sqlPath": "subdocument.rinaCase.id",
     "sqlType": "VARCHAR(255)",
-    "value": "duplicate(caseId)"
+    "value": "duplicate(caseId)",
+    "importIgnore": true
   },
   {
     "comment": "if null, replace with parent creation date",
@@ -265,25 +206,28 @@
     "required": true,
     "sqlPath": "iamUser.id",
     "sqlType": "VARCHAR(255)",
-    "value": "reference(identity_v1,user)"
+    "value": "reference(identity,user)"
   },
   {
     "esPath": "subdocuments.creator.name",
     "esType": "string",
+    "importIgnore": true,
     "sqlPath": "subdocument.audit.createdBy",
     "sqlType": "VARCHAR(255)"
   },
   {
     "esPath": "subdocuments.creator.organisation.acronym",
     "esType": "string",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.acronym",
-    "sqlType": "VARCHAR(255)"
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "subdocuments.creator.organisation.activeSince",
     "esType": "date",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.activeSince",
-    "sqlType": "TIMESTAMP WITH TIME ZONE"
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "subdocuments.creator.organisation.address",
@@ -296,13 +240,14 @@
   {
     "esPath": "subdocuments.creator.organisation.countryCode",
     "esType": "string",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.countryCode",
-    "sqlType": "TEXT",
-    "value": "enum(ECountryCode)"
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "subdocuments.creator.organisation.id",
     "esType": "string",
+    "importIgnore": true,
     "required": true,
     "sqlPath": "(iamUser|iamGroup).tenant.organisation.id",
     "sqlType": "VARCHAR(50)",
@@ -311,13 +256,23 @@
   {
     "esPath": "subdocuments.creator.organisation.name",
     "esType": "string",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.name",
-    "sqlType": "VARCHAR(255)"
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "subdocuments.creator.organisation.matchedBUC",
+    "esType": "object",
+    "ignorePath": true,
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "comment": "should be user",
     "esPath": "subdocuments.creator.type",
     "esType": "string",
+    "importIgnore": true,
     "required": true,
     "sqlPath": "",
     "sqlType": "VARCHAR(4)",
@@ -409,7 +364,7 @@
     "required": true,
     "sqlPath": "iamUser.id",
     "sqlType": "VARCHAR(255)",
-    "value": "reference(identity_v1,user)"
+    "value": "reference(identity,user)"
   },
   {
     "esPath": "subdocuments.versions.user.name",
@@ -422,16 +377,16 @@
   {
     "esPath": "subdocuments.versions.user.organisation.acronym",
     "esType": "string",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.acronym",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "subdocuments.versions.user.organisation.activeSince",
     "esType": "date",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.activeSince",
-    "sqlType": "TIMESTAMP WITH TIME ZONE",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "subdocuments.versions.user.organisation.address",
@@ -444,10 +399,9 @@
   {
     "esPath": "subdocuments.versions.user.organisation.countryCode",
     "esType": "string",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.countryCode",
-    "sqlType": "TEXT",
-    "value": "enum(ECountryCode)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "subdocuments.versions.user.organisation.id",
@@ -461,9 +415,17 @@
   {
     "esPath": "subdocuments.versions.user.organisation.name",
     "esType": "string",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.name",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "subdocuments.versions.user.organisation.matchedBUC",
+    "esType": "object",
+    "ignorePath": true,
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "comment": "should be user",

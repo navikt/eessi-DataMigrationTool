@@ -8,15 +8,21 @@ The structure of the project is like this:
 
 ```
 .
-└── deploy_folder                           # the folder where the zip content is extracted
+└── deploy_folder                   # the folder where the zip content is extracted
     ├── EESSI-RINA-DATA-MIGRATION-x.y.z.jar # the data Migration tool jar
-    └── config                              # config folder
-        ├── bucs                            # folder containing the buc definitions
-        ├── field_mapping                   # folder containing Elasticsearch-SQL field mappings
-        ├── jpa                             # folder containing SQL connection properties
-        ├── sql                             # folder containing SQL pre-population scripts
-        ├── application.properties          # properties configurations
-        └── log4j2.xml                      # logging configurations
+    ├── ChangeLog.txt               # the change log file
+    ├── config                      # config folder
+    │   ├── bucs                    # folder containing the buc definitions
+    │   ├── field_mapping           # folder containing Elasticsearch-SQL field mappings
+    │   ├── jpa                     # folder containing SQL connection properties
+    │   ├── sql                     # folder containing SQL pre-population scripts
+    │   ├── application.properties  # properties configurations
+    │   └── log4j2.xml              # logging configurations
+    └── scripts                     # scripts folder
+        └── bonita-actors-extractor # script for extracting the actor roles mapping from Bonita DB
+            ├── sql                 # folder containing the sql scripts used by the extractor
+            ├── actors_extractor.ps1 # the Windows version of the extractor script
+            └── actors_extractor.sh # the Linux version of the extractor script
 ```
 
 Before running the Data Migration tool, there are some properties that have to be configured in the [application.properties](../application/src/main/resources/application.properties) (e.g. specify how to connect to Elasticsearch, or Postgresq, provide paths to different resources). The `application.properties` comes preconfigured as below: 
@@ -61,10 +67,11 @@ The full list of properties that can be configured in the `application.propertie
 * `rina.configuration.datasource`: the path to the folder that contains the `jpa` subfolder. This is preconfigured to `config`. The `jpa` folder contains the SQL connection properties files, and is structured like this:
 
     ```
-    └── config                          # config folder
-        └── jpa                         # folder containing SQL connection properties
-            ├── db.properties           # Postgresql datasource properties
-            └── jpa.properties          # Hibernate properties
+    .
+    └── config                  # config folder
+        └── jpa                 # folder containing SQL connection properties
+            ├── db.properties   # Postgresql datasource properties
+            └── jpa.properties  # Hibernate properties
     ```
   
 * `sql.scripts.path`: the path to the SQL pre-population scripts. This is preconfigured to `config/sql`.
@@ -171,10 +178,10 @@ Currently, there are two types of reports:
  As an example, structure of the output folder may look like this:
  ```
 .
-└── validator                  # the reporting folder
+└── validator                   # the reporting folder
     ├── admin.json              # report for index admin
     ├── entities.json           # report for index entities
-    ├── identity_v1.json        # report for index identity_v1
+    ├── identity.json           # report for index identity
     ├── [...]                   # other reports
     └── cases                   # folder containing detailed case reports
         ├── case_1111.json      # aggregated report for case 1111 

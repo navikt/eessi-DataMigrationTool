@@ -5,6 +5,7 @@ import static eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.DateUtils.*;
 import static eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.RepositoryUtils.*;
 
 import java.time.ZonedDateTime;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -36,10 +37,11 @@ import eu.ec.dgempl.eessi.rina.repo.UserMessageResponseRepo;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dataimport.CaseImporter;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dataimport.ElasticTypeImporter;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dataimport._abstract.AbstractDataImporter;
-import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.report.DocumentsReport;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.EElasticType;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.report.DocumentsReport;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.DocumentFields;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.MapUtils;
 
 @Component
 @ElasticTypeImporter(type = EElasticType.CASES_DOCUMENT)
@@ -76,6 +78,7 @@ public class DocumentImporter extends AbstractDataImporter implements CaseImport
         String docType = doc.string(DocumentFields.TYPE);
 
         if (UNSUPPORTED_DOCUMENT_TYPES.contains(docType)) {
+            doc.visitAll();
             logger.warn("Found dummy documents in MultiStarter context for case: {}, docId: {}", doc.string(DocumentFields.CASE_ID),
                     doc.string(DocumentFields.ID));
             return;
@@ -159,6 +162,7 @@ public class DocumentImporter extends AbstractDataImporter implements CaseImport
         List<MapHolder> versions = doc.listToMapHolder(DocumentFields.VERSIONS);
         if (CollectionUtils.isNotEmpty(versions)) {
             versions.stream().map(version -> beanMapper.map(version, DocumentBversion.class, mctxb().addProp("doc", document).build()))
+                    .filter(MapUtils.distinctByKey(x -> Arrays.asList(x.getId(), x.getAudit().getCreatedAt(), x.getAudit().getCreatedBy())))
                     .forEach(document::addDocumentBversion);
 
             List<DocumentBversion> bversions = document.getDocumentBversions();

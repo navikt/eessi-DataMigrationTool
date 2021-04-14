@@ -8,8 +8,6 @@ import java.util.Map;
 import org.apache.commons.collections.CollectionUtils;
 import org.jetbrains.annotations.NotNull;
 
-import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.EElasticType;
-
 public class IndexReport {
 
     private final Map<String, DocumentsReport> report;
@@ -32,8 +30,7 @@ public class IndexReport {
     }
 
     public void swallow(DocumentsReport documentsReport) {
-        EElasticType eElasticType = documentsReport.getEElasticType();
-        String key = getKey(eElasticType);
+        String key = getKey(documentsReport.getIndex(), documentsReport.getType());
 
         if (report.containsKey(key)) {
             DocumentsReport currentReport = report.get(key);
@@ -58,7 +55,7 @@ public class IndexReport {
     }
 
     @NotNull
-    private String getKey(final EElasticType eElasticType) {
-        return eElasticType.getIndex() + "_" + eElasticType.getType();
+    private String getKey(final String index, final String type) {
+        return index + "_" + type;
     }
 }

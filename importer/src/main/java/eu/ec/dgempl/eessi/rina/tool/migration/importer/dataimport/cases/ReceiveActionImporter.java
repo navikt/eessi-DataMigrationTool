@@ -12,6 +12,7 @@ import eu.ec.dgempl.eessi.rina.tool.migration.buc.CaseProcessor;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dataimport.CaseImporter;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dataimport.ElasticTypeImporter;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dataimport._abstract.AbstractDataImporter;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.GenericImporterException;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.report.DocumentsReport;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.EElasticType;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.RepositoryUtils;
@@ -40,7 +41,7 @@ public class ReceiveActionImporter extends AbstractDataImporter implements CaseI
         try {
             caseProcessor.processCase(caseId, processDefVersion.getProcessDef().getId(), eCaseRole, processDefVersion.getBusinessVersion());
         } catch (Exception e) {
-            throw new RuntimeException("Could not create receive Actions for case: " + caseId, e);
+            throw new GenericImporterException(e, this.inferElasticType(), caseId);
         }
 
         return null;

@@ -1,5 +1,47 @@
 EESSI-RINA-DATA-MIGRATION
 
+v2.1.1
+--------------------------------------
+Validator:
+- added exception for cases_casestructuredmetadata.caseAssignment.actors.name to allow value 'System'
+- added exception for identity_user to allow empty values for firstName, lastName or salt
+- added exception for notifications_alarm.creationDate to allow value null
+- added exception for cases_document.conversations.participants.role to allow value 'CounterParty'
+- updated field_mappings: ignore redundant organisations fields (matchedBUC.*, identifier)
+- updated field_mapping audit_auditentry: ignore field port; update length constraint for net_location_machine
+- updated field_mapping cases_casestructuredmetadata: ignore fields caseAssignment.properties.importance and caseAssignment.properties.criticality
+- updated field_mapping cases_document: ignore fields conversations.participants.id, conversations.participants.counterParty, conversations.participants.caseOwner
+- updated field_mapping cases_taskmetadata: ignore field tags.dmprocessId
+- updated field_mapping configurations_applicationprofile: ignore fields whoamiId and businessExceptionsSettings.*
+- updated field_mapping configurations_fieldchooser: ignore fields fields.uiShow and fields.uiSort
+- updated field_mapping configurations_searchdefinition: marked several unknown fields as ignored
+- updated field_mapping globalconfigurations_applicationprofile: added messagingSettings.antimalwareInfectedSettings to the list of known fields
+- updated references to index identity_v1; DMT now uses the alias identity
+- removed validation for cases_thumbnailcontent
+Importer:
+- added exception for handling cases_casestructuredmetadata.caseAssignment.actors.name = 'System'
+- handle gracefully cases when SBDH is null or missing
+- fixed migration of username when processing audit events
+- fixed migration of name when processing documents
+- fixed generation of X013 actions for sent X012 documents
+- fixed issue with updating server version and date
+- fixed validityEndDate NPE when importing organisation assignedBUCs
+- fixed handling hierarchies of groups
+- set default values to caseAssignment.properties.importance and caseAssignment.properties.criticality if missing
+- set default values to identity_user.firstName and identity_user.lastName if missing
+- set default value to notifications_alarm.creationDate if missing
+- removed duplicate entries from cases_document.documents.versions
+- removed duplicated entries from notifications_notification.responsibleParties
+- added fallback for missing audit_auditentry.message.action
+- updated the logic of finding the corresponding case for pending messages
+- replaced the value of cases_document.conversations.participants.role from 'CounterParty' to 'Receiver'
+- updated references to index identity_v1; DMT now uses the alias identity
+- removed importer for cases_thumbnailcontent
+- updated the cleanup script: added missing tables
+Other:
+- increased the timeout for Elasticsearch scrolls
+- added script to generate inactive organisations csv file for different environments
+
 v2.1.0
 --------------------------------------
 Note: Entries marked with (*) are resolved in DMT. To consider these fully resolved, they need to be tested with the next public RINA release

@@ -7,12 +7,12 @@
     <parent>
         <groupId>eu.ec.dgempl.eessi</groupId>
         <artifactId>ES2SQL_data_migration</artifactId>
-        <version>2.1.0</version>
+        <version>2.1.1</version>
         <relativePath>../</relativePath>
     </parent>
 
     <artifactId>application</artifactId>
-    <version>2.1.0</version>
+    <version>2.1.1</version>
 
     <dependencies>
         <dependency>
@@ -53,7 +53,7 @@
                 <executions>
                     <execution>
                         <id>copy-resources-1</id>
-                        <phase>validate</phase>
+                        <phase>install</phase>
                         <goals>
                             <goal>copy-resources</goal>
                         </goals>
@@ -72,6 +72,39 @@
                                         <include>application.properties</include>
                                         <include>log4j2.xml</include>
                                         <include>Organisations.csv</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>copy-resources-2</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/run</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>..</directory>
+                                    <includes>
+                                        <include>scripts/bonita-actors-extractor/sql/*.*</include>
+                                        <include>scripts/bonita-actors-extractor/actors_extractor.ps1</include>
+                                        <include>scripts/bonita-actors-extractor/actors_extractor.sh</include>
+                                    </includes>
+                                </resource>
+                                <resource>
+                                    <directory>.</directory>
+                                    <includes>
+                                        <include>ChangeLog.txt</include>
+                                    </includes>
+                                </resource>
+                                <resource>
+                                    <directory>target</directory>
+                                    <includes>
+                                        <include>EESSI-RINA-DATA-MIGRATION-${version}.jar</include>
                                     </includes>
                                 </resource>
                             </resources>

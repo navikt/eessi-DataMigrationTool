@@ -43,6 +43,7 @@ public class EsClientService {
     private final RestHighLevelClient client;
     private final RestClient lowLevelClient;
     private final int BATCH_SIZE = 1000;
+    private final long SCROLL_KEEP_ALIVE_MINS = 5L;
 
     @Autowired
     public EsClientService(@Qualifier("highLevelClient") RestHighLevelClient client, RestClient lowLevelClient) {
@@ -279,7 +280,6 @@ public class EsClientService {
                 EEsType.DOCUMENTCONTENT.value(),
                 EEsType.SIGNATURE.value(),
                 EEsType.TASKMETADATA.value(),
-                EEsType.THUMBNAILCONTENT.value(),
                 EEsType.USERMESSAGEHEADER.value()
         };
         // @formatter:on
@@ -300,15 +300,17 @@ public class EsClientService {
     }
 
     /**
-     * Method for processing BUC documents (not elasticsearch documents) that have parent documents (i.e. reply documents)
+     * Method for processing elasticsearch documents that have a certain type (i.e. R017)
      *
      * @param caseId
      *            the case id
      * @param processor
      *            the processing method that will be called on all the query results
+     * @param documentType
+     *              the type of the documents that need to be processed
      * @throws IOException
      */
-    public void processDocumentsWithParent(String caseId, Consumer<SearchHit[]> processor) throws IOException {
+    public void processDocumentsWithType(String caseId, Consumer<SearchHit[]> processor, String documentType) throws IOException {
         PreconditionsHelper.notEmpty(caseId, "caseId");
         PreconditionsHelper.notNull(processor, "processor");
 
@@ -316,7 +318,7 @@ public class EsClientService {
         SearchSourceBuilder sourceBuilder = new SearchSourceBuilder()
                 .query(QueryBuilders.boolQuery()
                         .must(QueryBuilders.termQuery("caseId", caseId))
-                        .must(QueryBuilders.existsQuery("parentDocumentId"))
+                        .must(QueryBuilders.termQuery("type", documentType.toLowerCase()))
                 )
                 .size(BATCH_SIZE);
         //@formatter:on
@@ -327,15 +329,17 @@ public class EsClientService {
     }
 
     /**
-     * Method for processing BUC documents (not elasticsearch documents) that don't have parent documents (i.e. non-reply documents)
+     * Method for processing elasticsearch documents that have a different type than the one provided (i.e. R017)
      *
      * @param caseId
      *            the case id
      * @param processor
      *            the processing method that will be called on all the query results
+     * @param documentType
+     *            the type of the documents that need to be skipped from processing
      * @throws IOException
      */
-    public void processDocumentsWithoutParent(String caseId, Consumer<SearchHit[]> processor) throws IOException {
+    public void processDocumentsWithTypeNot(String caseId, Consumer<SearchHit[]> processor, String documentType) throws IOException {
         PreconditionsHelper.notEmpty(caseId, "caseId");
         PreconditionsHelper.notNull(processor, "processor");
 
@@ -343,7 +347,7 @@ public class EsClientService {
         SearchSourceBuilder sourceBuilder = new SearchSourceBuilder()
                 .query(QueryBuilders.boolQuery()
                         .must(QueryBuilders.termQuery("caseId", caseId))
-                        .mustNot(QueryBuilders.existsQuery("parentDocumentId")))
+                        .mustNot(QueryBuilders.termQuery("type", documentType.toLowerCase())))
                 .size(BATCH_SIZE);
         //@formatter:on
 
@@ -394,50 +398,6 @@ public class EsClientService {
         String[] types = new String[] { EEsType.ASSIGNMENTPOLICY.value() };
 
         processAllByQuery(EEsIndex.CONFIGURATIONS.value(), types, sourceBuilder, processor, false);
-    }
-
-    /**
-     * Method for processing BUC assignment_policies that don't have child policies
-     *
-     * @param processor
-     *            the processing method that will be called on all the query results
-     * @throws IOException
-     */
-    public void processGroupsWithoutParent(Consumer<SearchHit[]> processor) throws IOException {
-        PreconditionsHelper.notNull(processor, "processor");
-
-        //@formatter:off
-        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder()
-                .query(QueryBuilders.boolQuery()
-                        .mustNot(QueryBuilders.existsQuery("parentGroupId")))
-                .size(BATCH_SIZE);
-        //@formatter:on
-
-        String[] types = new String[] { EEsType.GROUP.value() };
-
-        processAllByQuery(EEsIndex.IDENTITY_V1.value(), types, sourceBuilder, processor, false);
-    }
-
-    /**
-     * Method for processing BUC assignment_policies that have child policies
-     *
-     * @param processor
-     *            the processing method that will be called on all the query results
-     * @throws IOException
-     */
-    public void processGroupsWithParent(Consumer<SearchHit[]> processor) throws IOException {
-        PreconditionsHelper.notNull(processor, "processor");
-
-        //@formatter:off
-        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder()
-                .query(QueryBuilders.boolQuery()
-                        .must(QueryBuilders.existsQuery("parentGroupId")))
-                .size(BATCH_SIZE);
-        //@formatter:on
-
-        String[] types = new String[] { EEsType.GROUP.value() };
-
-        processAllByQuery(EEsIndex.IDENTITY_V1.value(), types, sourceBuilder, processor, false);
     }
 
     /**
@@ -525,8 +485,8 @@ public class EsClientService {
             fetchStart = Instant.now();
         }
 
-        // define a scroll with a timeout of 2 mins
-        final Scroll scroll = new Scroll(TimeValue.timeValueMinutes(2L));
+        // instantiate the scroll
+        final Scroll scroll = new Scroll(TimeValue.timeValueMinutes(SCROLL_KEEP_ALIVE_MINS));
 
         //@formatter:off
         SearchRequest searchRequest = new SearchRequest()

@@ -8,7 +8,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
+import org.apache.commons.collections4.CollectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -23,13 +27,15 @@ import eu.ec.dgempl.apclient.sbdh.model.StandardBusinessDocumentHeader;
 import eu.ec.dgempl.eessi.rina.commons.transformation.RinaJsonMapper;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.EApplicationRole;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.ECaseActionType;
+import eu.ec.dgempl.eessi.rina.model.enumtypes.ECaseStatus;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.EMimeType;
-import eu.ec.dgempl.eessi.rina.model.exception.runtime.enums.EnumNotFoundEessiRuntimeException;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.Organisation;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.PendingAttachment;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.PendingMessage;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.ProcessDefVersion;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.RinaCase;
+import eu.ec.dgempl.eessi.rina.model.jpa.exception.EntityWithTooManyRecordsEessiRuntimeException;
+import eu.ec.dgempl.eessi.rina.model.jpa.exception.UniqueIdentifier;
 import eu.ec.dgempl.eessi.rina.repo.ProcessDefVersionRepo;
 import eu.ec.dgempl.eessi.rina.repo.RinaCaseRepo;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
@@ -41,6 +47,8 @@ import ma.glasnost.orika.MappingContext;
 
 @Component
 public class MapToPendingMessageMapper extends AbstractMapToEntityMapper<MapHolder, PendingMessage> {
+
+    private static final Logger logger = LoggerFactory.getLogger(MapToPendingMessageMapper.class);
 
     private final ProcessDefVersionRepo processDefVersionRepo;
     private final RinaCaseRepo rinaCaseRepo;
@@ -127,13 +135,16 @@ public class MapToPendingMessageMapper extends AbstractMapToEntityMapper<MapHold
         String receiverId = a.string(PendingMessageFields.RECEIVER_ID, true);
         EApplicationRole eApplicationRole = getCaseRole(a.listToMapHolder(PendingMessageFields.PARTICIPANTS), receiverId);
 
-        if (eApplicationRole == null) {
-            throw new EnumNotFoundEessiRuntimeException("Missing receiver case role for pending message with id " + b.getId());
+        RinaCase rinaCase = null;
+        try {
+            rinaCase = getRinaCase(caseInternationalId, receiverId, eApplicationRole);
+        } catch (Exception e) {
+            logger.warn(e.getMessage(), e);
         }
 
-        RinaCase rinaCase = rinaCaseRepo.findByInternationalIdAndApplicationRole(caseInternationalId, eApplicationRole);
-
-        b.setRinaCase(rinaCase);
+        if (rinaCase != null) {
+            b.setRinaCase(rinaCase);
+        }
     }
 
     private void mapPendingAttachments(MapHolder a, PendingMessage b) {
@@ -258,5 +269,33 @@ public class MapToPendingMessageMapper extends AbstractMapToEntityMapper<MapHold
         } catch (JsonProcessingException e) {
             throw new RuntimeException("Error on serializing sbdh for pending message with id " + b.getId(), e);
         }
+    }
+
+    private RinaCase getRinaCase(final String internationalCaseId, final String tenantId, final EApplicationRole eApplicationRole) {
+        List<RinaCase> rinaCases = rinaCaseRepo.findByInternationalIdAndTenantId(internationalCaseId, tenantId);
+
+        if (CollectionUtils.isEmpty(rinaCases)) {
+            return null;
+        }
+
+        rinaCases.removeIf(rinaCase -> !rinaCase.getApplicationRole().equals(eApplicationRole));
+
+        if (rinaCases.size() > 1) {
+            rinaCases = rinaCases.stream()
+                    .filter(rinaCase -> ECaseStatus.REMOVED != rinaCase.getStatus() && ECaseStatus.ARCHIVED != rinaCase.getStatus())
+                    .collect(Collectors.toList());
+
+            if (CollectionUtils.isEmpty(rinaCases)) {
+                return null;
+            }
+
+            if (rinaCases.size() > 1) {
+                logger.warn("Too many cases with international id [{}] and tenant id [{}]", internationalCaseId, tenantId);
+                throw new EntityWithTooManyRecordsEessiRuntimeException(RinaCase.class, UniqueIdentifier.internationalId,
+                        internationalCaseId, UniqueIdentifier.tenantId, tenantId);
+            }
+        }
+
+        return rinaCases.get(0);
     }
 }

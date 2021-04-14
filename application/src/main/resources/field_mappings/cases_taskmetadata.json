@@ -146,7 +146,8 @@
     "esPath": "subdocumentId",
     "esType": "string",
     "sqlPath": "",
-    "sqlType": ""
+    "sqlType": "",
+    "importIgnore": true
   },
   {
     "esPath": "tags.category",
@@ -157,6 +158,13 @@
   },
   {
     "esPath": "tags.DMProcessId",
+    "esType": "long",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "esPath": "tags.dmprocessId",
     "esType": "long",
     "sqlPath": "",
     "sqlType": "",

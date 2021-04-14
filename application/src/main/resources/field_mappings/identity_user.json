@@ -1,0 +1,124 @@
+[
+  {
+    "esPath": "creationDate",
+    "esType": "date",
+    "required": true,
+    "sqlPath": "iamUser.log.createdAt",
+    "sqlType": "TIMESTAMP WITH TIME ZONE"
+  },
+  {
+    "esPath": "email",
+    "esType": "string",
+    "sqlPath": "iamUser.email",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "firstName",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "iamUser.firstName",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "groups.groupId",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "iamUserGroup.iamGroup.id",
+    "sqlType": "VARCHAR(255)",
+    "value": "reference(identity,group)"
+  },
+  {
+    "esPath": "groups.role",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "iamUserGroup.role.name",
+    "sqlType": "TEXT",
+    "value": "enum(ERole)"
+  },
+  {
+    "esPath": "institutionId",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "iamUser.tenant.id",
+    "sqlType": "VARCHAR(255)",
+    "value": "reference(entities,organisation)"
+  },
+  {
+    "esPath": "isAdministrator",
+    "esType": "boolean",
+    "sqlPath": "iamUser.isAdmin",
+    "sqlType": "BOOL"
+  },
+  {
+    "esPath": "isDeleted",
+    "esType": "boolean",
+    "sqlPath": "iamUser.isDeleted",
+    "sqlType": "BOOL"
+  },
+  {
+    "esPath": "isEnabled",
+    "esType": "boolean",
+    "sqlPath": "iamUser.isEnabled",
+    "sqlType": "BOOL"
+  },
+  {
+    "esPath": "isLocked",
+    "esType": "boolean",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "esPath": "keystoreAlias",
+    "esType": "string",
+    "sqlPath": "iamUser.keystoreAlias",
+    "sqlType": "VARCHAR(1024)"
+  },
+  {
+    "esPath": "lastName",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "iamUser.lastName",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "comment": "if null, take the value from creationDate",
+    "esPath": "lastUpdate",
+    "esType": "date",
+    "sqlPath": "iamUser.log.updatedAt",
+    "sqlType": "TIMESTAMP WITH TIME ZONE"
+  },
+  {
+    "comment": "References IamOrigin by name",
+    "esPath": "origin",
+    "esType": "string",
+    "sqlPath": "iamUser.iamOrigin",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "password",
+    "esType": "string",
+    "sqlPath": "iamUser.password",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "phoneNumber",
+    "esType": "string",
+    "sqlPath": "iamUser.phoneNumber",
+    "sqlType": "varchar(255)"
+  },
+  {
+    "comment": "if null, take the default value 'salt'",
+    "esPath": "salt",
+    "esType": "string",
+    "sqlPath": "iamUser.salt",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "username",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "iamUser.username",
+    "sqlType": "VARCHAR(255)"
+  }
+]

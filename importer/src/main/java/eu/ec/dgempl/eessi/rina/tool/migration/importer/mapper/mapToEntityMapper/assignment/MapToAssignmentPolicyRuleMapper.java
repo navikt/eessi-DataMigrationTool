@@ -159,6 +159,7 @@ public class MapToAssignmentPolicyRuleMapper extends AbstractMapToEntityMapper<M
         if (CollectionUtils.isNotEmpty(userGroups)) {
             userGroups.stream()
                     .filter(isCreatorUserPredicate)
+                    .peek(MapHolder::visitAll)
                     .findFirst()
                     .ifPresent(mapHolderConsumer);
 
@@ -229,8 +230,15 @@ public class MapToAssignmentPolicyRuleMapper extends AbstractMapToEntityMapper<M
 
     private List<String> getUserGroupIdsByType(List<MapHolder> actors, EUserOrGroupType eUserOrGroupType) {
         return actors.stream()
-                .filter(actor -> eUserOrGroupType == EUserOrGroupType.lookup(actor.string(TYPE))
-                        .orElseThrow(() -> new DmtEnumNotFoundException(EUserOrGroupType.class, actor.addPath(TYPE), actor.string(TYPE))))
+                .filter(actor -> {
+                    String type = actor.string(TYPE);
+                    EUserOrGroupType actualEUserOrGroupType = EUserOrGroupType.lookup(type).orElseThrow(
+                            () -> new DmtEnumNotFoundException(
+                                    EUserOrGroupType.class,
+                                    actor.addPath(TYPE),
+                                    type));
+                    return eUserOrGroupType == actualEUserOrGroupType;
+                })
                 .map(actor -> actor.string(ID))
                 .collect(Collectors.toList());
     }

@@ -1,9 +1,8 @@
 package eu.ec.dgempl.eessi.rina.tool.migration.importer.dataimport.precase;
 
+import static eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.AssignedBucUtils.*;
 import static eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.RepositoryUtils.*;
 
-import java.time.ZonedDateTime;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -22,9 +21,9 @@ import eu.ec.dgempl.eessi.rina.repo.OrganisationRepo;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dataimport.ElasticTypeImporter;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dataimport.PreCaseImporter;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dataimport._abstract.AbstractDataImporter;
-import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.report.DocumentsReport;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.EElasticType;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.report.DocumentsReport;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.OrganisationFields;
 
 @Component
@@ -66,10 +65,8 @@ public class OrganisationImporter extends AbstractDataImporter implements PreCas
                     if (assignedBucs.size() == 1) {
                         result = assignedBucs.get(0);
                     } else {
-                        result = assignedBucs
-                                .stream()
-                                .min(Comparator.nullsLast(Comparator.comparing(AssignedBuc::getValidityStartDate)))
-                                .orElseThrow();
+                        assignedBucs.sort(compareByValidityStartDateNullsLast());
+                        result = assignedBucs.get(0);
                         result.setValidityEndDate(getMaxValidityEndDate(assignedBucs));
                     }
                     return result;
@@ -84,12 +81,6 @@ public class OrganisationImporter extends AbstractDataImporter implements PreCas
     @Override
     protected String getId(MapHolder doc) {
         return doc.string(OrganisationFields.ID);
-    }
-
-    private ZonedDateTime getMaxValidityEndDate(List<AssignedBuc> assignedBucs) {
-        return assignedBucs.stream()
-                .map(AssignedBuc::getValidityEndDate)
-                .max(Comparator.nullsLast(ZonedDateTime::compareTo)).orElse(null);
     }
 
 }

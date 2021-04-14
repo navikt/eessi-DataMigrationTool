@@ -1,5 +1,6 @@
 package eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper.notification;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.IamUser;
@@ -51,5 +52,11 @@ public class MapToNotificationAlarmMapper extends AbstractMapToEntityMapper<MapH
 
         b.getAudit().setCreatedBy(creator.getId());
         b.getAudit().setUpdatedBy(creator.getId());
+
+        String creationDate = a.string(NotificationAlarmFields.CREATION_DATE);
+        if (StringUtils.isNotBlank(creationDate)) {
+            mapDate(a, NotificationAlarmFields.CREATION_DATE, b.getAudit()::setCreatedAt);
+            mapDate(a, NotificationAlarmFields.CREATION_DATE, b.getAudit()::setUpdatedAt);
+        }
     }
 }

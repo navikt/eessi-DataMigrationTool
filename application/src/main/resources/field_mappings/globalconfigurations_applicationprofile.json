@@ -1,5 +1,11 @@
 [
   {
+    "esPath": "messagingSettings.antimalwareInfectedSettings",
+    "esType": "string",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
     "esPath": "messagingSettings.antimalwareMode",
     "esType": "string",
     "sqlPath": "globalParam.value",

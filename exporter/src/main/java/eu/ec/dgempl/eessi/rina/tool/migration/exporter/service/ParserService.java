@@ -18,6 +18,8 @@ import eu.ec.dgempl.eessi.rina.tool.migration.exporter.model.ValidationContext;
 import eu.ec.dgempl.eessi.rina.tool.migration.exporter.schema.Schema;
 import eu.ec.dgempl.eessi.rina.tool.migration.exporter.schema.SchemaEntry;
 import eu.ec.dgempl.eessi.rina.tool.migration.exporter.util.JsonPathHelper;
+import eu.ec.dgempl.eessi.rina.tool.migration.exporter.validator.NotNullValidator;
+import eu.ec.dgempl.eessi.rina.tool.migration.exporter.validator.Validator;
 
 /**
  * Service for parsing elasticsearch documents and executing actions on the document fields
@@ -97,8 +99,21 @@ public class ParserService {
         SchemaEntry schemaEntry = context.getSchema().getSchemaEntry(normalisedPath);
 
         if (schemaEntry != null && schemaEntry.isIgnored()) {
-            logger.debug("Field validation SKIP: ignored path [path={}]", esFieldPath);
-            return aggregator.identity();
+            // @formatter:off
+            Validator validator = schemaEntry.getValidators()
+                    .stream()
+                    .filter(x -> x instanceof NotNullValidator)
+                    .findFirst()
+                    .orElse(null);
+            // @formatter:on
+
+            if (validator != null) {
+                logger.debug("Apply only non-null validation [path={}]", esFieldPath);
+                return aggregator.applyValidation(validator, esFieldPath, obj, context);
+            } else {
+                logger.debug("Field validation SKIP: ignored path [path={}]", esFieldPath);
+                return aggregator.identity();
+            }
         }
 
         if (obj instanceof Map) {

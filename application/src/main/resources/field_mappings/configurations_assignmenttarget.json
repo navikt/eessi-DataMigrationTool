@@ -20,7 +20,8 @@
     "esType": "string",
     "required": true,
     "sqlPath": "assignmentPolicyTarget.storageId",
-    "sqlType": "VARCHAR(255)"
+    "sqlType": "VARCHAR(255)",
+    "importIgnore": true
   },
   {
     "comment": "this needs transformation",

@@ -6,7 +6,7 @@ public class UserFields {
     public static final String TENANT_ID = "institutionId";
     public static final String IAM_ORIGIN = "origin";
     public static final String USERNAME = "username";
-    public static final String FIRS_NAME = "firstName";
+    public static final String FIRST_NAME = "firstName";
     public static final String LAST_NAME = "lastName";
     public static final String EMAIL = "email";
     public static final String PASSWORD = "password";

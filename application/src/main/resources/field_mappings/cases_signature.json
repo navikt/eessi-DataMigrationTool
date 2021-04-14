@@ -11,13 +11,15 @@
     "esPath": "documentId",
     "esType": "string",
     "sqlPath": "",
-    "sqlType": ""
+    "sqlType": "",
+    "importIgnore": true
   },
   {
     "esPath": "internalId",
     "esType": "string",
     "sqlPath": "",
-    "sqlType": ""
+    "sqlType": "",
+    "importIgnore": true
   },
   {
     "esPath": "messageId",
@@ -44,6 +46,7 @@
     "esType": "string",
     "required": true,
     "sqlPath": "signature.userMessage.documentConversation.documentBversion.version",
-    "sqlType": "INT4"
+    "sqlType": "INT4",
+    "importIgnore": true
   }
 ]

@@ -97,16 +97,16 @@
     "importIgnore": true
   },
   {
+    "comment": "ignore required constraint from the schema; if null, the DMT Importer resets the field to the default value",
     "esPath": "caseAssignment.properties.criticality",
     "esType": "string",
-    "required": true,
     "sqlPath": "rinaCase.caseProperties.value",
     "sqlType": "VARCHAR(255)"
   },
   {
+    "comment": "ignore required constraint from the schema; if null, the DMT Importer resets the field to the default value",
     "esPath": "caseAssignment.properties.importance",
     "esType": "string",
-    "required": true,
     "sqlPath": "rinaCase.caseProperties.value",
     "sqlType": "VARCHAR(255)"
   },
@@ -122,7 +122,7 @@
     "required": true,
     "sqlPath": "iamUser.id",
     "sqlType": "VARCHAR(255)",
-    "value": "reference(identity_v1,user)"
+    "value": "reference(identity,user)"
   },
   {
     "esPath": "creator.name",
@@ -134,16 +134,16 @@
   {
     "esPath": "creator.organisation.acronym",
     "esType": "string",
-    "sqlPath": "iamUser.tenant.organisation.acronym",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "creator.organisation.activeSince",
     "esType": "date",
-    "sqlPath": "(iamUser|iamGrou)organisation.activeSince",
-    "sqlType": "TIMESTAMP WITH TIME ZONE",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "creator.organisation.address",
@@ -156,10 +156,9 @@
   {
     "esPath": "creator.organisation.countryCode",
     "esType": "string",
-    "sqlPath": "iamUser.tenant.organisation.countryCode",
-    "sqlType": "TEXT",
-    "value": "enum(ECountryCode)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "creator.organisation.id",
@@ -173,9 +172,17 @@
   {
     "esPath": "creator.organisation.name",
     "esType": "string",
-    "sqlPath": "iamUser.tenant.organisation.name",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "creator.organisation.matchedBUC",
+    "esType": "object",
+    "ignorePath": true,
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "comment": "should be user",
@@ -216,16 +223,16 @@
   {
     "esPath": "participants.organisation.acronym",
     "esType": "string",
-    "sqlPath": "rinaCase.caseParticipants.organisation.acronym",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "participants.organisation.activeSince",
     "esType": "string",
-    "sqlPath": "rinaCase.caseParticipants.organisation.activeSince",
-    "sqlType": "TIMESTAMP WITH TIME ZONE",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "participants.organisation.address",
@@ -238,10 +245,9 @@
   {
     "esPath": "participants.organisation.countryCode",
     "esType": "string",
-    "sqlPath": "rinaCase.caseParticipants.organisation.countryCode",
-    "sqlType": "TEXT",
-    "value": "enum(ECountryCode)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "participants.organisation.id",
@@ -252,18 +258,33 @@
     "value": "reference(entities,organisation)"
   },
   {
+    "esPath": "participants.organisation.identifier",
+    "esType": "string",
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
     "esPath": "participants.organisation.location",
     "esType": "geo_point",
-    "sqlPath": "rinaCase.caseParticipants.organisation.location",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "participants.organisation.name",
     "esType": "string",
-    "sqlPath": "rinaCase.caseParticipants.organisation.name",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "participants.organisation.matchedBUC",
+    "esType": "object",
+    "ignorePath": true,
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "participants.role",
@@ -330,16 +351,16 @@
   {
     "esPath": "whoami.acronym",
     "esType": "string",
-    "sqlPath": "rinaCase.tenant.organisation.acronym",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "whoami.activeSince",
     "esType": "string",
-    "sqlPath": "rinaCase.tenant.organisation.activeSince",
-    "sqlType": "TIMESTAMP WITH TIME ZONE",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "whoami.address",
@@ -352,10 +373,9 @@
   {
     "esPath": "whoami.countryCode",
     "esType": "string",
-    "sqlPath": "rinaCase.tenant.organisation.countryCode",
-    "sqlType": "TEXT",
-    "value": "enum(ECountryCode)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "whoami.id",
@@ -368,8 +388,16 @@
   {
     "esPath": "whoami.name",
     "esType": "string",
-    "sqlPath": "rinaCase.tenant.organisation.name",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "whoami.matchedBUC",
+    "esType": "object",
+    "ignorePath": true,
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   }
 ]

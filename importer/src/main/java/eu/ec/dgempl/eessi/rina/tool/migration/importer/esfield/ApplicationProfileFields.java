@@ -115,7 +115,7 @@ public class ApplicationProfileFields {
         public static final String LOCALIZATION_SETTINGS_NUMBER_FORMAT = "localizationSettings.numberFormat";
         public static final String LOCALIZATION_SETTINGS_TIME_FORMAT = "localizationSettings.timeFormat";
         public static final String LOCALIZATION_SETTINGS_TIME_ZONE = "localizationSettings.timeZone";
-        public static final String ALARM_SETTINGS_AUTO_SED_ON_SEND = "alarmSettings.autoSedOnSend";
+        public static final String ALARM_SETTINGS_AUTO_SED_ON_SEND = "alarmSettings.autoSetOnSend";
         public static final String ALARM_SETTINGS_AUTO_SET_DAYS = "alarmSettings.autoSetDays";
 
         public static BiMap<String, EGlobalParam> DEFAULT_USER_PROFILE_MAP = new ImmutableBiMap.Builder<String, EGlobalParam>()

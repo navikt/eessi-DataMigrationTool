@@ -12,6 +12,7 @@ import eu.ec.dgempl.eessi.rina.tool.migration.importer.dataimport.CaseImporter;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dataimport.ElasticTypeImporter;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dataimport._abstract.AbstractDataImporter;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.EElasticType;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.GenericImporterException;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.report.DocumentsReport;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.RepositoryUtils;
 import org.jetbrains.annotations.NotNull;
@@ -43,16 +44,21 @@ public class FinalizeCaseImporter extends AbstractDataImporter implements CaseIm
     @Override
     public DocumentsReport importData(final String caseId) {
 
-        RinaCase rinaCase = RepositoryUtils.findById(caseId, rinaCaseRepo::findById, RinaCase.class);
+        try {
+            RinaCase rinaCase = RepositoryUtils.findById(caseId, rinaCaseRepo::findById, RinaCase.class);
 
-        List<Document> documents = documentRepo.findByRinaCaseId(caseId);
+            List<Document> documents = documentRepo.findByRinaCaseId(caseId);
 
-        Optional<Document> document = getValidDocument(documents);
+            Optional<Document> document = getValidDocument(documents);
 
-        document.ifPresent(doc -> casePrefillRepo.saveAndFlush(
-                new CasePrefill(rinaCase, ECasePrefillGroup.PREFILL, LAST_PROCESSED_X001_DOCUMENT_ID, doc.getId())));
+            document.ifPresent(doc -> casePrefillRepo.saveAndFlush(
+                    new CasePrefill(rinaCase, ECasePrefillGroup.PREFILL, LAST_PROCESSED_X001_DOCUMENT_ID, doc.getId())));
 
-        return null;
+            return null;
+
+        } catch (Exception e) {
+            throw new GenericImporterException(e, this.inferElasticType(), caseId);
+        }
     }
 
     @NotNull

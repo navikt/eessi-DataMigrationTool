@@ -30,6 +30,20 @@
     "sqlType": ""
   },
   {
+    "esPath": "fields.uiShow",
+    "esType": "string",
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "fields.uiSort",
+    "esType": "string",
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
     "esPath": "internalId",
     "esType": "string",
     "sqlPath": "",

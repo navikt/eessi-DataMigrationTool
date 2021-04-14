@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.validation.constraints.NotNull;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,7 +38,7 @@ public class ValidationAggregator implements Aggregator<List<ValidationResult>> 
 
         // no entry means unknown field; fail only if object is not null
         if (schemaEntry == null) {
-            if (obj != null) {
+            if (obj != null && !obj.equals("null")) {
                 logger.info("Field validation FAIL: unknown path [index={},type={},id={},path={}]", index, type, id, path);
                 List<ValidationResult> validationResults = new ArrayList<>();
                 validationResults.add(ValidationResult.error(path, null, EValidationResult.UNKNOWN_FIELD));
@@ -72,15 +74,8 @@ public class ValidationAggregator implements Aggregator<List<ValidationResult>> 
                 .collect(Collectors.toList());
         // @formatter:on
 
-        // log errors
-        if (errors.size() != 0) {
-            String s = errors.stream().map(Object::toString).collect(Collectors.joining(","));
-            logger.info("Field validation FAIL [index={},type={},id={},path={},errors={}]", index, type, id, path, s);
-        } else {
-            logger.debug("Field validation PASS [path={}]", path);
-        }
-
-        return errors;
+        // log and return errors, if any
+        return getValidationResults(path, index, type, id, errors);
     }
 
     @Override
@@ -94,5 +89,38 @@ public class ValidationAggregator implements Aggregator<List<ValidationResult>> 
         PreconditionsHelper.notNull(b, "b");
 
         return Stream.concat(a.stream(), b.stream()).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ValidationResult> applyValidation(Validator v, String path, Object obj, ValidationContext context) {
+
+        String index = context.getDocument().getIndex();
+        String type = context.getDocument().getType();
+        String id = context.getDocument().getObjectId();
+
+        // collect the list of errors
+        // @formatter:off
+        List<ValidationResult> errors = v.validate(path, obj, context).stream()
+                // filter out valid results, keep only errors
+                .filter(validationResult -> !validationResult.getResult().equals(EValidationResult.VALID))
+                // return the list of errors
+                .collect(Collectors.toList());
+        // @formatter:on
+
+        // log and return errors, if any
+        return getValidationResults(path, index, type, id, errors);
+    }
+
+    @NotNull
+    private List<ValidationResult> getValidationResults(final String path, final String index, final String type, final String id,
+            final List<ValidationResult> errors) {
+        if (errors.size() != 0) {
+            String s = errors.stream().map(Object::toString).collect(Collectors.joining(","));
+            logger.info("Field validation FAIL [index={},type={},id={},path={},errors={}]", index, type, id, path, s);
+        } else {
+            logger.debug("Field validation PASS [path={}]", path);
+        }
+
+        return errors;
     }
 }

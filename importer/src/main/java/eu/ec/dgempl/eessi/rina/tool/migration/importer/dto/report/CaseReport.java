@@ -41,8 +41,7 @@ public class CaseReport {
     }
 
     public void swallow(DocumentsReport documentsReport) {
-        EElasticType eElasticType = documentsReport.getEElasticType();
-        String key = getKey(eElasticType);
+        String key = getKey(documentsReport.getIndex(), documentsReport.getType());
 
         if (report.containsKey(key)) {
             DocumentsReport currentReport = report.get(key);
@@ -70,12 +69,12 @@ public class CaseReport {
         DocumentsReport documentsReport = new DocumentsReport(eElasticType);
         documentsReport.getTotal().set(total);
 
-        String key = getKey(eElasticType);
+        String key = getKey(eElasticType.getIndex(), eElasticType.getType());
         report.putIfAbsent(key, documentsReport);
     }
 
     @NotNull
-    private String getKey(final EElasticType eElasticType) {
-        return eElasticType.getIndex() + "_" + eElasticType.getType();
+    private String getKey(final String index, final String type) {
+        return index + "_" + type;
     }
 }

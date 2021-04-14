@@ -5,8 +5,12 @@ import static eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.UserFields
 import java.security.SecureRandom;
 import java.util.Base64;
 import java.util.List;
+import java.util.function.Consumer;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.util.Strings;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -26,6 +30,8 @@ import ma.glasnost.orika.MappingContext;
 
 @Component
 public class MapToIamUserMapper extends AbstractMapToEntityMapper<MapHolder, IamUser> {
+
+    private static final Logger logger = LoggerFactory.getLogger(MapToIamUserMapper.class);
     private static final SecureRandom SECURE_RANDOM = new SecureRandom();
 
     private final IamOriginRepo iamOriginRepo;
@@ -43,29 +49,13 @@ public class MapToIamUserMapper extends AbstractMapToEntityMapper<MapHolder, Iam
 
         mapTenant(a, b);
         mapLog(a, b);
-
-        String originId = a.string(UserFields.IAM_ORIGIN);
-        if (StringUtils.isNotBlank(originId)) {
-            IamOrigin origin = iamOriginRepo.findByName(originId);
-            b.setIamOrigin(origin);
-        }
+        mapOrigin(a, b);
+        mapSalt(a, b);
+        mapGroups(a, b, context);
 
         b.setUsername(a.string(UserFields.USERNAME));
-        b.setFirstName(a.string(UserFields.FIRS_NAME));
-        b.setLastName(a.string(UserFields.LAST_NAME));
         b.setEmail(a.string(UserFields.EMAIL));
-
-        if (a.string(UserFields.SALT) == null) {
-            if (a.string(UserFields.PASSWORD) != null) {
-                throw new RuntimeException("For user " + b.getUsername() + " the salt is null and the password is not null");
-            }
-            b.setSalt(generatePasswordSalt());
-        } else {
-            b.setSalt(a.string(UserFields.SALT));
-        }
-
         b.setPassword(a.string(UserFields.PASSWORD));
-
         b.setIsSystem(false);
         b.setIsEnabled(a.bool(UserFields.IS_ENABLED));
         b.setIsDeleted(a.bool(UserFields.IS_DELETED));
@@ -73,11 +63,35 @@ public class MapToIamUserMapper extends AbstractMapToEntityMapper<MapHolder, Iam
         b.setPhoneNumber(a.string(PHONE_NUMBER));
         b.setKeystoreAlias(a.string(KEYSTORE_ALIAS));
 
+        setValue(a, FIRST_NAME, b::setFirstName);
+        setValue(a, LAST_NAME, b::setLastName);
+    }
+
+    private void mapGroups(final MapHolder a, final IamUser b, final MappingContext context) {
         List<MapHolder> groups = a.listToMapHolder(UserFields.GROUPS);
         if (!CollectionUtils.isEmpty(groups)) {
             groups.stream()
                     .map(holder -> mapperFacade.map(holder, IamUserGroup.class, context))
                     .forEach(b::addIamUserGroup);
+        }
+    }
+
+    private void mapOrigin(final MapHolder a, final IamUser b) {
+        String originId = a.string(UserFields.IAM_ORIGIN);
+        if (StringUtils.isNotBlank(originId)) {
+            IamOrigin origin = iamOriginRepo.findByName(originId);
+            b.setIamOrigin(origin);
+        }
+    }
+
+    private void mapSalt(final MapHolder a, final IamUser b) {
+        if (a.string(UserFields.SALT) == null) {
+            if (a.string(UserFields.PASSWORD) != null) {
+                throw new RuntimeException("For user " + b.getUsername() + " the salt is null and the password is not null");
+            }
+            b.setSalt(generatePasswordSalt());
+        } else {
+            b.setSalt(a.string(UserFields.SALT));
         }
     }
 
@@ -90,7 +104,6 @@ public class MapToIamUserMapper extends AbstractMapToEntityMapper<MapHolder, Iam
         if (b.getLog().getUpdatedAt() == null) {
             b.getLog().setUpdatedAt(b.getLog().getCreatedAt());
         }
-
     }
 
     private void mapTenant(final MapHolder a, final IamUser b) {
@@ -100,6 +113,16 @@ public class MapToIamUserMapper extends AbstractMapToEntityMapper<MapHolder, Iam
             throw new EntityNotFoundEessiRuntimeException(Tenant.class, UniqueIdentifier.id, tenantId);
         }
         b.setTenant(tenant);
+    }
+
+    private void setValue(final MapHolder a, final String path, Consumer<String> valueConsumer){
+        String defaultValue = "unknown";
+        String value = a.string(path, true);
+        if (Strings.isBlank(value)){
+            value = defaultValue;
+            logger.info(String.format("User %s is empty. Setting default value %s", path, defaultValue));
+        }
+        valueConsumer.accept(value);
     }
 
     /**
@@ -112,6 +135,5 @@ public class MapToIamUserMapper extends AbstractMapToEntityMapper<MapHolder, Iam
         byte[] bytes = new byte[10];
         SECURE_RANDOM.nextBytes(bytes);
         return Base64.getEncoder().encodeToString(bytes);
-
     }
 }

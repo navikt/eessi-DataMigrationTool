@@ -1,0 +1,55 @@
+[
+  {
+    "esPath": "caseId",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "activity.rinaCase.id",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "colour",
+    "esType": "string",
+    "sqlPath": "activity.colour",
+    "sqlType": "TEXT",
+    "value": "enum(EColour)"
+  },
+  {
+    "esPath": "isDeleted",
+    "esType": "boolean",
+    "sqlPath": "activity.isDeleted",
+    "sqlType": "BOOL"
+  },
+  {
+    "esPath": "message",
+    "esType": "string",
+    "sqlPath": "activity.message",
+    "sqlType": "VARCHAR"
+  },
+  {
+    "esPath": "repetitionParentId",
+    "esType": "string",
+    "sqlPath": "activity.parent.id",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "startDate",
+    "esType": "date",
+    "sqlPath": "activity.startDate",
+    "sqlType": "TIMESTAMP WITH TIME ZONE"
+  },
+  {
+    "esPath": "title",
+    "esType": "string",
+    "sqlPath": "activity.title",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "comment": "this needs to go to activity.audit.updatedBy too",
+    "esPath": "userId",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "activity.audit.createdBy",
+    "sqlType": "VARCHAR(255)",
+    "value": "reference(identity,user)"
+  }
+]

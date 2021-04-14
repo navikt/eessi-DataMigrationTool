@@ -3,31 +3,36 @@
     "esPath": "@timestamp",
     "esType": "date",
     "sqlPath": "",
-    "sqlType": ""
+    "sqlType": "",
+    "importIgnore": true
   },
   {
     "esPath": "@version",
     "esType": "string",
     "sqlPath": "",
-    "sqlType": ""
+    "sqlType": "",
+    "importIgnore": true
   },
   {
     "esPath": "btm-gtrid",
     "esType": "string",
     "sqlPath": "",
-    "sqlType": ""
+    "sqlType": "",
+    "importIgnore": true
   },
   {
     "esPath": "host",
     "esType": "string",
     "sqlPath": "",
-    "sqlType": ""
+    "sqlType": "",
+    "importIgnore": true
   },
   {
     "esPath": "logger_name",
     "esType": "string",
     "sqlPath": "",
-    "sqlType": ""
+    "sqlType": "",
+    "importIgnore": true
   },
   {
     "esPath": "message.action",
@@ -81,7 +86,7 @@
     "esPath": "message.networkLocation.machine",
     "esType": "string",
     "sqlPath": "auditEvent.netLocationMachine",
-    "sqlType": "VARCHAR(20)"
+    "sqlType": "VARCHAR(255)"
   },
   {
     "esPath": "message.outcome",
@@ -153,83 +158,104 @@
     "esPath": "priority",
     "esType": "string",
     "sqlPath": "",
-    "sqlType": ""
+    "sqlType": "",
+    "importIgnore": true
   },
   {
     "esPath": "stack_trace",
     "esType": "string",
     "sqlPath": "",
-    "sqlType": ""
+    "sqlType": "",
+    "importIgnore": true
   },
   {
     "esPath": "syslog5424_app",
     "esType": "string",
     "sqlPath": "",
-    "sqlType": ""
+    "sqlType": "",
+    "importIgnore": true
   },
   {
     "esPath": "syslog5424_host",
     "esType": "string",
     "sqlPath": "",
-    "sqlType": ""
+    "sqlType": "",
+    "importIgnore": true
   },
   {
     "esPath": "syslog5424_pri",
     "esType": "string",
     "sqlPath": "",
-    "sqlType": ""
+    "sqlType": "",
+    "importIgnore": true
   },
   {
     "esPath": "syslog5424_proc",
     "esType": "string",
     "sqlPath": "",
-    "sqlType": ""
+    "sqlType": "",
+    "importIgnore": true
   },
   {
     "esPath": "syslog5424_ts",
     "esType": "date",
     "sqlPath": "",
-    "sqlType": ""
+    "sqlType": "",
+    "importIgnore": true
   },
   {
     "esPath": "syslog5424_ver",
     "esType": "string",
     "sqlPath": "",
-    "sqlType": ""
+    "sqlType": "",
+    "importIgnore": true
   },
   {
     "esPath": "syslog_facility",
     "esType": "string",
     "sqlPath": "",
-    "sqlType": ""
+    "sqlType": "",
+    "importIgnore": true
   },
   {
     "esPath": "syslog_facility_code",
     "esType": "long",
     "sqlPath": "",
-    "sqlType": ""
+    "sqlType": "",
+    "importIgnore": true
   },
   {
     "esPath": "syslog_severity",
     "esType": "string",
     "sqlPath": "",
-    "sqlType": ""
+    "sqlType": "",
+    "importIgnore": true
   },
   {
     "esPath": "syslog_severity_code",
     "esType": "long",
     "sqlPath": "",
-    "sqlType": ""
+    "sqlType": "",
+    "importIgnore": true
   },
   {
     "esPath": "thread",
     "esType": "string",
     "sqlPath": "",
-    "sqlType": ""
+    "sqlType": "",
+    "importIgnore": true
   },
   {
     "esPath": "type",
     "esType": "string",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "esPath": "port",
+    "esType": "string",
+    "importIgnore": true,
     "sqlPath": "",
     "sqlType": ""
   }

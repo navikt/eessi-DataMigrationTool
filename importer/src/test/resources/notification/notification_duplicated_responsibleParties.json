@@ -1,0 +1,405 @@
+{
+  "severity": "information",
+  "dueDate": "2021-03-19T12:32:57.740Z",
+  "document": {
+    "type": "NOTYPE"
+  },
+  "isRead": "true",
+  "creationDate": "2021-03-16T12:32:57.740Z",
+  "type": "case_assigned",
+  "responsibleParties": [
+    {
+      "name": "hSLgjYXh",
+      "organisation": {
+        "address": {
+          "country": "FR"
+        },
+        "activeSince": "2020-06-25T22:00:00.000Z",
+        "acronym": "FR:FRNA10",
+        "countryCode": "FR",
+        "name": "FR:FRNA10",
+        "id": "FR:FRNA10"
+      },
+      "id": "AXUhExnk5TcFptbEg1yU",
+      "type": "User"
+    },
+    {
+      "name": "IAM_UNAUTHORIZED_CLERK",
+      "organisation": {
+        "address": {
+          "country": "FR"
+        },
+        "activeSince": "2020-06-25T22:00:00.000Z",
+        "acronym": "FR:FRNA10",
+        "countryCode": "FR",
+        "name": "FR:FRNA10",
+        "id": "FR:FRNA10"
+      },
+      "id": "AXUb3_mB5TcFptbEfwFK",
+      "type": "User"
+    },
+    {
+      "name": "alex",
+      "organisation": {
+        "address": {
+          "country": "FR"
+        },
+        "activeSince": "2020-06-25T22:00:00.000Z",
+        "acronym": "FR:FRNA10",
+        "countryCode": "FR",
+        "name": "FR:FRNA10",
+        "id": "FR:FRNA10"
+      },
+      "id": "AXY9U6tb5TcFptbE2NI2",
+      "type": "User"
+    },
+    {
+      "name": "IAM_MEDICAL_AUTH",
+      "organisation": {
+        "address": {
+          "country": "FR"
+        },
+        "activeSince": "2020-06-25T22:00:00.000Z",
+        "acronym": "FR:FRNA10",
+        "countryCode": "FR",
+        "name": "FR:FRNA10",
+        "id": "FR:FRNA10"
+      },
+      "id": "AXUb4TtG5TcFptbEfwJp",
+      "type": "User"
+    },
+    {
+      "name": "TlasusGM",
+      "organisation": {
+        "address": {
+          "country": "FR"
+        },
+        "activeSince": "2020-06-25T22:00:00.000Z",
+        "acronym": "FR:FRNA10",
+        "countryCode": "FR",
+        "name": "FR:FRNA10",
+        "id": "FR:FRNA10"
+      },
+      "id": "AXUeB_ad5TcFptbEgdhZ",
+      "type": "User"
+    },
+    {
+      "name": "kzqMYulj",
+      "organisation": {
+        "address": {
+          "country": "FR"
+        },
+        "activeSince": "2020-06-25T22:00:00.000Z",
+        "acronym": "FR:FRNA10",
+        "countryCode": "FR",
+        "name": "FR:FRNA10",
+        "id": "FR:FRNA10"
+      },
+      "id": "AXUgpHkK5TcFptbEgunm",
+      "type": "User"
+    },
+    {
+      "name": "hxiRrUWw",
+      "organisation": {
+        "address": {
+          "country": "FR"
+        },
+        "activeSince": "2020-06-25T22:00:00.000Z",
+        "acronym": "FR:FRNA10",
+        "countryCode": "FR",
+        "name": "FR:FRNA10",
+        "id": "FR:FRNA10"
+      },
+      "id": "AXUglcT95TcFptbEgtwK",
+      "type": "User"
+    },
+    {
+      "name": "testduplicate",
+      "organisation": {
+        "address": {
+          "country": "FR"
+        },
+        "activeSince": "2020-06-25T22:00:00.000Z",
+        "acronym": "FR:FRNA10",
+        "countryCode": "FR",
+        "name": "FR:FRNA10",
+        "id": "FR:FRNA10"
+      },
+      "id": "AXg65hdCFYDE3SK9i9F1",
+      "type": "User"
+    },
+    {
+      "name": "testduplicate",
+      "organisation": {
+        "address": {
+          "country": "FR"
+        },
+        "activeSince": "2020-06-25T22:00:00.000Z",
+        "acronym": "FR:FRNA10",
+        "countryCode": "FR",
+        "name": "FR:FRNA10",
+        "id": "FR:FRNA10"
+      },
+      "id": "AXg65hdCFYDE3SK9i9F1",
+      "type": "User"
+    },
+    {
+      "name": "123456789012345678901234567890",
+      "organisation": {
+        "address": {
+          "country": "FR"
+        },
+        "activeSince": "2020-06-25T22:00:00.000Z",
+        "acronym": "FR:FRNA10",
+        "countryCode": "FR",
+        "name": "FR:FRNA10",
+        "id": "FR:FRNA10"
+      },
+      "id": "AXZNNplQ5TcFptbE3PBQ",
+      "type": "User"
+    },
+    {
+      "name": "HZHIeCzu",
+      "organisation": {
+        "address": {
+          "country": "FR"
+        },
+        "activeSince": "2020-06-25T22:00:00.000Z",
+        "acronym": "FR:FRNA10",
+        "countryCode": "FR",
+        "name": "FR:FRNA10",
+        "id": "FR:FRNA10"
+      },
+      "id": "AXUeEGL55TcFptbEgd5g",
+      "type": "User"
+    },
+    {
+      "name": "IAM_SUPERVISOR",
+      "organisation": {
+        "address": {
+          "country": "FR"
+        },
+        "activeSince": "2020-06-25T22:00:00.000Z",
+        "acronym": "FR:FRNA10",
+        "countryCode": "FR",
+        "name": "FR:FRNA10",
+        "id": "FR:FRNA10"
+      },
+      "id": "AXUb346g5TcFptbEfwEG",
+      "type": "User"
+    },
+    {
+      "name": "haTbRpWJ",
+      "organisation": {
+        "address": {
+          "country": "FR"
+        },
+        "activeSince": "2020-06-25T22:00:00.000Z",
+        "acronym": "FR:FRNA10",
+        "countryCode": "FR",
+        "name": "FR:FRNA10",
+        "id": "FR:FRNA10"
+      },
+      "id": "AXUg1mZz5TcFptbEgwYe",
+      "type": "User"
+    },
+    {
+      "name": "LIJAuvEM",
+      "organisation": {
+        "address": {
+          "country": "FR"
+        },
+        "activeSince": "2020-06-25T22:00:00.000Z",
+        "acronym": "FR:FRNA10",
+        "countryCode": "FR",
+        "name": "FR:FRNA10",
+        "id": "FR:FRNA10"
+      },
+      "id": "AXUeG1lL5TcFptbEgeRo",
+      "type": "User"
+    },
+    {
+      "name": "alex123",
+      "organisation": {
+        "address": {
+          "country": "FR"
+        },
+        "activeSince": "2020-06-25T22:00:00.000Z",
+        "acronym": "FR:FRNA10",
+        "countryCode": "FR",
+        "name": "FR:FRNA10",
+        "id": "FR:FRNA10"
+      },
+      "id": "AXYtUTzI5TcFptbE1Dgw",
+      "type": "User"
+    },
+    {
+      "name": "IAM_AUTHORIZED_CLERK",
+      "organisation": {
+        "address": {
+          "country": "FR"
+        },
+        "activeSince": "2020-06-25T22:00:00.000Z",
+        "acronym": "FR:FRNA10",
+        "countryCode": "FR",
+        "name": "FR:FRNA10",
+        "id": "FR:FRNA10"
+      },
+      "id": "AXUb38VS5TcFptbEfwEo",
+      "type": "User"
+    },
+    {
+      "name": "ywwRjKxk",
+      "organisation": {
+        "address": {
+          "country": "FR"
+        },
+        "activeSince": "2020-06-25T22:00:00.000Z",
+        "acronym": "FR:FRNA10",
+        "countryCode": "FR",
+        "name": "FR:FRNA10",
+        "id": "FR:FRNA10"
+      },
+      "id": "AXUgi_G85TcFptbEgtSM",
+      "type": "User"
+    },
+    {
+      "name": "StIIPizO",
+      "organisation": {
+        "address": {
+          "country": "FR"
+        },
+        "activeSince": "2020-06-25T22:00:00.000Z",
+        "acronym": "FR:FRNA10",
+        "countryCode": "FR",
+        "name": "FR:FRNA10",
+        "id": "FR:FRNA10"
+      },
+      "id": "AXUghrZL5TcFptbEgs6m",
+      "type": "User"
+    },
+    {
+      "name": "ddjKAQxB",
+      "organisation": {
+        "address": {
+          "country": "FR"
+        },
+        "activeSince": "2020-06-25T22:00:00.000Z",
+        "acronym": "FR:FRNA10",
+        "countryCode": "FR",
+        "name": "FR:FRNA10",
+        "id": "FR:FRNA10"
+      },
+      "id": "AXUhGCuC5TcFptbEg2LT",
+      "type": "User"
+    },
+    {
+      "name": "mgAAVzfz",
+      "organisation": {
+        "address": {
+          "country": "FR"
+        },
+        "activeSince": "2020-06-25T22:00:00.000Z",
+        "acronym": "FR:FRNA10",
+        "countryCode": "FR",
+        "name": "FR:FRNA10",
+        "id": "FR:FRNA10"
+      },
+      "id": "AXUgmsVw5TcFptbEguIH",
+      "type": "User"
+    },
+    {
+      "name": "wyWExAXQ",
+      "organisation": {
+        "address": {
+          "country": "FR"
+        },
+        "activeSince": "2020-06-25T22:00:00.000Z",
+        "acronym": "FR:FRNA10",
+        "countryCode": "FR",
+        "name": "FR:FRNA10",
+        "id": "FR:FRNA10"
+      },
+      "id": "AXUgmhOC5TcFptbEguGo",
+      "type": "User"
+    },
+    {
+      "name": "Fldulzil",
+      "organisation": {
+        "address": {
+          "country": "FR"
+        },
+        "activeSince": "2020-06-25T22:00:00.000Z",
+        "acronym": "FR:FRNA10",
+        "countryCode": "FR",
+        "name": "FR:FRNA10",
+        "id": "FR:FRNA10"
+      },
+      "id": "AXUgjz-75TcFptbEgte0",
+      "type": "User"
+    },
+    {
+      "name": "supervisor",
+      "organisation": {
+        "address": {
+          "country": "FR"
+        },
+        "activeSince": "2020-06-25T22:00:00.000Z",
+        "acronym": "FR:FRNA10",
+        "countryCode": "FR",
+        "name": "FR:FRNA10",
+        "id": "FR:FRNA10"
+      },
+      "id": "supervisor",
+      "type": "User"
+    },
+    {
+      "name": "kwrQZQYj",
+      "organisation": {
+        "address": {
+          "country": "FR"
+        },
+        "activeSince": "2020-06-25T22:00:00.000Z",
+        "acronym": "FR:FRNA10",
+        "countryCode": "FR",
+        "name": "FR:FRNA10",
+        "id": "FR:FRNA10"
+      },
+      "id": "AXUggRje5TcFptbEgrqx",
+      "type": "User"
+    }
+  ],
+  "sourceType": "business",
+  "caseId": "318572",
+  "lastUpdate": "2021-03-16T12:32:57.740Z",
+  "id": "e9f0d315f6fd4793a4d4524754b96292",
+  "_id": "e9f0d315f6fd4793a4d4524754b96292",
+  "category": "admin",
+  "caseInfo": {
+    "id": "318572",
+    "type": {
+      "versions": [
+        {
+          "version": "1.2",
+          "activeFrom": "2016-07-01T08:00:00.000Z"
+        },
+        {
+          "version": "4.1",
+          "activeFrom": "2018-10-01T08:00:00.000Z"
+        },
+        {
+          "version": "4.2",
+          "activeFrom": "2020-07-17T00:00:00.000Z"
+        }
+      ],
+      "name": "Certification right benefit in Kind - Member State of stay/residence request confirmation of rights",
+      "id": "AW_BUC_01a",
+      "sector": "AWOD"
+    },
+    "properties": {
+      "importance": "1",
+      "criticality": "1"
+    }
+  },
+  "status": "active"
+}

@@ -7,7 +7,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -34,6 +37,7 @@ import eu.ec.dgempl.eessi.rina.service.tx.util.ProcessDefUtil;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.DmtEnumNotFoundException;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.EElasticType;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.AssignmentFields;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.CaseFields;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper._abstract.AbstractMapToEntityMapper;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.service.OrganisationService;
@@ -43,6 +47,8 @@ import ma.glasnost.orika.MappingContext;
 
 @Component
 public class MapToRinaCaseMapper extends AbstractMapToEntityMapper<MapHolder, RinaCase> {
+
+    private static final Logger logger = LoggerFactory.getLogger(MapToRinaCaseMapper.class);
 
     private final DocumentTypeRepo documentTypeRepo;
     private final IamUserRepo iamUserRepo;
@@ -171,6 +177,7 @@ public class MapToRinaCaseMapper extends AbstractMapToEntityMapper<MapHolder, Ri
         if (CollectionUtils.isNotEmpty(actors)) {
             context.setProperty("caseId", a.string(ID));
             List<Assignment> assignments = actors.stream()
+                    .filter(actor -> !"System".equalsIgnoreCase(actor.string(AssignmentFields.NAME)))
                     .map(actor -> mapperFacade.map(actor, Assignment.class, context))
                     .collect(Collectors.toList());
             assignments.forEach(b::addAssignment);
@@ -225,7 +232,19 @@ public class MapToRinaCaseMapper extends AbstractMapToEntityMapper<MapHolder, Ri
     }
 
     private int getCaseProperty(final MapHolder a, final ECasePropertyKey key) {
-        return Integer.parseInt(a.string(key.getPropertyKey()));
-    }
 
+        if (a == null || MapUtils.isEmpty(a.getHolding())) {
+            logger.info("CaseAssignment property {} value not found. Setting default value 1.", key);
+            return 1;
+        }
+
+        String propertyValue = a.string(key.getPropertyKey());
+
+        if (StringUtils.isEmpty(propertyValue)) {
+            logger.info("CaseAssignment property {} value not found. Setting default value 1.", key);
+            return 1;
+        }
+
+        return Integer.parseInt(propertyValue);
+    }
 }

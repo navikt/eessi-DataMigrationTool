@@ -16,7 +16,7 @@ public enum EEsIndex {
     TOKEN("token"),
     ENTITIES("entities"),
     GLOBALCONFIGURATIONS("globalconfigurations"),
-    IDENTITY_V1("identity_v1"),
+    IDENTITY("identity"),
     LETTERTEMPLATES("lettertemplates"),
     NOTIFICATIONS("notifications"),
     RESOURCES("resources"),

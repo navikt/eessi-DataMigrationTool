@@ -90,14 +90,16 @@
   {
     "esPath": "rules.condition.ownerOrganization.acronym",
     "esType": "string",
-    "sqlPath": "assignmentPolicy.assignmentPolicyRules.organisations.acronym",
-    "sqlType": "VARCHAR(255)"
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "rules.condition.ownerOrganization.activeSince",
     "esType": "string",
-    "sqlPath": "assignmentPolicy.assignmentPolicyRules.organisations.activeSince",
-    "sqlType": "TIMESTAMP WITH TIME ZONE"
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "rules.condition.ownerOrganization.address",
@@ -110,9 +112,9 @@
   {
     "esPath": "rules.condition.ownerOrganization.countryCode",
     "esType": "string",
-    "sqlPath": "assignmentPolicy.assignmentPolicyRules.organisations.countryCode",
-    "sqlType": "TEXT",
-    "value": "enum(ECountryCode)"
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "rules.condition.ownerOrganization.id",
@@ -124,8 +126,17 @@
   {
     "esPath": "rules.condition.ownerOrganization.name",
     "esType": "string",
-    "sqlPath": "assignmentPolicy.assignmentPolicyRules.organisations.name",
-    "sqlType": "VARCHAR(255)"
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "rules.condition.ownerOrganization.matchedBUC",
+    "esType": "object",
+    "ignorePath": true,
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "rules.condition.process",
@@ -162,7 +173,8 @@
     "esPath": "rules.userGroups.name",
     "esType": "string",
     "sqlPath": "assignmentPolicy.assignmentPolicyRules.(iamGroups|iamUsers).name",
-    "sqlType": "VARCHAR(255)"
+    "sqlType": "VARCHAR(255)",
+    "importIgnore": true
   },
   {
     "esPath": "rules.userGroups.type",

@@ -144,10 +144,13 @@ public abstract class AbstractCasesRunnerService {
                             String index = null;
                             String type = null;
 
-                            if (e.getCause() instanceof GenericImporterException && EElasticType.NONE != eElasticType) {
+                            if (e.getCause() instanceof GenericImporterException) {
                                 documentId = ((GenericImporterException) e.getCause()).getElasticId();
-                                index = eElasticType.getIndex();
-                                type = eElasticType.getType();
+
+                                if(EElasticType.NONE != eElasticType) {
+                                    index = eElasticType.getIndex();
+                                    type = eElasticType.getType();
+                                }
                             }
 
                             errors.add(new ReportError(

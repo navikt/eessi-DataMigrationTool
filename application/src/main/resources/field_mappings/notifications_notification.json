@@ -20,7 +20,8 @@
     "esType": "string",
     "sqlPath": "notification.rinaCase.id",
     "sqlType": "VARCHAR(255)",
-    "value": "duplicate(caseId)"
+    "value": "duplicate(caseId)",
+    "importIgnore": true
   },
   {
     "esPath": "caseInfo.properties.criticality",
@@ -107,7 +108,7 @@
     "esType": "string",
     "sqlPath": "notification.creator.id",
     "sqlType": "VARCHAR(255)",
-    "value": "reference(identity_v1,user)"
+    "value": "reference(identity,user)"
   },
   {
     "esPath": "creator.name",
@@ -120,16 +121,16 @@
   {
     "esPath": "creator.organisation.acronym",
     "esType": "string",
-    "sqlPath": "notification.creator.tenant.organisation.acronym",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "creator.organisation.activeSince",
     "esType": "string",
-    "sqlPath": "notification.creator.tenant.organisation.activeSince",
-    "sqlType": "TIMESTAMP WITH TIME ZONE",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "creator.organisation.address",
@@ -142,10 +143,9 @@
   {
     "esPath": "creator.organisation.countryCode",
     "esType": "string",
-    "sqlPath": "notification.creator.tenant.organisation.countryCode",
-    "sqlType": "TEXT",
-    "value": "enum(ECountryCode)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "comment": "this has to be replicated to notification.sender",
@@ -159,9 +159,17 @@
   {
     "esPath": "creator.organisation.name",
     "esType": "string",
-    "sqlPath": "notification.creator.tenant.organisation.name",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "creator.organisation.matchedBUC",
+    "esType": "object",
+    "ignorePath": true,
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "comment": "should be user; we know that because of a bug this can be 'Admin', but we ignore the type anyway",
@@ -181,16 +189,16 @@
   {
     "esPath": "document.receiver.acronym",
     "esType": "string",
-    "sqlPath": "notification.receiver.acronym",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "document.receiver.activeSince",
     "esType": "string",
-    "sqlPath": "notification.receiver.activeSince",
-    "sqlType": "TIMESTAMP WITH TIME ZONE",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "document.receiver.address",
@@ -203,10 +211,9 @@
   {
     "esPath": "document.receiver.countryCode",
     "esType": "string",
-    "sqlPath": "notification.receiver.countryCode",
-    "sqlType": "TEXT",
-    "value": "enum(ECountryCode)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "comment": "if document.receiver is an organisation, set it as notification.receiver; if document.receiver is a user, set the user organisation as notification.receiver; cannot validate the reference here, as this can be a user reference or an organisation reference",
@@ -218,23 +225,31 @@
   {
     "esPath": "document.receiver.name",
     "esType": "string",
+    "importIgnore": true,
     "sqlPath": "",
-    "sqlType": "",
-    "importIgnore": true
+    "sqlType": ""
+  },
+  {
+    "esPath": "document.receiver.matchedBUC",
+    "esType": "object",
+    "ignorePath": true,
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "document.receiver.organisation.acronym",
     "esType": "string",
-    "sqlPath": "notification.receiver.acronym",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "document.receiver.organisation.activeSince",
     "esType": "string",
-    "sqlPath": "notification.receiver.activeSince",
-    "sqlType": "TIMESTAMP WITH TIME ZONE",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "document.receiver.organisation.address",
@@ -247,10 +262,9 @@
   {
     "esPath": "document.receiver.organisation.countryCode",
     "esType": "string",
-    "sqlPath": "notification.receiver.countryCode",
-    "sqlType": "TEXT",
-    "value": "enum(ECountryCode)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "comment": "if document.receiver.organisation exists take the receiver from document.receiver.organisation.id otherwise from document.receiver.id",
@@ -263,15 +277,24 @@
   {
     "esPath": "document.receiver.organisation.name",
     "esType": "string",
-    "sqlPath": "notification.receiver.name",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "document.receiver.organisation.matchedBUC",
+    "esType": "object",
+    "ignorePath": true,
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "document.receiver.type",
     "esType": "string",
     "sqlPath": "",
-    "sqlType": ""
+    "sqlType": "",
+    "importIgnore": true
   },
   {
     "esPath": "document.type",
@@ -289,7 +312,8 @@
     "esPath": "failureReason.code",
     "esType": "string",
     "sqlPath": "",
-    "sqlType": ""
+    "sqlType": "",
+    "importIgnore": true
   },
   {
     "esPath": "failureReason.description",
@@ -330,7 +354,7 @@
     "required": true,
     "sqlPath": "notification.iamUsers.id",
     "sqlType": "VARCHAR(255)",
-    "value": "reference(identity_v1,user)",
+    "value": "reference(identity,user)",
     "importIgnore": true
   },
   {
@@ -343,16 +367,16 @@
   {
     "esPath": "responsibleParties.organisation.acronym",
     "esType": "string",
-    "sqlPath": "notification.iamUsers.tenant.organisation.acronym",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "responsibleParties.organisation.activeSince",
     "esType": "string",
-    "sqlPath": "notification.iamUsers.tenant.organisation.activeSince",
-    "sqlType": "TIMESTAMP WITH TIME ZONE",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "responsibleParties.organisation.address",
@@ -365,10 +389,9 @@
   {
     "esPath": "responsibleParties.organisation.countryCode",
     "esType": "string",
-    "sqlPath": "notification.iamUsers.tenant.organisation.countryCode",
-    "sqlType": "TEXT",
-    "value": "enum(ECountryCode)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "responsibleParties.organisation.id",
@@ -382,30 +405,38 @@
   {
     "esPath": "responsibleParties.organisation.name",
     "esType": "string",
-    "sqlPath": "notification.iamUsers.tenant.organisation.name",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "responsibleParties.organisation.contactMethods",
     "esType": "",
+    "importIgnore": true,
     "sqlPath": "",
-    "sqlType": "",
-    "importIgnore": true
+    "sqlType": ""
   },
   {
     "esPath": "responsibleParties.organisation.location",
     "esType": "string",
-    "sqlPath": "notification.iamUsers.tenant.organisation.location",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "responsibleParties.organisation.registryNumber",
     "esType": "string",
-    "sqlPath": "notification.iamUsers.tenant.organisation.registryNumber",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "responsibleParties.organisation.matchedBUC",
+    "esType": "object",
+    "ignorePath": true,
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "comment": "should be user; we know that because of a bug this can be 'Admin', but we ignore the type anyway",

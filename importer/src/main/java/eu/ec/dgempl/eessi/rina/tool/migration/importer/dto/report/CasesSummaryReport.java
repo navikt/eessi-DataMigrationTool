@@ -35,9 +35,9 @@ public class CasesSummaryReport {
             casesWithError.incrementAndGet();
             caseReportErrors.forEach(error -> {
                 if (error.getElasticIndex() == null && error.getElasticType() == null) {
-                    errors.getNon_es_data().merge(error.getImporterName(), 1L, Long::sum);
+                    errors.swallowNonEsData(error, errors.getNon_es_data());
                 } else {
-                    errors.getEs_data().merge(error.getElasticIndex() + "_" + error.getElasticType(), 1L, Long::sum);
+                    errors.swallowEsData(error, errors.getEs_data());
                 }
             });
         }

@@ -226,13 +226,7 @@ mayCreateH121=[false]
             </triggers>
         </document>
 
-        <document type="DA003A"/>
-
-        <document type="DA003">
-            <triggers>
-                <createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_CREATE_REPLY" documentType="DA003A"/>
-            </triggers>
-        </document>
+        <document type="DA003"/>
 
         <!-- subprocess H_BUC_01 -->
 

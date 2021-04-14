@@ -31,56 +31,24 @@
     "esPath": "attachments.creator.id",
     "esType": "string",
     "required": true,
-    "sqlPath": "iamUser.id",
+    "sqlPath": "documentAttachment.audit.createdBy",
     "sqlType": "VARCHAR(255)",
-    "value": "reference(identity_v1,user)"
+    "value": "reference(identity,user)"
   },
   {
     "esPath": "attachments.creator.name",
     "esType": "string",
     "sqlPath": "documentAttachment.audit.createdBy",
-    "sqlType": "VARCHAR(255)"
+    "sqlType": "VARCHAR(255)",
+    "importIgnore": true
   },
   {
-    "esPath": "attachments.creator.organisation.acronym",
-    "esType": "string",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.acronym",
-    "sqlType": "VARCHAR(255)"
-  },
-  {
-    "esPath": "attachments.creator.organisation.activeSince",
-    "esType": "date",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.activeSince",
-    "sqlType": "TIMESTAMP WITH TIME ZONE"
-  },
-  {
-    "esPath": "attachments.creator.organisation.address",
+    "esPath": "attachments.creator.organisation",
     "esType": "object",
     "ignorePath": true,
     "importIgnore": true,
     "sqlPath": "",
     "sqlType": ""
-  },
-  {
-    "esPath": "attachments.creator.organisation.countryCode",
-    "esType": "string",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.countryCode",
-    "sqlType": "TEXT",
-    "value": "enum(ECountryCode)"
-  },
-  {
-    "esPath": "attachments.creator.organisation.id",
-    "esType": "string",
-    "required": true,
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.id",
-    "sqlType": "VARCHAR(50)",
-    "value": "reference(entities,organisation)"
-  },
-  {
-    "esPath": "attachments.creator.organisation.name",
-    "esType": "string",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.name",
-    "sqlType": "VARCHAR(255)"
   },
   {
     "comment": "should be user",
@@ -89,7 +57,8 @@
     "required": true,
     "sqlPath": "",
     "sqlType": "VARCHAR(4)",
-    "value": "regex(User)"
+    "value": "regex(User)",
+    "importIgnore": true
   },
   {
     "esPath": "attachments.documentId",
@@ -150,7 +119,8 @@
     "esType": "string",
     "required": true,
     "sqlPath": "documentAttachment.documentBversions.id",
-    "sqlType": "INT4"
+    "sqlType": "INT4",
+    "importIgnore": true
   },
   {
     "esPath": "attachments.versions.user.id",
@@ -158,54 +128,23 @@
     "required": true,
     "sqlPath": "iamUser.id",
     "sqlType": "VARCHAR(255)",
-    "value": "reference(identity_v1,user)"
+    "value": "reference(identity,user)",
+    "importIgnore": true
   },
   {
     "esPath": "attachments.versions.user.name",
     "esType": "string",
     "sqlPath": "documentAttachment.documentBversions.audit.createdBy",
-    "sqlType": "VARCHAR(255)"
+    "sqlType": "VARCHAR(255)",
+    "importIgnore": true
   },
   {
-    "esPath": "attachments.versions.user.organisation.acronym",
-    "esType": "string",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.acronym",
-    "sqlType": "VARCHAR(255)"
-  },
-  {
-    "esPath": "attachments.versions.user.organisation.activeSince",
-    "esType": "date",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.activeSince",
-    "sqlType": "TIMESTAMP WITH TIME ZONE"
-  },
-  {
-    "esPath": "attachments.versions.user.organisation.address",
+    "esPath": "attachments.versions.user.organisation",
     "esType": "object",
     "ignorePath": true,
     "importIgnore": true,
     "sqlPath": "",
     "sqlType": ""
-  },
-  {
-    "esPath": "attachments.versions.user.organisation.countryCode",
-    "esType": "string",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.countryCode",
-    "sqlType": "TEXT",
-    "value": "enum(ECountryCode)"
-  },
-  {
-    "esPath": "attachments.versions.user.organisation.id",
-    "esType": "string",
-    "required": true,
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.id",
-    "sqlType": "VARCHAR(50)",
-    "value": "reference(entities,organisation)"
-  },
-  {
-    "esPath": "attachments.versions.user.organisation.name",
-    "esType": "string",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.name",
-    "sqlType": "VARCHAR(255)"
   },
   {
     "comment": "should be user",
@@ -214,7 +153,8 @@
     "required": true,
     "sqlPath": "",
     "sqlType": "VARCHAR(4)",
-    "value": "regex(User)"
+    "value": "regex(User)",
+    "importIgnore": true
   },
   {
     "esPath": "bulk",
@@ -250,18 +190,39 @@
     "sqlType": "VARCHAR(255)"
   },
   {
+    "esPath": "conversations.participants.caseOwner",
+    "esType": "string",
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "conversations.participants.counterParty",
+    "esType": "string",
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "conversations.participants.id",
+    "esType": "string",
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
     "esPath": "conversations.participants.organisation.acronym",
     "esType": "string",
-    "sqlPath": "document.documentConversations.conversationParticipants.organisation.acronym",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "conversations.participants.organisation.activeSince",
     "esType": "date",
-    "sqlPath": "document.documentConversations.conversationParticipants.organisation.activeSince",
-    "sqlType": "TIMESTAMP WITH TIME ZONE",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "conversations.participants.organisation.address",
@@ -274,10 +235,9 @@
   {
     "esPath": "conversations.participants.organisation.countryCode",
     "esType": "string",
-    "sqlPath": "document.documentConversations.conversationParticipants.organisation.countryCode",
-    "sqlType": "TEXT",
-    "value": "enum(ECountryCode)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "conversations.participants.organisation.id",
@@ -290,16 +250,24 @@
   {
     "esPath": "conversations.participants.organisation.location",
     "esType": "geo_point",
-    "sqlPath": "document.documentConversations.conversationParticipants.organisation.location",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "conversations.participants.organisation.name",
     "esType": "string",
-    "sqlPath": "document.documentConversations.conversationParticipants.organisation.name",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "conversations.participants.organisation.matchedBUC",
+    "esType": "object",
+    "ignorePath": true,
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "conversations.participants.role",
@@ -338,16 +306,16 @@
   {
     "esPath": "conversations.userMessages.ack.receiver.acronym",
     "esType": "string",
-    "sqlPath": "document.documentConversations.userMessages.receiver.acronym",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "conversations.userMessages.ack.receiver.activeSince",
     "esType": "date",
-    "sqlPath": "document.documentConversations.userMessages.receiver.activeSince",
-    "sqlType": "TIMESTAMP WITH TIME ZONE",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "conversations.userMessages.ack.receiver.address",
@@ -360,10 +328,9 @@
   {
     "esPath": "conversations.userMessages.ack.receiver.countryCode",
     "esType": "string",
-    "sqlPath": "document.documentConversations.userMessages.receiver.countryCode",
-    "sqlType": "TEXT",
-    "value": "enum(ECountryCode)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "conversations.userMessages.ack.receiver.id",
@@ -377,23 +344,31 @@
   {
     "esPath": "conversations.userMessages.ack.receiver.name",
     "esType": "string",
-    "sqlPath": "document.documentConversations.userMessages.receiver.name",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "conversations.userMessages.ack.receiver.matchedBUC",
+    "esType": "object",
+    "ignorePath": true,
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "conversations.userMessages.ack.sender.acronym",
     "esType": "string",
-    "sqlPath": "document.documentConversations.userMessages.sender.acronym",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "conversations.userMessages.ack.sender.activeSince",
     "esType": "date",
-    "sqlPath": "document.documentConversations.userMessages.sender.activeSince",
-    "sqlType": "TIMESTAMP WITH TIME ZONE",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "conversations.userMessages.ack.sender.address",
@@ -406,10 +381,9 @@
   {
     "esPath": "conversations.userMessages.ack.sender.countryCode",
     "esType": "string",
-    "sqlPath": "document.documentConversations.userMessages.sender.countryCode",
-    "sqlType": "TEXT",
-    "value": "enum(ECountryCode)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "conversations.userMessages.ack.sender.id",
@@ -423,9 +397,17 @@
   {
     "esPath": "conversations.userMessages.ack.sender.name",
     "esType": "string",
-    "sqlPath": "document.documentConversations.userMessages.sender.name",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "conversations.userMessages.ack.sender.matchedBUC",
+    "esType": "object",
+    "ignorePath": true,
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "conversations.userMessages.action",
@@ -463,16 +445,16 @@
   {
     "esPath": "conversations.userMessages.error.receiver.acronym",
     "esType": "string",
-    "sqlPath": "document.documentConversations.userMessages.receiver.acronym",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "conversations.userMessages.error.receiver.activeSince",
     "esType": "date",
-    "sqlPath": "document.documentConversations.userMessages.receiver.activeSince",
-    "sqlType": "TIMESTAMP WITH TIME ZONE",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "conversations.userMessages.error.receiver.address",
@@ -485,10 +467,9 @@
   {
     "esPath": "conversations.userMessages.error.receiver.countryCode",
     "esType": "string",
-    "sqlPath": "document.documentConversations.userMessages.receiver.countryCode",
-    "sqlType": "TEXT",
-    "value": "enum(ECountryCode)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "conversations.userMessages.error.receiver.id",
@@ -502,23 +483,31 @@
   {
     "esPath": "conversations.userMessages.error.receiver.name",
     "esType": "string",
-    "sqlPath": "document.documentConversations.userMessages.receiver.name",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "conversations.userMessages.error.receiver.matchedBUC",
+    "esType": "object",
+    "ignorePath": true,
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "conversations.userMessages.error.sender.acronym",
     "esType": "string",
-    "sqlPath": "document.documentConversations.userMessages.sender.acronym",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "conversations.userMessages.error.sender.activeSince",
     "esType": "date",
-    "sqlPath": "document.documentConversations.userMessages.sender.activeSince",
-    "sqlType": "TIMESTAMP WITH TIME ZONE",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "conversations.userMessages.error.sender.address",
@@ -531,10 +520,9 @@
   {
     "esPath": "conversations.userMessages.error.sender.countryCode",
     "esType": "string",
-    "sqlPath": "document.documentConversations.userMessages.sender.countryCode",
-    "sqlType": "TEXT",
-    "value": "enum(ECountryCode)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "conversations.userMessages.error.sender.id",
@@ -548,9 +536,17 @@
   {
     "esPath": "conversations.userMessages.error.sender.name",
     "esType": "string",
-    "sqlPath": "document.documentConversations.userMessages.sender.name",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "conversations.userMessages.error.sender.matchedBUC",
+    "esType": "object",
+    "ignorePath": true,
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "conversations.userMessages.id",
@@ -575,16 +571,16 @@
   {
     "esPath": "conversations.userMessages.receiver.acronym",
     "esType": "string",
-    "sqlPath": "document.documentConversations.userMessages.receiver.acronym",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "conversations.userMessages.receiver.activeSince",
     "esType": "date",
-    "sqlPath": "document.documentConversations.userMessages.receiver.activeSince",
-    "sqlType": "TIMESTAMP WITH TIME ZONE",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "conversations.userMessages.receiver.address",
@@ -597,10 +593,9 @@
   {
     "esPath": "conversations.userMessages.receiver.countryCode",
     "esType": "string",
-    "sqlPath": "document.documentConversations.userMessages.receiver.countryCode",
-    "sqlType": "TEXT",
-    "value": "enum(ECountryCode)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "conversations.userMessages.receiver.id",
@@ -613,30 +608,39 @@
   {
     "esPath": "conversations.userMessages.receiver.name",
     "esType": "string",
-    "sqlPath": "document.documentConversations.userMessages.receiver.name",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "conversations.userMessages.receiver.matchedBUC",
+    "esType": "object",
+    "ignorePath": true,
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "conversations.userMessages.sbdh",
     "esType": "object",
     "ignorePath": true,
     "sqlPath": "",
-    "sqlType": ""
+    "sqlType": "",
+    "required": true
   },
   {
     "esPath": "conversations.userMessages.sender.acronym",
     "esType": "string",
-    "sqlPath": "document.documentConversations.userMessages.sender.acronym",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "conversations.userMessages.sender.activeSince",
     "esType": "date",
-    "sqlPath": "document.documentConversations.userMessages.sender.activeSince",
-    "sqlType": "TIMESTAMP WITH TIME ZONE",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "conversations.userMessages.sender.address",
@@ -649,10 +653,9 @@
   {
     "esPath": "conversations.userMessages.sender.countryCode",
     "esType": "string",
-    "sqlPath": "document.documentConversations.userMessages.sender.countryCode",
-    "sqlType": "TEXT",
-    "value": "enum(ECountryCode)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "conversations.userMessages.sender.id",
@@ -665,9 +668,17 @@
   {
     "esPath": "conversations.userMessages.sender.name",
     "esType": "string",
-    "sqlPath": "document.documentConversations.userMessages.sender.name",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "conversations.userMessages.sender.matchedBUC",
+    "esType": "object",
+    "ignorePath": true,
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "conversations.userMessages.status",
@@ -694,7 +705,7 @@
     "required": true,
     "sqlPath": "iamUser.id",
     "sqlType": "VARCHAR(255)",
-    "value": "reference(identity_v1,user)"
+    "value": "reference(identity,user)"
   },
   {
     "esPath": "creator.name",
@@ -706,16 +717,16 @@
   {
     "esPath": "creator.organisation.acronym",
     "esType": "string",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.acronym",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "creator.organisation.activeSince",
     "esType": "date",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.activeSince",
-    "sqlType": "TIMESTAMP WITH TIME ZONE",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "creator.organisation.address",
@@ -728,10 +739,9 @@
   {
     "esPath": "creator.organisation.countryCode",
     "esType": "string",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.countryCode",
-    "sqlType": "TEXT",
-    "value": "enum(ECountryCode)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "creator.organisation.id",
@@ -745,9 +755,17 @@
   {
     "esPath": "creator.organisation.name",
     "esType": "string",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.name",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "creator.organisation.matchedBUC",
+    "esType": "object",
+    "ignorePath": true,
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "comment": "should be user",
@@ -1012,7 +1030,7 @@
     "required": true,
     "sqlPath": "iamUser.id",
     "sqlType": "VARCHAR(255)",
-    "value": "reference(identity_v1,user)"
+    "value": "reference(identity,user)"
   },
   {
     "esPath": "versions.user.name",
@@ -1024,16 +1042,16 @@
   {
     "esPath": "versions.user.organisation.acronym",
     "esType": "string",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.acronym",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "versions.user.organisation.activeSince",
     "esType": "date",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.activeSince",
-    "sqlType": "TIMESTAMP WITH TIME ZONE",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "versions.user.organisation.address",
@@ -1046,10 +1064,9 @@
   {
     "esPath": "versions.user.organisation.countryCode",
     "esType": "string",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.countryCode",
-    "sqlType": "TEXT",
-    "value": "enum(ECountryCode)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "versions.user.organisation.id",
@@ -1063,9 +1080,17 @@
   {
     "esPath": "versions.user.organisation.name",
     "esType": "string",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.name",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "versions.user.organisation.matchedBUC",
+    "esType": "object",
+    "ignorePath": true,
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "comment": "should be user",

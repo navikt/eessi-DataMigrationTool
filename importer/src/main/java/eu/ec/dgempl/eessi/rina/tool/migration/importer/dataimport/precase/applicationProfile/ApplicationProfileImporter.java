@@ -2,8 +2,8 @@ package eu.ec.dgempl.eessi.rina.tool.migration.importer.dataimport.precase.appli
 
 import static eu.ec.dgempl.eessi.rina.model.enumtypes.EGlobalParam.*;
 import static eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.ApplicationProfileFields.*;
+import static eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.nie.NieSubscriptionUtils.*;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -42,9 +42,9 @@ import eu.ec.dgempl.eessi.rina.tool.migration.importer.dataimport.precase.applic
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.DmtEnumNotFoundException;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.EElasticType;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.NieSubscriptionDto;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.report.DocumentsReport;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.ProgrammaticTransactionUtil;
-import eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.SubscriptionsHolder;
 
 @Component
 @ElasticTypeImporter(type = EElasticType.APPLICATION_PROFILE)
@@ -157,7 +157,7 @@ public class ApplicationProfileImporter extends AbstractApplicationProfileImport
                         processGlobalParam(() -> caseRetentionPoliciesHolder, () -> CaseRetentionPolicies.CASE_RETENTION_POLICIES_MAP);
 
                         processListData(
-                                () -> doc.listToMapHolder(CASE_RETENTION_POLICIES_TABLE),
+                                () -> caseRetentionPoliciesHolder.listToMapHolder(CASE_RETENTION_POLICIES_TABLE),
                                 () -> caseRetentionPolicyRepo,
                                 () -> CaseRetentionPolicy.class
                         );
@@ -295,48 +295,15 @@ public class ApplicationProfileImporter extends AbstractApplicationProfileImport
 
     private List<NieSubscription> processSubscriptionsData(final Supplier<List<MapHolder>> subscriptionsSupplier) {
 
-        final String SUBSCRIBERS = "subscribers";
-        final String LISTENERS = "listeners";
-        final String NOTIFICATIONS = "notifications";
+        List<MapHolder> nieSubscriptionsMapHolders = subscriptionsSupplier.get();
 
-        List<MapHolder> subscriptionsMap = subscriptionsSupplier.get();
-        if (CollectionUtils.isEmpty(subscriptionsMap)) {
+        if (CollectionUtils.isEmpty(nieSubscriptionsMapHolders)) {
             return Collections.emptyList();
         }
 
-        SubscriptionsHolder subscriptionsHolder = new SubscriptionsHolder();
+        List<NieSubscriptionDto> nieSubscriptions = getNieSubscriptions(nieSubscriptionsMapHolders);
 
-        subscriptionsMap.forEach((subscriptionHolder) -> {
-
-            Map<String, Object> subscription = subscriptionHolder.getHolding();
-            subscriptionsHolder.setSubscription(subscription);
-
-            List<Map<String, String>> subscribers = getListFromObject(subscription.get(SUBSCRIBERS));
-            if (!subscribers.isEmpty()) {
-
-                List<Map<String, String>> listeners = getListFromObject(subscription.get(LISTENERS));
-
-                subscribers.forEach((subscriber) -> {
-                    subscriptionsHolder.setSubscriber(subscriber);
-                    listeners.forEach(subscriptionsHolder::addListener);
-                });
-            } else {
-                subscriptionsHolder.setSubscriber(null);
-                getListFromObject(subscription.get(NOTIFICATIONS)).forEach(subscriptionsHolder::addNotificationListener);
-            }
-
-        });
-
-        return beanMapper.mapAsList(subscriptionsHolder.getSubscriptions(), NieSubscription.class);
-    }
-
-    @SuppressWarnings("unchecked")
-    private List<Map<String, String>> getListFromObject(Object value) {
-        if (value instanceof List) {
-            return (List<Map<String, String>>) value;
-        }
-
-        return new ArrayList<>();
+        return beanMapper.mapAsList(nieSubscriptions, NieSubscription.class);
     }
 
     private void processTenantsData(MapHolder doc) {

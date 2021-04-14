@@ -1,0 +1,44 @@
+{
+    "id": "73be0551304a43ae88f90b0d98e8475e",
+    "participants": [
+      {
+        "role": "Receiver",
+        "organisation": {
+          "activeSince": "2020-06-26T00:00:00Z",
+          "address": {
+            "country": "PT"
+          },
+          "acronym": "PT:PTNA07",
+          "countryCode": "PT",
+          "name": "PT:PTNA07",
+          "id": "PT:PTNA07"
+        }
+      },
+      {
+        "role": "Receiver",
+        "organisation": {
+          "activeSince": "2020-06-26T00:00:00Z",
+          "address": {
+            "country": "PT"
+          },
+          "acronym": "PT:PTNA06",
+          "countryCode": "PT",
+          "name": "PT:PTNA06",
+          "id": "PT:PTNA06"
+        }
+      },
+      {
+        "role": "CounterParty",
+        "organisation": {
+          "activeSince": "2020-06-26T00:00:00Z",
+          "address": {
+            "country": "AT"
+          },
+          "acronym": "AT:ATNA06",
+          "countryCode": "AT",
+          "name": "AT:ATNA06",
+          "id": "AT:ATNA06"
+        }
+      }
+    ]
+}

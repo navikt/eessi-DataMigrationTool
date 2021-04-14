@@ -2,6 +2,7 @@ package eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,7 @@ import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.NotificationField
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper._abstract.AbstractMapToEntityMapper;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.service.OrganisationService;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.CasesUtils;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.MapUtils;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.RepositoryUtils;
 
 import ma.glasnost.orika.MappingContext;
@@ -143,11 +145,10 @@ public class MapToNotificationMapper extends AbstractMapToEntityMapper<MapHolder
             return;
         }
 
-        String receiverId = null;
-        if (a.get(NotificationFields.RECEIVER_ORGANISATION, true) == null) {
-            receiverId = a.string(NotificationFields.RECEIVER_ID, true);
-        } else {
-            receiverId = a.string(NotificationFields.RECEIVER_ORGANISATION_ID, true);
+        String receiverId = a.string(NotificationFields.RECEIVER_ID, true);
+        String receiverOrgId = a.string(NotificationFields.RECEIVER_ORGANISATION_ID, true);
+        if (a.get(NotificationFields.RECEIVER_ORGANISATION, true) != null) {
+            receiverId = receiverOrgId;
         }
 
         Organisation receiver = organisationService.getOrSaveOrganisationWithDefault(receiverId, null);
@@ -186,6 +187,8 @@ public class MapToNotificationMapper extends AbstractMapToEntityMapper<MapHolder
         List<IamUser> iamUsers = new ArrayList<>();
         List<MapHolder> responsibleParties = a.listToMapHolder(NotificationFields.RESPONSIBLE_PARTIES);
 
+        responsibleParties = distinctResponsibleParties(responsibleParties);
+
         for (MapHolder responsibleParty : responsibleParties) {
             String username = responsibleParty.string(NotificationFields.NAME);
 
@@ -195,6 +198,16 @@ public class MapToNotificationMapper extends AbstractMapToEntityMapper<MapHolder
         }
 
         b.setIamUsers(iamUsers);
+    }
+
+    private List<MapHolder> distinctResponsibleParties(final List<MapHolder> responsibleParties) {
+        if (responsibleParties != null && responsibleParties.size() > 1) {
+            return responsibleParties.stream()
+                    .filter(rp -> rp.getHolding() != null && rp.getHolding().containsKey(NotificationFields.ID))
+                    .filter(MapUtils.distinctByKey(rp -> rp.getHolding().get(NotificationFields.ID)))
+                    .collect(Collectors.toList());
+        }
+        return responsibleParties;
     }
 
     private void mapAssignmentRequests(final MapHolder a, final Notification b) {

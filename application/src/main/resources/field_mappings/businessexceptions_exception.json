@@ -47,7 +47,8 @@
     "esType": "long",
     "required": true,
     "sqlPath": "businessException.document.documentBversion.version",
-    "sqlType": "INT4"
+    "sqlType": "INT4",
+    "importIgnore": true
   },
   {
     "esPath": "id",
@@ -282,16 +283,16 @@
   {
     "esPath": "source.participants.organisation.acronym",
     "esType": "string",
+    "importIgnore": true,
     "sqlPath": "",
-    "sqlType": "",
-    "importIgnore": true
+    "sqlType": ""
   },
   {
     "esPath": "source.participants.organisation.activeSince",
     "esType": "string",
+    "importIgnore": true,
     "sqlPath": "",
-    "sqlType": "",
-    "importIgnore": true
+    "sqlType": ""
   },
   {
     "esPath": "source.participants.organisation.address",
@@ -304,16 +305,16 @@
   {
     "esPath": "source.participants.organisation.registryNumber",
     "esType": "string",
+    "importIgnore": true,
     "sqlPath": "",
-    "sqlType": "",
-    "importIgnore": true
+    "sqlType": ""
   },
   {
     "esPath": "source.participants.organisation.countryCode",
     "esType": "string",
+    "importIgnore": true,
     "sqlPath": "",
-    "sqlType": "",
-    "importIgnore": true
+    "sqlType": ""
   },
   {
     "comment": "use this to identify the role of the sender/receivers that go into sbdh",
@@ -325,23 +326,31 @@
   {
     "esPath": "source.participants.organisation.name",
     "esType": "string",
+    "importIgnore": true,
     "sqlPath": "",
-    "sqlType": "",
-    "importIgnore": true
+    "sqlType": ""
   },
   {
     "esPath": "source.participants.organisation.contactMethods",
     "esType": "string",
+    "importIgnore": true,
     "sqlPath": "",
-    "sqlType": "",
-    "importIgnore": true
+    "sqlType": ""
   },
   {
     "esPath": "source.participants.organisation.location",
     "esType": "string",
+    "importIgnore": true,
     "sqlPath": "",
-    "sqlType": "",
-    "importIgnore": true
+    "sqlType": ""
+  },
+  {
+    "esPath": "source.participants.organisation.matchedBUC",
+    "esType": "object",
+    "ignorePath": true,
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "comment": "use this to identify the role of the sender/receivers that go into sbdh",
@@ -372,16 +381,16 @@
   {
     "esPath": "source.receiver.acronym",
     "esType": "string",
+    "importIgnore": true,
     "sqlPath": "",
-    "sqlType": "",
-    "importIgnore": true
+    "sqlType": ""
   },
   {
     "esPath": "source.receiver.activeSince",
     "esType": "string",
+    "importIgnore": true,
     "sqlPath": "",
-    "sqlType": "",
-    "importIgnore": true
+    "sqlType": ""
   },
   {
     "esPath": "source.receiver.address",
@@ -394,16 +403,16 @@
   {
     "esPath": "source.receiver.registryNumber",
     "esType": "string",
+    "importIgnore": true,
     "sqlPath": "",
-    "sqlType": "",
-    "importIgnore": true
+    "sqlType": ""
   },
   {
     "esPath": "source.receiver.countryCode",
     "esType": "string",
+    "importIgnore": true,
     "sqlPath": "",
-    "sqlType": "",
-    "importIgnore": true
+    "sqlType": ""
   },
   {
     "comment": "this goes into sbdh",
@@ -417,23 +426,31 @@
   {
     "esPath": "source.receiver.name",
     "esType": "string",
+    "importIgnore": true,
     "sqlPath": "",
-    "sqlType": "",
-    "importIgnore": true
+    "sqlType": ""
   },
   {
     "esPath": "source.receiver.contactMethods",
     "esType": "string",
+    "importIgnore": true,
     "sqlPath": "",
-    "sqlType": "",
-    "importIgnore": true
+    "sqlType": ""
   },
   {
     "esPath": "source.receiver.location",
     "esType": "string",
+    "importIgnore": true,
     "sqlPath": "",
-    "sqlType": "",
-    "importIgnore": true
+    "sqlType": ""
+  },
+  {
+    "esPath": "source.receiver.matchedBUC",
+    "esType": "object",
+    "ignorePath": true,
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "comment": "this goes into sbdh",
@@ -497,16 +514,16 @@
   {
     "esPath": "source.sender.acronym",
     "esType": "string",
+    "importIgnore": true,
     "sqlPath": "",
-    "sqlType": "",
-    "importIgnore": true
+    "sqlType": ""
   },
   {
     "esPath": "source.sender.activeSince",
     "esType": "string",
+    "importIgnore": true,
     "sqlPath": "",
-    "sqlType": "",
-    "importIgnore": true
+    "sqlType": ""
   },
   {
     "esPath": "source.sender.address",
@@ -519,16 +536,16 @@
   {
     "esPath": "source.sender.countryCode",
     "esType": "string",
+    "importIgnore": true,
     "sqlPath": "",
-    "sqlType": "",
-    "importIgnore": true
+    "sqlType": ""
   },
   {
     "esPath": "source.sender.registryNumber",
     "esType": "string",
+    "importIgnore": true,
     "sqlPath": "",
-    "sqlType": "",
-    "importIgnore": true
+    "sqlType": ""
   },
   {
     "comment": "this goes into sbdh",
@@ -542,22 +559,30 @@
   {
     "esPath": "source.sender.name",
     "esType": "string",
+    "importIgnore": true,
     "sqlPath": "",
-    "sqlType": "",
-    "importIgnore": true
+    "sqlType": ""
   },
   {
     "esPath": "source.sender.contactMethods",
     "esType": "string",
+    "importIgnore": true,
     "sqlPath": "",
-    "sqlType": "",
-    "importIgnore": true
+    "sqlType": ""
   },
   {
     "esPath": "source.sender.location",
     "esType": "string",
+    "importIgnore": true,
     "sqlPath": "",
-    "sqlType": "",
-    "importIgnore": true
+    "sqlType": ""
+  },
+  {
+    "esPath": "source.sender.matchedBUC",
+    "esType": "object",
+    "ignorePath": true,
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   }
 ]

@@ -232,7 +232,7 @@ public class ReferenceValidatorTest {
     public void whenAllFieldsAreInformed_AndIndexIsIdentityV1_AndTypeIsUser_AndObjectIsSystem_thenAssertionSucceeds() {
 
         setUpValidationContext();
-        setUpReferenceValidatorWithParams("identity_v1", "user");
+        setUpReferenceValidatorWithParams("identity", "user");
         Object object = "system";
         path = "documentId";
 
@@ -248,7 +248,7 @@ public class ReferenceValidatorTest {
     public void whenAllFieldsAreInformed_AndIndexIsIdentityV1_AndTypeIsUser_AndObjectIs0_thenAssertionSucceeds() {
 
         setUpValidationContext();
-        setUpReferenceValidatorWithParams("identity_v1", "user");
+        setUpReferenceValidatorWithParams("identity", "user");
         Object object = "0";
         path = "documentId";
 
@@ -264,7 +264,7 @@ public class ReferenceValidatorTest {
     public void whenAllFieldsAreInformed_AndDocumentTypeEqualsDocumentContent_AndPathIsId_AndParentDocumentIdIsNotNull_AndCaseIdIsNull_thenValidationResultIsError() {
 
         setUpValidationContextWithDocumentTypeDocumentContentAndParentDocumentIdIsNotNullAndCaseIdIsNull();
-        String param1 = "identity_v1";
+        String param1 = "identity";
         String param2 = "user";
         setUpReferenceValidatorWithParams(param1, param2);
         Object object = "1";
@@ -550,13 +550,13 @@ public class ReferenceValidatorTest {
     }
 
     //
-    // Reference(identity_v1,user)
+    // Reference(identity,user)
     //
 
     @Test
     public void whenAllFieldsAreInformed_ReferenceIdentityV1User_AndCacheEntryIsFalse_AndElasticClientIsFalse_thenValidationResultIsError() {
 
-        String index = "identity_v1";
+        String index = "identity";
         String type = "user";
 
         setUpValidationContext();
@@ -590,7 +590,7 @@ public class ReferenceValidatorTest {
     @Test
     public void whenAllFieldsAreInformed_ReferenceIdentityV1User_AndCacheEntryIsFalse_AndElasticClientIsTrue_thenValidationResultIsError() {
 
-        String index = "identity_v1";
+        String index = "identity";
         String type = "user";
 
         setUpValidationContext();
@@ -621,13 +621,13 @@ public class ReferenceValidatorTest {
     }
 
     //
-    // Reference(identity_v1,group)
+    // Reference(identity,group)
     //
 
     @Test
     public void whenAllFieldsAreInformed_ReferenceIdentityV1Group_AndCacheEntryIsFalse_AndElasticClientIsFalse_thenValidationResultIsError() {
 
-        String index = "identity_v1";
+        String index = "identity";
         String type = "group";
 
         setUpValidationContext();
@@ -661,7 +661,7 @@ public class ReferenceValidatorTest {
     @Test
     public void whenAllFieldsAreInformed_ReferenceIdentityV1Group_AndCacheEntryIsFalse_AndElasticClientIsTrue_thenValidationResultIsError() {
 
-        String index = "identity_v1";
+        String index = "identity";
         String type = "group";
 
         setUpValidationContext();

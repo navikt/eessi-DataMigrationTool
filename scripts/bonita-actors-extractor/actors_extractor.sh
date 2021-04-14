@@ -39,4 +39,4 @@ if [ ! -d $output_folder ]; then
   mkdir -p $output_folder
 fi
 
-psql -U bonita -d bonita -qtAX -h $psql_host -p $psql_port -f ./sql/exportProcessDefActors.sql > "${output_folder}/"BonitaProcessDefinitionActors.json
+psql -W -U bonita -d bonita -qtAX -h $psql_host -p $psql_port -f ./sql/exportProcessDefActors.sql >"${output_folder}/"BonitaProcessDefinitionActors.json

@@ -20,26 +20,29 @@
     "required": true,
     "sqlPath": "iamUser.id",
     "sqlType": "VARCHAR(255)",
-    "value": "reference(identity_v1,user)"
+    "value": "reference(identity,user)"
   },
   {
     "esPath": "creator.name",
     "esType": "string",
     "required": true,
     "sqlPath": "caseAttachment.audit.createdBy",
-    "sqlType": "VARCHAR(255)"
+    "sqlType": "VARCHAR(255)",
+    "importIgnore": true
   },
   {
     "esPath": "creator.organisation.acronym",
     "esType": "string",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.acronym",
-    "sqlType": "VARCHAR(255)"
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "creator.organisation.activeSince",
     "esType": "date",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.activeSince",
-    "sqlType": "TIMESTAMP WITH TIME ZONE"
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "creator.organisation.address",
@@ -52,9 +55,9 @@
   {
     "esPath": "creator.organisation.countryCode",
     "esType": "string",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.countryCode",
-    "sqlType": "TEXT",
-    "value": "enum(ECountryCode)"
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "creator.organisation.id",
@@ -62,13 +65,23 @@
     "required": true,
     "sqlPath": "(iamUser|iamGroup).tenant.organisation.id",
     "sqlType": "VARCHAR(50)",
-    "value": "reference(entities,organisation)"
+    "value": "reference(entities,organisation)",
+    "importIgnore": true
   },
   {
     "esPath": "creator.organisation.name",
     "esType": "string",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.name",
-    "sqlType": "VARCHAR(255)"
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "creator.organisation.matchedBUC",
+    "esType": "object",
+    "ignorePath": true,
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "comment": "should be user",
@@ -77,7 +90,8 @@
     "required": true,
     "sqlPath": "",
     "sqlType": "VARCHAR(4)",
-    "value": "regex(User)"
+    "value": "regex(User)",
+    "importIgnore": true
   },
   {
     "esPath": "fileName",
@@ -96,7 +110,8 @@
     "esPath": "internalId",
     "esType": "string",
     "sqlPath": "",
-    "sqlType": ""
+    "sqlType": "",
+    "importIgnore": true
   },
   {
     "esPath": "lastUpdate",

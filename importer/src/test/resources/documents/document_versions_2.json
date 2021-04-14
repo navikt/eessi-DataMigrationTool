@@ -1,0 +1,142 @@
+{
+  "creator": {
+    "name": "System",
+    "organisation": {
+      "activeSince": "2020-06-26T00:00:00Z",
+      "address": {
+        "country": "FR"
+      },
+      "acronym": "FR:FRNA07",
+      "countryCode": "FR",
+      "name": "FR:FRNA07",
+      "id": "FR:FRNA07"
+    },
+    "id": "0",
+    "type": "User"
+  },
+  "starter": false,
+  "displayName": "Business Exception",
+  "mimeType": "json",
+  "type": "X050",
+  "conversations": [
+    {
+      "id": "0e37ee11b8ec4f3f9c23d145412d99d7",
+      "participants": [
+        {
+          "role": "Sender",
+          "organisation": {
+            "activeSince": "2020-06-26T00:00:00Z",
+            "address": {
+              "country": "FR"
+            },
+            "acronym": "FR:FRNA07",
+            "countryCode": "FR",
+            "name": "FR:FRNA07",
+            "id": "FR:FRNA07"
+          }
+        },
+        {
+          "role": "Receiver",
+          "organisation": {
+            "activeSince": "2020-06-26T00:00:00Z",
+            "address": {
+              "country": "PT"
+            },
+            "acronym": "PT:PTNA06",
+            "countryCode": "PT",
+            "name": "PT:PTNA06",
+            "id": "PT:PTNA06"
+          }
+        }
+      ]
+    }
+  ],
+  "internalId": "0_ee6665ad8a144700b8d3d70849a9162c",
+  "typeVersion": "4.1",
+  "allowsAttachments": false,
+  "versions": [
+    {
+      "date": "2020-12-12T13:25:18Z",
+      "id": "1",
+      "user": {
+        "name": "System",
+        "organisation": {
+          "activeSince": "2020-06-26T00:00:00Z",
+          "address": {
+            "country": "FR"
+          },
+          "acronym": "FR:FRNA07",
+          "countryCode": "FR",
+          "name": "FR:FRNA07",
+          "id": "FR:FRNA07"
+        },
+        "id": "0",
+        "type": "User"
+      }
+    },
+    {
+      "date": "2020-12-12T13:25:17Z",
+      "id": "1",
+      "user": {
+        "name": "System",
+        "organisation": {
+          "activeSince": "2020-06-26T00:00:00Z",
+          "address": {
+            "country": "FR"
+          },
+          "acronym": "FR:FRNA07",
+          "countryCode": "FR",
+          "name": "FR:FRNA07",
+          "id": "FR:FRNA07"
+        },
+        "id": "0",
+        "type": "User"
+      }
+    },
+    {
+      "date": "2020-12-12T13:25:17Z",
+      "id": "1",
+      "user": {
+        "name": "System",
+        "organisation": {
+          "activeSince": "2020-06-26T00:00:00Z",
+          "address": {
+            "country": "FR"
+          },
+          "acronym": "FR:FRNA07",
+          "countryCode": "FR",
+          "name": "FR:FRNA07",
+          "id": "FR:FRNA07"
+        },
+        "id": "0",
+        "type": "User"
+      }
+    },
+    {
+      "date": "2020-12-12T13:25:17Z",
+      "id": "2",
+      "user": {
+        "name": "System",
+        "organisation": {
+          "activeSince": "2020-06-26T00:00:00Z",
+          "address": {
+            "country": "FR"
+          },
+          "acronym": "FR:FRNA07",
+          "countryCode": "FR",
+          "name": "FR:FRNA07",
+          "id": "FR:FRNA07"
+        },
+        "id": "0",
+        "type": "User"
+      }
+    }
+  ],
+  "caseId": "0",
+  "hasBusinessValidation": false,
+  "ParentType": "X050",
+  "id": "ee6665ad8a144700b8d3d70849a9162c",
+  "_id": "0_ee6665ad8a144700b8d3d70849a9162c",
+  "direction": "OUT",
+  "status": "new"
+}

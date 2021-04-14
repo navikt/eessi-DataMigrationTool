@@ -4,7 +4,7 @@ public class NotificationFields {
 
     public static final String ID = "id";
     public static final String REASON = "reason";
-    public static final String FAILURE_DESCRIPTION = "failureDescription";
+    public static final String FAILURE_DESCRIPTION = "failureReason.description";
     public static final String CATEGORY = "category";
     public static final String SEVERITY = "severity";
     public static final String TYPE = "type";

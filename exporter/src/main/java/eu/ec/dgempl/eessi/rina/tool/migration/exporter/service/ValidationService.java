@@ -73,7 +73,7 @@ public class ValidationService {
         reportsResult.addAll(validateAllInIndex(EEsIndex.CONFIGURATIONS.value()));
         reportsResult.addAll(validateAllInIndex(EEsIndex.ENTITIES.value()));
         reportsResult.addAll(validateAllInIndex(EEsIndex.GLOBALCONFIGURATIONS.value()));
-        reportsResult.addAll(validateAllInIndex(EEsIndex.IDENTITY_V1.value()));
+        reportsResult.addAll(validateAllInIndex(EEsIndex.IDENTITY.value()));
         reportsResult.addAll(validateAllInIndex(EEsIndex.RESOURCES.value()));
         reportsResult.addAll(validateAllInIndex(EEsIndex.VOCABULARIES.value()));
         reportsResult.addAll(validateAllCases());
