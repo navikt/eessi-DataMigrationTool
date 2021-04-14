@@ -1,0 +1,26 @@
+[
+  {
+    "esPath": "checkCategory",
+    "esType": "string",
+    "sqlPath": "checkDefinition.checkCategory",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "id",
+    "esType": "string",
+    "sqlPath": "checkDefinition.id",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "name",
+    "esType": "string",
+    "sqlPath": "checkDefinition.name",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "valid",
+    "esType": "boolean",
+    "sqlPath": "checkDefinition.isValid",
+    "sqlType": "BOOL"
+  }
+]

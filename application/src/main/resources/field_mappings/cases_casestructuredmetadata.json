@@ -1,0 +1,372 @@
+[
+  {
+    "esPath": "businessId",
+    "esType": "string",
+    "sqlPath": "rinaCase.businessId",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "caseAssignment.actors.$selected",
+    "esType": "boolean",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "caseAssignment.actors.id",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "rinaCase.assignments.id",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "caseAssignment.actors.name",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "rinaCase.assignments.role.name",
+    "sqlType": "TEXT",
+    "value": "enum(ERole)"
+  },
+  {
+    "esPath": "caseAssignment.actors.userGroups.allChildren",
+    "esType": "object",
+    "ignorePath": true,
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "caseAssignment.actors.userGroups.children",
+    "esType": "object",
+    "ignorePath": true,
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "caseAssignment.actors.userGroups.id",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "rinaCase.assignments.(iamUsers|iamGroups).id",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "caseAssignment.actors.userGroups.isLeaf",
+    "esType": "boolean",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "caseAssignment.actors.userGroups.name",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "rinaCase.assignments.(iamUsers.username|iamGroups.name)",
+    "sqlType": "VARCHAR(255)",
+    "importIgnore": true
+  },
+  {
+    "esPath": "caseAssignment.actors.userGroups.notLoaded",
+    "esType": "boolean",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "caseAssignment.actors.userGroups.path",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "caseAssignment.actors.userGroups.shortName",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "comment": "user or group",
+    "esPath": "caseAssignment.actors.userGroups.type",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "TEXT",
+    "value": "enum(EUserGroupType)"
+  },
+  {
+    "esPath": "caseAssignment.id",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "rinaCase.id",
+    "sqlType": "VARCHAR(255)",
+    "value": "duplicate(id)",
+    "importIgnore": true
+  },
+  {
+    "esPath": "caseAssignment.properties.criticality",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "rinaCase.caseProperties.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "caseAssignment.properties.importance",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "rinaCase.caseProperties.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "counter",
+    "esType": "long",
+    "sqlPath": "rinaCase.counter",
+    "sqlType": "INT4"
+  },
+  {
+    "esPath": "creator.id",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "iamUser.id",
+    "sqlType": "VARCHAR(255)",
+    "value": "reference(identity_v1,user)"
+  },
+  {
+    "esPath": "creator.name",
+    "esType": "string",
+    "sqlPath": "caseAttachment.audit.createdBy",
+    "sqlType": "VARCHAR(255)",
+    "importIgnore": true
+  },
+  {
+    "esPath": "creator.organisation.acronym",
+    "esType": "string",
+    "sqlPath": "iamUser.tenant.organisation.acronym",
+    "sqlType": "VARCHAR(255)",
+    "importIgnore": true
+  },
+  {
+    "esPath": "creator.organisation.activeSince",
+    "esType": "date",
+    "sqlPath": "(iamUser|iamGrou)organisation.activeSince",
+    "sqlType": "TIMESTAMP WITH TIME ZONE",
+    "importIgnore": true
+  },
+  {
+    "esPath": "creator.organisation.address.country",
+    "esType": "string",
+    "sqlPath": "iamUser.tenant.organisation.addressCountry",
+    "sqlType": "VARCHAR(255)",
+    "importIgnore": true
+  },
+  {
+    "esPath": "creator.organisation.countryCode",
+    "esType": "string",
+    "sqlPath": "iamUser.tenant.organisation.countryCode",
+    "sqlType": "TEXT",
+    "value": "enum(ECountryCode)",
+    "importIgnore": true
+  },
+  {
+    "esPath": "creator.organisation.id",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "iamUser.tenant.organisation.id",
+    "sqlType": "VARCHAR(50)",
+    "value": "reference(entities,organisation)",
+    "importIgnore": true
+  },
+  {
+    "esPath": "creator.organisation.name",
+    "esType": "string",
+    "sqlPath": "iamUser.tenant.organisation.name",
+    "sqlType": "VARCHAR(255)",
+    "importIgnore": true
+  },
+  {
+    "comment": "should be user",
+    "esPath": "creator.type",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "VARCHAR(4)",
+    "value": "regex(User)",
+    "importIgnore": true
+  },
+  {
+    "esPath": "diagramVersions",
+    "esType": "object",
+    "ignorePath": true,
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "id",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "rinaCase.id",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "internationalId",
+    "esType": "string",
+    "sqlPath": "rinaCase.internationalId",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "lastUpdate",
+    "esType": "date",
+    "required": true,
+    "sqlPath": "rinaCase.audit.updatedAt",
+    "sqlType": "TIMESTAMP WITH TIME ZONE"
+  },
+  {
+    "esPath": "participants.organisation.acronym",
+    "esType": "string",
+    "sqlPath": "rinaCase.caseParticipants.organisation.acronym",
+    "sqlType": "VARCHAR(255)",
+    "importIgnore": true
+  },
+  {
+    "esPath": "participants.organisation.activeSince",
+    "esType": "string",
+    "sqlPath": "rinaCase.caseParticipants.organisation.activeSince",
+    "sqlType": "TIMESTAMP WITH TIME ZONE",
+    "importIgnore": true
+  },
+  {
+    "esPath": "participants.organisation.address.country",
+    "esType": "string",
+    "sqlPath": "rinaCase.caseParticipants.organisation.addressCountry",
+    "sqlType": "VARCHAR(255)",
+    "importIgnore": true
+  },
+  {
+    "esPath": "participants.organisation.countryCode",
+    "esType": "string",
+    "sqlPath": "rinaCase.caseParticipants.organisation.countryCode",
+    "sqlType": "TEXT",
+    "value": "enum(ECountryCode)",
+    "importIgnore": true
+  },
+  {
+    "esPath": "participants.organisation.id",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "rinaCase.caseParticipants.organisation.id",
+    "sqlType": "VARCHAR(50)",
+    "value": "reference(entities,organisation)"
+  },
+  {
+    "esPath": "participants.organisation.location",
+    "esType": "geo_point",
+    "sqlPath": "rinaCase.caseParticipants.organisation.location",
+    "sqlType": "VARCHAR(255)",
+    "importIgnore": true
+  },
+  {
+    "esPath": "participants.organisation.name",
+    "esType": "string",
+    "sqlPath": "rinaCase.caseParticipants.organisation.name",
+    "sqlType": "VARCHAR(255)",
+    "importIgnore": true
+  },
+  {
+    "esPath": "participants.role",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "rinaCase.caseParticipants.eApplicationRole",
+    "sqlType": "TEXT",
+    "value": "enum(EApplicationRole)"
+  },
+  {
+    "esPath": "processDefinitionName",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "split into rinaCase.applicationRole + rinaCase.ProcessDefVersion.processDef.name + rinaCase.ProcessDefVersion.businessVersion",
+    "sqlType": "VARCHAR(269)"
+  },
+  {
+    "esPath": "searchMetadata",
+    "esType": "object",
+    "ignorePath": true,
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "sensitive",
+    "esType": "boolean",
+    "sqlPath": "rinaCase.isSensitive",
+    "sqlType": "BOOL"
+  },
+  {
+    "esPath": "sensitiveCommitted",
+    "esType": "boolean",
+    "sqlPath": "rinaCase.isSensitiveCommited",
+    "sqlType": "BOOL"
+  },
+  {
+    "esPath": "startDate",
+    "esType": "date",
+    "required": true,
+    "sqlPath": "rinaCase.audit.createdAt",
+    "sqlType": "TIMESTAMP WITH TIME ZONE"
+  },
+  {
+    "esPath": "status",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "rinaCase.status",
+    "sqlType": "TEXT",
+    "value": "enum(ECaseStatus)"
+  },
+  {
+    "esPath": "storeLocationOfArchive",
+    "esType": "string",
+    "sqlPath": "rinaCase.storeLocationOfArchive",
+    "sqlType": "VARCHAR(1024)"
+  },
+  {
+    "esPath": "subject",
+    "esType": "object",
+    "ignorePath": true,
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "whoami.acronym",
+    "esType": "string",
+    "sqlPath": "rinaCase.tenant.organisation.acronym",
+    "sqlType": "VARCHAR(255)",
+    "importIgnore": true
+  },
+  {
+    "esPath": "whoami.activeSince",
+    "esType": "string",
+    "sqlPath": "rinaCase.tenant.organisation.activeSince",
+    "sqlType": "TIMESTAMP WITH TIME ZONE",
+    "importIgnore": true
+  },
+  {
+    "esPath": "whoami.address.country",
+    "esType": "string",
+    "sqlPath": "rinaCase.tenant.organisation.addressCountry",
+    "sqlType": "VARCHAR(255)",
+    "importIgnore": true
+  },
+  {
+    "esPath": "whoami.countryCode",
+    "esType": "string",
+    "sqlPath": "rinaCase.tenant.organisation.countryCode",
+    "sqlType": "TEXT",
+    "value": "enum(ECountryCode)",
+    "importIgnore": true
+  },
+  {
+    "esPath": "whoami.id",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "rinaCase.tenant.organisation.id",
+    "sqlType": "VARCHAR(50)",
+    "value": "reference(entities,organisation)"
+  },
+  {
+    "esPath": "whoami.name",
+    "esType": "string",
+    "sqlPath": "rinaCase.tenant.organisation.name",
+    "sqlType": "VARCHAR(255)",
+    "importIgnore": true
+  }
+]

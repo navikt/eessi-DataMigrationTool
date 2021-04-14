@@ -1,0 +1,35 @@
+EESSI-RINA-DATA-MIGRATION
+
+v2.0.1 -
+--------------------------------------
+Importer:
+- fixed linux paths
+- fixed users for Notifications
+- fixed missing field from Action (templateVersion -> fixes the undefined template for a SED)
+- fixed missing field in SubdocumentAttachment (pathname)
+- fixed Subdocument: validationErrors is now correctly mapped
+- fixed import of AuditEntries
+- fixed medical flag in SBDH
+- fixed retrieval of business exceptions
+- improved logging
+
+
+v2.0.0 - published on 15.12.2020
+--------------------------------------
+Application bundles now the Validator and Importer
+
+Importer:
+- added import methods for all Elasticsearch resources
+Validator:
+- added validation for indices ADMIN, AUDIT, BUSINESSEXCEPTIONS, CHECKS, CONFIGURATIONS, GLOBALCONFIGURATIONS, NOTIFICATIONS, RESOURCES, VOCABULARIES
+- added the case tenant in the case reports
+
+
+v1.0.2 - published on 10.12.2020
+--------------------------------------
+Fix for EESSI 7742: incorrect propagation of errors caused by unknown fields (fields that are not present in the aggregated Elasticsearch mapping),no other functionalities added or changed
+
+
+v1.0.1 - published on 02.12.2020
+--------------------------------------
+First release

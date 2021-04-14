@@ -1,0 +1,700 @@
+<?xml version="1.0"?> 
+<case name="P_BUC_01" version="${buc.model.version}" role="PO" xmlns="http://ec.europa.eu/eessi/rina/buc"> 
+ 
+<!-- CONFIG FILE P1.conf
+PROC=[P_BUC_01]
+VER=[4.2]
+PATCH=[20200101]
+ISML=[true]
+STARTERS=[P2000]
+POCREATED=[P3000 P4000 P5000 P6000 P7000 P8000 P9000 P10000]
+CPCREATED=[P5000 P6000 P8000 P9000 P10000]
+HSUBS=[H4 H7 H8]
+XADMINS=[X005 X006 X007 X009]
+-->
+ 
+<!-- BONITA EXTRACT
+PO_P_BUC_01_v4.2-v20200101.proc
+000038 [Create P2000] exists
+000053 [Create P2000] method = createEmptyMetadata
+000076 [Create P2000] docId = tmpP2000Id
+000081 [Create P2000] selectParticipants = isFirstP2000
+000086 [Create P2000] hasClarify = false
+000091 [Create P2000] hasReject = false
+000117 [Read P6000] exists
+000155 [Read P6000] docId = tmpDocId
+000160 [Read P6000] selectParticipants = false
+000165 [Read P6000] hasReject = false
+000170 [Read P6000] hasClarify = false
+000175 [Read P6000] hasReject = false
+000183 [Create P6000] exists
+000194 [Create P6000] method = createEmptyMetadata
+000222 [Create P6000] selectParticipants = false
+000227 [Create P6000] docId = tmpP6000Id
+000232 [Create P6000] hasReject = false
+000237 [Create P6000] hasClarify = false
+000281 [Create P7000] exists
+000292 [Create P7000] allowsAttachments = false
+000292 [Create P7000] method = createEmptyMetadata
+000331 [Create P7000] docId = tempP7000Id
+000336 [Create P7000] selectParticipants = false
+000341 [Create P7000] hasReject = false
+000346 [Create P7000] hasClarify = false
+000351 [Create P7000] hasLetter = false
+000467 [Forward P2000] exists
+000490 [Forward P2000] docId = lastDocumentId
+000495 [Forward P2000] selectParticipants = true
+000500 [Forward P2000] receivedAction = actionP2000
+000505 [Forward P2000] hasClarify = true
+000513 [Initialise Forwarded Process] exists
+000537 [Initialise Forwarded Process] lastMessageId = lastMessageId
+000542 [Initialise Forwarded Process] receivedWhoAmI = receivedWhoAmI
+000547 [Initialise Forwarded Process] flowid = flowid
+000558 [Common] exists
+000568 [Common] isPO = true
+000653 [Common] method = createEmptyMetadata
+000686 [Call P3000s] exists
+000699 [Call P3000s] docId = tmpP300Id
+000704 [Call P3000s] selectParticipants = false
+000709 [Call P3000s] hasReject = false
+000714 [Call P3000s] hasClarify = false
+000722 [Create P3000 Bis] exists
+000734 [Create P3000 Bis] method = createEmptyMetadata
+000758 [Create P3000 Bis] docId = tmpDocId
+000763 [Create P3000 Bis] selectParticipants = false
+000768 [Create P3000 Bis] hasReject = false
+000773 [Create P3000 Bis] hasClarify = false
+000833 [Create P4000] exists
+000844 [Create P4000] method = createEmptyMetadata
+000867 [Create P4000] docId = tmpP4000Id
+000872 [Create P4000] selectParticipants = false
+000877 [Create P4000] hasClarify = false
+000882 [Create P4000] hasReject = false
+000892 [Create P5000] exists
+000903 [Create P5000] allowsAttachments = false
+000903 [Create P5000] method = createEmptyMetadata
+000926 [Create P5000] docId = tmpP5000Id
+000931 [Create P5000] selectParticipants = false
+000936 [Create P5000] hasReject = false
+000941 [Create P5000] hasClarify = false
+000955 [Read P5000] exists
+000993 [Read P5000] docId = tmpDocId
+000998 [Read P5000] selectParticipants = false
+001003 [Read P5000] hasReject = false
+001008 [Read P5000] hasClarify = false
+001013 [Read P5000] hasReject = false
+001086 [Read P8000] exists
+001124 [Read P8000] docId = tmpDocId
+001129 [Read P8000] selectParticipants = true
+001134 [Read P8000] hasReject = false
+001139 [Read P8000] hasClarify = false
+001144 [Read P8000] hasReject = false
+001158 [Create P8000] exists
+001169 [Create P8000] method = createEmptyMetadata
+001192 [Create P8000] docId = tmpP8000Id
+001197 [Create P8000] selectParticipants = true
+001202 [Create P8000] hasReject = false
+001207 [Create P8000] hasClarify = false
+001221 [Read P9000] exists
+001259 [Read P9000] docId = tmpDocId
+001264 [Read P9000] selectParticipants = true
+001269 [Read P9000] hasReject = false
+001274 [Read P9000] hasClarify = false
+001279 [Read P9000] hasReject = false
+001287 [Create P9000] exists
+001298 [Create P9000] method = createAnswerMetadata
+001322 [Create P9000] docId = tmpP9000Id
+001327 [Create P9000] selectParticipants = false
+001332 [Create P9000] hasReject = false
+001337 [Create P9000] hasClarify = false
+001345 [Create P9000 Bis] exists
+001356 [Create P9000 Bis] method = createAnswerMetadata
+001380 [Create P9000 Bis] docId = tmpP9000Id
+001385 [Create P9000 Bis] selectParticipants = false
+001390 [Create P9000 Bis] hasReject = false
+001395 [Create P9000 Bis] hasClarify = false
+001565 [Read P10000] exists
+001603 [Read P10000] docId = tmpDocId
+001608 [Read P10000] selectParticipants = true
+001613 [Read P10000] hasClarify = false
+001618 [Read P10000] hasReject = false
+001632 [Create P10000] exists
+001643 [Create P10000] method = createEmptyMetadata
+001666 [Create P10000] docId = tmpP10000Id
+001671 [Create P10000] selectParticipants = true
+001676 [Create P10000] hasClarify = false
+001681 [Create P10000] hasReject = false
+002151 [Call AddRemoveForward] exists
+002161 [Call AddRemoveForward] whoami = whoami
+002166 [Call AddRemoveForward] flowid = flowid
+002171 [Call AddRemoveForward] isPO = true
+002199 [SUBPROCESS H_BUC_08_09] exists
+002210 [SUBPROCESS H_BUC_08_09] flowid = flowid
+002215 [SUBPROCESS H_BUC_08_09] whoami = whoami
+002220 [SUBPROCESS H_BUC_08_09] isMainProcess = false
+002225 [SUBPROCESS H_BUC_08_09] mayCreateH121 = false
+002230 [SUBPROCESS H_BUC_08_09] mayReceiveH121 = true
+002235 [SUBPROCESS H_BUC_08_09] mayCreateH120 = true
+002240 [SUBPROCESS H_BUC_08_09] mayReceiveH120 = true
+002245 [SUBPROCESS H_BUC_08_09] mayChooseParticipants = true
+002254 [SUBPROCESS H_BUC_07] exists
+002264 [SUBPROCESS H_BUC_07] flowid = flowid
+002269 [SUBPROCESS H_BUC_07] whoami = whoami
+002274 [SUBPROCESS H_BUC_07] isMainProcess = false
+002279 [SUBPROCESS H_BUC_07] mayCreateH070 = true
+002284 [SUBPROCESS H_BUC_07] hasPORole = true
+002289 [SUBPROCESS H_BUC_07] hasCPRole = true
+002294 [SUBPROCESS H_BUC_07] mayChooseParticipants = true
+002299 [SUBPROCESS H_BUC_07] mayLoopH070 = false
+002307 [SUBPROCESS H_BUC_04] exists
+002317 [SUBPROCESS H_BUC_04] flowid = flowid
+002322 [SUBPROCESS H_BUC_04] whoami = whoami
+002327 [SUBPROCESS H_BUC_04] isMainProcess = false
+002332 [SUBPROCESS H_BUC_04] mayCreateH020 = true
+002337 [SUBPROCESS H_BUC_04] hasPORole = true
+002342 [SUBPROCESS H_BUC_04] hasCPRole = true
+002347 [SUBPROCESS H_BUC_04] mayChooseParticipants = true
+-->
+
+<!-- BONITA EXTRACT
+CP_P_BUC_01_v4.2-v20200101.proc
+000159 [Read P2000] exists
+000209 [Read P2000] docId = tmpP2000Id
+000214 [Read P2000] selectParticipants = true
+000219 [Read P2000] hasReject = false
+000224 [Read P2000] hasClarify = false
+000238 [Create P6000] exists
+000249 [Create P6000] method = createEmptyMetadata
+000272 [Create P6000] selectParticipants = false
+000277 [Create P6000] docId = tmpP6000Id
+000282 [Create P6000] hasReject = false
+000287 [Create P6000] hasClarify = false
+000313 removeOnlyMe = true
+000350 [Read P6000] exists
+000388 [Read P6000] docId = tmpP6000Id
+000393 [Read P6000] selectParticipants = false
+000398 [Read P6000] hasReject = false
+000403 [Read P6000] hasClarify = false
+000408 [Read P6000] hasReject = false
+000455 [Read P7000] exists
+000493 [Read P7000] docId = tmpDocId
+000498 [Read P7000] selectParticipants = false
+000503 [Read P7000] hasReject = false
+000508 [Read P7000] hasClarify = false
+000522 [Common] exists
+000535 [Read Update P2000] exists
+000573 [Read Update P2000] docId = tmpDocId
+000578 [Read Update P2000] hasCancel = true
+000583 [Read Update P2000] hasReject = false
+000588 [Read Update P2000] selectParticipants = false
+000593 [Read Update P2000] hasClarify = false
+000663 [Read P3000] exists
+000701 [Read P3000] docId = tmpDocId
+000706 [Read P3000] selectParticipants = false
+000711 [Read P3000] hasReject = false
+000716 [Read P3000] hasClarify = false
+000828 [Read P4000] exists
+000866 [Read P4000] docId = tmpDocId
+000871 [Read P4000] selectParticipants = false
+000876 [Read P4000] hasClarify = false
+000881 [Read P4000] hasReject = false
+000891 [Read P5000] exists
+000929 [Read P5000] docId = tmpDocId
+000934 [Read P5000] selectParticipants = false
+000939 [Read P5000] hasReject = false
+000944 [Read P5000] hasClarify = false
+000952 [Create P5000] exists
+000963 [Create P5000] allowsAttachments = false
+000963 [Create P5000] method = createEmptyMetadata
+000986 [Create P5000] selectParticipants = false
+000991 [Create P5000] docId = tmpP5000Id
+000996 [Create P5000] hasClarify = false
+001001 [Create P5000] hasReject = false
+001137 [Create P9000] exists
+001148 [Create P9000] method = createAnswerMetadata
+001172 [Create P9000] selectParticipants = false
+001177 [Create P9000] docId = tmpP9000Id
+001182 [Create P9000] hasReject = false
+001187 [Create P9000] hasClarify = false
+001195 [Read P8000] exists
+001233 [Read P8000] docId = tmpDocId
+001238 [Read P8000] selectParticipants = true
+001243 [Read P8000] hasReject = false
+001248 [Read P8000] hasClarify = false
+001262 [Create P8000] exists
+001273 [Create P8000] method = createEmptyMetadata
+001296 [Create P8000] selectParticipants = true
+001301 [Create P8000] docId = tmpP8000Id
+001306 [Create P8000] hasReject = false
+001311 [Create P8000] hasClarify = false
+001319 [Read P9000] exists
+001357 [Read P9000] docId = tmpDocId
+001362 [Read P9000] selectParticipants = true
+001367 [Read P9000] hasReject = false
+001372 [Read P9000] hasClarify = false
+001386 [Create P9000 Bis] exists
+001397 [Create P9000 Bis] method = createAnswerMetadata
+001421 [Create P9000 Bis] selectParticipants = false
+001426 [Create P9000 Bis] docId = tmpP9000Id
+001431 [Create P9000 Bis] hasReject = false
+001436 [Create P9000 Bis] hasClarify = false
+001548 [Create P10000] exists
+001559 [Create P10000] method = createEmptyMetadata
+001582 [Create P10000] selectParticipants = true
+001587 [Create P10000] docId = tmpP10000Id
+001592 [Create P10000] hasClarify = false
+001597 [Create P10000] hasReject = false
+001656 [Read P10000] exists
+001694 [Read P10000] docId = tmpDocId
+001699 [Read P10000] selectParticipants = true
+001704 [Read P10000] hasClarify = false
+001709 [Read P10000] hasReject = false
+001951 [Call AddRemoveForward] exists
+001961 [Call AddRemoveForward] whoami = whoami
+001966 [Call AddRemoveForward] flowid = flowid
+001971 [Call AddRemoveForward] isPO = false
+001976 [Call AddRemoveForward] hasAddParticipant = true
+001981 [Call AddRemoveForward] hasRemoveParticipant = true
+002015 [SUBPROCESS H_BUC_08_09] exists
+002026 [SUBPROCESS H_BUC_08_09] flowid = flowid
+002031 [SUBPROCESS H_BUC_08_09] whoami = whoami
+002036 [SUBPROCESS H_BUC_08_09] isMainProcess = false
+002041 [SUBPROCESS H_BUC_08_09] mayCreateH121 = false
+002046 [SUBPROCESS H_BUC_08_09] mayReceiveH121 = true
+002051 [SUBPROCESS H_BUC_08_09] mayCreateH120 = true
+002056 [SUBPROCESS H_BUC_08_09] mayReceiveH120 = true
+002061 [SUBPROCESS H_BUC_08_09] mayChooseParticipants = true
+002070 [SUBPROCESS H_BUC_07] exists
+002080 [SUBPROCESS H_BUC_07] flowid = flowid
+002085 [SUBPROCESS H_BUC_07] whoami = whoami
+002090 [SUBPROCESS H_BUC_07] isMainProcess = false
+002095 [SUBPROCESS H_BUC_07] mayCreateH070 = true
+002100 [SUBPROCESS H_BUC_07] hasPORole = true
+002105 [SUBPROCESS H_BUC_07] hasCPRole = true
+002110 [SUBPROCESS H_BUC_07] mayChooseParticipants = true
+002115 [SUBPROCESS H_BUC_07] mayLoopH070 = false
+002123 [SUBPROCESS H_BUC_04] exists
+002133 [SUBPROCESS H_BUC_04] flowid = flowid
+002138 [SUBPROCESS H_BUC_04] whoami = whoami
+002143 [SUBPROCESS H_BUC_04] isMainProcess = false
+002148 [SUBPROCESS H_BUC_04] mayCreateH020 = true
+002153 [SUBPROCESS H_BUC_04] hasPORole = true
+002158 [SUBPROCESS H_BUC_04] hasCPRole = true
+002163 [SUBPROCESS H_BUC_04] mayChooseParticipants = true
+-->
+
+<!-- CONFIG FILE P1.conf
+PROC=[P_BUC_01]
+VER=[4.2]
+PATCH=[20200101]
+ISML=[true]
+STARTERS=[P2000]
+POCREATED=[P3000 P4000 P5000 P6000 P7000 P8000 P9000 P10000]
+CPCREATED=[P5000 P6000 P8000 P9000 P10000]
+HSUBS=[H4 H7 H8]
+XADMINS=[X005 X006 X007 X009]
+-->
+ 
+<!-- DEDUCED FROM PO BONITA EXTRACT
+removeOnlyMe=[false]
+hasClose=[false]
+hasReopen=[false]
+hasLocalClose=[true]
+canSendReminder=[true]
+canReplyReminder=[true]
+hasAddParticipant=[true]
+hasRemoveParticipant=[true]
+hasForwardParticipant=[true]
+canCreateH001=[false]
+mayCreateH020=[true]
+mayCreateH120=[true]
+mayCreateH121=[false]
+mayLoopH070=[false]
+-->
+ 
+<!-- DEDUCED FROM CP BONITA EXTRACT
+removeOnlyMe=[false]
+hasClose=[false]
+hasReopen=[false]
+hasLocalClose=[true]
+canSendReminder=[true]
+canReplyReminder=[true]
+hasAddParticipant=[true]
+hasRemoveParticipant=[true]
+hasForwardParticipant=[true]
+canCreateH001=[false]
+mayCreateH020=[true]
+mayCreateH120=[true]
+mayCreateH121=[false]
+mayLoopH070=[false]
+-->
+ 
+	<context> 
+		<parameters> 
+			<!-- isML (default is true; the current BUC is isML=true) --> 
+			<!-- removeMeOnly is not considered in PO --> 
+		</parameters> 
+	</context> 
+	
+	<!-- Default values for parameters: isStarter : false hasUpdateAfterSent 
+		: false X008, hasCancel: false recreateAfterCancel: false X011, hasReject 
+		false updateAfterReject: false X012, hasClarify false X013, hasReplytoClarify 
+		false recreateAfterDeletion: true - Parameters in Case Creation - isML: true 
+		Is multilateral, several CPs or only one. hasLocalClose: true Default local 
+		close, if not, to be specified. - Admin BUCs are implemented in common code 
+		for all BUCs, those that use them will include those documents X005, X006, 
+		X007, X009, X010if required. X008, cancellation, is used parameter, hasCancel 
+		X011, hasReject X012, hasClarify X013, hasReplytoClarify -->
+
+	<!-- Case Actions, not document related -->
+	<actions>
+		<!-- <action type="CASE_CREATE" isStartAction="true"> <!- - Parameters 
+			in Case Creation will be processed and corresponding tasks generated: Choose 
+			Participant or Choose Participants if isML. Delete Case always. When first 
+			starter document is sent, it will remove the tasks Update Participants and 
+			Delete Case. It will generate LocalClose/LocalReopen loop if hasLocalClose 
+			parameter is true. Still, this action can be defined in case some other custom 
+			handler must be triggered at case creation. PO Flow standard for CASE_CREATE 
+			is -> 1 Select Participants (1 or more CPs) Delete Case Any special action/handler 
+			added as ResultAction of CASE_CREATE 2 Update Participants Delete Case Create 
+			starter(s) (P2000) 3 Once starter is sent: Remove Update participants Remove 
+			Delete Case Create Read Participants Create Local Close (depending on registryConfiguration) 
+			Rest of actions..... - - > </action> -->
+	</actions>
+
+	<!-- Document related registryConfiguration. -->
+	<documents>
+		<document type="P2000">
+			<parameters>
+				<!-- Starter configuration will be applied ONLY if document is starter/first 
+					document in the case if not, another configuration with parameter isStarter 
+					false or without this parameter, default value is null, is required, or no 
+					trigger will take place for it. -->
+				<parameter key="isStarter">true</parameter>
+				<parameter key="allowsAttachments">true</parameter> <!-- default is false -->
+				<parameter key="hasMultipleVersions">true</parameter>
+				<parameter key="hasCancel">true</parameter>
+				<parameter key="recreateAfterCancel">true</parameter>
+				<!-- This recreateAfterDeletion should be by default true, to check what 
+					should be default values for parameters, maybe always false? -->
+				<parameter key="recreateAfterDeletion">true</parameter>
+			</parameters>
+			<triggers>
+				<!-- Added event because in some BUCs there are actions generated/removed 
+					due to other document actions, like creation, deletion, update, cancellation, 
+					etc... In this example, the result actions are only because the document 
+					is sent. Moreover, by default, now, the DOCUMENT_SENT event is only considered 
+					the 1st time each document is sent. If it is sent again after updated, this 
+					event is ignored. For now we can assume this behaviour. For example, create 
+					a document U020 after P2000 cancel, <resultAction event="DOCUMENT_CANCELLED" 
+					actionType="U020" resultType="SUCCESS" operationType="CREATE"/> Actually 
+					we can use this also for creating cancel document, like X008, Reject, Clarify, 
+					but it is a common behaviour in all BUCs, and I think using a parameter, 
+					hasCancel, hasReject, etc.., is better. -->
+				<createActionTrigger onAction="DOC_SEND"
+					onlyStarter="true" onResult="SUCCESS" actionType="CASE_LOCAL_CLOSE"
+					documentType="NONE" />
+				<removeActionTrigger onAction="DOC_SEND"
+					onlyStarter="true" onResult="SUCCESS"
+					actionType="CASE_UPDATE_PARTICIPANTS" documentType="ANY" />
+				<removeActionTrigger onAction="DOC_SEND"
+					onlyStarter="true" onResult="SUCCESS" actionType="CASE_DELETE"
+					documentType="ANY" />
+				<createActionTrigger onAction="DOC_SEND"
+					onlyStarter="true" onResult="SUCCESS" actionType="DOC_CREATE"
+					documentType="P3000" />
+				<createActionTrigger onAction="DOC_SEND"
+					onlyStarter="true" onResult="SUCCESS" actionType="DOC_CREATE"
+					documentType="P4000" />
+				<createActionTrigger onAction="DOC_SEND"
+					onlyStarter="true" onResult="SUCCESS" actionType="DOC_CREATE"
+					documentType="P5000" />
+				<createActionTrigger onAction="DOC_SEND"
+					onlyStarter="true" onResult="SUCCESS" actionType="DOC_CREATE"
+					documentType="P6000" />
+				<createActionTrigger onAction="DOC_SEND"
+					onlyStarter="true" onResult="SUCCESS" actionType="DOC_CREATE"
+					documentType="P7000" />
+				<createActionTrigger onAction="DOC_SEND"
+					onlyStarter="true" onResult="SUCCESS" actionType="DOC_CREATE"
+					documentType="P8000" />
+				<createActionTrigger onAction="DOC_SEND"
+					onlyStarter="true" onResult="SUCCESS" actionType="DOC_CREATE"
+					documentType="P10000" />
+				<createActionTrigger onAction="DOC_SEND"
+					onlyStarter="true" onResult="SUCCESS" actionType="DOC_CREATE"
+					documentType="X009" />
+				<createActionTrigger onAction="DOC_SEND"
+					onlyStarter="true" onResult="SUCCESS" actionType="DOC_CREATE"
+					documentType="X005" />
+				<createActionTrigger onAction="DOC_SEND"
+					onlyStarter="true" onResult="SUCCESS" actionType="DOC_CREATE"
+					documentType="X006" />
+				<createActionTrigger onAction="DOC_SEND"
+					onlyStarter="true" onResult="SUCCESS" actionType="DOC_CREATE"
+					documentType="X007" />
+				<createActionTrigger onAction="DOC_SEND"
+					onlyStarter="true" onResult="SUCCESS" actionType="DOC_CREATE"
+					documentType="H020" />
+				<createActionTrigger onAction="DOC_SEND"
+					onlyStarter="true" onResult="SUCCESS" actionType="DOC_CREATE"
+					documentType="H070" />
+				<createActionTrigger onAction="DOC_SEND"
+					onlyStarter="true" onResult="SUCCESS" actionType="DOC_CREATE"
+					documentType="H120" />
+				<!-- Enabling reception of all documents after starter -->
+				<createActionTrigger onAction="DOC_SEND"
+					onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE"
+					documentType="P4000" />
+				<createActionTrigger onAction="DOC_SEND"
+					onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE"
+					documentType="P5000" />
+				<createActionTrigger onAction="DOC_SEND"
+					onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE"
+					documentType="P6000" />
+				<createActionTrigger onAction="DOC_SEND"
+					onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE"
+					documentType="P7000" />
+				<createActionTrigger onAction="DOC_SEND"
+					onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE"
+					documentType="P8000" />
+				<createActionTrigger onAction="DOC_SEND"
+					onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE"
+					documentType="P10000" />
+				<createActionTrigger onAction="DOC_SEND"
+					onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE"
+					documentType="X009" />
+				<createActionTrigger onAction="DOC_SEND"
+					onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE"
+					documentType="X005" />
+				<createActionTrigger onAction="DOC_SEND"
+					onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE"
+					documentType="X006" />
+				<createActionTrigger onAction="DOC_SEND"
+					onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE"
+					documentType="X007" />
+				<createActionTrigger onAction="DOC_SEND"
+					onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE"
+					documentType="H020" />
+				<createActionTrigger onAction="DOC_SEND"
+					onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE"
+					documentType="H070" />
+				<createActionTrigger onAction="DOC_SEND"
+					onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE"
+					documentType="H120" />
+				<createActionTrigger onAction="DOC_SEND"
+					onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE"
+					documentType="X050" />
+				<createActionTrigger onAction="DOC_SEND"
+					onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE"
+					documentType="X100" />
+			</triggers>
+		</document>
+
+
+		<document type="P3000">
+			<parameters>
+				<parameter key="allowsAttachments">true</parameter> <!-- default is false -->
+				<parameter key="hasMultipleVersions">true</parameter>
+				<parameter key="hasCancel">true</parameter>
+				<parameter key="recreateAfterCancel">true</parameter>
+			</parameters>
+		</document>
+		<document type="P4000">
+			<parameters>
+				<parameter key="allowsAttachments">true</parameter> <!-- default is false -->
+				<parameter key="hasMultipleVersions">true</parameter>
+				<parameter key="hasCancel">true</parameter>
+				<parameter key="recreateAfterCancel">true</parameter>
+			</parameters>
+		</document>
+		<document type="P5000">
+			<parameters>
+				<parameter key="hasMultipleVersions">true</parameter>
+				<parameter key="hasCancel">true</parameter>
+				<parameter key="recreateAfterSend">true</parameter>
+			</parameters>
+		</document>
+		<document type="P6000">
+			<parameters>
+				<parameter key="allowsAttachments">true</parameter> <!-- default is false -->
+				<parameter key="hasMultipleVersions">true</parameter>
+				<parameter key="hasCancel">true</parameter>
+				<parameter key="recreateAfterSend">true</parameter>
+			</parameters>
+		</document>
+		<document type="P7000">
+			<parameters>
+				<parameter key="hasMultipleVersions">true</parameter>
+				<parameter key="hasCancel">true</parameter>
+				<parameter key="recreateAfterCancel">true</parameter>
+			</parameters>
+		</document>
+		<document type="P8000">
+			<parameters>
+				<parameter key="allowsAttachments">true</parameter> <!-- default is false -->
+				<parameter key="hasParticipantSelection">true</parameter>
+				<parameter key="hasMultipleVersions">true</parameter>
+				<parameter key="hasCancel">true</parameter>
+				<parameter key="recreateAfterSend">true</parameter>
+			</parameters>
+			<triggers>
+				<createActionTrigger
+					onAction="DOC_SEND_PARTICIPANTS" onResult="SUCCESS"
+					actionType="DOC_RECEIVE_REPLY" documentType="P9000" />
+				<createActionTrigger onAction="DOC_RECEIVE"
+					onResult="SUCCESS" actionType="DOC_CREATE_REPLY"
+					documentType="P9000" />
+				<createActionTrigger onAction="DOC_RECEIVE"
+					onResult="SUCCESS" actionType="DOC_RECEIVE_REPLY"
+					documentType="P9000" />					
+			</triggers>
+		</document>
+		<document type="P9000">
+			<parameters>
+				<parameter key="allowsAttachments">true</parameter> <!-- default is false -->
+				<parameter key="hasCancel">true</parameter>
+				<parameter key="hasMultipleVersions">true</parameter>
+				<parameter key="recreateAfterCancel">true</parameter>
+			</parameters>
+			<!--  Uncomment to test test_trigger_ordering
+				  Example replacing DOC_SEND action by DOC_SEND_PARTICIPANT action
+				  if not parent document
+			<triggers>
+				<removeActionTrigger onParentDocumentType="NONE"
+					onAction="DOC_CREATE" onResult="SUCCESS"
+					actionType="DOC_SEND" documentType="P9000" />
+				<createActionTrigger onParentDocumentType="NONE"
+					onAction="DOC_CREATE" onResult="SUCCESS" actionType="DOC_SEND_PARTICIPANTS"
+					documentType="P9000" />
+			</triggers>
+			-->			
+		</document>
+		<document type="P10000">
+			<parameters>
+				<parameter key="allowsAttachments">true</parameter> <!-- default is false -->
+				<parameter key="hasParticipantSelection">true</parameter>
+				<parameter key="hasMultipleVersions">true</parameter>
+				<parameter key="hasCancel">true</parameter>
+				<parameter key="recreateAfterSend">true</parameter>
+			</parameters>
+		</document>
+		
+		
+		<!-- subprocess H_BUC_04 --> 
+ 
+		<document type="H020"> 
+			<parameters> 
+				<!-- current BUC is multilateral and mayChooseParticipants=true --> 
+				<parameter key="hasParticipantSelection">true</parameter>
+				<parameter key="recreateAfterSend">true</parameter> 
+				<parameter key="allowsAttachments">true</parameter> 
+				<parameter key="hasClarify">true</parameter> 
+			</parameters> 
+			<triggers> 
+				<createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_CREATE_REPLY" documentType="H021" /> 
+				<createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_RECEIVE_REPLY" documentType="H021" /> 
+				<createActionTrigger onAction="DOC_SEND_PARTICIPANTS" onResult="SUCCESS" actionType="DOC_RECEIVE_REPLY" documentType="H021" /> 
+			</triggers> 
+		</document> 
+ 
+		<document type="H021"> 
+			<parameters> 
+				<!-- sent to all --> 
+				<parameter key="allowsAttachments">true</parameter> 
+				<parameter key="hasClarify">true</parameter> 
+			</parameters> 
+		</document> 
+ 
+		<!-- subprocess H_BUC_07 --> 
+ 
+		<document type="H070"> 
+			<parameters> 
+				<!-- current BUC is multilateral and mayChooseParticipants=true --> 
+				<parameter key="hasParticipantSelection">true</parameter> <!-- default is false --> 
+				<parameter key="hasMultipleVersions">true</parameter> 
+				<parameter key="hasCancel">true</parameter> 
+				<!-- in current BUC, mayLoopH070=false (default true) --> 
+				<!-- recreate after cancel is requested (mayLoopH070=false) --> 
+				<parameter key="recreateAfterCancel">true</parameter> 
+				<parameter key="allowsAttachments">true</parameter> 
+			</parameters> 
+		</document> 
+ 
+		<!-- subprocess H_BUC_08 --> 
+ 
+		<document type="H120"> 
+			<parameters> 
+				<!-- current BUC is multilateral --> 
+				<parameter key="hasParticipantSelection">true</parameter> <!-- default is false --> 				
+				<parameter key="hasMultipleVersions">true</parameter> 
+				<parameter key="hasCancel">true</parameter> 
+				<parameter key="recreateAfterSend">true</parameter> 
+				<parameter key="allowsAttachments">true</parameter> 
+			</parameters> 
+			<triggers> 
+				<createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_CREATE_REPLY" documentType="H121" /> 
+				<createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_RECEIVE_REPLY" documentType="H121" /> 
+				<createActionTrigger onAction="DOC_SEND_PARTICIPANTS" onResult="SUCCESS" actionType="DOC_RECEIVE_REPLY" documentType="H121" /> 
+			</triggers> 
+		</document> 
+ 
+		<document type="H121"> 
+			<parameters> 
+				<parameter key="hasMultipleVersions">true</parameter> 
+				<parameter key="hasCancel">true</parameter> 
+				<parameter key="allowsAttachments">true</parameter> 
+			</parameters> 
+		</document> 
+ 
+		<!-- Add Participant --> 
+		<document type="X005"> 
+			<!-- recreateAfterSend and hasBusinessValidation used if X005 may be sent (in current BUC, PO has hasAddParticipant=true) --> 
+			<parameters> 
+				<parameter key="recreateAfterSend">true</parameter> 
+				<parameter key="hasBusinessValidation">true</parameter> 
+			</parameters> 
+		</document> 
+ 
+		<!-- Remove Participant --> 
+		<document type="X006"> 
+			<!-- recreateAfterSend and hasBusinessValidation used if X006 may be sent (in current BUC, PO has hasRemoveParticipant=true) --> 
+			<parameters> 
+				<parameter key="recreateAfterSend">true</parameter> 
+				<parameter key="hasBusinessValidation">true</parameter> 
+			</parameters> 
+		</document> 
+ 
+		<!-- Forward Case --> 
+		<document type="X007"> 
+			<!-- hasBusinessValidation and CASE_ARCHIVE used if X007 may be sent (in current BUC, PO has hasForwardParticipant=true) --> 
+			<parameters> 
+				<parameter key="hasBusinessValidation">true</parameter> 
+			</parameters> 
+			<triggers> 
+				<createActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="CASE_ARCHIVE" /> 
+			</triggers> 
+		</document> 
+ 
+		<!-- Reminder --> 
+		<document type="X009"> 
+			<!-- If X009 may be sent (in current BUC, PO has canSendReminder=true) --> 
+			<parameters> 
+				<!-- X009 has to be sent to a subset of the participants --> 
+				<!-- current BUC is multilateral --> 
+				<parameter key="hasParticipantSelection">true</parameter> <!-- default is false --> 
+				<parameter key="recreateAfterSend">true</parameter> 
+			</parameters> 
+			<triggers> 
+				<!-- Create reply task if X010 may be sent (in current BUC, PO has canReplyReminder=true) --> 
+				<createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_CREATE_REPLY" documentType="X010" /> 
+				<createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_RECEIVE_REPLY" documentType="X010" /> 
+				<!-- Create receive task if X010 may be received (in current BUC, other side CP has canReplyReminder=true) --> 
+				<createActionTrigger onAction="DOC_SEND_PARTICIPANTS" onResult="SUCCESS" actionType="DOC_RECEIVE_REPLY" documentType="X010" /> 
+			</triggers> 
+		</document> 
+ 
+		<document type="X010" />
+
+	</documents>
+</case>

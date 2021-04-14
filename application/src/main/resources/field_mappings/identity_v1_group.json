@@ -1,0 +1,83 @@
+[
+  {
+    "esPath": "creationDate",
+    "esType": "date",
+    "required": true,
+    "sqlPath": "iamGroup.audit.createdAt",
+    "sqlType": "TIMESTAMP WITH TIME ZONE"
+  },
+  {
+    "esPath": "description",
+    "esType": "string",
+    "sqlPath": "iamGroup.description",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "displayName",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "iamGroup.displayName",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "institutionId",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "iamGroup.tenant.id",
+    "sqlType": "VARCHAR(255)",
+    "value": "reference(entities,organisation)"
+  },
+  {
+    "esPath": "isDeleted",
+    "esType": "boolean",
+    "sqlPath": "iamGroup.isDeleted",
+    "sqlType": "BOOL"
+  },
+  {
+    "esPath": "isOrgUnit",
+    "esType": "boolean",
+    "sqlPath": "iamGroup.isOrganisationUnit",
+    "sqlType": "BOOL"
+  },
+  {
+    "comment": "this has been removed (https://citnet.tech.ec.europa.eu/CITnet/jira/browse/EESSIDEV-25425)",
+    "esPath": "isReassigned",
+    "esType": "boolean",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "comment": "if null, take the value from creationDate",
+    "esPath": "lastUpdate",
+    "esType": "date",
+    "sqlPath": "iamGroup.audit.updatedAt",
+    "sqlType": "TIMESTAMP WITH TIME ZONE"
+  },
+  {
+    "esPath": "name",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "iamGroup.name",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "comment": "References IamOrigin by name",
+    "esPath": "origin",
+    "esType": "string",
+    "sqlPath": "iamGroup.origin.name",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "parentGroupId",
+    "esType": "string",
+    "sqlPath": "iamGroup.parentGroup.id",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "parentPath",
+    "esType": "string",
+    "sqlPath": "iamGroup.parentPath",
+    "sqlType": "VARCHAR(1024)"
+  }
+]

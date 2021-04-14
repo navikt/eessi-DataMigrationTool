@@ -1,0 +1,230 @@
+<?xml version="1.0"?> 
+<case name="H_BUC_01" version="${buc.model.version}" role="PO" xmlns="http://ec.europa.eu/eessi/rina/buc">
+
+
+<!-- CONFIG FILE H1.conf
+PROC=[H_BUC_01]
+VER=[4.2]
+PATCH=[20200101]
+ISML=[true]
+STARTERS=[H001]
+POCREATED=[]
+CPCREATED=[H002]
+HSUBS=[]
+XADMINS=[X005 X006 X007 X009]
+-->
+ 
+<!-- WARNING
+WARNING: POCREATED empty
+WARNING: HSUBS empty
+-->
+ 
+<!-- BONITA EXTRACT
+PO_H_BUC_01_v4.2-v20200101.proc
+000078 [Initialise Forwarded Process] exists
+000109 [Initialise Forwarded Process] lastMessageId = lastMessageId
+000114 [Initialise Forwarded Process] receivedWhoAmI = receivedWhoAmI
+000119 [Initialise Forwarded Process] flowid = flowid
+000130 [Common] exists
+000140 [Common] isPO = true
+000190 [PO H_BUC_01] exists
+000200 [PO H_BUC_01] flowid = flowid
+000205 [PO H_BUC_01] whoami = whoami
+000210 [PO H_BUC_01] onlyPO = true
+000215 [PO H_BUC_01] isHBUC01 = true
+000223 [Forward H_BUC_01] exists
+000243 [Forward H_BUC_01] flowid = flowid
+000248 [Forward H_BUC_01] whoami = whoami
+000253 [Forward H_BUC_01] onlyPO = true
+000258 [Forward H_BUC_01] forwardedDocumentId = lastDocumentId
+000263 [Forward H_BUC_01] isFirstDocument = true
+000271 [Call AddRemoveForward] exists
+000281 [Call AddRemoveForward] whoami = whoami
+000286 [Call AddRemoveForward] flowid = flowid
+000291 [Call AddRemoveForward] isPO = true
+-->
+
+<!-- BONITA EXTRACT
+CP_H_BUC_01_v4.2-v20200101.proc
+000088 [Common] exists
+000101 [CP H_BUC_01] exists
+000111 [CP H_BUC_01] flowid = flowid
+000116 [CP H_BUC_01] whoami = receivedWhoAmI
+000121 [CP H_BUC_01] onlyCP = true
+000126 [CP H_BUC_01] isHBUC01 = true
+000304 [Call AddRemoveForward] exists
+000314 [Call AddRemoveForward] whoami = whoami
+000319 [Call AddRemoveForward] flowid = flowid
+000324 [Call AddRemoveForward] isPO = false
+000329 [Call AddRemoveForward] hasAddParticipant = false
+000334 [Call AddRemoveForward] hasRemoveParticipant = false
+-->
+
+<!-- CONFIG FILE H1.conf
+PROC=[H_BUC_01]
+VER=[4.2]
+PATCH=[20200101]
+ISML=[true]
+STARTERS=[H001]
+POCREATED=[]
+CPCREATED=[H002]
+HSUBS=[]
+XADMINS=[X005 X006 X007 X009]
+-->
+ 
+<!-- DEDUCED FROM PO BONITA EXTRACT
+removeOnlyMe=[false]
+hasClose=[false]
+hasReopen=[false]
+hasLocalClose=[true]
+canSendReminder=[true]
+canReplyReminder=[true]
+hasAddParticipant=[true]
+hasRemoveParticipant=[true]
+hasForwardParticipant=[true]
+canCreateH001=[false]
+mayCreateH020=[false]
+mayCreateH120=[false]
+mayCreateH121=[false]
+mayLoopH070=[false]
+-->
+ 
+<!-- DEDUCED FROM CP BONITA EXTRACT
+removeOnlyMe=[false]
+hasClose=[false]
+hasReopen=[false]
+hasLocalClose=[true]
+canSendReminder=[true]
+canReplyReminder=[true]
+hasAddParticipant=[false]
+hasRemoveParticipant=[false]
+hasForwardParticipant=[true]
+canCreateH001=[false]
+mayCreateH020=[false]
+mayCreateH120=[false]
+mayCreateH121=[false]
+mayLoopH070=[false]
+-->
+ 
+ 
+	<context> 
+		<parameters> 
+			<!-- isML (default is true; the current BUC is isML=true) --> 
+			<!-- removeMeOnly is not considered in PO --> 
+		</parameters> 
+	</context> 
+ 
+	<actions> 
+		<!-- empty --> 
+	</actions> 
+ 
+	<documents> 
+		<document type="H001"> 
+			<parameters> 
+				<parameter key="isStarter">true</parameter> <!-- default is false --> 
+				<parameter key="hasMultipleVersions">true</parameter> <!-- default is false --> 
+				<parameter key="hasCancel">true</parameter> <!-- default is false --> 
+				<parameter key="recreateAfterSend">true</parameter> <!-- default is false --> 
+				<parameter key="allowsAttachments">true</parameter> <!-- default is false --> 
+			</parameters> 
+			<triggers> 
+ 
+				<!-- ADMINISTRATIVE SUBPROCESSES --> 
+ 
+				<!-- for starter only, local close --> 
+				<createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="CASE_LOCAL_CLOSE" documentType="ANY" /> 
+ 
+				<!-- for starter only, X005 --> 
+				<createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="DOC_CREATE" documentType="X005" /> 
+ 
+				<!-- for starter only, X006 --> 
+				<createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="DOC_CREATE" documentType="X006" /> 
+ 
+				<!-- for starter only, X007 --> 
+				<createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="DOC_CREATE" documentType="X007" /> 
+				<createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE" documentType="X007" /> 
+ 
+				<!-- for starter only, X009 --> 
+				<createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="DOC_CREATE" documentType="X009" /> 
+				<createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE" documentType="X009" /> 
+ 
+				<!-- for starter only, business exception --> 
+				<createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE" documentType="X050" /> 
+ 
+				<!-- for starter only, change participants --> 
+				<createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE" documentType="X100" /> 
+ 
+				<!-- HORIZONTAL SUBPROCESSES --> 
+ 
+				<!-- MAIN FLOW ENCODING --> 
+ 
+				<!-- for starter only, receivers --> 
+				<createActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_RECEIVE_REPLY" documentType="H002" /> 
+				<!-- end receivers --> 
+ 
+			</triggers> 
+		</document> 
+ 
+		<document type="H002"> 
+			<parameters> 
+				<parameter key="hasMultipleVersions">true</parameter> <!-- default is false --> 
+				<parameter key="hasCancel">true</parameter> <!-- default is false --> 
+				<parameter key="allowsAttachments">true</parameter> <!-- default is false --> 
+			</parameters> 
+		</document> 
+ 
+		<!-- Add Participant --> 
+		<document type="X005"> 
+			<!-- recreateAfterSend and hasBusinessValidation if X005 may be sent (in current BUC, PO has hasAddParticipant=true) --> 
+			<parameters> 
+				<parameter key="recreateAfterSend">true</parameter> 
+				<parameter key="hasBusinessValidation">true</parameter> 
+			</parameters> 
+		</document> 
+ 
+		<!-- Remove Participant --> 
+		<document type="X006"> 
+			<!-- recreateAfterSend and hasBusinessValidation if X006 may be sent (in current BUC, PO has hasRemoveParticipant=true) --> 
+			<parameters> 
+				<parameter key="recreateAfterSend">true</parameter> 
+				<parameter key="hasBusinessValidation">true</parameter> 
+			</parameters> 
+		</document> 
+ 
+		<!-- Forward Case --> 
+		<document type="X007"> 
+			<!-- hasBusinessValidation and CASE_ARCHIVE if X007 may be sent (in current BUC, PO has hasForwardParticipant=true) --> 
+			<parameters> 
+				<parameter key="hasBusinessValidation">true</parameter> 
+			</parameters> 
+			<triggers> 
+				<createActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="CASE_ARCHIVE" /> 
+			</triggers> 
+		</document> 
+ 
+		<!-- Reminder --> 
+		<document type="X009"> 
+			<!-- If X009 may be sent (in current BUC, PO has canSendReminder=true) --> 
+			<parameters> 
+				<!-- X009 has to be sent to a subset of the participants --> 
+				<!-- current BUC is multilateral --> 
+				<parameter key="hasParticipantSelection">true</parameter> <!-- default is false --> 
+				<parameter key="recreateAfterSend">true</parameter> 
+			</parameters> 
+			<triggers> 
+				<!-- Create reply task if X010 may be sent (in current BUC, PO has canReplyReminder=true) --> 
+				<createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_CREATE_REPLY" documentType="X010" /> 
+				<createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_RECEIVE_REPLY" documentType="X010" /> 				
+				<!-- Create receive task if X010 may be received (in current BUC, other side CP has canReplyReminder=true) --> 
+				<createActionTrigger onAction="DOC_SEND_PARTICIPANTS" onResult="SUCCESS" actionType="DOC_RECEIVE_REPLY" documentType="X010" /> 
+			</triggers> 
+		</document> 
+ 
+		<document type="X010"> 
+			<!-- in current BUC, PO has canReplyReminder=true --> 
+			<!-- current BUC is multilateral --> 
+			<!-- X010 is sent to all (like in Bonita) - could be corrected later to stick to reqs --> 
+		</document> 
+ 
+	</documents> 
+</case> 

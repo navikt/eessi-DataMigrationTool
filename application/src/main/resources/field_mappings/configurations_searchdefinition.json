@@ -1,0 +1,158 @@
+[
+  {
+    "esPath": "color",
+    "esType": "string",
+    "sqlPath": "searchDefinition.color",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "comment": "the list of criticalities has to be converted to a string of comma-separated values",
+    "esPath": "criticalities",
+    "esType": "string",
+    "sqlPath": "searchDefinition.criticalities",
+    "sqlType": "TEXT"
+  },
+  {
+    "esPath": "endDate",
+    "esType": "string",
+    "sqlPath": "searchDefinition.endDate",
+    "sqlType": "TIMESTAMP WITH TIME ZONE"
+  },
+  {
+    "esPath": "id",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "searchDefinition.id",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "comment": "the list of importances has to be converted to a string of comma-separated values",
+    "esPath": "importances",
+    "esType": "string",
+    "sqlPath": "searchDefinition.importances",
+    "sqlType": "TEXT"
+  },
+  {
+    "esPath": "name",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "searchDefinition.name",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "participants.acronym",
+    "esType": "string",
+    "sqlPath": "searchDefinition.organisations.acronym",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "participants.activeSince",
+    "esType": "string",
+    "sqlPath": "searchDefinition.organisations.activeSince",
+    "sqlType": "TIMESTAMP WITH TIME ZONE"
+  },
+  {
+    "esPath": "participants.address.country",
+    "esType": "string",
+    "sqlPath": "searchDefinition.organisations.addressCountry",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "participants.countryCode",
+    "esType": "string",
+    "sqlPath": "searchDefinition.organisations.countryCode",
+    "sqlType": "TEXT",
+    "value": "enum(ECountryCode)"
+  },
+  {
+    "esPath": "participants.id",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "searchDefinition.organisations.id",
+    "sqlType": "VARCHAR(50)",
+    "value": "reference(entities,organisation)"
+  },
+  {
+    "esPath": "participants.name",
+    "esType": "string",
+    "sqlPath": "searchDefinition.organisations.name",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "comment": "Reference to ProcessDefinition by id",
+    "esPath": "processDefinitions.id",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "searchDefinition.processDefinitions.id",
+    "sqlType": "VARCHAR(255)",
+    "value": "reference(configurations,processdefinition)"
+  },
+  {
+    "esPath": "processDefinitions.name",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "searchDefinition.processDefinitions.name",
+    "sqlType": "VARCHAR(255)",
+    "importIgnore": true
+  },
+  {
+    "esPath": "processDefinitions.versions.activeFrom",
+    "esType": "string",
+    "sqlPath": "searchDefinition.processDefinitions.processDefVersions.activeFrom",
+    "sqlType": "TIMESTAMP WITH TIME ZONE",
+    "importIgnore": true
+  },
+  {
+    "esPath": "processDefinitions.versions.version",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "searchDefinition.processDefinitions.processDefVersions.businessVersion",
+    "sqlType": "VARCHAR(10)",
+    "importIgnore": true
+  },
+  {
+    "esPath": "startDate",
+    "esType": "string",
+    "sqlPath": "searchDefinition.startDate",
+    "sqlType": "TIMESTAMP WITH TIME ZONE"
+  },
+  {
+    "esPath": "statuses",
+    "esType": "string",
+    "sqlPath": "searchDefinition.statuses",
+    "sqlType": "VARCHAR(100)"
+  },
+  {
+    "esPath": "timeIntervalType",
+    "esType": "string",
+    "sqlPath": "searchDefinition.timeIntervalType",
+    "sqlType": "VARCHAR(50)"
+  },
+  {
+    "esPath": "userGroups.id",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "(iamUser|iamGroup).id",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "userGroups.name",
+    "esType": "string",
+    "sqlPath": "iamUser.username|iamGroup.name",
+    "sqlType": "VARCHAR(255)",
+    "importIgnore": true
+  },
+  {
+    "esPath": "userGroups.type",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "TEXT",
+    "value": "enum(EUserGroupType)"
+  },
+  {
+    "esPath": "userName",
+    "esType": "string",
+    "sqlPath": "iamUser.username",
+    "sqlType": "VARCHAR(255)"
+  }
+]

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>eu.ec.dgempl.eessi</groupId>
+        <artifactId>ES2SQL_data_migration</artifactId>
+        <version>2.0.1</version>
+        <relativePath>../</relativePath>
+    </parent>
+
+    <artifactId>application</artifactId>
+    <version>2.0.1</version>
+
+    <dependencies>
+        <dependency>
+            <groupId>eu.ec.dgempl.eessi</groupId>
+            <artifactId>exporter</artifactId>
+            <version>${data.migration.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>eu.ec.dgempl.eessi</groupId>
+            <artifactId>importer</artifactId>
+            <version>${data.migration.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>EESSI-RINA-DATA-MIGRATION-${version}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${org.springframework.boot.version}</version>
+                <configuration>
+                    <mainClass>eu.ec.dgempl.eessi.rina.tool.migration.application.Application</mainClass>
+                </configuration>
+
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.6</version>
+                <executions>
+                    <execution>
+                        <id>copy-resources-1</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/run/config</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/resources</directory>
+                                    <includes>
+                                        <include>bucs/4.1/*.*</include>
+                                        <include>bucs/4.2/*.*</include>
+                                        <include>field_mappings/*.*</include>
+                                        <include>jpa/*.*</include>
+                                        <include>sql/*.*</include>
+                                        <include>application.properties</include>
+                                        <include>log4j2.xml</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <excludes>
+                    <exclude>assets/*</exclude>
+                    <exclude>bucs/4.1/*</exclude>
+                    <exclude>bucs/4.2/*</exclude>
+                    <exclude>field_mappings/*</exclude>
+                    <exclude>jpa/*</exclude>
+                    <exclude>sql/*</exclude>
+                    <exclude>application.properties</exclude>
+                    <exclude>log4j2.xml</exclude>
+                </excludes>
+            </resource>
+        </resources>
+    </build>
+
+</project>

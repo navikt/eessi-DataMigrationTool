@@ -1,0 +1,99 @@
+<?xml version="1.0"?> 
+<case name="S_BUC_22" version="${buc.model.version}" role="PO" xmlns="http://ec.europa.eu/eessi/rina/buc"> 
+	<context> 
+		<parameters> 
+			<!-- isML (default is true; the current BUC is isML=false) --> 
+			<parameter key="isML">false</parameter> <!-- default is true --> 
+			<!-- removeMeOnly is not considered in PO --> 
+		</parameters> 
+	</context> 
+ 
+	<actions> 
+		<!-- empty --> 
+	</actions> 
+ 
+	<documents> 
+		<document type="S026"> 
+			<parameters> 
+				<parameter key="isStarter">true</parameter> <!-- default is false --> 
+				<!-- <parameter key="allowsAttachments">true</parameter> false for S_BUC_22, v4.2, S026 --> 
+				<parameter key="isBulk">true</parameter> <!-- default is false --> 
+			</parameters> 
+			<triggers> 
+ 
+				<!-- ADMINISTRATIVE SUBPROCESSES --> 
+ 
+				<!-- for starter only, local close --> 
+				<createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="CASE_LOCAL_CLOSE" documentType="ANY" /> 
+ 
+				<!-- for starter only, business exception --> 
+				<createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE" documentType="X050" /> 
+ 
+				<!-- for starter only, change participants --> 
+				<createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE" documentType="X100" /> 
+ 
+				<!-- HORIZONTAL SUBPROCESSES --> 
+ 
+				<!-- MAIN FLOW ENCODING --> 
+ 
+				<!-- for starter only, receivers --> 
+				<createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE_REPLY" documentType="S027" /> 
+				<createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE" documentType="S032" /> 
+				<createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE" documentType="S030" /> 
+				<createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE" documentType="S033" /> 
+				<!-- end receivers --> 
+ 
+				<createActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_CREATE" documentType="S028" /> 
+			</triggers> 
+		</document> 
+ 
+		<document type="S028"> 
+			<parameters> 
+				<parameter key="recreateAfterSend">true</parameter> <!-- default is false --> 
+				<!-- <parameter key="allowsAttachments">true</parameter> false for S_BUC_22, v4.2, S028 --> 
+				<parameter key="isBulk">true</parameter> <!-- default is false --> 
+			</parameters> 
+		</document> 
+ 
+		<document type="S031"> 
+			<parameters> 
+				<parameter key="allowsAttachments">true</parameter> <!-- default is false --> 
+				<parameter key="isBulk">true</parameter> <!-- default is false --> 
+			</parameters> 
+		</document> 
+ 
+		<document type="S034"> 
+			<parameters> 
+				<parameter key="allowsAttachments">true</parameter> <!-- default is false --> 
+				<parameter key="isBulk">true</parameter> <!-- default is false --> 
+			</parameters> 
+		</document> 
+ 
+		<document type="S027" /> 
+ 
+		<document type="S032">
+			<parameters> 
+				<parameter key="isBulk">true</parameter> <!-- default is false --> 
+			</parameters>
+		</document> 			
+ 
+		<document type="S030"> 
+			<parameters> 
+				<parameter key="isBulk">true</parameter> <!-- default is false --> 
+			</parameters>		
+			<triggers> 
+				<createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_CREATE_REPLY" documentType="S031" /> 
+			</triggers> 
+		</document> 
+ 
+		<document type="S033"> 
+			<parameters> 
+				<parameter key="isBulk">true</parameter> <!-- default is false --> 
+			</parameters>		
+			<triggers> 
+				<createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_CREATE_REPLY" documentType="S034" /> 
+			</triggers> 
+		</document> 
+ 
+	</documents> 
+</case> 

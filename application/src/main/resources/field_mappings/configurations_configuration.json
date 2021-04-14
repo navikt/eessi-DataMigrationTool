@@ -1,0 +1,199 @@
+[
+  {
+    "esPath": "counterType",
+    "esType": "string",
+    "sqlPath": "tenantParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "creationDate",
+    "esType": "string",
+    "sqlPath": "tenantParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "description",
+    "esType": "string",
+    "sqlPath": "tenantParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "displayName",
+    "esType": "string",
+    "sqlPath": "tenantParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "email",
+    "esType": "string",
+    "sqlPath": "tenantParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "firstName",
+    "esType": "string",
+    "sqlPath": "tenantParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "groups",
+    "esType": "string",
+    "sqlPath": "tenantParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "groupSearchBase",
+    "esType": "string",
+    "sqlPath": "tenantParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "groupSearchString",
+    "esType": "string",
+    "sqlPath": "tenantParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "comment": "References a Tenant by id",
+    "esPath": "institutionId",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "tenantParamGroup.tenant.id",
+    "sqlType": "VARCHAR(255)",
+    "value": "reference(entities,organisation)"
+  },
+  {
+    "esPath": "isAdministrator",
+    "esType": "string",
+    "sqlPath": "tenantParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "isEnabled",
+    "esType": "string",
+    "sqlPath": "tenantParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "isOrganisationUnit",
+    "esType": "string",
+    "sqlPath": "tenantParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "lastName",
+    "esType": "string",
+    "sqlPath": "tenantParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "lastUpdate",
+    "esType": "string",
+    "sqlPath": "tenantParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "ldapUniqueIdetifier",
+    "esType": "string",
+    "sqlPath": "tenantParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "members",
+    "esType": "string",
+    "sqlPath": "tenantParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "name",
+    "esType": "string",
+    "sqlPath": "tenantParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "needReassignment",
+    "esType": "string",
+    "sqlPath": "tenantParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "parentGroupId",
+    "esType": "string",
+    "sqlPath": "tenantParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "password",
+    "esType": "string",
+    "sqlPath": "tenantParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "path",
+    "esType": "string",
+    "sqlPath": "tenantParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "pattern",
+    "esType": "string",
+    "sqlPath": "tenantParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "phoneNumber",
+    "esType": "string",
+    "sqlPath": "tenantParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "providerUrl",
+    "esType": "string",
+    "sqlPath": "tenantParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "role",
+    "esType": "string",
+    "sqlPath": "tenantParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "securityAuthentication",
+    "esType": "string",
+    "sqlPath": "tenantParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "comment": "enum of type ETenantConfigurationType",
+    "esPath": "type",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "tenantParamGroup.type",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "user",
+    "esType": "string",
+    "sqlPath": "tenantParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "username",
+    "esType": "string",
+    "sqlPath": "tenantParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "userSearchBase",
+    "esType": "string",
+    "sqlPath": "tenantParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "userSearchString",
+    "esType": "string",
+    "sqlPath": "tenantParam.value",
+    "sqlType": "VARCHAR(255)"
+  }
+]

@@ -1,0 +1,489 @@
+<?xml version="1.0"?>
+<case name="P_BUC_06" version="${buc.model.version}" role="PO" xmlns="http://ec.europa.eu/eessi/rina/buc">
+
+    <!-- CONFIG FILE P6.conf
+    PROC=[P_BUC_06]
+    VER=[4.2]
+    PATCH=[20190702]
+    ISML=[true]
+    STARTERS=[P5000 P6000 P7000 P10000]
+    POCREATED=[]
+    CPCREATED=[]
+    HSUBS=[]
+    XADMINS=[X005 X007]
+    -->
+
+    <!-- WARNING
+    WARNING: POCREATED empty
+    WARNING: CPCREATED empty
+    WARNING: HSUBS empty
+    -->
+
+    <!-- BONITA EXTRACT
+    PO_P_BUC_06_v4.2-v20190702.proc
+    000033 [Create P5000] exists
+    000044 [Create P5000] allowsAttachments = false
+    000044 [Create P5000] method = createEmptyMetadata
+    000067 [Create P5000] docId = tmpDocId
+    000072 [Create P5000] selectParticipants = false
+    000077 [Create P5000] hasReject = false
+    000082 [Create P5000] hasClarify = false
+    000132 [Create P6000] exists
+    000143 [Create P6000] method = createEmptyMetadata
+    000166 [Create P6000] docId = tmpDocId
+    000171 [Create P6000] selectParticipants = false
+    000176 [Create P6000] hasReject = false
+    000181 [Create P6000] hasClarify = false
+    000216 [Forward Starter] exists
+    000229 [Forward Starter] docId = lastDocumentId
+    000234 [Forward Starter] selectParticipants = true
+    000239 [Forward Starter] hasReject = false
+    000244 [Forward Starter] receivedAction = docType
+    000249 [Forward Starter] hasClarify = false
+    000257 [Common] exists
+    000267 [Common] isPO = true
+    000272 [Common] canSendReminder = false
+    000277 [Common] canReplyReminder = false
+    000282 [Common] hasLocalClose = true
+    000368 [Create P10000] exists
+    000379 [Create P10000] method = createEmptyMetadata
+    000402 [Create P10000] selectParticipants = false
+    000407 [Create P10000] docId = tmpDocId
+    000412 [Create P10000] hasReject = false
+    000417 [Create P10000] hasClarify = false
+    000425 [Create P7000] exists
+    000436 [Create P7000] allowsAttachments = false
+    000436 [Create P7000] method = createEmptyMetadata
+    000459 [Create P7000] selectParticipants = false
+    000464 [Create P7000] docId = tmpDocId
+    000469 [Create P7000] hasReject = false
+    000474 [Create P7000] hasClarify = false
+    000500 [Initialise Forwarded Process] exists
+    000524 [Initialise Forwarded Process] lastMessageId = lastMessageId
+    000529 [Initialise Forwarded Process] receivedWhoAmI = receivedWhoAmI
+    000534 [Initialise Forwarded Process] flowid = flowid
+    000610 [Initialise Forwarded Process] method = createEmptyMetadata
+    000972 [Call AddRemoveForward] exists
+    000982 [Call AddRemoveForward] whoami = whoami
+    000987 [Call AddRemoveForward] flowid = flowid
+    000992 [Call AddRemoveForward] isPO = true
+    000997 [Call AddRemoveForward] hasAddParticipant = true
+    001002 [Call AddRemoveForward] hasRemoveParticipant = false
+    001007 [Call AddRemoveForward] hasForwardParticipant = true
+    -->
+
+    <!-- BONITA EXTRACT
+    CP_P_BUC_06_v4.2-v20190702.proc
+    000194 [Read P6000] exists
+    000232 [Read P6000] docId = tmpDocId
+    000237 [Read P6000] selectParticipants = false
+    000242 [Read P6000] hasReject = false
+    000247 [Read P6000] hasClarify = false
+    000255 [Read P5000] exists
+    000293 [Read P5000] selectParticipants = false
+    000298 [Read P5000] hasReject = false
+    000303 [Read P5000] hasClarify = false
+    000308 [Read P5000] docId = tmpDocId
+    000316 [Common] exists
+    000326 [Common] canSendReminder = false
+    000331 [Common] canReplyReminder = false
+    000336 [Common] hasLocalClose = true
+    000407 [Read Starter] exists
+    000453 [Read Starter] docId = tmpDocId
+    000458 [Read Starter] selectParticipants = true
+    000463 [Read Starter] hasReject = false
+    000468 [Read Starter] hasClarify = false
+    000525 [Read P10000] exists
+    000563 [Read P10000] docId = tmpDocId
+    000568 [Read P10000] selectParticipants = false
+    000573 [Read P10000] hasReject = false
+    000578 [Read P10000] hasClarify = false
+    000635 [Read P7000] exists
+    000673 [Read P7000] docId = tmpDocId
+    000678 [Read P7000] selectParticipants = false
+    000683 [Read P7000] hasReject = false
+    000688 [Read P7000] hasClarify = false
+    000974 [Call AddRemoveForward] exists
+    000984 [Call AddRemoveForward] whoami = whoami
+    000989 [Call AddRemoveForward] flowid = flowid
+    000994 [Call AddRemoveForward] isPO = false
+    000999 [Call AddRemoveForward] hasAddParticipant = true
+    001004 [Call AddRemoveForward] hasRemoveParticipant = false
+    001009 [Call AddRemoveForward] hasForwardParticipant = true
+    -->
+
+    <!-- CONFIG FILE P6.conf
+    PROC=[P_BUC_06]
+    VER=[4.2]
+    PATCH=[20190702]
+    ISML=[true]
+    STARTERS=[P5000 P6000 P7000 P10000]
+    POCREATED=[]
+    CPCREATED=[]
+    HSUBS=[]
+    XADMINS=[X005 X007]
+    -->
+
+    <!-- DEDUCED FROM PO BONITA EXTRACT
+    removeOnlyMe=[false]
+    hasClose=[false]
+    hasReopen=[false]
+    hasLocalClose=[true]
+    canSendReminder=[false]
+    canReplyReminder=[false]
+    hasAddParticipant=[true]
+    hasRemoveParticipant=[false]
+    hasForwardParticipant=[true]
+    canCreateH001=[false]
+    mayCreateH020=[false]
+    mayCreateH120=[false]
+    mayCreateH121=[false]
+    mayLoopH070=[false]
+    -->
+
+    <!-- DEDUCED FROM CP BONITA EXTRACT
+    removeOnlyMe=[false]
+    hasClose=[false]
+    hasReopen=[false]
+    hasLocalClose=[true]
+    canSendReminder=[false]
+    canReplyReminder=[false]
+    hasAddParticipant=[true]
+    hasRemoveParticipant=[false]
+    hasForwardParticipant=[true]
+    canCreateH001=[false]
+    mayCreateH020=[false]
+    mayCreateH120=[false]
+    mayCreateH121=[false]
+    mayLoopH070=[false]
+    -->
+
+    <context>
+        <parameters>
+            <!-- isML (default is true; the current BUC is isML=true) -->
+            <!-- removeMeOnly is not considered in PO -->
+        </parameters>
+    </context>
+
+    <actions>
+        <!-- empty -->
+    </actions>
+
+    <documents>
+        <document type="P5000">
+            <parameters>
+                <parameter key="isStarter">true</parameter> <!-- default is false -->
+                <parameter key="hasMultipleVersions">true</parameter> <!-- default is false -->
+                <parameter key="hasCancel">true</parameter> <!-- default is false -->
+                <parameter key="recreateAfterCancel">true</parameter> <!-- default is false -->
+                <parameter key="recreateAfterDeletion">false</parameter> <!-- default is true -->
+                <!-- <parameter key="allowsAttachments">false</parameter> false for P_BUC_06, v4.2, P5000 -->
+            </parameters>
+            <triggers>
+
+                <!-- for starter only, local close -->
+                <createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS"
+                                     actionType="CASE_LOCAL_CLOSE" documentType="ANY"/>
+
+                <!-- for starter only, X005 -->
+                <createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="DOC_CREATE"
+                                     documentType="X005"/>
+                <createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE"
+                                     documentType="X005"/>
+
+                <!-- for starter only, X007 -->
+                <createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="DOC_CREATE"
+                                     documentType="X007"/>
+                <createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE"
+                                     documentType="X007"/>
+
+                <!-- for starter only, business exception -->
+                <createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE"
+                                     documentType="X050"/>
+
+                <!-- for starter only, change participants -->
+                <createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE"
+                                     documentType="X100"/>
+
+                <!-- for starter only, receivers -->
+                <!-- end receivers -->
+
+                <removeActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_CREATE" documentType="P6000"
+                                     onlyStarter="true"/>
+                <removeActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_CREATE" documentType="P7000"
+                                     onlyStarter="true"/>
+                <removeActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_CREATE"
+                                     documentType="P10000" onlyStarter="true"/>
+                <removeActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_UPDATE" documentType="P6000"
+                                     onlyStarter="true"/>
+                <removeActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_UPDATE" documentType="P7000"
+                                     onlyStarter="true"/>
+                <removeActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_UPDATE"
+                                     documentType="P10000" onlyStarter="true"/>
+                <removeActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_SEND" documentType="P6000"
+                                     onlyStarter="true"/>
+                <removeActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_SEND" documentType="P7000"
+                                     onlyStarter="true"/>
+                <removeActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_SEND" documentType="P10000"
+                                     onlyStarter="true"/>
+
+                <!-- onCondition (No doc sent yet or P5000 cancelled) -->
+                <createActionTrigger onAction="DOC_DELETE" onResult="SUCCESS" onCondition="po_p_buc_06_DEL"
+                                     actionType="DOC_CREATE" documentType="P5000"/>
+
+            </triggers>
+        </document>
+
+        <document type="P6000">
+            <parameters>
+                <parameter key="isStarter">true</parameter> <!-- default is false -->
+                <parameter key="hasMultipleVersions">true</parameter> <!-- default is false -->
+                <parameter key="hasCancel">true</parameter> <!-- default is false -->
+                <parameter key="recreateAfterCancel">true</parameter> <!-- default is false -->
+                <parameter key="recreateAfterDeletion">false</parameter> <!-- default is true -->
+                <parameter key="allowsAttachments">true</parameter> <!-- default is false -->
+            </parameters>
+            <triggers>
+
+                <!-- ADMINISTRATIVE SUBPROCESSES -->
+
+                <!-- for starter only, remove update participants -->
+                <removeActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS"
+                                     actionType="CASE_UPDATE_PARTICIPANTS" documentType="ANY"/>
+                <!-- for starter only, remove delete case -->
+                <removeActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="CASE_DELETE"
+                                     documentType="ANY"/>
+
+                <!-- for starter only, local close -->
+                <createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS"
+                                     actionType="CASE_LOCAL_CLOSE" documentType="ANY"/>
+
+                <!-- for starter only, X005 -->
+                <createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="DOC_CREATE"
+                                     documentType="X005"/>
+                <createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE"
+                                     documentType="X005"/>
+
+                <!-- for starter only, X007 -->
+                <createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="DOC_CREATE"
+                                     documentType="X007"/>
+                <createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE"
+                                     documentType="X007"/>
+
+                <!-- for starter only, business exception -->
+                <createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE"
+                                     documentType="X050"/>
+
+                <!-- for starter only, change participants -->
+                <createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE"
+                                     documentType="X100"/>
+
+                <!-- HORIZONTAL SUBPROCESSES -->
+
+                <!-- MAIN FLOW ENCODING -->
+
+                <!-- for starter only, receivers -->
+                <!-- end receivers -->
+
+                <removeActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_CREATE" documentType="P5000"
+                                     onlyStarter="true"/>
+                <removeActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_CREATE" documentType="P7000"
+                                     onlyStarter="true"/>
+                <removeActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_CREATE"
+                                     documentType="P10000" onlyStarter="true"/>
+                <removeActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_UPDATE" documentType="P5000"
+                                     onlyStarter="true"/>
+                <removeActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_UPDATE" documentType="P7000"
+                                     onlyStarter="true"/>
+                <removeActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_UPDATE"
+                                     documentType="P10000" onlyStarter="true"/>
+                <removeActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_SEND" documentType="P5000"
+                                     onlyStarter="true"/>
+                <removeActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_SEND" documentType="P7000"
+                                     onlyStarter="true"/>
+                <removeActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_SEND" documentType="P10000"
+                                     onlyStarter="true"/>
+
+                <!-- onCondition (No doc sent yet or P6000 cancelled) -->
+                <createActionTrigger onAction="DOC_DELETE" onResult="SUCCESS" onCondition="po_p_buc_06_DEL"
+                                     actionType="DOC_CREATE" documentType="P6000"/>
+
+            </triggers>
+        </document>
+
+        <document type="P7000">
+            <parameters>
+                <parameter key="isStarter">true</parameter> <!-- default is false -->
+                <parameter key="hasMultipleVersions">true</parameter> <!-- default is false -->
+                <parameter key="hasCancel">true</parameter> <!-- default is false -->
+                <parameter key="recreateAfterCancel">true</parameter> <!-- default is false -->
+                <parameter key="recreateAfterDeletion">false</parameter> <!-- default is true -->
+                <!-- <parameter key="allowsAttachments">false</parameter> false for P_BUC_06, v4.2, P7000 -->
+            </parameters>
+            <triggers>
+
+                <!-- ADMINISTRATIVE SUBPROCESSES -->
+
+                <!-- for starter only, remove update participants -->
+                <removeActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS"
+                                     actionType="CASE_UPDATE_PARTICIPANTS" documentType="ANY"/>
+                <!-- for starter only, remove delete case -->
+                <removeActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="CASE_DELETE"
+                                     documentType="ANY"/>
+
+                <!-- for starter only, local close -->
+                <createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS"
+                                     actionType="CASE_LOCAL_CLOSE" documentType="ANY"/>
+
+                <!-- for starter only, X005 -->
+                <createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="DOC_CREATE"
+                                     documentType="X005"/>
+                <createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE"
+                                     documentType="X005"/>
+
+                <!-- for starter only, X007 -->
+                <createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="DOC_CREATE"
+                                     documentType="X007"/>
+                <createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE"
+                                     documentType="X007"/>
+
+                <!-- for starter only, business exception -->
+                <createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE"
+                                     documentType="X050"/>
+
+                <!-- for starter only, change participants -->
+                <createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE"
+                                     documentType="X100"/>
+
+                <!-- HORIZONTAL SUBPROCESSES -->
+
+                <!-- MAIN FLOW ENCODING -->
+
+                <!-- for starter only, receivers -->
+                <!-- end receivers -->
+
+                <removeActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_CREATE" documentType="P5000"
+                                     onlyStarter="true"/>
+                <removeActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_CREATE" documentType="P6000"
+                                     onlyStarter="true"/>
+                <removeActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_CREATE"
+                                     documentType="P10000" onlyStarter="true"/>
+                <removeActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_UPDATE" documentType="P5000"
+                                     onlyStarter="true"/>
+                <removeActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_UPDATE" documentType="P6000"
+                                     onlyStarter="true"/>
+                <removeActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_UPDATE"
+                                     documentType="P10000" onlyStarter="true"/>
+                <removeActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_SEND" documentType="P5000"
+                                     onlyStarter="true"/>
+                <removeActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_SEND" documentType="P6000"
+                                     onlyStarter="true"/>
+                <removeActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_SEND" documentType="P10000"
+                                     onlyStarter="true"/>
+
+                <!-- onCondition (No doc sent yet or P7000 cancelled) -->
+                <createActionTrigger onAction="DOC_DELETE" onResult="SUCCESS" onCondition="po_p_buc_06_DEL"
+                                     actionType="DOC_CREATE" documentType="P7000"/>
+
+            </triggers>
+        </document>
+
+        <document type="P10000">
+            <parameters>
+                <parameter key="isStarter">true</parameter> <!-- default is false -->
+                <parameter key="hasMultipleVersions">true</parameter> <!-- default is false -->
+                <parameter key="hasCancel">true</parameter> <!-- default is false -->
+                <parameter key="recreateAfterCancel">true</parameter> <!-- default is false -->
+                <parameter key="recreateAfterDeletion">false</parameter> <!-- default is true -->
+                <parameter key="allowsAttachments">true</parameter> <!-- default is false -->
+            </parameters>
+            <triggers>
+
+                <!-- ADMINISTRATIVE SUBPROCESSES -->
+
+                <!-- for starter only, remove update participants -->
+                <removeActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS"
+                                     actionType="CASE_UPDATE_PARTICIPANTS" documentType="ANY"/>
+                <!-- for starter only, remove delete case -->
+                <removeActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="CASE_DELETE"
+                                     documentType="ANY"/>
+
+                <!-- for starter only, local close -->
+                <createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS"
+                                     actionType="CASE_LOCAL_CLOSE" documentType="ANY"/>
+
+                <!-- for starter only, X005 -->
+                <createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="DOC_CREATE"
+                                     documentType="X005"/>
+                <createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE"
+                                     documentType="X005"/>
+
+                <!-- for starter only, X007 -->
+                <createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="DOC_CREATE"
+                                     documentType="X007"/>
+                <createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE"
+                                     documentType="X007"/>
+
+                <!-- for starter only, business exception -->
+                <createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE"
+                                     documentType="X050"/>
+
+                <!-- for starter only, change participants -->
+                <createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE"
+                                     documentType="X100"/>
+
+                <!-- HORIZONTAL SUBPROCESSES -->
+
+                <!-- MAIN FLOW ENCODING -->
+
+                <!-- for starter only, receivers -->
+                <!-- end receivers -->
+
+                <removeActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_CREATE" documentType="P5000"
+                                     onlyStarter="true"/>
+                <removeActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_CREATE" documentType="P6000"
+                                     onlyStarter="true"/>
+                <removeActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_CREATE" documentType="P7000"
+                                     onlyStarter="true"/>
+                <removeActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_UPDATE" documentType="P5000"
+                                     onlyStarter="true"/>
+                <removeActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_UPDATE" documentType="P6000"
+                                     onlyStarter="true"/>
+                <removeActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_UPDATE" documentType="P7000"
+                                     onlyStarter="true"/>
+                <removeActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_SEND" documentType="P5000"
+                                     onlyStarter="true"/>
+                <removeActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_SEND" documentType="P6000"
+                                     onlyStarter="true"/>
+                <removeActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_SEND" documentType="P7000"
+                                     onlyStarter="true"/>
+
+                <!-- onCondition (No doc sent yet or P10000 cancelled) -->
+                <createActionTrigger onAction="DOC_DELETE" onResult="SUCCESS" onCondition="po_p_buc_06_DEL"
+                                     actionType="DOC_CREATE" documentType="P10000"/>
+
+            </triggers>
+        </document>
+
+        <!-- Add Participant -->
+        <document type="X005">
+            <!-- recreateAfterSend and hasBusinessValidation used if X005 may be sent (in current BUC, PO has hasAddParticipant=true) -->
+            <parameters>
+                <parameter key="recreateAfterSend">true</parameter>
+                <parameter key="hasBusinessValidation">true</parameter>
+            </parameters>
+        </document>
+
+        <!-- Forward Case -->
+        <document type="X007">
+            <!-- hasBusinessValidation and CASE_ARCHIVE used if X007 may be sent (in current BUC, PO has hasForwardParticipant=true) -->
+            <parameters>
+                <parameter key="hasBusinessValidation">true</parameter>
+            </parameters>
+            <triggers>
+                <createActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="CASE_ARCHIVE"/>
+            </triggers>
+        </document>
+
+    </documents>
+</case> 

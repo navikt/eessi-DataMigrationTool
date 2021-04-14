@@ -1,0 +1,122 @@
+[
+  {
+    "esPath": "@timestamp",
+    "esType": "date",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "@version",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "btm-gtrid",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "host",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "logger_name",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "message",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "priority",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "stack_trace",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "syslog5424_app",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "syslog5424_host",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "syslog5424_pri",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "syslog5424_proc",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "syslog5424_ts",
+    "esType": "date",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "syslog5424_ver",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "syslog_facility",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "syslog_facility_code",
+    "esType": "long",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "syslog_severity",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "syslog_severity_code",
+    "esType": "long",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "thread",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "type",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": ""
+  }
+]

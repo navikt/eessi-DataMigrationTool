@@ -1,0 +1,9 @@
+ALTER SEQUENCE role_seq RESTART WITH 9;
+INSERT INTO role(sid, name) VALUES (1, 'SUPERVISOR');
+INSERT INTO role(sid, name) VALUES (2, 'AUTHORIZED_CLERK');
+INSERT INTO role(sid, name) VALUES (3, 'UNAUTHORIZED_CLERK');
+INSERT INTO role(sid, name) VALUES (4, 'AUDITOR');
+INSERT INTO role(sid, name) VALUES (5, 'VIEWER');
+INSERT INTO role(sid, name) VALUES (6, 'MEDICAL');
+INSERT INTO role(sid, name) VALUES (7, 'VIP');
+INSERT INTO role(sid, name) VALUES (8, 'EVERYONE');

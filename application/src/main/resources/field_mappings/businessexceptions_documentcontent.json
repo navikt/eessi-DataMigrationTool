@@ -1,0 +1,16 @@
+[
+  {
+    "esPath": "content",
+    "esType": "object",
+    "ignorePath": true,
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "comment": "this is the same as businessexceptions_exception.source.documentIdentification.id",
+    "esPath": "id",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": ""
+  }
+]

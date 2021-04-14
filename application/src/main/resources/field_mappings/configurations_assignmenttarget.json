@@ -1,0 +1,33 @@
+[
+  {
+    "esPath": "institutionId",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "assignmentPolicyTarget.tenant.organisation.id",
+    "sqlType": "VARCHAR(50)",
+    "value": "reference(entities,organisation)"
+  },
+  {
+    "esPath": "policies",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "assignmentPolicyTarget.assignmentPolicies.id",
+    "sqlType": "VARCHAR(255)",
+    "value": "reference(configurations,assignmentpolicy)"
+  },
+  {
+    "esPath": "storageId",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "assignmentPolicyTarget.storageId",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "comment": "this needs transformation",
+    "esPath": "targetId",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "assignmentPolicyTarget.target",
+    "sqlType": "VARCHAR(255)"
+  }
+]

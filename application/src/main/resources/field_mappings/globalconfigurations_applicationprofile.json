@@ -1,0 +1,139 @@
+[
+  {
+    "esPath": "messagingSettings.antimalwareMode",
+    "esType": "string",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "messagingSettings.antimalwareSettings",
+    "esType": "string",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "messagingSettings.bmpValidationMode",
+    "esType": "string",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "messagingSettings.businessKeyAliasPasswordList.certificateAlias",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "businessKey.alias",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "messagingSettings.businessKeyAliasPasswordList.certificateAliasPassword",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "businessKey.password",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "messagingSettings.businessKeystorePassword",
+    "esType": "string",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "messagingSettings.clusterNodes.name",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "clusterNode.name",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "messagingSettings.clusterNodes.pmodePath",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "clusterNode.pmodePath",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "messagingSettings.defaultPullingInterval",
+    "esType": "long",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "messagingSettings.maxMessageSize",
+    "esType": "long",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "messagingSettings.maxRetries",
+    "esType": "long",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "messagingSettings.mshPath",
+    "esType": "string",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "messagingSettings.operationMode",
+    "esType": "string",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "messagingSettings.privateKeystorePassword",
+    "esType": "string",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "messagingSettings.publicKeystorePassword",
+    "esType": "string",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "messagingSettings.retryInterval",
+    "esType": "long",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "messagingSettings.tlsKeystorePassword",
+    "esType": "string",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "messagingSettings.tlsTruststorePassword",
+    "esType": "string",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "messagingSettings.useCompression",
+    "esType": "boolean",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "messagingSettings.usePullMode",
+    "esType": "boolean",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "messagingSettings.xsdRepositoryPath",
+    "esType": "string",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "name",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  }
+]

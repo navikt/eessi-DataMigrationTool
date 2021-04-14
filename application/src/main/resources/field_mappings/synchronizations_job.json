@@ -1,0 +1,32 @@
+[
+  {
+    "esPath": "endDate",
+    "esType": "date",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "progress",
+    "esType": "integer",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "startDate",
+    "esType": "date",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "status",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "type",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": ""
+  }
+]

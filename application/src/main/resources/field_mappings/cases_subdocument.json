@@ -1,0 +1,472 @@
+[
+  {
+    "comment": "do not add reference validation",
+    "esPath": "caseId",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "subdocument.rinaCase.id",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "id",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "",
+    "sqlType": "VARCHAR(255)",
+    "importIgnore": true
+  },
+  {
+    "esPath": "internalId",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "esPath": "no",
+    "esType": "double",
+    "sqlPath": "subdocument.no",
+    "sqlType": "INT8"
+  },
+  {
+    "esPath": "referenceId",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "subdocuments.attachments.caseId",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "subdocument.subdocumentAttachments.subdocument.rinaCase.id",
+    "sqlType": "VARCHAR(255)",
+    "value": "duplicate(caseId)"
+  },
+  {
+    "esPath": "subdocuments.attachments.creationDate",
+    "esType": "date",
+    "required": true,
+    "sqlPath": "subdocument.subdocumentAttachments.audit.createdAt",
+    "sqlType": "TIMESTAMP WITH TIME ZONE"
+  },
+  {
+    "esPath": "subdocuments.attachments.creator.id",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "iamUser.id",
+    "sqlType": "VARCHAR(255)",
+    "value": "reference(identity_v1,user)"
+  },
+  {
+    "esPath": "subdocuments.attachments.creator.name",
+    "esType": "string",
+    "sqlPath": "subdocument.subdocumentAttachments.audit.createdBy",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "subdocuments.attachments.creator.organisation.acronym",
+    "esType": "string",
+    "sqlPath": "(iamUser|iamGroup).tenant.organisation.acronym",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "subdocuments.attachments.creator.organisation.activeSince",
+    "esType": "date",
+    "sqlPath": "(iamUser|iamGroup).tenant.organisation.activeSince",
+    "sqlType": "TIMESTAMP WITH TIME ZONE"
+  },
+  {
+    "esPath": "subdocuments.attachments.creator.organisation.address.country",
+    "esType": "string",
+    "sqlPath": "(iamUser|iamGroup).tenant.organisation.addressCountry",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "subdocuments.attachments.creator.organisation.countryCode",
+    "esType": "string",
+    "sqlPath": "(iamUser|iamGroup).tenant.organisation.countryCode",
+    "sqlType": "TEXT",
+    "value": "enum(ECountryCode)"
+  },
+  {
+    "esPath": "subdocuments.attachments.creator.organisation.id",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "(iamUser|iamGroup).tenant.organisation.id",
+    "sqlType": "VARCHAR(50)",
+    "value": "reference(entities,organisation)"
+  },
+  {
+    "esPath": "subdocuments.attachments.creator.organisation.name",
+    "esType": "string",
+    "sqlPath": "(iamUser|iamGroup).tenant.organisation.name",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "comment": "should be user",
+    "esPath": "subdocuments.attachments.creator.type",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "",
+    "sqlType": "VARCHAR(4)",
+    "value": "regex(User)"
+  },
+  {
+    "esPath": "subdocuments.attachments.documentId",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "subdocument.subdocumentAttachments.subdocument.document.id",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "subdocuments.attachments.fileName",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "subdocument.subdocumentAttachments.filename",
+    "sqlType": "VARCHAR(1024)"
+  },
+  {
+    "esPath": "subdocuments.attachments.id",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "subdocument.subdocumentAttachments.id",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "subdocuments.attachments.lastUpdate",
+    "esType": "date",
+    "required": true,
+    "sqlPath": "subdocument.subdocumentAttachments.audit.updatedAt",
+    "sqlType": "TIMESTAMP WITH TIME ZONE"
+  },
+  {
+    "esPath": "subdocuments.attachments.medical",
+    "esType": "boolean",
+    "sqlPath": "subdocument.subdocumentAttachments.isMedical",
+    "sqlType": "BOOL"
+  },
+  {
+    "esPath": "subdocuments.attachments.mimeType",
+    "esType": "string",
+    "sqlPath": "subdocument.subdocumentAttachments.mimeType",
+    "sqlType": "TEXT",
+    "value": "enum(EMimeType)"
+  },
+  {
+    "esPath": "subdocuments.attachments.name",
+    "esType": "string",
+    "sqlPath": "subdocument.subdocumentAttachments.name",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "subdocuments.attachments.subdocumentId",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "subdocument.subdocumentAttachments.subdocument.id",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "subdocuments.attachments.versions.date",
+    "esType": "date",
+    "required": true,
+    "sqlPath": "subdocument.subdocumentAttachments.subdocumentBversions.audit.createdAt",
+    "sqlType": "TIMESTAMP WITH TIME ZONE"
+  },
+  {
+    "esPath": "subdocuments.attachments.versions.id",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "subdocument.subdocumentAttachments.subdocumentBversions.id",
+    "sqlType": "INT4"
+  },
+  {
+    "esPath": "subdocuments.attachments.versions.user.id",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "iamUser.id",
+    "sqlType": "VARCHAR(255)",
+    "value": "reference(identity_v1,user)"
+  },
+  {
+    "esPath": "subdocuments.attachments.versions.user.name",
+    "esType": "string",
+    "sqlPath": "subdocument.subdocumentAttachments.subdocumentBversions.audit.createdBy",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "subdocuments.attachments.versions.user.organisation.acronym",
+    "esType": "string",
+    "sqlPath": "(iamUser|iamGroup).tenant.organisation.acronym",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "subdocuments.attachments.versions.user.organisation.activeSince",
+    "esType": "date",
+    "sqlPath": "(iamUser|iamGroup).tenant.organisation.activeSince",
+    "sqlType": "TIMESTAMP WITH TIME ZONE"
+  },
+  {
+    "esPath": "subdocuments.attachments.versions.user.organisation.address.country",
+    "esType": "string",
+    "sqlPath": "(iamUser|iamGroup).tenant.organisation.addressCountry",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "subdocuments.attachments.versions.user.organisation.countryCode",
+    "esType": "string",
+    "sqlPath": "(iamUser|iamGroup).tenant.organisation.countryCode",
+    "sqlType": "TEXT",
+    "value": "enum(ECountryCode)"
+  },
+  {
+    "esPath": "subdocuments.attachments.versions.user.organisation.id",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "(iamUser|iamGroup).tenant.organisation.id",
+    "sqlType": "VARCHAR(50)",
+    "value": "reference(entities,organisation)"
+  },
+  {
+    "esPath": "subdocuments.attachments.versions.user.organisation.name",
+    "esType": "string",
+    "sqlPath": "(iamUser|iamGroup).tenant.organisation.name",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "comment": "should be user",
+    "esPath": "subdocuments.attachments.versions.user.type",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "",
+    "sqlType": "VARCHAR(4)",
+    "value": "regex(User)"
+  },
+  {
+    "comment": "if null, replace with the main caseId",
+    "esPath": "subdocuments.caseId",
+    "esType": "string",
+    "sqlPath": "subdocument.rinaCase.id",
+    "sqlType": "VARCHAR(255)",
+    "value": "duplicate(caseId)"
+  },
+  {
+    "comment": "if null, replace with parent creation date",
+    "esPath": "subdocuments.creationDate",
+    "esType": "date",
+    "sqlPath": "subdocument.audit.createdAt",
+    "sqlType": "TIMESTAMP WITH TIME ZONE"
+  },
+  {
+    "esPath": "subdocuments.creator.id",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "iamUser.id",
+    "sqlType": "VARCHAR(255)",
+    "value": "reference(identity_v1,user)"
+  },
+  {
+    "esPath": "subdocuments.creator.name",
+    "esType": "string",
+    "sqlPath": "subdocument.audit.createdBy",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "subdocuments.creator.organisation.acronym",
+    "esType": "string",
+    "sqlPath": "(iamUser|iamGroup).tenant.organisation.acronym",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "subdocuments.creator.organisation.activeSince",
+    "esType": "date",
+    "sqlPath": "(iamUser|iamGroup).tenant.organisation.activeSince",
+    "sqlType": "TIMESTAMP WITH TIME ZONE"
+  },
+  {
+    "esPath": "subdocuments.creator.organisation.address.country",
+    "esType": "string",
+    "sqlPath": "(iamUser|iamGroup).tenant.organisation.addressCountry",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "subdocuments.creator.organisation.countryCode",
+    "esType": "string",
+    "sqlPath": "(iamUser|iamGroup).tenant.organisation.countryCode",
+    "sqlType": "TEXT",
+    "value": "enum(ECountryCode)"
+  },
+  {
+    "esPath": "subdocuments.creator.organisation.id",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "(iamUser|iamGroup).tenant.organisation.id",
+    "sqlType": "VARCHAR(50)",
+    "value": "reference(entities,organisation)"
+  },
+  {
+    "esPath": "subdocuments.creator.organisation.name",
+    "esType": "string",
+    "sqlPath": "(iamUser|iamGroup).tenant.organisation.name",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "comment": "should be user",
+    "esPath": "subdocuments.creator.type",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "",
+    "sqlType": "VARCHAR(4)",
+    "value": "regex(User)"
+  },
+  {
+    "esPath": "subdocuments.id",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "subdocument.id",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "comment": "if null, replace with subdocuments.creationDate",
+    "esPath": "subdocuments.lastUpdate",
+    "esType": "date",
+    "sqlPath": "subdocument.audit.updatedAt",
+    "sqlType": "TIMESTAMP WITH TIME ZONE"
+  },
+  {
+    "esPath": "subdocuments.parentDocumentId",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "subdocument.document.id",
+    "sqlType": "VARCHAR(255)",
+    "value": "reference(cases,document,caseId_subdocuments.parentDocumentId)"
+  },
+  {
+    "esPath": "subdocuments.preFill",
+    "esType": "object",
+    "ignorePath": true,
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "subdocuments.referenceId",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "subdocument.businessReference",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "subdocuments.searchMetadata",
+    "esType": "object",
+    "ignorePath": true,
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "subdocuments.type",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "subdocument.document.documentTypeVersion.documentType.type",
+    "sqlType": "VARCHAR(255)",
+    "importIgnore": true
+  },
+  {
+    "esPath": "subdocuments.validation.messages",
+    "esType": "object",
+    "ignorePath": true,
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "comment": "This needs conversion from String values valid/invalid to subdocument.isValid boolean values true/false. The real sqlType value is BOOL",
+    "esPath": "subdocuments.validation.status",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "subdocument.isValid",
+    "sqlType": "VARCHAR(7)"
+  },
+  {
+    "esPath": "subdocuments.versions.date",
+    "esType": "date",
+    "required": true,
+    "sqlPath": "subdocument.subdocumentBversion.audit.createdAt",
+    "sqlType": "TIMESTAMP WITH TIME ZONE"
+  },
+  {
+    "esPath": "subdocuments.versions.id",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "subdocument.subdocumentBversion.id",
+    "sqlType": "INT4"
+  },
+  {
+    "esPath": "subdocuments.versions.user.id",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "iamUser.id",
+    "sqlType": "VARCHAR(255)",
+    "value": "reference(identity_v1,user)"
+  },
+  {
+    "esPath": "subdocuments.versions.user.name",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "subdocument.subdocumentBversion.audit.createdBy",
+    "sqlType": "VARCHAR(255)",
+    "importIgnore": true
+  },
+  {
+    "esPath": "subdocuments.versions.user.organisation.acronym",
+    "esType": "string",
+    "sqlPath": "(iamUser|iamGroup).tenant.organisation.acronym",
+    "sqlType": "VARCHAR(255)",
+    "importIgnore": true
+  },
+  {
+    "esPath": "subdocuments.versions.user.organisation.activeSince",
+    "esType": "date",
+    "sqlPath": "(iamUser|iamGroup).tenant.organisation.activeSince",
+    "sqlType": "TIMESTAMP WITH TIME ZONE",
+    "importIgnore": true
+  },
+  {
+    "esPath": "subdocuments.versions.user.organisation.address.country",
+    "esType": "string",
+    "sqlPath": "(iamUser|iamGroup).tenant.organisation.addressCountry",
+    "sqlType": "VARCHAR(255)",
+    "importIgnore": true
+  },
+  {
+    "esPath": "subdocuments.versions.user.organisation.countryCode",
+    "esType": "string",
+    "sqlPath": "(iamUser|iamGroup).tenant.organisation.countryCode",
+    "sqlType": "TEXT",
+    "value": "enum(ECountryCode)",
+    "importIgnore": true
+  },
+  {
+    "esPath": "subdocuments.versions.user.organisation.id",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "(iamUser|iamGroup).tenant.organisation.id",
+    "sqlType": "VARCHAR(50)",
+    "value": "reference(entities,organisation)",
+    "importIgnore": true
+  },
+  {
+    "esPath": "subdocuments.versions.user.organisation.name",
+    "esType": "string",
+    "sqlPath": "(iamUser|iamGroup).tenant.organisation.name",
+    "sqlType": "VARCHAR(255)",
+    "importIgnore": true
+  },
+  {
+    "comment": "should be user",
+    "esPath": "subdocuments.versions.user.type",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "",
+    "sqlType": "VARCHAR(4)",
+    "value": "regex(User)",
+    "importIgnore": true
+  }
+]

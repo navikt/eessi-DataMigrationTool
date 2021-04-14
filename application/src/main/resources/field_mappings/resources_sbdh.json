@@ -1,0 +1,45 @@
+[
+  {
+    "esPath": "date",
+    "esType": "date",
+    "sqlPath": "resource.date",
+    "sqlType": "TIMESTAMP WITH TIME ZONE"
+  },
+  {
+    "esPath": "id",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "resource.id",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "storageId",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "resource.storageId",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "tag",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "resource.tag",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "type",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "resource.type",
+    "sqlType": "TEXT",
+    "value": "enum(EResourceType)",
+    "importIgnore": true
+  },
+  {
+    "esPath": "version",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "resource.bversion",
+    "sqlType": "VARCHAR(35)"
+  }
+]

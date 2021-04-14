@@ -1,0 +1,236 @@
+[
+  {
+    "esPath": "@timestamp",
+    "esType": "date",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "@version",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "btm-gtrid",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "host",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "logger_name",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "message.action",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "auditEvent.actionType",
+    "sqlType": "TEXT",
+    "value": "enum(EActionType)"
+  },
+  {
+    "esPath": "message.auditedObjects.details",
+    "esType": "string",
+    "sqlPath": "auditEvent.auditObjects.details",
+    "sqlType": "TEXT"
+  },
+  {
+    "esPath": "message.auditedObjects.id",
+    "esType": "string",
+    "sqlPath": "auditEvent.auditObjects.id",
+    "sqlType": "VARCHAR(100)"
+  },
+  {
+    "esPath": "message.auditedObjects.type",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "auditEvent.auditObjects.auditObjectType",
+    "sqlType": "TEXT",
+    "value": "enum(EAuditedObjectType)"
+  },
+  {
+    "esPath": "message.date",
+    "esType": "date",
+    "required": true,
+    "sqlPath": "auditEvent.audit.createdAt",
+    "sqlType": "TIMESTAMP WITH TIME ZONE"
+  },
+  {
+    "esPath": "message.id",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "auditEvent.id",
+    "sqlType": "VARCHAR(100)"
+  },
+  {
+    "esPath": "message.networkLocation.ip",
+    "esType": "string",
+    "sqlPath": "auditEvent.netLocationIp",
+    "sqlType": "VARCHAR(20)"
+  },
+  {
+    "esPath": "message.networkLocation.machine",
+    "esType": "string",
+    "sqlPath": "auditEvent.netLocationMachine",
+    "sqlType": "VARCHAR(20)"
+  },
+  {
+    "esPath": "message.outcome",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "auditEvent.outcomeType",
+    "sqlType": "TEXT",
+    "value": "enum(EOutcomeType)"
+  },
+  {
+    "esPath": "message.outcomeDetails",
+    "esType": "string",
+    "sqlPath": "auditEvent.outcomeDetails",
+    "sqlType": "TEXT"
+  },
+  {
+    "esPath": "message.participants.id",
+    "esType": "string",
+    "sqlPath": "auditEvent.auditParticipants.id",
+    "sqlType": "VARCHAR(100)"
+  },
+  {
+    "esPath": "message.participants.role",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "auditEvent.auditParticipants.participantRole",
+    "sqlType": "TEXT",
+    "value": "enum(EParticipantRole)"
+  },
+  {
+    "esPath": "message.participants.type",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "auditEvent.auditParticipants.participantType",
+    "sqlType": "TEXT",
+    "value": "enum(EParticipantType)"
+  },
+  {
+    "esPath": "message.source.categoryType",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "auditEvent.categoryType",
+    "sqlType": "TEXT",
+    "value": "enum(ECategoryType)"
+  },
+  {
+    "esPath": "message.source.componentType",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "auditEvent.componentType",
+    "sqlType": "TEXT",
+    "value": "enum(EComponentType)"
+  },
+  {
+    "esPath": "message.source.eventType",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "auditEvent.eventType",
+    "sqlType": "TEXT",
+    "value": "enum(EEventType)"
+  },
+  {
+    "esPath": "message.userName",
+    "esType": "string",
+    "sqlPath": "auditEvent.audit.createdBy",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "priority",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "stack_trace",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "syslog5424_app",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "syslog5424_host",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "syslog5424_pri",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "syslog5424_proc",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "syslog5424_ts",
+    "esType": "date",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "syslog5424_ver",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "syslog_facility",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "syslog_facility_code",
+    "esType": "long",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "syslog_severity",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "syslog_severity_code",
+    "esType": "long",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "thread",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "type",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": ""
+  }
+]

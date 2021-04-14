@@ -1,0 +1,21 @@
+[
+  {
+    "esPath": "id",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "query.match_all",
+    "esType": "object",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "sbdh",
+    "esType": "object",
+    "ignorePath": true,
+    "sqlPath": "",
+    "sqlType": ""
+  }
+]

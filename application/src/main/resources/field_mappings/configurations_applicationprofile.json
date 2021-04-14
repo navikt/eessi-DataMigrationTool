@@ -1,0 +1,846 @@
+[
+  {
+    "esPath": "adminManagerPassword",
+    "esType": "string",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "applicationId",
+    "esType": "string",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "archivingPolicies.archiveMessages",
+    "esType": "boolean",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "comment": "the EApplicationRole.constant value",
+    "esPath": "archivingPolicies.archivingPoliciesTable.applicationRole",
+    "esType": "string",
+    "sqlPath": "archivingPolicy.applicationRole",
+    "sqlType": "VARCHAR(13)",
+    "importIgnore": true
+  },
+  {
+    "comment": "the EApplicationRole value",
+    "esPath": "archivingPolicies.archivingPoliciesTable.applicationRoleId",
+    "esType": "string",
+    "sqlPath": "archivingPolicy.applicationRole",
+    "sqlType": "TEXT",
+    "value": "enum(EApplicationRole)"
+  },
+  {
+    "esPath": "archivingPolicies.archivingPoliciesTable.bucType",
+    "esType": "string",
+    "sqlPath": "archivingPolicy.processDef.name",
+    "sqlType": "VARCHAR(255)",
+    "importIgnore": true
+  },
+  {
+    "esPath": "archivingPolicies.archivingPoliciesTable.bucTypeId",
+    "esType": "string",
+    "sqlPath": "archivingPolicy.processDef.id",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "archivingPolicies.archivingPoliciesTable.id",
+    "esType": "string",
+    "sqlPath": "archivingPolicy.id",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "archivingPolicies.archivingPoliciesTable.policy",
+    "esType": "long",
+    "required": true,
+    "sqlPath": "archivingPolicy.policy",
+    "sqlType": "INT4"
+  },
+  {
+    "esPath": "archivingPolicies.archivingPoliciesTable.sector",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "esPath": "archivingPolicies.archivingPoliciesTable.sectorId",
+    "esType": "string",
+    "sqlPath": "archivingPolicy.processDef.sector.name",
+    "sqlType": "TEXT",
+    "value": "enum(ESector)"
+  },
+  {
+    "esPath": "archivingPolicies.defaultArchivingPeriod",
+    "esType": "long",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "archivingRepositories.archivingRepositoriesList.achivingMinSpaceThreshold",
+    "esType": "long",
+    "sqlPath": "archivingVolume.achivingMinSpaceThreshold",
+    "sqlType": "INT4"
+  },
+  {
+    "esPath": "archivingRepositories.archivingRepositoriesList.archivingVolume",
+    "esType": "string",
+    "sqlPath": "archivingVolume.archivingVolume",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "archivingRepositories.archivingRepositoriesList.archivingVolumeId",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "archivingVolume.archivingVolumeId",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "comment": "this needs to be stringified",
+    "esPath": "archivingRepositories.archivingRepositoriesList.physicalLocations",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "archivingVolume.physicalLocations",
+    "sqlType": "TEXT"
+  },
+  {
+    "esPath": "archivingRepositories.defaultCaseArchivingVolume",
+    "esType": "string",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "archivingRepositories.defaultMessagesVolume",
+    "esType": "string",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "comment": "the EApplicationRole.constant value",
+    "esPath": "archivingRepositoryPolicies.applicationRole",
+    "esType": "string",
+    "sqlPath": "archivingRepositoryPolicy.applicationRole",
+    "sqlType": "VARCHAR(13)",
+    "importIgnore": true
+  },
+  {
+    "comment": "the EApplicationRole value",
+    "esPath": "archivingRepositoryPolicies.applicationRoleId",
+    "esType": "string",
+    "sqlPath": "archivingRepositoryPolicy.applicationRole",
+    "sqlType": "TEXT",
+    "value": "enum(EApplicationRole)"
+  },
+  {
+    "esPath": "archivingRepositoryPolicies.archivingVolume",
+    "esType": "string",
+    "sqlPath": "archivingVolume.archivingVolume",
+    "sqlType": "VARCHAR(255)",
+    "importIgnore": true
+  },
+  {
+    "esPath": "archivingRepositoryPolicies.archivingVolumeId",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "archivingVolume.archivingVolumeId",
+    "sqlType": "VARCHAR(255)",
+    "importIgnore": true
+  },
+  {
+    "esPath": "archivingRepositoryPolicies.bucType",
+    "esType": "string",
+    "sqlPath": "archivingRepositoryPolicy.processDef.name",
+    "sqlType": "VARCHAR(255)",
+    "importIgnore": true
+  },
+  {
+    "esPath": "archivingRepositoryPolicies.bucTypeId",
+    "esType": "string",
+    "sqlPath": "archivingRepositoryPolicy.processDef.id",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "archivingRepositoryPolicies.id",
+    "esType": "string",
+    "sqlPath": "archivingRepositoryPolicy.id",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "archivingRepositoryPolicies.sector",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "esPath": "archivingRepositoryPolicies.sectorId",
+    "esType": "string",
+    "sqlPath": "archivingRepositoryPolicy.processDef.sector.name",
+    "sqlType": "TEXT",
+    "value": "enum(ESector)"
+  },
+  {
+    "esPath": "attachmentAllowedMimeTypes",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "esPath": "attachmentDirectoryPath",
+    "esType": "string",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "attachmentMaxFileSize",
+    "esType": "long",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "autoSyncCDM",
+    "esType": "long",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "autoSyncIR",
+    "esType": "long",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "bulkSEDMaxNumberChildren",
+    "esType": "long",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "casesRetentionPolicies.caseRetentionPoliciesTable.applicationRole",
+    "esType": "string",
+    "sqlPath": "casesRetentionPolicy.applicationRole",
+    "sqlType": "VARCHAR(13)",
+    "importIgnore": true
+  },
+  {
+    "esPath": "casesRetentionPolicies.caseRetentionPoliciesTable.applicationRoleId",
+    "esType": "string",
+    "sqlPath": "casesRetentionPolicy.applicationRole",
+    "sqlType": "TEXT",
+    "value": "enum(EApplicationRole)"
+  },
+  {
+    "esPath": "casesRetentionPolicies.caseRetentionPoliciesTable.bucType",
+    "esType": "string",
+    "sqlPath": "casesRetentionPolicy.processDef.name",
+    "sqlType": "VARCHAR(255)",
+    "importIgnore": true
+  },
+  {
+    "esPath": "casesRetentionPolicies.caseRetentionPoliciesTable.bucTypeId",
+    "esType": "string",
+    "sqlPath": "casesRetentionPolicy.processDef.id",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "casesRetentionPolicies.caseRetentionPoliciesTable.id",
+    "esType": "string",
+    "sqlPath": "casesRetentionPolicy.id",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "casesRetentionPolicies.caseRetentionPoliciesTable.policy",
+    "esType": "long",
+    "required": true,
+    "sqlPath": "casesRetentionPolicy.policy",
+    "sqlType": "INT4"
+  },
+  {
+    "esPath": "casesRetentionPolicies.caseRetentionPoliciesTable.sector",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "esPath": "casesRetentionPolicies.caseRetentionPoliciesTable.sectorId",
+    "esType": "string",
+    "sqlPath": "casesRetentionPolicy.processDef.sector.name",
+    "sqlType": "TEXT",
+    "value": "enum(ESector)"
+  },
+  {
+    "esPath": "casesRetentionPolicies.defaultCaseRetentionPeriod",
+    "esType": "long",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "characterSet",
+    "esType": "string",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "defaultCriticality",
+    "esType": "string",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "defaultImportance",
+    "esType": "string",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "defaultLanguage",
+    "esType": "string",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "defaultUserProfile.alarmSettings.autoSetDays",
+    "esType": "long",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "defaultUserProfile.alarmSettings.autoSetOnSend",
+    "esType": "boolean",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "defaultUserProfile.caseClassicView.groupByMonth",
+    "esType": "boolean",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "defaultUserProfile.caseClassicView.showPreview",
+    "esType": "boolean",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "defaultUserProfile.caseTimelineView.displayMode",
+    "esType": "string",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "defaultUserProfile.caseTimelineView.displayThumbnails",
+    "esType": "boolean",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "defaultUserProfile.documents.displayMode",
+    "esType": "string",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "defaultUserProfile.documents.showFlags",
+    "esType": "string",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "defaultUserProfile.documents.sortBy",
+    "esType": "string",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "defaultUserProfile.filterActionType",
+    "esType": "string",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "defaultUserProfile.localizationSettings.currency",
+    "esType": "string",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "defaultUserProfile.localizationSettings.dateFormat",
+    "esType": "string",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "defaultUserProfile.localizationSettings.language",
+    "esType": "string",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "defaultUserProfile.localizationSettings.numberFormat",
+    "esType": "string",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "defaultUserProfile.localizationSettings.timeFormat",
+    "esType": "string",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "defaultUserProfile.localizationSettings.timeZone",
+    "esType": "string",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "defaultUserProfile.userName",
+    "esType": "string",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)",
+    "importIgnore": true
+  },
+  {
+    "esPath": "formRepositoryPath",
+    "esType": "string",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "letterTemplatesRepositoryPath",
+    "esType": "string",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "localizationRepositoryPath",
+    "esType": "string",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "maxIdleTime",
+    "esType": "long",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "messagesRetentionPolicies.defaultMessageRetentionPeriod",
+    "esType": "long",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "messagingSettings.institutionAliasMappings.defaultBusinessKeyAlias",
+    "esType": "string",
+    "sqlPath": "tenantParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "messagingSettings.institutionAliasMappings.isPrivateKeyStore",
+    "esType": "boolean",
+    "sqlPath": "tenantParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "messagingSettings.institutionAliasMappings.keyAlias",
+    "esType": "string",
+    "sqlPath": "tenantParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "messagingSettings.institutionAliasMappings.mpc",
+    "esType": "string",
+    "sqlPath": "tenantParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "messagingSettings.institutionAliasMappings.organisation.accessPoint.accessPointIp",
+    "esType": "string",
+    "sqlPath": "tenantParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "messagingSettings.institutionAliasMappings.organisation.accessPoint.accessPointPort",
+    "esType": "string",
+    "sqlPath": "tenantParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "messagingSettings.institutionAliasMappings.organisation.accessPoint.channel",
+    "esType": "string",
+    "sqlPath": "tenantParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "messagingSettings.institutionAliasMappings.organisation.accessPoint.countryCode",
+    "esType": "string",
+    "sqlPath": "tenantParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "messagingSettings.institutionAliasMappings.organisation.accessPoint.id",
+    "esType": "string",
+    "sqlPath": "tenantParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "messagingSettings.institutionAliasMappings.organisation.accessPoint.inboxService",
+    "esType": "string",
+    "sqlPath": "tenantParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "messagingSettings.institutionAliasMappings.organisation.accessPoint.name",
+    "esType": "string",
+    "sqlPath": "tenantParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "messagingSettings.institutionAliasMappings.organisation.accessPoint.outboxService",
+    "esType": "string",
+    "sqlPath": "tenantParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "messagingSettings.institutionAliasMappings.organisation.accessPoint.protocol",
+    "esType": "string",
+    "sqlPath": "tenantParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "messagingSettings.institutionAliasMappings.organisation.accessPoint.technicalChannel",
+    "esType": "string",
+    "sqlPath": "tenantParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "messagingSettings.institutionAliasMappings.organisation.accessPoint.technicalInboxService",
+    "esType": "string",
+    "sqlPath": "tenantParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "messagingSettings.institutionAliasMappings.organisation.accessPoint.technicalOutboxService",
+    "esType": "string",
+    "sqlPath": "tenantParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "messagingSettings.institutionAliasMappings.organisation.accessPoint.technicalProtocol",
+    "esType": "string",
+    "sqlPath": "tenantParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "messagingSettings.institutionAliasMappings.organisation.acronym",
+    "esType": "string",
+    "sqlPath": "tenantParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "messagingSettings.institutionAliasMappings.organisation.activeSince",
+    "esType": "string",
+    "sqlPath": "tenantParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "messagingSettings.institutionAliasMappings.organisation.assignedBUCs",
+    "esType": "object",
+    "ignorePath": true,
+    "sqlPath": "tenantParam.value",
+    "sqlType": "VARCHAR(255)",
+    "importIgnore": true
+  },
+  {
+    "esPath": "messagingSettings.institutionAliasMappings.organisation.countryCode",
+    "esType": "string",
+    "sqlPath": "tenantParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "messagingSettings.institutionAliasMappings.organisation.id",
+    "esType": "string",
+    "sqlPath": "tenantParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "messagingSettings.institutionAliasMappings.organisation.name",
+    "esType": "string",
+    "sqlPath": "tenantParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "messagingSettings.institutionAliasMappings.password",
+    "esType": "string",
+    "sqlPath": "tenantParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "messagingSettings.institutionAliasMappings.privateKeyStore",
+    "esType": "boolean",
+    "sqlPath": "tenantParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "messagingSettings.institutionAliasMappings.pullingInterval",
+    "esType": "long",
+    "sqlPath": "tenantParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "messagingSettings.institutionAliasMappings.technicalKeyAlias",
+    "esType": "string",
+    "sqlPath": "tenantParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "messagingSettings.institutionAliasMappings.technicalMpc",
+    "esType": "string",
+    "sqlPath": "tenantParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "messagingSettings.institutionAliasMappings.technicalPassword",
+    "esType": "string",
+    "sqlPath": "tenantParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "messagingSettings.institutionAliasMappings.technicalPullingInterval",
+    "esType": "long",
+    "sqlPath": "tenantParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "multitenantMode",
+    "esType": "boolean",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)",
+    "importIgnore": true
+  },
+  {
+    "esPath": "name",
+    "esType": "string",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "nieSubscriptions.eventsSubscriptions.case",
+    "esType": "boolean",
+    "sqlPath": "nieSubscription.isCase",
+    "sqlType": "BOOL"
+  },
+  {
+    "esPath": "nieSubscriptions.eventsSubscriptions.id",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "nieSubscription.id",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "nieSubscriptions.eventsSubscriptions.isCase",
+    "esType": "boolean",
+    "sqlPath": "nieSubscription.isCase",
+    "sqlType": "BOOL"
+  },
+  {
+    "esPath": "nieSubscriptions.eventsSubscriptions.listeners.id",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "nieSubscription.nieListeners.id",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "nieSubscriptions.eventsSubscriptions.listeners.label",
+    "esType": "string",
+    "sqlPath": "nieSubscription.nieListeners.label",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "nieSubscriptions.eventsSubscriptions.listeners.listener",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "nieSubscription.nieListeners.url",
+    "sqlType": "VARCHAR(1024)"
+  },
+  {
+    "comment": "this is a nieListener, id is always Notification",
+    "esPath": "nieSubscriptions.eventsSubscriptions.notifications.id",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "nieSubscription.nieListeners.id",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "nieSubscriptions.eventsSubscriptions.notifications.label",
+    "esType": "string",
+    "sqlPath": "nieSubscription.nieListeners.label",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "nieSubscriptions.eventsSubscriptions.notifications.url",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "nieSubscription.nieListeners.url",
+    "sqlType": "VARCHAR(1024)"
+  },
+  {
+    "esPath": "nieSubscriptions.eventsSubscriptions.subscribers.id",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "nieSubscription.nieSubscribers.id",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "nieSubscriptions.eventsSubscriptions.subscribers.version",
+    "esType": "string",
+    "sqlPath": "nieSubscription.nieSubscribers.processDefVersion.businessVersion",
+    "sqlType": "VARCHAR(10)"
+  },
+  {
+    "esPath": "nieSubscriptions.eventsSubscriptions.subscriptionName",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "nieSubscription.subscriptionName",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "nieSubscriptions.nieClientImplClass",
+    "esType": "string",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "organizationSystemPassword",
+    "esType": "string",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "pdpAssignmentsImplClass",
+    "esType": "string",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "processAssignmentsPolicy",
+    "esType": "string",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "recoveryVolume",
+    "esType": "string",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "resourcesDiskPath",
+    "esType": "string",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "sedValidationMode",
+    "esType": "string",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "showFullError",
+    "esType": "boolean",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "showProcessVersion",
+    "esType": "boolean",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "showSoftwareVersions",
+    "esType": "boolean",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "supportedLanguages",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "esPath": "tenants.enabled",
+    "esType": "boolean",
+    "sqlPath": "tenant.isEnabled",
+    "sqlType": "BOOL"
+  },
+  {
+    "comment": "This is a reference to organisation.id",
+    "esPath": "tenants.id",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "tenant.organisation.id && tenant.id",
+    "sqlType": "VARCHAR(50)",
+    "value": "reference(entities,organisation)"
+  },
+  {
+    "esPath": "tenants.isDefault",
+    "esType": "boolean",
+    "sqlPath": "tenant.isDefault",
+    "sqlType": "BOOL"
+  },
+  {
+    "esPath": "ticketDestinationEmail",
+    "esType": "string",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "ticketRelayEmail",
+    "esType": "string",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "ticketRelayPassword",
+    "esType": "string",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "ticketRelayServer",
+    "esType": "string",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "useApplicationId",
+    "esType": "boolean",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "validateSED",
+    "esType": "boolean",
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "whoamiId",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "globalParam.value",
+    "sqlType": "VARCHAR(255)",
+    "value": "reference(entities,organisation)"
+  }
+]

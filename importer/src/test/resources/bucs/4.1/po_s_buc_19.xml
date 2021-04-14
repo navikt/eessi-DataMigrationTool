@@ -1,0 +1,132 @@
+<?xml version="1.0"?>
+<case name="S_BUC_19" version="${buc.model.version}" role="PO"
+      xmlns="http://ec.europa.eu/eessi/rina/buc">
+
+    <context>
+        <parameters>
+            <!-- isML (default is true; the current BUC is isML=false) -->
+            <parameter key="isML">false</parameter> <!-- default is true -->
+            <!-- removeMeOnly is not considered in PO -->
+        </parameters>
+    </context>
+
+    <actions>
+        <!-- empty -->
+    </actions>
+
+    <documents>
+        <document type="S080">
+            <parameters>
+                <parameter key="isStarter">true</parameter> <!-- default is false -->
+                <parameter key="isBulk">true</parameter> <!-- default is false -->
+            </parameters>
+            <triggers>
+
+                <!-- for starter only, local close -->
+                <createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS"
+                                     actionType="CASE_LOCAL_CLOSE" documentType="ANY"/>
+
+                <!-- for starter only, business exception -->
+                <createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE"
+                                     documentType="X050"/>
+
+                <!-- for starter only, change participants -->
+                <createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE"
+                                     documentType="X100"/>
+
+                <!-- HORIZONTAL SUBPROCESSES -->
+
+                <!-- MAIN FLOW ENCODING -->
+
+                <!-- for starter only, receivers -->
+                <createActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_RECEIVE_REPLY" documentType="S081"/>
+                
+                <createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE"
+                                     documentType="S089"/>
+                <createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE"
+                                     documentType="S091"/>
+                <createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE"
+                                     documentType="S082"/>
+                <createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE"
+                                     documentType="S087"/>
+                <!-- end receivers -->
+
+                <createActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_CREATE"
+                                     documentType="S085"/>
+            </triggers>
+        </document>
+
+        <document type="S085">
+            <parameters>
+                <parameter key="recreateAfterSend">true</parameter> <!-- default is false -->
+                <parameter key="isBulk">true</parameter> <!-- default is false -->
+            </parameters>
+        </document>
+
+        <document type="S092"/>
+
+        <document type="S083">
+            <triggers>
+                <createActionTrigger onAction="DOC_SEND" onResult="SUCCESS" onParentDocumentType="S082"
+                                     actionType="DOC_CREATE_REPLY" documentType="S084" sameParentDocument="true" />
+            </triggers>
+        </document>
+
+        <document type="S084">
+            <parameters>
+                <parameter key="recreateAfterSend">true</parameter> <!-- default is false -->
+                <parameter key="allowsAttachments">true</parameter> <!-- default is false -->
+                <parameter key="isBulk">true</parameter> <!-- default is false -->
+            </parameters>
+        </document>
+
+        <document type="S088">
+            <parameters>
+                <parameter key="allowsAttachments">true</parameter> <!-- default is false -->
+                <parameter key="isBulk">true</parameter> <!-- default is false -->
+            </parameters>
+        </document>
+
+        <document type="S090"/>
+
+        <document type="S081"/>
+
+        <document type="S089">
+            <triggers>
+                <createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_CREATE_REPLY"
+                                     documentType="S090"/>
+            </triggers>
+        </document>
+
+        <document type="S091">
+		    <parameters>
+                <parameter key="isBulk">true</parameter> <!-- default is false -->
+            </parameters>		
+            <triggers>
+                <createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_CREATE_REPLY"
+                                     documentType="S092"/>
+            </triggers>
+        </document>
+
+        <document type="S082">
+		    <parameters>
+                <parameter key="isBulk">true</parameter> <!-- default is false -->
+            </parameters>			
+            <triggers>
+                <createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_CREATE_REPLY"
+                                     documentType="S083"/>
+            </triggers>
+        </document>
+
+        <document type="S087">
+		    <parameters>
+                <parameter key="isBulk">true</parameter> <!-- default is false -->
+            </parameters>			
+            <triggers>
+                <createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_CREATE_REPLY"
+                                     documentType="S088"/>
+            </triggers>
+        </document>
+
+    </documents>
+</case> 

@@ -1,0 +1,39 @@
+[
+  {
+    "comment": "do not add reference validation",
+    "esPath": "caseId",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "documentThumbnail.documentBversion.document.rinaCase.id",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "documentId",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "documentThumbnail.documentBversion.document.id",
+    "sqlType": "VARCHAR(255)",
+    "value": "reference(cases,document,caseId_documentId)"
+  },
+  {
+    "esPath": "internalId",
+    "esType": "string",
+    "sqlPath": "split into documentThumbnail.documentBversion.document.rinaCase.id + documentThumbnail.documentBversion.document.id + documentThumbnail.documentBversion.version + documentThumbnail.lang.name",
+    "sqlType": "VARCHAR(526)",
+    "value": "regex([0-9]+_[0-9a-zA-Z]+_[0-9]+_[a-zA-Z]{2})"
+  },
+  {
+    "esPath": "thumbnailContent",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "documentThumbnail.content",
+    "sqlType": "TEXT"
+  },
+  {
+    "esPath": "versionId",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "documentThumbnail.documentBversion.version",
+    "sqlType": "INT4"
+  }
+]

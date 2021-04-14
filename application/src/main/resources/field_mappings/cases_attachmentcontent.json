@@ -1,0 +1,40 @@
+[
+  {
+    "esPath": "attachmentcontent",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "comment": "do not add reference validation",
+    "esPath": "caseId",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "documentId",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "id",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "internalId",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "versionId",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": ""
+  }
+]

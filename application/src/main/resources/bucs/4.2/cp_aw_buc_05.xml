@@ -1,0 +1,165 @@
+<?xml version="1.0"?>
+<case name="AW_BUC_05" version="${buc.model.version}" role="CP"
+      xmlns="http://ec.europa.eu/eessi/rina/buc">
+
+    <context>
+        <parameters>
+            <!-- isML (default is true; the current BUC is isML=false) -->
+            <parameter key="isML">false</parameter> <!-- default is true -->
+            <!-- removeMeOnly is considered in CP (default is false; in the current BUC, CP has removeMeOnly=false) -->
+        </parameters>
+    </context>
+
+    <actions>
+        <!-- empty -->
+    </actions>
+
+    <documents>
+        <document type="DA010">
+            <parameters>
+                <parameter key="isStarter">true</parameter> <!-- default is false -->
+                <parameter key="isBulk">true</parameter>
+            </parameters>
+            <triggers>
+
+                <!-- ADMINISTRATIVE SUBPROCESSES -->
+
+                <!-- for starter only, local close -->
+                <createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS"
+                                     actionType="CASE_LOCAL_CLOSE" documentType="ANY"/>
+
+                <!-- for starter only, X009 -->
+                <createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS"
+                                     actionType="DOC_RECEIVE" documentType="X009"/>
+
+                <!-- for starter only, business exception -->
+                <createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS"
+                                     actionType="DOC_RECEIVE" documentType="X050"/>
+
+                <!-- for starter only, change participants -->
+                <createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS"
+                                     actionType="DOC_RECEIVE" documentType="X100"/>
+
+                <!-- HORIZONTAL SUBPROCESSES -->
+
+                <!-- MAIN FLOW ENCODING -->
+
+                <!-- for starter only, receivers -->
+                <createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS"
+                                     actionType="DOC_RECEIVE" documentType="DA012"/>
+                <createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS"
+                                     actionType="DOC_RECEIVE" documentType="DA019"/>
+                <createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS"
+                                     actionType="DOC_RECEIVE" documentType="DA016A"/>
+                <createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS"
+                                     actionType="DOC_RECEIVE" documentType="DA017"/>
+                <createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS"
+                                     actionType="DOC_RECEIVE" documentType="DA012R"/>
+                <createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS"
+                                     actionType="DOC_RECEIVE" documentType="DA015"/>
+                <!-- end receivers -->
+
+                <createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_CREATE_REPLY"
+                                     documentType="DA011"/>
+
+            </triggers>
+        </document>
+
+        <document type="DA011">
+            <triggers>
+                <createActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_CREATE"
+                                     documentType="DA014"/>
+                <createActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_CREATE"
+                                     documentType="DA018"/>
+                <createActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_CREATE"
+                                     documentType="DA016"/>
+            </triggers>
+        </document>
+
+        <document type="DA014">
+            <triggers>
+                <createActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_RECEIVE_REPLY"
+                                     documentType="DA015"/>
+            </triggers>
+        </document>
+
+        <document type="DA018">
+            <parameters>
+                <parameter key="recreateAfterSend">true</parameter> <!-- default is false -->
+                <parameter key="isBulk">true</parameter> <!-- default is false -->
+            </parameters>
+            <triggers>
+                <removeActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_CREATE"
+                                     documentType="DA014"/>
+                <removeActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_UPDATE"
+                                     documentType="DA014"/>
+                <removeActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_SEND" documentType="DA014"/>
+                <createActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_RECEIVE_REPLY"
+                                     documentType="DA019"/>
+            </triggers>
+        </document>
+
+        <document type="DA016">
+            <parameters>
+                <parameter key="recreateAfterSend">true</parameter> <!-- default is false -->
+                <parameter key="allowsAttachments">true</parameter> <!-- default is false -->
+                <parameter key="isBulk">true</parameter> <!-- default is false -->
+            </parameters>
+            <triggers>
+                <createActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_RECEIVE_REPLY"
+                                     documentType="DA016A"/>
+            </triggers>
+        </document>
+
+        <document type="DA012C">
+            <parameters>
+                <parameter key="recreateAfterSend">true</parameter> <!-- default is false -->
+                <parameter key="isBulk">true</parameter> <!-- default is false -->
+            </parameters>
+            <triggers>
+                <createActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_RECEIVE_REPLY"
+                                     documentType="DA012R"/>
+            </triggers>
+        </document>
+
+        <document type="DA012">
+            <triggers>
+                <createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_CREATE_REPLY"
+                                     documentType="DA012C"/>
+            </triggers>
+        </document>
+
+        <document type="DA019"/>
+
+        <document type="DA016A">
+            <triggers>
+                <createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_RECEIVE_REPLY"
+                                     documentType="DA017" sameParentDocument="true"/>
+            </triggers>
+        </document>
+
+        <document type="DA017"/>
+
+        <document type="DA012R"/>
+
+        <document type="DA015"/>
+
+        <!-- Reminder -->
+        <document type="X009">
+            <!-- If X009 may be sent (in current BUC, CP has canSendReminder=false) -->
+            <triggers>
+                <!-- Create reply task if X010 may be sent (in current BUC, CP has canReplyReminder=true) -->
+                <createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_CREATE_REPLY"
+                                     documentType="X010"/>
+                <!-- Create receive task if X010 may be received (in current BUC, other side PO has canReplyReminder=false) -->
+            </triggers>
+        </document>
+
+        <document type="X010">
+            <!-- If X010 may be sent (in current BUC, CP has canReplyReminder=true) -->
+            <!-- X010 must be sent only to the triggering participant, meaning hasParticipantSelection=true and isML(local)=false -->
+            <!-- Check hasParticipantSelection and isML(local) - no need if isML(context)=false (in current BUC, isML(context)=false) -->
+        </document>
+
+    </documents>
+</case> 

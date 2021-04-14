@@ -1,0 +1,402 @@
+<?xml version="1.0"?> 
+<case name="LA_BUC_01" version="${buc.model.version}" role="CP"
+	xmlns="http://ec.europa.eu/eessi/rina/buc"> 
+ 
+	<context> 
+		<parameters> 
+			<!-- isML (default true), removeMeOnly (default false) --> 
+		</parameters> 
+	</context> 
+ 
+	<actions> 
+		<!-- empty --> 
+	</actions> 
+ 
+	<documents> 
+		<document type="A001"> 
+			<parameters> 
+				<parameter key="isStarter">true</parameter> <!-- default is false --> 
+				<parameter key="hasMultipleVersions">true</parameter> <!-- default is false --> 
+				<parameter key="hasCancel">true</parameter> <!-- default is false --> 
+				<parameter key="hasClarify">true</parameter> <!-- default is false --> 
+			</parameters> 
+			<triggers> 
+ 
+				<!-- ADMINISTRATIVE SUBPROCESSES --> 
+ 
+				<!-- for starter only, local close --> 
+				<!--createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS" actionType="CASE_LOCAL_CLOSE" documentType="ANY" /--> 
+ 
+				<!-- for starter only, X001 --> 
+				<createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE" documentType="X001" /> 
+ 
+				<!-- for starter only, X005 --> 
+				<createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS" actionType="DOC_CREATE" documentType="X005" /> 
+				<createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE" documentType="X005" /> 
+ 
+				<!-- for starter only, X007 --> 
+				<createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS" actionType="DOC_CREATE" documentType="X007" /> 
+				<createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE" documentType="X007" /> 
+ 
+				<!-- for starter only, X009 --> 
+				<createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS" actionType="DOC_CREATE" documentType="X009" /> 
+				<createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE" documentType="X009" /> 
+ 
+				<!-- for starter only, business exception --> 
+				<createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE" documentType="X050" /> 
+ 
+				<!-- for starter only, change participants --> 
+				<createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE" documentType="X100" /> 
+ 
+				<!-- HORIZONTAL SUBPROCESSES --> 
+ 
+				<!-- for starter only, subprocess H_BUC_01 --> 
+				<createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS" actionType="DOC_CREATE" documentType="H001" /> 
+				<createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE" documentType="H001" /> 
+ 
+				<!-- for starter only, subprocess H_BUC_02 --> 
+				<createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS" actionType="DOC_CREATE" documentType="H003" /> 
+				<createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE" documentType="H003" /> 
+				<createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS" actionType="DOC_CREATE" documentType="H004" /> 
+				<createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE" documentType="H004" /> 
+				<createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS" actionType="DOC_CREATE" documentType="H005" /> 
+				<createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE" documentType="H005" /> 	
+				
+				<!-- for starter only, subprocess H_BUC_05 --> 
+				<createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS" actionType="DOC_CREATE" documentType="H061" /> 
+				<createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE" documentType="H061" /> 
+ 
+				<!-- for starter only, subprocess H_BUC_06 --> 
+				<createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS" actionType="DOC_CREATE" documentType="H065" /> 
+				<createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE" documentType="H065" /> 
+ 
+				<!-- for starter only, subprocess H_BUC_07 --> 
+				<createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS" actionType="DOC_CREATE" documentType="H070" /> 
+				<createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE" documentType="H070" /> 
+ 
+				<!-- MAIN FLOW --> 
+ 
+				<!-- for starter only, receivers --> 
+				<createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE" documentType="A005" /> 
+				<createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE" documentType="A008" /> 
+				<!-- end receivers --> 
+ 
+				<createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS" actionType="DOC_CREATE" documentType="A005" /> 
+				<createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS" actionType="DOC_CREATE" documentType="A008" /> 
+
+				<createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_CREATE_REPLY" documentType="A011" /> 
+				<createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_CREATE_REPLY" documentType="A002" /> 
+
+				<createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_RECEIVE_REPLY" documentType="A011" /> 
+				<createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_RECEIVE_REPLY" documentType="A002" /> 
+ 
+			</triggers> 
+		</document> 
+ 
+		<document type="A005"> 
+			<parameters> 
+				<parameter key="hasParticipantSelection">true</parameter> <!-- default is false --> 
+				<parameter key="hasMultipleVersions">true</parameter> <!-- default is false --> 
+				<parameter key="hasCancel">true</parameter> <!-- default is false --> 
+				<parameter key="recreateAfterSend">true</parameter> <!-- default is false --> 
+				<parameter key="allowsAttachments">true</parameter> <!-- default is false --> 
+				<parameter key="hasClarify">true</parameter> <!-- default is false --> 
+			</parameters> 
+			<triggers> 
+				<createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_CREATE_REPLY" documentType="A006" /> 
+				<createActionTrigger onAction="DOC_SEND_PARTICIPANTS" onResult="SUCCESS" actionType="DOC_RECEIVE_REPLY" documentType="A006" /> 
+				<createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_RECEIVE_REPLY" documentType="A006" /> 				
+			</triggers> 
+		</document> 
+ 
+		<document type="A006"> 
+			<parameters> 
+				<parameter key="hasMultipleVersions">true</parameter> <!-- default is false --> 
+				<parameter key="hasCancel">true</parameter> <!-- default is false --> 
+				<parameter key="recreateAfterCancel">true</parameter> <!-- default is false --> 
+				<parameter key="allowsAttachments">true</parameter> <!-- default is false --> 
+				<parameter key="hasClarify">true</parameter> <!-- default is false --> 
+			</parameters> 
+		</document> 
+ 
+		<document type="A008"> 
+			<parameters> 
+				<parameter key="hasMultipleVersions">true</parameter> <!-- default is false --> 
+				<parameter key="hasCancel">true</parameter> <!-- default is false --> 
+				<parameter key="recreateAfterSend">true</parameter> <!-- default is false --> 
+				<parameter key="allowsAttachments">true</parameter> <!-- default is false --> 
+				<parameter key="hasClarify">true</parameter> <!-- default is false --> 
+			</parameters> 
+		</document> 
+ 
+		<document type="A011"> 
+			<parameters> 
+				<parameter key="hasMultipleVersions">true</parameter> <!-- default is false --> 
+				<parameter key="hasCancel">true</parameter> <!-- default is false --> 
+				<parameter key="recreateAfterCancel">true</parameter> <!-- default is false --> 
+				<parameter key="hasClarify">true</parameter> <!-- default is false --> 
+			</parameters> 
+			<triggers> 
+				<removeActionTrigger onAction="DOC_CREATE" onParentDocumentType="A001" onResult="SUCCESS" actionType="DOC_CREATE" documentType="A002" sameParentDocument="true" />
+				<!-- <removeActionTrigger onAction="DOC_CREATE" onParentDocumentType="A001" onResult="SUCCESS" actionType="DOC_UPDATE" documentType="A002" sameParentDocument="true" /> -->
+				<!-- <removeActionTrigger onAction="DOC_CREATE" onParentDocumentType="A001" onResult="SUCCESS" actionType="DOC_SEND" documentType="A002" sameParentDocument="true" /> -->
+
+				<createActionTrigger onAction="DOC_DELETE" onParentDocumentType="A001" onResult="SUCCESS" actionType="DOC_CREATE" documentType="A002" sameParentDocument="true" />
+				
+				<createActionTrigger onAction="DOC_CANCEL" onParentDocumentType="A001" onResult="SUCCESS" actionType="DOC_CREATE_REPLY" documentType="A002" sameParentDocument="true" />
+				
+			</triggers> 
+		</document> 
+ 
+		<document type="A002"> 
+			<parameters> 
+				<parameter key="hasMultipleVersions">true</parameter> <!-- default is false --> 
+				<parameter key="hasCancel">true</parameter> <!-- default is false --> 
+				<parameter key="recreateAfterCancel">true</parameter> <!-- default is false --> 
+				<parameter key="allowsAttachments">true</parameter> <!-- default is false --> 
+				<parameter key="hasClarify">true</parameter> <!-- default is false --> 
+			</parameters> 
+			<triggers> 
+				<removeActionTrigger onAction="DOC_CREATE" onParentDocumentType="A001" onResult="SUCCESS" actionType="DOC_CREATE" documentType="A011" sameParentDocument="true" />
+				<!-- <removeActionTrigger onAction="DOC_CREATE" onParentDocumentType="A001" onResult="SUCCESS" actionType="DOC_UPDATE" documentType="A011" sameParentDocument="true" /> -->
+				<!-- <removeActionTrigger onAction="DOC_CREATE" onParentDocumentType="A001" onResult="SUCCESS" actionType="DOC_SEND" documentType="A011" sameParentDocument="true" /> -->
+
+				<createActionTrigger onAction="DOC_DELETE" onParentDocumentType="A001" onResult="SUCCESS" actionType="DOC_CREATE_REPLY" documentType="A011" sameParentDocument="true" />
+				
+				<createActionTrigger onAction="DOC_CANCEL" onParentDocumentType="A001" onResult="SUCCESS" actionType="DOC_CREATE_REPLY" documentType="A011" sameParentDocument="true" /> 
+				
+			</triggers> 
+		</document> 
+ 
+		<!-- subprocess H_BUC_01 --> 
+ 
+		<document type="H001"> 
+			<parameters> 
+				<!-- H001 must be sent to a subset of all participants --> 
+				<!-- current BUC is multilateral --> 
+				<parameter key="hasParticipantSelection">true</parameter> <!-- default is false --> 
+				<parameter key="hasMultipleVersions">true</parameter> 
+				<parameter key="hasCancel">true</parameter> 
+				<parameter key="recreateAfterSend">true</parameter> 
+				<parameter key="allowsAttachments">true</parameter> 
+			</parameters> 
+			<triggers> 
+				<createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_CREATE_REPLY" documentType="H002" /> 
+				<createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_RECEIVE_REPLY" documentType="H002" /> 
+				<createActionTrigger onAction="DOC_SEND_PARTICIPANTS" onResult="SUCCESS" actionType="DOC_RECEIVE_REPLY" documentType="H002" /> 
+			</triggers> 
+		</document> 
+ 
+		<document type="H002"> 
+			<parameters> 
+				<!-- current BUC is multilateral --> 
+				<parameter key="hasParticipantSelection">true</parameter> <!-- default is false --> 
+				<parameter key="hasMultipleVersions">true</parameter> 
+				<parameter key="hasCancel">true</parameter> 
+				<parameter key="recreateAfterCancel">true</parameter> 
+				<parameter key="allowsAttachments">true</parameter> 
+			</parameters> 
+		</document> 
+ 
+		<!-- subprocess H_BUC_02 --> 
+ 
+		<!-- H005, H003 and H004 are available immediately (kind of multistarter) --> 
+		<!-- H006 is used as a reply to H005 --> 
+		<!-- In Bonita : H004 is not a reply to H003. We do like in Bonita --> 
+ 
+		<document type="H005"> 
+			<parameters> 
+				<parameter key="hasParticipantSelection">true</parameter> <!-- for multilateral --> 
+				<parameter key="hasMultipleVersions">true</parameter> 
+				<!-- H005 has Cancel in subprocess --> 
+				<parameter key="hasCancel">true</parameter> 
+				<parameter key="recreateAfterSend">true</parameter> 
+				<parameter key="allowsAttachments">true</parameter> 
+			</parameters> 
+			<triggers> 
+				<createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_CREATE_REPLY" documentType="H006" /> 
+				<createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_RECEIVE_REPLY" documentType="H006" /> 				
+				<createActionTrigger onAction="DOC_SEND_PARTICIPANTS" onResult="SUCCESS" actionType="DOC_RECEIVE_REPLY" documentType="H006" /> 
+ 
+			</triggers> 
+		</document> 
+ 
+		<document type="H006"> 
+			<!-- answer to all, confirmed by BA --> 
+			<parameters> 
+				<parameter key="hasMultipleVersions">true</parameter> 
+				<!-- H006 has Cancel in subprocess --> 
+				<parameter key="hasCancel">true</parameter> 
+				<parameter key="recreateAfterCancel">true</parameter> 
+				<parameter key="allowsAttachments">true</parameter> 
+			</parameters> 
+		</document> 
+ 
+		<document type="H003"> 
+			<parameters> 
+				<parameter key="hasParticipantSelection">true</parameter> <!-- for multilateral --> 
+				<parameter key="hasMultipleVersions">true</parameter> 
+				<!-- H003 has Cancel in subprocess --> 
+				<parameter key="hasCancel">true</parameter> 
+				<parameter key="recreateAfterSend">true</parameter> 
+				<parameter key="allowsAttachments">true</parameter> 
+			</parameters> 
+			<!-- <triggers> -->
+				<!-- In Bonita : H004 is not a reply to H003. We do like in Bonita --> 			
+				<!-- <createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_CREATE_REPLY" documentType="H004" /> -->
+				<!-- <createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_RECEIVE_REPLY" documentType="H004" /> -->
+				<!-- <createActionTrigger onAction="DOC_SEND_PARTICIPANTS" onResult="SUCCESS" actionType="DOC_RECEIVE_REPLY" documentType="H004" /> -->
+			<!-- </triggers> -->
+		</document> 
+ 
+		<document type="H004"> 
+			<parameters> 
+				<parameter key="hasParticipantSelection">true</parameter> <!-- for multilateral -->
+				<parameter key="recreateAfterSend">true</parameter> 				
+				<parameter key="hasMultipleVersions">true</parameter> 
+				<!-- no cancel for H004!!! --> 
+				<parameter key="allowsAttachments">true</parameter> 
+			</parameters> 
+		</document> 
+ 
+		<!-- subprocess H_BUC_05 --> 
+ 
+		<document type="H061"> 
+			<parameters> 
+				<!-- current BUC is multilateral and mayChooseParticipants=true --> 
+				<parameter key="hasParticipantSelection">true</parameter> <!-- default is false --> 
+				<parameter key="hasCancel">true</parameter> 
+				<parameter key="hasMultipleVersions">true</parameter> 
+				<parameter key="recreateAfterSend">true</parameter> 
+				<parameter key="allowsAttachments">true</parameter> 
+			</parameters> 
+			<triggers> 
+				<createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_CREATE_REPLY" documentType="H062" /> 
+				<createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_RECEIVE_REPLY" documentType="H062" /> 
+				<createActionTrigger onAction="DOC_SEND_PARTICIPANTS" onResult="SUCCESS" actionType="DOC_RECEIVE_REPLY" documentType="H062" /> 
+			</triggers> 
+		</document> 
+ 
+		<document type="H062"> 
+			<parameters> 
+				<!-- sent to all --> 
+				<parameter key="hasMultipleVersions">true</parameter> 
+				<parameter key="hasCancel">true</parameter> 
+				<parameter key="recreateAfterCancel">true</parameter> 
+				<parameter key="allowsAttachments">true</parameter> 
+			</parameters> 
+		</document> 
+ 
+		<!-- subprocess H_BUC_06 --> 
+ 
+		<document type="H065"> 
+			<parameters> 
+				<!-- hasParticipantSelection depends on the main BUC (mayChooseParticipants) --> 
+				<parameter key="hasParticipantSelection">true</parameter> 
+				<parameter key="hasCancel">true</parameter> 
+				<parameter key="hasMultipleVersions">true</parameter> 
+				<!-- next line (recreateAfterSend) approved by BA: "do like in RINA now" --> 
+				<parameter key="recreateAfterSend">true</parameter> 
+				<parameter key="allowsAttachments">true</parameter> 
+			</parameters> 
+			<triggers> 
+				<createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_CREATE_REPLY" documentType="H066" /> 
+				<createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_RECEIVE_REPLY" documentType="H066" /> 
+				<createActionTrigger onAction="DOC_SEND_PARTICIPANTS" onResult="SUCCESS" actionType="DOC_RECEIVE_REPLY" documentType="H066" /> 
+			</triggers> 
+		</document> 
+ 
+		<document type="H066"> 
+			<parameters> 
+				<!-- sent to all --> 
+				<parameter key="hasMultipleVersions">true</parameter> 
+				<parameter key="hasCancel">true</parameter> 
+				<parameter key="recreateAfterCancel">true</parameter> 
+				<parameter key="allowsAttachments">true</parameter> 
+			</parameters> 
+		</document> 
+ 
+		<!-- subprocess H_BUC_07 --> 
+ 
+		<!-- subprocess H_BUC_07 --> 
+ 
+		<document type="H070"> 
+			<parameters> 
+				<!-- current BUC is multilateral and mayChooseParticipants=true --> 
+				<parameter key="hasParticipantSelection">true</parameter> <!-- default is false --> 
+				<parameter key="hasMultipleVersions">true</parameter> 
+				<parameter key="hasCancel">true</parameter> 
+				<!-- in current BUC, mayLoopH070=true (default true) --> 
+				<!-- recreate after send is requested (mayLoopH070=true) --> 
+				<parameter key="recreateAfterSend">true</parameter> 
+				<parameter key="allowsAttachments">true</parameter> 
+			</parameters> 
+		</document> 
+ 
+		<!-- Global Close, there should be NO LOCAL CLOSE --> 
+ 
+		<!-- Note that X001 and X002 have hasBusinessValidation true (if X001 may be sent of course) --> 
+		<!-- The BUC engine will take care of X003 and X004 automatically --> 
+		<document type="X001"> 
+			<parameters> 
+				<!-- must be there if X001 may be sent, otherwise skip --> 
+				<parameter key="hasBusinessValidation">false</parameter> 
+			</parameters> 
+			<triggers> 
+				<!-- CLOSE ALLOWED FROM CO? YES --> 
+				<!-- REOPEN ALLOWED FROM CO? YES --> 
+				<!-- CLOSE ALLOWED FROM CP? NO --> 
+				<!-- REOPEN ALLOWED FROM CP? YES --> 
+				<createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_RECEIVE_REPLY" documentType="X002" /> 
+				<createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_CREATE_REPLY" documentType="X002" /> 
+			</triggers> 
+		</document> 
+ 
+		<document type="X002"> 
+			<parameters> 
+				<parameter key="hasBusinessValidation">true</parameter> 
+			</parameters> 
+		</document> 
+ 
+		<!-- Add Participant custom SEND management --> 
+ 
+		<document type="X005"> 
+			<parameters> 
+				<parameter key="hasBusinessValidation">true</parameter> 
+				<parameter key="recreateAfterSend">true</parameter> 
+			</parameters> 
+		</document> 
+ 
+		<!-- Forward Case --> 
+ 
+		<document type="X007"> 
+			<parameters> 
+				<parameter key="hasBusinessValidation">true</parameter> 
+			</parameters> 		
+			<triggers> 
+				<createActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="CASE_ARCHIVE" /> 
+			</triggers> 
+		</document> 
+ 
+		<!-- Reminder --> 
+ 
+		<document type="X009"> 
+			<parameters> 
+				<parameter key="hasParticipantSelection">true</parameter> 
+				<parameter key="recreateAfterSend">true</parameter> 
+			</parameters> 
+			<triggers> 
+				<createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_CREATE_REPLY" documentType="X010" /> 
+				<createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_RECEIVE_REPLY" documentType="X010" /> 
+				<createActionTrigger onAction="DOC_SEND_PARTICIPANTS" onResult="SUCCESS" actionType="DOC_RECEIVE_REPLY" documentType="X010" /> 
+			</triggers> 
+		</document> 
+ 
+		<document type="X010">  
+			<!-- as per the BUC, X010 is sent only to the triggering participant, so isML = false --> 
+			<!-- there was a mistake in Bonita : toSenderOnly was false --> 
+			<!-- X010 is sent to all (like in Bonita) - could be corrected later to stick to reqs --> 
+		</document> 
+ 
+	</documents> 
+</case> 

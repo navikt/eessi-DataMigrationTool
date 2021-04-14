@@ -1,0 +1,25 @@
+[
+  {
+    "esPath": "code",
+    "esType": "string",
+    "sqlPath": "vocabulary.code",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "comment": "This field is ignored due to its type, being either String or Map, it cannot be validated!",
+    "esPath": "value",
+    "esType": "object",
+    "ignorePath": true,
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "comment": "enum of type EVocabularyType & references VocabularyType by type",
+    "esPath": "vocabulary",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "vocabularyType.type",
+    "sqlType": "TEXT",
+    "value": "enum(EVocabularyType)"
+  }
+]

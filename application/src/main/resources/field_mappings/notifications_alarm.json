@@ -1,0 +1,156 @@
+[
+  {
+    "comment": "do not add reference validation",
+    "esPath": "caseId",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "notificationAlarm.rinaCase.id",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "creationDate",
+    "esType": "date",
+    "required": true,
+    "sqlPath": "notificationAlarm.audit.createdAt",
+    "sqlType": "TIMESTAMP WITH TIME ZONE"
+  },
+  {
+    "esPath": "creator.id",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "notificationAlarm.audit.createdBy",
+    "sqlType": "VARCHAR(255)",
+    "value": "reference(identity_v1,user)",
+    "importIgnore": true
+  },
+  {
+    "esPath": "creator.name",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "VARCHAR(255)",
+    "importIgnore": true
+  },
+  {
+    "esPath": "creator.organisation.acronym",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "VARCHAR(255)",
+    "importIgnore": true
+  },
+  {
+    "esPath": "creator.organisation.activeSince",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "TIMESTAMP WITH TIME ZONE",
+    "importIgnore": true
+  },
+  {
+    "esPath": "creator.organisation.address.country",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "VARCHAR(255)",
+    "importIgnore": true
+  },
+  {
+    "esPath": "creator.organisation.address.town",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "VARCHAR(255)",
+    "importIgnore": true
+  },
+  {
+    "esPath": "creator.organisation.address.street",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "VARCHAR(255)",
+    "importIgnore": true
+  },
+  {
+    "esPath": "creator.organisation.address.postalCode",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "VARCHAR(255)",
+    "importIgnore": true
+  },
+  {
+    "esPath": "creator.organisation.address.region",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "VARCHAR(255)",
+    "importIgnore": true
+  },
+  {
+    "esPath": "creator.organisation.countryCode",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "TEXT",
+    "value": "enum(ECountryCode)",
+    "importIgnore": true
+  },
+  {
+    "esPath": "creator.organisation.registryNumber",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "TEXT",
+    "value": "enum(ECountryCode)",
+    "importIgnore": true
+  },
+  {
+    "esPath": "creator.organisation.contactMethods",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "TEXT",
+    "value": "enum(ECountryCode)",
+    "importIgnore": true
+  },
+  {
+    "esPath": "creator.organisation.location",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "TEXT",
+    "value": "enum(ECountryCode)",
+    "importIgnore": true
+  },
+  {
+    "esPath": "creator.organisation.id",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "VARCHAR(50)",
+    "value": "reference(entities,organisation)",
+    "importIgnore": true
+  },
+  {
+    "esPath": "creator.organisation.name",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "VARCHAR(255)",
+    "importIgnore": true
+  },
+  {
+    "esPath": "creator.type",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "VARCHAR(4)",
+    "value": "regex(User)",
+    "importIgnore": true
+  },
+  {
+    "esPath": "date",
+    "esType": "date",
+    "sqlPath": "notificationAlarm.date",
+    "sqlType": "TIMESTAMP WITH TIME ZONE"
+  },
+  {
+    "esPath": "description",
+    "esType": "string",
+    "sqlPath": "notificationAlarm.description",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "id",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "notificationAlarm.id",
+    "sqlType": "VARCHAR(255)"
+  }
+]

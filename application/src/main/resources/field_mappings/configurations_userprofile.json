@@ -1,0 +1,117 @@
+[
+  {
+    "esPath": "alarmSettings.autoSetDays",
+    "esType": "long",
+    "sqlPath": "userProfile.alarmAutoSetDays",
+    "sqlType": "INT4"
+  },
+  {
+    "esPath": "alarmSettings.autoSetOnSend",
+    "esType": "boolean",
+    "sqlPath": "userProfile.alarmAutoSetOnSend",
+    "sqlType": "BOOL"
+  },
+  {
+    "esPath": "caseClassicView.groupByMonth",
+    "esType": "boolean",
+    "sqlPath": "userProfile.classicGroupByMonth",
+    "sqlType": "BOOL"
+  },
+  {
+    "esPath": "caseClassicView.showPreview",
+    "esType": "boolean",
+    "sqlPath": "userProfile.classicShowPreview",
+    "sqlType": "BOOL"
+  },
+  {
+    "esPath": "caseTimelineView.displayMode",
+    "esType": "string",
+    "sqlPath": "userProfile.timelineDisplayMode",
+    "sqlType": "VARCHAR(20)"
+  },
+  {
+    "esPath": "caseTimelineView.displayThumbnails",
+    "esType": "boolean",
+    "sqlPath": "userProfile.timelineDisplayThumbnails",
+    "sqlType": "BOOL"
+  },
+  {
+    "comment": "Reference to ProcessDefinition by id",
+    "esPath": "currentProcessDefinition",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "userProfile.currentProcessDef",
+    "sqlType": "VARCHAR(255)",
+    "value": "reference(configurations,processdefinition)"
+  },
+  {
+    "esPath": "documents.displayMode",
+    "esType": "string",
+    "sqlPath": "userProfile.documentDsplayMode",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "documents.showFlags",
+    "esType": "boolean",
+    "sqlPath": "userProfile.documentShowFlags",
+    "sqlType": "BOOL"
+  },
+  {
+    "esPath": "documents.sortBy",
+    "esType": "string",
+    "sqlPath": "userProfile.documentSortby",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "filterActionType",
+    "esType": "string",
+    "sqlPath": "userProfile.filterActionType",
+    "sqlType": "VARCHAR(10)"
+  },
+  {
+    "esPath": "localizationSettings.currency",
+    "esType": "string",
+    "sqlPath": "userProfile.localeCurrency",
+    "sqlType": "VARCHAR(3)"
+  },
+  {
+    "esPath": "localizationSettings.dateFormat",
+    "esType": "string",
+    "sqlPath": "userProfile.localeDateFormat",
+    "sqlType": "VARCHAR(20)"
+  },
+  {
+    "comment": "enum of type ELanguage",
+    "esPath": "localizationSettings.language",
+    "esType": "string",
+    "sqlPath": "userProfile.localeLang",
+    "sqlType": "TEXT",
+    "value": "enum(ELanguage)"
+  },
+  {
+    "esPath": "localizationSettings.numberFormat",
+    "esType": "string",
+    "sqlPath": "userProfile.localeNumberFormat",
+    "sqlType": "VARCHAR(20)"
+  },
+  {
+    "esPath": "localizationSettings.timeFormat",
+    "esType": "string",
+    "sqlPath": "userProfile.localeTimeFormat",
+    "sqlType": "VARCHAR(20)"
+  },
+  {
+    "esPath": "localizationSettings.timeZone",
+    "esType": "string",
+    "sqlPath": "userProfile.localeTimezone",
+    "sqlType": "VARCHAR(3)"
+  },
+  {
+    "comment": "References IamUser by username",
+    "esPath": "userName",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "userProfile.userName & userProfile.iamUser",
+    "sqlType": "VARCHAR(255)"
+  }
+]

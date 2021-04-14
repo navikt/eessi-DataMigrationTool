@@ -1,0 +1,186 @@
+[
+  {
+    "esPath": "appRole",
+    "esType": "string",
+    "sqlPath": "assignmentPolicy.applicationRole",
+    "sqlType": "TEXT",
+    "value": "enum(EApplicationRole)"
+  },
+  {
+    "esPath": "color",
+    "esType": "string",
+    "sqlPath": "assignmentPolicy.color",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "description",
+    "esType": "string",
+    "sqlPath": "assignmentPolicy.description",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "id",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "assignmentPolicy.id",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "institutionId",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "assignmentPolicy.tenant.organisation.id",
+    "sqlType": "VARCHAR(255)",
+    "value": "reference(entities,organisation)"
+  },
+  {
+    "esPath": "name",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "assignmentPolicy.name",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "policies",
+    "esType": "string",
+    "sqlPath": "assignmentPolicy.childAssignmentPolicies.id",
+    "sqlType": "VARCHAR(255)",
+    "value": "reference(configurations,assignmentpolicy)"
+  },
+  {
+    "esPath": "rules.actors",
+    "esType": "string",
+    "sqlPath": "assignmentPolicy.assignmentPolicyRules.roles.name",
+    "sqlType": "TEXT",
+    "value": "enum(ERole)"
+  },
+  {
+    "esPath": "rules.condition.appRole",
+    "esType": "string",
+    "sqlPath": "assignmentPolicy.assignmentPolicyRules.applicationRole",
+    "sqlType": "TEXT",
+    "value": "enum(EApplicationRole)"
+  },
+  {
+    "esPath": "rules.condition.creatorGroup.id",
+    "esType": "string",
+    "sqlPath": "assignmentPolicy.assignmentPolicyRules.(iamGroups|iamUsers).id",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "rules.condition.creatorGroup.name",
+    "esType": "string",
+    "sqlPath": "assignmentPolicy.assignmentPolicyRules.(iamGroups|iamUsers).name",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "rules.condition.creatorGroup.type",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "TEXT",
+    "value": "enum(EUserGroupType)"
+  },
+  {
+    "esPath": "rules.condition.ownerCountry",
+    "esType": "string",
+    "sqlPath": "assignmentPolicy.assignmentPolicyRules.ruleCountries.countryCode",
+    "sqlType": "TEXT",
+    "value": "enum(ECountryCode)"
+  },
+  {
+    "esPath": "rules.condition.ownerOrganization.acronym",
+    "esType": "string",
+    "sqlPath": "assignmentPolicy.assignmentPolicyRules.organisations.acronym",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "rules.condition.ownerOrganization.activeSince",
+    "esType": "string",
+    "sqlPath": "assignmentPolicy.assignmentPolicyRules.organisations.activeSince",
+    "sqlType": "TIMESTAMP WITH TIME ZONE"
+  },
+  {
+    "esPath": "rules.condition.ownerOrganization.address.country",
+    "esType": "string",
+    "sqlPath": "assignmentPolicy.assignmentPolicyRules.organisations.addressCountry",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "rules.condition.ownerOrganization.countryCode",
+    "esType": "string",
+    "sqlPath": "assignmentPolicy.assignmentPolicyRules.organisations.countryCode",
+    "sqlType": "TEXT",
+    "value": "enum(ECountryCode)"
+  },
+  {
+    "esPath": "rules.condition.ownerOrganization.id",
+    "esType": "string",
+    "sqlPath": "assignmentPolicy.assignmentPolicyRules.organisations.id",
+    "sqlType": "VARCHAR(50)",
+    "value": "reference(entities,organisation)"
+  },
+  {
+    "esPath": "rules.condition.ownerOrganization.name",
+    "esType": "string",
+    "sqlPath": "assignmentPolicy.assignmentPolicyRules.organisations.name",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "rules.condition.process",
+    "esType": "string",
+    "sqlPath": "assignmentPolicy.assignmentPolicyRules.processDefs.id",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "rules.condition.sector",
+    "esType": "string",
+    "sqlPath": "assignmentPolicy.assignmentPolicyRules.sectors.name",
+    "sqlType": "TEXT",
+    "value": "enum(ESector)"
+  },
+  {
+    "esPath": "rules.condition.subjectAddress",
+    "esType": "string",
+    "sqlPath": "assignmentPolicy.assignmentPolicyRules.subjectAddress",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "rules.id",
+    "esType": "string",
+    "sqlPath": "assignmentPolicy.assignmentPolicyRules.id",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "rules.userGroups.id",
+    "esType": "string",
+    "sqlPath": "assignmentPolicy.assignmentPolicyRules.(iamGroups|iamUsers).id",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "rules.userGroups.name",
+    "esType": "string",
+    "sqlPath": "assignmentPolicy.assignmentPolicyRules.(iamGroups|iamUsers).name",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "rules.userGroups.type",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "TEXT",
+    "value": "enum(EUserGroupType)"
+  },
+  {
+    "esPath": "targets",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "type",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "assignmentPolicy.type",
+    "sqlType": "TEXT",
+    "value": "enum(EPolicyType)"
+  }
+]

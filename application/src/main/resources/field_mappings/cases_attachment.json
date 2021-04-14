@@ -1,0 +1,134 @@
+[
+  {
+    "comment": "do not add reference validation",
+    "esPath": "caseId",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "caseAttachment.rinaCase.id",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "creationDate",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "caseAttachment.audit.createdAt",
+    "sqlType": "TIMESTAMP WITH TIME ZONE"
+  },
+  {
+    "esPath": "creator.id",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "iamUser.id",
+    "sqlType": "VARCHAR(255)",
+    "value": "reference(identity_v1,user)"
+  },
+  {
+    "esPath": "creator.name",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "caseAttachment.audit.createdBy",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "creator.organisation.acronym",
+    "esType": "string",
+    "sqlPath": "(iamUser|iamGroup).tenant.organisation.acronym",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "creator.organisation.activeSince",
+    "esType": "date",
+    "sqlPath": "(iamUser|iamGroup).tenant.organisation.activeSince",
+    "sqlType": "TIMESTAMP WITH TIME ZONE"
+  },
+  {
+    "esPath": "creator.organisation.address.country",
+    "esType": "string",
+    "sqlPath": "(iamUser|iamGroup).tenant.organisation.addressCountry",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "creator.organisation.countryCode",
+    "esType": "string",
+    "sqlPath": "(iamUser|iamGroup).tenant.organisation.countryCode",
+    "sqlType": "TEXT",
+    "value": "enum(ECountryCode)"
+  },
+  {
+    "esPath": "creator.organisation.id",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "(iamUser|iamGroup).tenant.organisation.id",
+    "sqlType": "VARCHAR(50)",
+    "value": "reference(entities,organisation)"
+  },
+  {
+    "esPath": "creator.organisation.name",
+    "esType": "string",
+    "sqlPath": "(iamUser|iamGroup).tenant.organisation.name",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "comment": "should be user",
+    "esPath": "creator.type",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "",
+    "sqlType": "VARCHAR(4)",
+    "value": "regex(User)"
+  },
+  {
+    "esPath": "fileName",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "caseAttachment.filename",
+    "sqlType": "VARCHAR(1024)"
+  },
+  {
+    "esPath": "id",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "caseAttachment.id",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "internalId",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "lastUpdate",
+    "esType": "date",
+    "required": true,
+    "sqlPath": "caseAttachment.audit.updatedAt",
+    "sqlType": "TIMESTAMP WITH TIME ZONE"
+  },
+  {
+    "esPath": "medical",
+    "esType": "boolean",
+    "sqlPath": "caseAttachment.isMedical",
+    "sqlType": "BOOL"
+  },
+  {
+    "esPath": "mimeType",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "caseAttachment.mimeType",
+    "sqlType": "TEXT",
+    "value": "enum(EMimeType)"
+  },
+  {
+    "esPath": "name",
+    "esType": "string",
+    "sqlPath": "caseAttachment.name",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "versions",
+    "esType": "object",
+    "ignorePath": true,
+    "sqlPath": "",
+    "sqlType": ""
+  }
+]

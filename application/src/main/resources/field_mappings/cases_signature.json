@@ -1,0 +1,49 @@
+[
+  {
+    "comment": "do not add reference validation",
+    "esPath": "caseId",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "signature.userMessage.documentConversation.document.rinaCase.id",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "documentId",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "internalId",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "messageId",
+    "required": true,
+    "sqlPath": "signature.userMessage.id",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "sedSignature",
+    "esType": "object",
+    "ignorePath": true,
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "targetSedId",
+    "required": true,
+    "sqlPath": "signature.userMessage.documentConversation.document.id",
+    "sqlType": "VARCHAR(255)",
+    "value": "reference(cases,document,caseId_targetSedId)"
+  },
+  {
+    "esPath": "versionId",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "signature.userMessage.documentConversation.documentBversion.version",
+    "sqlType": "INT4"
+  }
+]

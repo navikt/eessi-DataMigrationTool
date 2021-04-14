@@ -1,0 +1,11 @@
+ALTER SEQUENCE sector_seq RESTART WITH 11;
+INSERT INTO sector(sid, name) VALUES (1, 'PENSION');
+INSERT INTO sector(sid, name) VALUES (2, 'AWOD');
+INSERT INTO sector(sid, name) VALUES (3, 'FB');
+INSERT INTO sector(sid, name) VALUES (4, 'HORIZONTAL');
+INSERT INTO sector(sid, name) VALUES (5, 'MISCELLANOUS');
+INSERT INTO sector(sid, name) VALUES (6, 'RECOVERY');
+INSERT INTO sector(sid, name) VALUES (7, 'UNEMPLOYMENT');
+INSERT INTO sector(sid, name) VALUES (8, 'SICKNESS');
+INSERT INTO sector(sid, name) VALUES (9, 'LA');
+INSERT INTO sector(sid, name) VALUES (10, 'SYS');

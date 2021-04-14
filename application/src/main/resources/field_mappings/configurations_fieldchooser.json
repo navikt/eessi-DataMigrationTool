@@ -1,0 +1,51 @@
+[
+  {
+    "esPath": "fields.id",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "fields.name",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "fields.show",
+    "esType": "boolean",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "fields.sort",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "fields.type",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "internalId",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "esPath": "processDefinitionId",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "userName",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": ""
+  }
+]

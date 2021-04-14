@@ -1,0 +1,54 @@
+[
+  {
+    "comment": "References a checkDefinition by id",
+    "esPath": "checkDefinitionId",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "checkInstance.checkDefinition.id",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "endDate",
+    "esType": "string",
+    "sqlPath": "checkInstance.endDate",
+    "sqlType": "TIMESTAMP WITH TIME ZONE"
+  },
+  {
+    "esPath": "id",
+    "esType": "string",
+    "sqlPath": "checkInstance.id",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "message",
+    "esType": "string",
+    "sqlPath": "checkInstance.message",
+    "sqlType": "VARCHAR(4000)"
+  },
+  {
+    "esPath": "name",
+    "esType": "string",
+    "sqlPath": "checkInstance.name",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "comment": "References a checkBucket by id",
+    "esPath": "parentCheckBucketId",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "checkInstance.parentCheckBucket.id",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "startDate",
+    "esType": "string",
+    "sqlPath": "checkInstance.startDate",
+    "sqlType": "TIMESTAMP WITH TIME ZONE"
+  },
+  {
+    "esPath": "status",
+    "esType": "string",
+    "sqlPath": "checkInstance.status",
+    "sqlType": "VARCHAR(255)"
+  }
+]

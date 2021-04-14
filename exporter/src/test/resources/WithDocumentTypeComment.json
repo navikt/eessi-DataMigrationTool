@@ -1,0 +1,33 @@
+{
+  "index": "identity_v1",
+  "type": "comment",
+  "objectId": "AXMT6_wm-JrcHd85NX5x",
+  "object": {
+    "status" : "empty",
+    "lastName": "supervisorfr15",
+    "salt": "Rl9f5sXvQgETxQ==",
+    "institutionId": "FR:FRNA15",
+    "groups": [
+      {
+        "role": "SUPERVISOR",
+        "groupId": "AXMT7C-s-JrcHd85NX6Q"
+      },
+      {
+        "role": "AUTHORIZED_CLERK",
+        "groupId": "AXMT7C-s-JrcHd85NX6Q"
+      }
+    ],
+    "creationDate": "2020-07-03T09:04:59.430+0000",
+    "firstName": "supervisorfr15",
+    "password": "4SxbkJRnp174wVnngGGEFMcXLkRoWW+ZWjTeUO2kB6fkViV84vIriyNgO/2GB2Tw37W8YaGlbUe6W5SIN1xgdQ==",
+    "phoneNumber": "",
+    "isDeleted": false,
+    "keystoreAlias": "",
+    "isEnabled": true,
+    "isLocked": false,
+    "lastUpdate": "2020-07-03T09:06:46.445+0000",
+    "isAdministrator": false,
+    "email": "x@y.z",
+    "username": "supervisorfr15"
+  }
+}

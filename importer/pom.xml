@@ -1,0 +1,112 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>eu.ec.dgempl.eessi</groupId>
+        <artifactId>ES2SQL_data_migration</artifactId>
+        <version>2.0.1</version>
+        <relativePath>../</relativePath>
+    </parent>
+
+    <artifactId>importer</artifactId>
+    <version>2.0.1</version>
+
+    <properties>
+        <main.basedir>${project.basedir}</main.basedir>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>eu.ec.dgempl.eessi.rina.buc</groupId>
+            <artifactId>buc-engine-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>eu.ec.dgempl.eessi</groupId>
+            <artifactId>common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>eu.ec.dgempl.eessi</groupId>
+            <artifactId>eessi-rina-client-repo</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>eu.ec.dgempl.eessi</groupId>
+            <artifactId>eessi-rina-services-util</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>eu.ec.dgempl.eessi</groupId>
+            <artifactId>eessi-rina-model-dto</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>eu.ec.dgempl.eessi</groupId>
+            <artifactId>eessi-rina-apclient-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ma.glasnost.orika</groupId>
+            <artifactId>orika-core</artifactId>
+        </dependency>
+
+        <!-- Testing -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-api-mockito2</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <profiles>
+
+        <!-- Development profile, each developer is responsible for this configuration
+            properties -->
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <build.profile.id>dev</build.profile.id>
+            </properties>
+        </profile>
+
+        <!-- Release profile, when building the application for release -->
+        <profile>
+            <id>release</id>
+            <properties>
+                <build.profile.id>release</build.profile.id>
+            </properties>
+        </profile>
+
+    </profiles>
+
+    <build>
+
+        <filters>
+            <filter>${main.basedir}/profiles/${build.profile.id}/config.properties</filter>
+        </filters>
+
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+                <filtering>true</filtering>
+            </testResource>
+        </testResources>
+
+    </build>
+
+</project>

@@ -1,0 +1,111 @@
+<?xml version="1.0"?>
+<case name="S_BUC_23" version="${buc.model.version}" role="CP"
+      xmlns="http://ec.europa.eu/eessi/rina/buc">
+
+    <context>
+        <parameters>
+            <!-- isML (default is true; the current BUC is isML=false) -->
+            <parameter key="isML">false</parameter> <!-- default is true -->
+            <!-- removeMeOnly is considered in CP (default is false; in the current BUC, CP has removeMeOnly=false) -->
+        </parameters>
+    </context>
+
+    <actions>
+        <!-- empty -->
+    </actions>
+
+    <documents>
+        <document type="S051">
+            <parameters>
+                <parameter key="isStarter">true</parameter> <!-- default is false -->
+                <parameter key="isBulk">true</parameter> <!-- default is false -->
+            </parameters>
+            <triggers>
+
+                <!-- ADMINISTRATIVE SUBPROCESSES -->
+
+                <!-- for starter only, local close -->
+                <createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS"
+                                     actionType="CASE_LOCAL_CLOSE" documentType="ANY"/>
+
+                <!-- for starter only, business exception -->
+                <createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS"
+                                     actionType="DOC_RECEIVE" documentType="X050"/>
+
+                <!-- for starter only, change participants -->
+                <createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS"
+                                     actionType="DOC_RECEIVE" documentType="X100"/>
+
+                <!-- HORIZONTAL SUBPROCESSES -->
+
+                <!-- MAIN FLOW ENCODING -->
+
+                <!-- for starter only, receivers -->
+                <createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS"
+                                     actionType="DOC_RECEIVE" documentType="S054"/>
+                <!-- end receivers -->
+
+                <createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_CREATE_REPLY"
+                                     documentType="S053A"/>
+                <createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_CREATE_REPLY"
+                                     documentType="S053C"/>
+
+            </triggers>
+        </document>
+
+        <document type="S054">
+            <parameters>
+                <!-- Check hasParticipantSelection - no need if isML(context)=false (in current BUC, isML(context)=false) -->
+                <parameter key="recreateAfterSend">true</parameter> <!-- default is false -->
+                <parameter key="isBulk">true</parameter> <!-- default is false -->
+            </parameters>
+        </document>
+
+        <document type="S053A">
+            <parameters>
+                <parameter key="isBulk">true</parameter> <!-- default is false -->
+            </parameters>
+            <triggers>
+                <!-- onCondition (isOverpayment) -->
+                <createActionTrigger onAction="DOC_SEND" onResult="SUCCESS"
+                                     onCondition="cp_s_buc_23_IS_OVERPAYMENT_FROM_S053A" actionType="DOC_CREATE"
+                                     documentType="S054"/>
+            </triggers>
+        </document>
+
+        <document type="S053C">
+            <parameters>
+                <parameter key="allowsAttachments">true</parameter> <!-- default is false -->
+                <parameter key="isBulk">true</parameter> <!-- default is false -->
+            </parameters>
+            <triggers>
+                <createActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_RECEIVE_REPLY"
+                                     documentType="S053R"/>
+            </triggers>
+        </document>
+
+        <document type="S053R">
+            <parameters>
+                <parameter key="isBulk">true</parameter> <!-- default is false -->
+            </parameters>
+            <triggers>
+				<!-- CUSTOM TRIGGER NEEDED -->
+				<!-- on DOC_RECEIVE of S053R:
+						from S053R, get parent S053C (=parentDocumentId)
+						from S053C, get parent S051 
+						from S051, create REPLY SS053C (parent of S053C = S051) 
+				-->
+				
+				<!-- Actually the parent of S053R is S053C. The custom trigger is built to be activated by the following: (ReceiveS053RCpTriggerHandler.java) -->			
+                <createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" onParentDocumentType="S053R"
+                                     actionType="DOC_CREATE" documentType="S053C"/>
+									 
+				<!-- onCondition (isOverpayment) -->
+                <createActionTrigger onAction="DOC_RECEIVE" onParentDocumentType="S053C" onResult="SUCCESS" onCondition="cp_s_buc_23_IS_OVERPAYMENT_FROM_S053R"
+									 actionType="DOC_CREATE" documentType="S054"/>	
+									 
+            </triggers>
+        </document>
+
+    </documents>
+</case> 

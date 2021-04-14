@@ -1,0 +1,24 @@
+{
+  "properties": [
+    {
+      "name": "reports.path",
+      "type": "java.lang.String",
+      "description": "Description for reports.path."
+    },
+    {
+      "name": "data.path",
+      "type": "java.lang.String",
+      "description": "Description for data.path."
+    },
+    {
+      "name": "schema.path",
+      "type": "java.lang.String",
+      "description": "Description for schema.path."
+    },
+    {
+      "name": "sql.scripts.path",
+      "type": "java.lang.String",
+      "description": "Description for sql.scripts.path."
+    }
+  ]
+}

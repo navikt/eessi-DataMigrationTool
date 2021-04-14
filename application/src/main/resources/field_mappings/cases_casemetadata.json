@@ -1,0 +1,153 @@
+[
+  {
+    "esPath": "caseName",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "esPath": "diagramVersions",
+    "esType": "object",
+    "ignorePath": true,
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "hasValidStarter",
+    "esType": "boolean",
+    "sqlPath": "rinaCase.hasValidStarter",
+    "sqlType": "BOOL"
+  },
+  {
+    "esPath": "id",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "rinaCase.id",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "isMultiStarter",
+    "esType": "boolean",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "esPath": "isStarterSent",
+    "esType": "boolean",
+    "sqlPath": "rinaCase.isStarterSent",
+    "sqlType": "BOOL"
+  },
+  {
+    "esPath": "messages",
+    "esType": "object",
+    "ignorePath": true,
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "participants.organisation.acronym",
+    "esType": "string",
+    "sqlPath": "rinaCase.caseParticipants.organisation.acronym",
+    "sqlType": "VARCHAR(255)",
+    "importIgnore": true
+  },
+  {
+    "esPath": "participants.organisation.activeSince",
+    "esType": "string",
+    "sqlPath": "rinaCase.caseParticipants.organisation.activeSince",
+    "sqlType": "TIMESTAMP WITH TIME ZONE",
+    "importIgnore": true
+  },
+  {
+    "esPath": "participants.organisation.address.country",
+    "esType": "string",
+    "sqlPath": "rinaCase.caseParticipants.organisation.addressCountry",
+    "sqlType": "VARCHAR(255)",
+    "importIgnore": true
+  },
+  {
+    "esPath": "participants.organisation.countryCode",
+    "esType": "string",
+    "sqlPath": "rinaCase.caseParticipants.organisation.countryCode",
+    "sqlType": "TEXT",
+    "value": "enum(ECountryCode)",
+    "importIgnore": true
+  },
+  {
+    "esPath": "participants.organisation.id",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "rinaCase.caseParticipants.organisation.id",
+    "sqlType": "VARCHAR(50)",
+    "value": "reference(entities,organisation)",
+    "importIgnore": true
+  },
+  {
+    "esPath": "participants.organisation.location",
+    "esType": "geo_point",
+    "sqlPath": "rinaCase.caseParticipants.organisation.location",
+    "sqlType": "VARCHAR(255)",
+    "importIgnore": true
+  },
+  {
+    "esPath": "participants.organisation.name",
+    "esType": "string",
+    "sqlPath": "rinaCase.caseParticipants.organisation.name",
+    "sqlType": "VARCHAR(255)",
+    "importIgnore": true
+  },
+  {
+    "esPath": "participants.role",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "rinaCase.caseParticipants.eApplicationRole",
+    "sqlType": "TEXT",
+    "value": "enum(EApplicationRole)",
+    "importIgnore": true
+  },
+  {
+    "esPath": "preFill",
+    "esType": "object",
+    "ignorePath": true,
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "processDefinitionName",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "split into rinaCase.applicationRole + rinaCase.ProcessDefVersion.processDef.name + rinaCase.ProcessDefVersion.businessVersion",
+    "sqlType": "VARCHAR(269)",
+    "value": "regex((PO|CP)_[A-Z]{1,3}_BUC_[0-9]{1,2}\\w?_v4\\.[012])",
+    "importIgnore": true
+  },
+  {
+    "esPath": "removeOnlyMe",
+    "esType": "boolean",
+    "sqlPath": "rinaCase.removeMeOnly",
+    "sqlType": "BOOL"
+  },
+  {
+    "esPath": "sendersP12000",
+    "esType": "object",
+    "ignorePath": true,
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "starterType",
+    "esType": "string",
+    "sqlPath": "rinaCase.starterDocumentType.type",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "comment": "this is the list of tasks that have status='suspended', this is handled when importing cases_taskmetadata",
+    "esPath": "suspendedTasks",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  }
+]

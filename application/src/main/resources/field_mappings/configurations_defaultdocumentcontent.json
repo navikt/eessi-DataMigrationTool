@@ -1,0 +1,15 @@
+[
+  {
+    "esPath": "content",
+    "esType": "object",
+    "ignorePath": true,
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "documentType",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": ""
+  }
+]

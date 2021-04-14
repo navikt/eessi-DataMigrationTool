@@ -1,0 +1,21 @@
+[
+  {
+    "esPath": "checkInstanceIds",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "esPath": "id",
+    "esType": "string",
+    "sqlPath": "checkBucket.id",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "startDate",
+    "esType": "string",
+    "sqlPath": "checkBucket.startDate",
+    "sqlType": "TIMESTAMP WITH TIME ZONE"
+  }
+]

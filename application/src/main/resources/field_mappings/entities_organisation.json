@@ -1,0 +1,196 @@
+[
+  {
+    "esPath": "accessPoint.accessPointIp",
+    "esType": "string",
+    "sqlPath": "organisation.apIp",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "accessPoint.accessPointPort",
+    "esType": "string",
+    "sqlPath": "organisation.apPort",
+    "sqlType": "INT4"
+  },
+  {
+    "esPath": "accessPoint.channel",
+    "esType": "string",
+    "sqlPath": "organisation.apChannel",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "accessPoint.countryCode",
+    "esType": "string",
+    "sqlPath": "organisation.apCountryCode",
+    "sqlType": "TEXT",
+    "value": "enum(ECountryCode)"
+  },
+  {
+    "esPath": "accessPoint.id",
+    "esType": "string",
+    "sqlPath": "organisation.apId",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "accessPoint.inboxService",
+    "esType": "string",
+    "sqlPath": "organisation.apInboxService",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "accessPoint.name",
+    "esType": "string",
+    "sqlPath": "organisation.apName",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "accessPoint.outboxService",
+    "esType": "string",
+    "sqlPath": "organisation.apOutboxService",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "accessPoint.protocol",
+    "esType": "string",
+    "sqlPath": "organisation.apProtocol",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "accessPoint.technicalChannel",
+    "esType": "string",
+    "sqlPath": "organisation.apTechnicalChannel",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "accessPoint.technicalInboxService",
+    "esType": "string",
+    "sqlPath": "organisation.apTechnicalInboxService",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "accessPoint.technicalOutboxService",
+    "esType": "string",
+    "sqlPath": "organisation.apTechnicalOutboxService",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "accessPoint.technicalProtocol",
+    "esType": "string",
+    "sqlPath": "organisation.apTechnicalProtocol",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "acronym",
+    "esType": "string",
+    "sqlPath": "organisation.acronym",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "activeSince",
+    "esType": "string",
+    "sqlPath": "organisation.activeSince",
+    "sqlType": "TIMESTAMP WITH TIME ZONE"
+  },
+  {
+    "esPath": "address.country",
+    "esType": "string",
+    "sqlPath": "organisation.addressCountry",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "address.postalCode",
+    "sqlPath": "organisation.addressPostalCode",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "address.region",
+    "sqlPath": "organisation.addressRegion",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "address.street",
+    "sqlPath": "organisation.addressStreet",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "address.town",
+    "sqlPath": "organisation.addressTown",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "assignedBUCs.applicationRole",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "organisation.assignedBUCs.applicationRole",
+    "sqlType": "TEXT",
+    "value": "enum(EApplicationRole)"
+  },
+  {
+    "esPath": "assignedBUCs.bucType",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "organisation.assignedBUCs.processDef.id",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "assignedBUCs.eessiready",
+    "esType": "boolean",
+    "sqlPath": "organisation.assignedBUCs.isEessiReady",
+    "sqlType": "BOOL"
+  },
+  {
+    "esPath": "assignedBUCs.id",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "assignedBUCs.isEESSIReady",
+    "esType": "boolean",
+    "sqlPath": "organisation.assignedBUCs.isEessiReady",
+    "sqlType": "BOOL"
+  },
+  {
+    "esPath": "assignedBUCs.validityEndDate",
+    "esType": "date",
+    "sqlPath": "organisation.assignedBUCs.validityEndDate",
+    "sqlType": "TIMESTAMP WITH TIME ZONE"
+  },
+  {
+    "esPath": "assignedBUCs.validityStartDate",
+    "esType": "date",
+    "sqlPath": "organisation.assignedBUCs.validityStartDate",
+    "sqlType": "TIMESTAMP WITH TIME ZONE"
+  },
+  {
+    "esPath": "countryCode",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "organisation.countryCode",
+    "sqlType": "TEXT",
+    "value": "enum(ECountryCode)"
+  },
+  {
+    "esPath": "id",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "organisation.id",
+    "sqlType": "VARCHAR(50)"
+  },
+  {
+    "esPath": "location",
+    "esType": "geo_point",
+    "sqlPath": "organisation.location",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "name",
+    "esType": "string",
+    "sqlPath": "organisation.name",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "registryNumber",
+    "sqlPath": "organisation.registryNumber",
+    "sqlType": "VARCHAR(255)"
+  }
+]

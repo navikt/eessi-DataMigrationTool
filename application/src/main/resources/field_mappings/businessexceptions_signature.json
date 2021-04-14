@@ -1,0 +1,38 @@
+[
+  {
+    "esPath": "messageId",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "pendingSignature.id",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "sedSignature",
+    "esType": "object",
+    "ignorePath": true,
+    "sqlPath": "pendingSignature.sedSignature",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "esPath": "targetSedId",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "pendingSignature.targetSedId",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "versionId",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "esPath": "_id",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  }
+]

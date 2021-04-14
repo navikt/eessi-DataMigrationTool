@@ -1,0 +1,338 @@
+<?xml version="1.0"?> 
+<case name="UB_BUC_04" version="${buc.model.version}" role="CP" xmlns="http://ec.europa.eu/eessi/rina/buc"> 
+
+	<context>
+		<parameters>
+			<parameter key="isML">false</parameter>
+		</parameters>
+	</context>
+
+	<actions>
+		<!-- empty? -->
+	</actions>
+
+	<documents>
+		<document type="U020">
+			<parameters>				
+				<parameter key="isStarter">true</parameter> <!-- default is false -->
+				<parameter key="hasCancel">true</parameter> <!-- default is false -->				
+				<parameter key="hasReject">true</parameter> <!-- default is false -->
+				<parameter key="hasClarify">true</parameter> <!-- default is false -->
+				<parameter key="hasMultipleVersions">true</parameter> <!-- default is false -->
+				<parameter key="isBulk">true</parameter> <!-- default is false -->				
+			</parameters>	
+			<triggers>
+				<!-- for starter only, local close -->
+				<createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS" actionType="CASE_LOCAL_CLOSE" />
+
+					
+				<!-- ADMINISTRATIVE SUBPROCESSES -->	
+				
+				<!-- no Close in CP -->
+				<!-- for starter only, global close -->
+				<createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE" documentType="X001" />
+
+				<!-- for starter only, forward -->
+				<createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS" actionType="DOC_CREATE" documentType="X007" />
+				<createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE" documentType="X007" />
+
+				<!-- for starter only, reminder -->
+				<createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS" actionType="DOC_CREATE" documentType="X009" />
+				<createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE" documentType="X009" />
+
+				<!-- for starter only, business exception -->
+				<createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE" documentType="X050" />
+
+				<!-- for starter only, change participants -->
+				<createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE" documentType="X100" />
+
+					
+				<!-- HORIZONTAL SUBPROCESSES -->					
+														
+				<!-- for starter only, subprocess H_BUC_01 -->
+				<createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS" actionType="DOC_CREATE" documentType="H001" />
+				<createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE" documentType="H001" />
+
+
+				<!-- MAIN FLOW -->
+
+				<createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE" documentType="U026" />
+
+				<createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_CREATE_REPLY" documentType="U021" />
+				<createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_CREATE_REPLY" documentType="U023" />
+
+			</triggers>
+		</document>
+		
+		<document type="U021">
+			<parameters>				
+				<parameter key="hasCancel">true</parameter> <!-- default is false -->
+				<parameter key="hasClarify">true</parameter> <!-- default is false -->
+				<parameter key="recreateAfterCancel">true</parameter> <!-- default is false -->
+				<parameter key="allowsAttachments">true</parameter> <!-- default is false -->
+			</parameters>	
+			<triggers>
+			
+				<!-- at DOC_CREATE of U021 with parent U020, suspend create,update,delete U023 with same parent -->
+				<removeActionTrigger onAction="DOC_CREATE" onParentDocumentType="U020" onResult="SUCCESS" actionType="DOC_CREATE" documentType="U023" sameParentDocument="true" />
+				
+				<!-- at DOC_DELETE of U021 with parent U020, reactivate create,update,delete U023 with same parent -->
+				<createActionTrigger onAction="DOC_DELETE" onParentDocumentType="U020" onResult="SUCCESS" actionType="DOC_CREATE" documentType="U023" sameParentDocument="true" />
+				
+				<!-- at DOC_CANCEL of U021 with parent U020, reactivate create,update,delete U023 with same parent -->
+				<createActionTrigger onAction="DOC_CANCEL" onParentDocumentType="U020" onResult="SUCCESS" actionType="DOC_CREATE" documentType="U023" sameParentDocument="true" />
+
+
+				<!-- at DOC_CREATE of U021 with parent U029, suspend create,update,delete U023 with same parent -->
+				<removeActionTrigger onAction="DOC_CREATE" onParentDocumentType="U029" onResult="SUCCESS" actionType="DOC_CREATE" documentType="U023" sameParentDocument="true" />
+				
+				<!-- at DOC_DELETE of U021 with parent U029, reactivate create,update,delete U023 with same parent -->
+				<createActionTrigger onAction="DOC_DELETE" onParentDocumentType="U029" onResult="SUCCESS" actionType="DOC_CREATE" documentType="U023" sameParentDocument="true" />
+				
+				<!-- at DOC_CANCEL of U021 with parent U029, reactivate create,update,delete U023 with same parent -->
+				<createActionTrigger onAction="DOC_CANCEL" onParentDocumentType="U029" onResult="SUCCESS" actionType="DOC_CREATE" documentType="U023" sameParentDocument="true" />
+
+
+				<createActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_CREATE" documentType="U024" />
+
+
+				<removeActionTrigger onAction="DOC_SEND" onParentDocumentType="U020" onResult="SUCCESS" actionType="DOC_CREATE" documentType="X011" sameParentDocument="true" />	
+				<removeActionTrigger onAction="DOC_SEND" onParentDocumentType="U020" onResult="SUCCESS" actionType="DOC_UPDATE" documentType="X011" sameParentDocument="true" />	
+				<removeActionTrigger onAction="DOC_SEND" onParentDocumentType="U020" onResult="SUCCESS" actionType="DOC_SEND" documentType="X011" sameParentDocument="true" />					
+
+			</triggers>
+		</document>
+		
+		<document type="U023">
+			<parameters>				
+				<parameter key="hasCancel">true</parameter> <!-- default is false -->
+				<parameter key="hasClarify">true</parameter> <!-- default is false -->
+				<parameter key="hasMultipleVersions">true</parameter> <!-- default is false -->
+				<parameter key="recreateAfterCancel">true</parameter> <!-- default is false -->
+				<parameter key="allowsAttachments">true</parameter> <!-- default is false -->
+				<parameter key="isBulk">true</parameter> <!-- default is false -->
+			</parameters>	
+			<triggers>
+
+				<!-- at DOC_CREATE of U023 with parent U020, suspend create,update,delete U021 with same parent -->			
+				<removeActionTrigger onAction="DOC_CREATE" onParentDocumentType="U020" onResult="SUCCESS" actionType="DOC_CREATE" documentType="U021" sameParentDocument="true" />
+
+				<!-- at DOC_DELETE of U023 with parent U020, reactivate create,update,delete U021 with same parent -->					
+				<createActionTrigger onAction="DOC_DELETE" onParentDocumentType="U020" onResult="SUCCESS" actionType="DOC_CREATE" documentType="U021" sameParentDocument="true" />
+
+				<!-- at DOC_CANCEL of U023 with parent U020, reactivate create,update,delete U021 with same parent -->					
+				<createActionTrigger onAction="DOC_CANCEL" onParentDocumentType="U020" onResult="SUCCESS" actionType="DOC_CREATE" documentType="U021" sameParentDocument="true" />
+
+
+				<!-- at DOC_CREATE of U023 with parent U029, suspend create,update,delete U021 with same parent -->			
+				<removeActionTrigger onAction="DOC_CREATE" onParentDocumentType="U029" onResult="SUCCESS" actionType="DOC_CREATE" documentType="U021" sameParentDocument="true" />
+
+				<!-- at DOC_DELETE of U023 with parent U029, reactivate create,update,delete U021 with same parent -->					
+				<createActionTrigger onAction="DOC_DELETE" onParentDocumentType="U029" onResult="SUCCESS" actionType="DOC_CREATE" documentType="U021" sameParentDocument="true" />
+
+				<!-- at DOC_CANCEL of U023 with parent U029, reactivate create,update,delete U021 with same parent -->					
+				<createActionTrigger onAction="DOC_CANCEL" onParentDocumentType="U029" onResult="SUCCESS" actionType="DOC_CREATE" documentType="U021" sameParentDocument="true" />
+
+
+				<createActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_CREATE" documentType="U024" />
+
+
+				<removeActionTrigger onAction="DOC_SEND" onParentDocumentType="U020" onResult="SUCCESS" actionType="DOC_CREATE" documentType="X011" sameParentDocument="true" />	
+				<removeActionTrigger onAction="DOC_SEND" onParentDocumentType="U020" onResult="SUCCESS" actionType="DOC_UPDATE" documentType="X011" sameParentDocument="true" />	
+				<removeActionTrigger onAction="DOC_SEND" onParentDocumentType="U020" onResult="SUCCESS" actionType="DOC_SEND" documentType="X011" sameParentDocument="true" />	
+
+				
+				<createActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_RECEIVE_REPLY" documentType="U029" />
+
+			</triggers>
+		</document>
+		
+		<document type="U024">
+			<parameters>
+				<parameter key="hasClarify">true</parameter> <!-- default is false -->
+				<parameter key="hasMultipleVersions">true</parameter> <!-- default is false -->
+				<parameter key="recreateAfterSend">true</parameter> <!-- default is false -->
+				<parameter key="allowsAttachments">true</parameter> <!-- default is false -->
+				<parameter key="isBulk">true</parameter> <!-- default is false -->
+			</parameters>	
+			<triggers>
+				<!-- CUSTOM REQUESTED: at DOC_SEND of U024, remove DOC_CREATE, DOC_UPDATE and DOC_SEND on X008 from all previously sent U021 and U023 -->
+				<removeActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="ANY" documentType="X008" />	<!-- This is the custom trigger (SendU024TriggerHandler.java)-->
+				
+				<!-- In addition, at DOC_SEND of U024, we need the following: -->
+				<createActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_RECEIVE_REPLY" documentType="U025" />
+
+			</triggers>
+		</document>
+		
+		<document type="U025">
+			<parameters>				
+				<parameter key="hasClarify">true</parameter> <!-- default is false -->
+				<parameter key="hasMultipleVersions">true</parameter> <!-- default is false -->
+			</parameters>		
+			<triggers>
+				<removeActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_UPDATE" documentType="U024" />
+			</triggers>
+		</document>
+
+		<document type="U026">
+			<parameters>				
+				<parameter key="hasCancel">true</parameter> <!-- default is false -->
+				<parameter key="hasClarify">true</parameter> <!-- default is false -->
+				<parameter key="hasMultipleVersions">true</parameter> <!-- default is false -->
+				<parameter key="isBulk">true</parameter> <!-- default is false -->				
+			</parameters>		
+			<triggers>
+				<!-- CUSTOM REQUESTED: when DOC_CREATE_REPLY U027, we have to prefill ReimbursementChargingInterestID from U026 to U027 -->
+				<createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_CREATE_REPLY" documentType="U027" /> <!-- This is the custom trigger (ReceiveU026CpTriggerHandler.java) -->
+			</triggers>
+		</document>
+		
+		<document type="U027">
+			<parameters>				
+				<parameter key="hasMultipleVersions">true</parameter> <!-- default is false -->
+				<parameter key="hasCancel">true</parameter> <!-- default is false -->
+				<parameter key="hasClarify">true</parameter> <!-- default is false -->
+				<parameter key="recreateAfterCancel">true</parameter> <!-- default is false -->
+				<parameter key="hasBusinessValidation">true</parameter> <!-- default is false -->
+				<parameter key="allowsAttachments">true</parameter> <!-- default is false -->
+				<parameter key="isBulk">true</parameter> <!-- default is false -->
+			</parameters>		
+			<triggers>
+
+				<createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_CREATE_REPLY" documentType="U021" />
+				<createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_CREATE_REPLY" documentType="U023" />
+
+				<!-- CUSTOM REQUESTED: when DOC_SEND U027 (=reply to U026), we have to remove Reject (DOC_CREATE, DOC_UPDATE and DOC_SEND X011) from U020 -->
+				<removeActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="ANY" documentType="X011" />	<!-- This is the custom trigger (SendU027DocumentActionHandler.java)-->
+				
+			</triggers>
+		</document>
+
+		<document type="U029">
+			<parameters>				
+				<parameter key="hasCancel">true</parameter> <!-- default is false -->
+				<parameter key="hasClarify">true</parameter> <!-- default is false -->
+				<parameter key="hasMultipleVersions">true</parameter> <!-- default is false -->
+				<parameter key="recreateAfterCancel">true</parameter> <!-- default is false -->
+				<parameter key="allowsAttachments">true</parameter> <!-- default is false -->
+				<parameter key="isBulk">true</parameter> <!-- default is false -->			
+			</parameters>		
+			<triggers>
+
+				<!-- This explains the following triggers:
+					At reception of U029, remove UPDATE on parent U023 (whose parent can be U020 or U029)
+				                           remove X008 on parent U023
+										   create new reply U021
+										   create new reply U023
+					order is important here, because you first act on existing the U023 before creating a new one
+				-->
+
+				<!-- remove UPDATE on parent U023 (whose parent can be U020 or U029) -->
+				<removeActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_UPDATE" documentType="U023" parentDocumentType="ANY" />
+				
+				<!-- remove X008 on parent U023 -->
+				<removeActionTrigger onAction="DOC_RECEIVE" onParentDocumentType="U023" onResult="SUCCESS" actionType="DOC_CREATE" documentType="X008" sameParentDocument="true" />
+				<removeActionTrigger onAction="DOC_RECEIVE" onParentDocumentType="U023" onResult="SUCCESS" actionType="DOC_UPDATE" documentType="X008" sameParentDocument="true" />
+				<removeActionTrigger onAction="DOC_RECEIVE" onParentDocumentType="U023" onResult="SUCCESS" actionType="DOC_SEND"   documentType="X008" sameParentDocument="true" />
+						
+				<!-- create new reply U021 -->
+				<createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_CREATE_REPLY" documentType="U021" />
+				
+				<!-- create new reply U023 -->
+				<createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_CREATE_REPLY" documentType="U023" />
+				
+				
+				<!-- At reception of cancel on U029, Bonita was removing create,update,send on replies U021 and U023 of all previous U020 -->
+				<!-- After analysis, it appears that this code was not needed in Bonita (it brings nothing), because these replies are already removed at that point -->
+				<!-- If it was not needed in Bonita, then it is not needed in BUC engine either -->
+				<!-- <removeActionTrigger onAction="DOC_CANCEL_RECEIVE" onResult="SUCCESS" actionType="DOC_CREATE" documentType="U021" /> -->
+				<!-- <removeActionTrigger onAction="DOC_CANCEL_RECEIVE" onResult="SUCCESS" actionType="DOC_UPDATE" documentType="U021" /> -->
+				<!-- <removeActionTrigger onAction="DOC_CANCEL_RECEIVE" onResult="SUCCESS" actionType="DOC_SEND"   documentType="U021" />	 -->
+				<!-- <removeActionTrigger onAction="DOC_CANCEL_RECEIVE" onResult="SUCCESS" actionType="DOC_CREATE" documentType="U023" /> -->
+				<!-- <removeActionTrigger onAction="DOC_CANCEL_RECEIVE" onResult="SUCCESS" actionType="DOC_UPDATE" documentType="U023" /> -->
+				<!-- <removeActionTrigger onAction="DOC_CANCEL_RECEIVE" onResult="SUCCESS" actionType="DOC_SEND"   documentType="U023" /> -->
+				
+					
+			</triggers>
+		</document>
+
+
+
+		<!-- subprocess H_BUC_01 --> 
+ 
+		<document type="H001"> 
+			<parameters> 
+				<parameter key="hasMultipleVersions">true</parameter> 
+				<parameter key="hasCancel">true</parameter> 
+				<parameter key="recreateAfterSend">true</parameter> 
+				<parameter key="allowsAttachments">true</parameter> 
+			</parameters> 
+			<triggers> 
+				<createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_CREATE_REPLY" documentType="H002" /> 
+				<createActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_RECEIVE_REPLY" documentType="H002" /> 
+			</triggers> 
+		</document> 
+ 
+		<document type="H002"> 
+			<parameters> 
+				<parameter key="hasMultipleVersions">true</parameter> 
+				<parameter key="hasCancel">true</parameter> 
+				<parameter key="recreateAfterCancel">true</parameter> 
+				<parameter key="allowsAttachments">true</parameter> 
+			</parameters> 
+		</document> 
+ 
+		<!-- Reminder --> 
+		<document type="X009"> 
+			<!-- If X009 may be sent (in current BUC, CP has canSendReminder=true) --> 
+			<parameters> 
+				<parameter key="recreateAfterSend">true</parameter> 
+			</parameters> 
+			<triggers> 
+				<!-- Create reply task if X010 may be sent (in current BUC, CP has canReplyReminder=true) --> 
+				<createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_CREATE_REPLY" documentType="X010" /> 
+				<!-- Create receive task if X010 may be received (in current BUC, other side PO has canReplyReminder=true) --> 
+				<createActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_RECEIVE_REPLY" documentType="X010" /> 
+			</triggers> 
+		</document> 
+ 
+		<document type="X010"> 
+			<!-- in current BUC, CP has canReplyReminder=true --> 
+		</document> 
+ 
+		<!-- Forward Case --> 
+		<document type="X007"> 
+			<!-- hasBusinessValidation and CASE_ARCHIVE used if X007 may be sent (in current BUC, CP has hasForwardParticipant=true) --> 
+			<parameters> 
+				<parameter key="hasBusinessValidation">true</parameter> 
+			</parameters> 
+			<triggers> 
+				<createActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="CASE_ARCHIVE" /> 
+			</triggers> 
+		</document> 
+ 
+		<!-- Close --> 
+		<document type="X001"> 
+			<!-- triggers added if X002 may be sent or received (in current BUC, CP has hasReopen=true and other side PO has hasReopen=true) --> 
+			<triggers> 
+				<!-- Create receive tasks if X002 may be received (in current BUC, some other participant has hasReopen=true) --> 
+				<!-- (in current BUC, some other participant has hasClose=true) --> 
+				<createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_RECEIVE_REPLY" documentType="X002" /> 
+				<!-- Create Reply/Child tasks if X002 may be sent (in current BUC, CP has hasReopen=true) --> 
+				<!-- (in current BUC, some other participant has hasClose=true) --> 
+				<createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_CREATE_REPLY" documentType="X002" /> 
+			</triggers> 
+		</document> 
+ 
+		<!-- document X002 added if X002 may be sent or received (in current BUC, CP has hasReopen=true and other side PO has hasReopen=true) --> 
+		<document type="X002"> 
+			<!-- The BUC engine will take care of X003 and X004 automatically --> 
+			<!-- hasBusinessValidation if X002 may be sent (in current BUC, CP has hasReopen=true) --> 
+			<parameters> 
+				<parameter key="hasBusinessValidation">true</parameter> 
+			</parameters> 
+		</document> 
+		
+	</documents>
+</case>

@@ -1,0 +1,282 @@
+<?xml version="1.0"?> 
+<case name="H_BUC_02a" version="${buc.model.version}" role="PO" xmlns="http://ec.europa.eu/eessi/rina/buc">
+
+
+<!-- CONFIG FILE H2a.conf
+PROC=[H_BUC_02a]
+VER=[4.2]
+PATCH=[20190701]
+ISML=[true]
+STARTERS=[H005]
+POCREATED=[H003]
+CPCREATED=[H006]
+HSUBS=[]
+XADMINS=[X005 X006 X007 X009]
+-->
+ 
+<!-- WARNING
+WARNING: HSUBS empty
+-->
+ 
+<!-- BONITA EXTRACT
+PO_H_BUC_02a_v4.2-v20190701.proc
+000136 [Initialise Forwarded Process] exists
+000160 [Initialise Forwarded Process] lastMessageId = lastMessageId
+000165 [Initialise Forwarded Process] receivedWhoAmI = receivedWhoAmI
+000170 [Initialise Forwarded Process] flowid = flowid
+000181 [Common] exists
+000191 [Common] isPO = true
+000196 [Common] canSendReminder = true
+000201 [Common] canReplyReminder = false
+000215 [SUBPROCESS 2_H_BUC_02abc] exists
+000225 [SUBPROCESS 2_H_BUC_02abc] flowid = flowid
+000230 [SUBPROCESS 2_H_BUC_02abc] whoami = whoami
+000235 [SUBPROCESS 2_H_BUC_02abc] hasCPRole = false
+000240 [SUBPROCESS 2_H_BUC_02abc] isMainProcess = true
+000245 [SUBPROCESS 2_H_BUC_02abc] hasPORole = true
+000250 [SUBPROCESS 2_H_BUC_02abc] hasH005Clarify = true
+000255 [SUBPROCESS 2_H_BUC_02abc] hasH006Clarify = true
+000263 [Forward 2_H_BUC_02abc] exists
+000286 [Forward 2_H_BUC_02abc] flowid = flowid
+000291 [Forward 2_H_BUC_02abc] whoami = whoami
+000296 [Forward 2_H_BUC_02abc] hasCPRole = false
+000301 [Forward 2_H_BUC_02abc] forwardedDocumentId = lastDocumentId
+000306 [Forward 2_H_BUC_02abc] isMainProcess = true
+000311 [Forward 2_H_BUC_02abc] hasPORole = true
+000316 [Forward 2_H_BUC_02abc] isFirstDocument = true
+000321 [Forward 2_H_BUC_02abc] hasH005Clarify = true
+000326 [Forward 2_H_BUC_02abc] hasH006Clarify = true
+000334 [SUBPROCESS 1_H_BUC_02abc] exists
+000344 [SUBPROCESS 1_H_BUC_02abc] flowid = flowid
+000349 [SUBPROCESS 1_H_BUC_02abc] whoami = whoami
+000354 [SUBPROCESS 1_H_BUC_02abc] hasCPRole = false
+000359 [SUBPROCESS 1_H_BUC_02abc] isMainProcess = false
+000364 [SUBPROCESS 1_H_BUC_02abc] hasPORole = true
+000369 [SUBPROCESS 1_H_BUC_02abc] mayCreateH004 = false
+000374 [SUBPROCESS 1_H_BUC_02abc] mayLoopH003 = true
+000379 [SUBPROCESS 1_H_BUC_02abc] hasH003Clarify = true
+000384 [SUBPROCESS 1_H_BUC_02abc] hasH004Clarify = true
+000389 [SUBPROCESS 1_H_BUC_02abc] hasH003Update = true
+000496 [Call AddRemoveForward] exists
+000506 [Call AddRemoveForward] whoami = whoami
+000511 [Call AddRemoveForward] flowid = flowid
+000516 [Call AddRemoveForward] isPO = true
+000521 [Call AddRemoveForward] hasForwardParticipant = true
+000526 [Call AddRemoveForward] hasAddParticipant = true
+000531 [Call AddRemoveForward] hasRemoveParticipant = true
+-->
+
+<!-- BONITA EXTRACT
+CP_H_BUC_02a_v4.2-v20190701.proc
+000165 [Common] exists
+000175 [Common] canReplyReminder = true
+000180 [Common] canSendReminder = false
+000188 [SUBPROCESS 2_H_BUC_02abc] exists
+000198 [SUBPROCESS 2_H_BUC_02abc] flowid = flowid
+000203 [SUBPROCESS 2_H_BUC_02abc] whoami = whoami
+000208 [SUBPROCESS 2_H_BUC_02abc] hasCPRole = true
+000213 [SUBPROCESS 2_H_BUC_02abc] isMainProcess = true
+000218 [SUBPROCESS 2_H_BUC_02abc] hasPORole = false
+000223 [SUBPROCESS 2_H_BUC_02abc] hasH005Clarify = true
+000228 [SUBPROCESS 2_H_BUC_02abc] hasH006Clarify = true
+000236 [SUBPROCESS 1_H_BUC_02abc] exists
+000246 [SUBPROCESS 1_H_BUC_02abc] flowid = flowid
+000251 [SUBPROCESS 1_H_BUC_02abc] whoami = receivedWhoAmI
+000256 [SUBPROCESS 1_H_BUC_02abc] hasPORole = false
+000261 [SUBPROCESS 1_H_BUC_02abc] isMainProcess = false
+000266 [SUBPROCESS 1_H_BUC_02abc] hasCPRole = true
+000271 [SUBPROCESS 1_H_BUC_02abc] starterMessageId = lastMessageId
+000276 [SUBPROCESS 1_H_BUC_02abc] mayCreateH004 = false
+000281 [SUBPROCESS 1_H_BUC_02abc] mayCreateH003 = false
+000286 [SUBPROCESS 1_H_BUC_02abc] hasH003Clarify = true
+000291 [SUBPROCESS 1_H_BUC_02abc] hasH004Clarify = true
+000296 [SUBPROCESS 1_H_BUC_02abc] hasH003Update = true
+000394 [Call AddRemoveForward] exists
+000404 [Call AddRemoveForward] whoami = whoami
+000409 [Call AddRemoveForward] flowid = flowid
+000414 [Call AddRemoveForward] isPO = false
+000419 [Call AddRemoveForward] hasAddParticipant = false
+000424 [Call AddRemoveForward] hasRemoveParticipant = false
+000429 [Call AddRemoveForward] hasForwardParticipant = true
+-->
+
+<!-- CONFIG FILE H2a.conf
+PROC=[H_BUC_02a]
+VER=[4.2]
+PATCH=[20190701]
+ISML=[true]
+STARTERS=[H005]
+POCREATED=[H003]
+CPCREATED=[H006]
+HSUBS=[]
+XADMINS=[X005 X006 X007 X009]
+-->
+ 
+<!-- DEDUCED FROM PO BONITA EXTRACT
+removeOnlyMe=[false]
+hasClose=[false]
+hasReopen=[false]
+hasLocalClose=[true]
+canSendReminder=[true]
+canReplyReminder=[false]
+hasAddParticipant=[true]
+hasRemoveParticipant=[true]
+hasForwardParticipant=[true]
+canCreateH001=[false]
+mayCreateH020=[false]
+mayCreateH120=[false]
+mayCreateH121=[false]
+mayLoopH070=[false]
+-->
+ 
+<!-- DEDUCED FROM CP BONITA EXTRACT
+removeOnlyMe=[false]
+hasClose=[false]
+hasReopen=[false]
+hasLocalClose=[true]
+canSendReminder=[false]
+canReplyReminder=[true]
+hasAddParticipant=[false]
+hasRemoveParticipant=[false]
+hasForwardParticipant=[true]
+canCreateH001=[false]
+mayCreateH020=[false]
+mayCreateH120=[false]
+mayCreateH121=[false]
+mayLoopH070=[false]
+-->
+
+
+<!-- !!!REBUILT LIKE IN BONITA!!! 			!!!DIFFERS QUITE FROM SPECS!!! -->
+
+ 
+	<context> 
+		<parameters> 
+			<!-- isML (default is true; the current BUC is isML=true) --> 
+			<!-- removeMeOnly is not considered in PO --> 
+		</parameters> 
+	</context> 
+ 
+	<actions> 
+		<!-- empty --> 
+	</actions> 
+ 
+	<documents> 
+		<document type="H005"> 
+			<parameters> 
+				<parameter key="isStarter">true</parameter> <!-- default is false --> 
+				<parameter key="hasMultipleVersions">true</parameter> <!-- default is false --> 
+				<parameter key="hasCancel">true</parameter> <!-- default is false --> 
+				<parameter key="hasClarify">true</parameter> <!-- default is false --> 
+				<parameter key="recreateAfterSend">true</parameter> <!-- default is false --> 
+				<parameter key="allowsAttachments">true</parameter> <!-- default is false --> 
+			</parameters> 
+			<triggers> 
+ 
+				<!-- ADMINISTRATIVE SUBPROCESSES --> 
+ 
+				<!-- for starter only, local close --> 
+				<createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="CASE_LOCAL_CLOSE" documentType="ANY" /> 
+ 
+				<!-- for starter only, X005 --> 
+				<createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="DOC_CREATE" documentType="X005" /> 
+ 
+				<!-- for starter only, X006 --> 
+				<createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="DOC_CREATE" documentType="X006" /> 
+ 
+				<!-- for starter only, X007 --> 
+				<createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="DOC_CREATE" documentType="X007" /> 
+				<createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE" documentType="X007" /> 
+ 
+				<!-- for starter only, X009 --> 
+				<createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="DOC_CREATE" documentType="X009" /> 
+ 
+				<!-- for starter only, business exception --> 
+				<createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE" documentType="X050" /> 
+ 
+				<!-- for starter only, change participants --> 
+				<createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE" documentType="X100" /> 
+ 
+				<!-- HORIZONTAL SUBPROCESSES --> 
+ 
+				<!-- MAIN FLOW ENCODING --> 
+ 
+				<!-- for starter only, receivers --> 
+				<createActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_RECEIVE_REPLY" documentType="H006" /> 
+				<!-- end receivers --> 
+ 
+				<createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="DOC_CREATE" documentType="H003" /> 
+ 
+			</triggers> 
+		</document> 
+ 
+		<document type="H003"> 
+			<parameters> 
+				<!-- current BUC is multilateral --> 
+				<parameter key="hasMultipleVersions">true</parameter> <!-- default is false --> 
+				<parameter key="hasCancel">true</parameter> <!-- default is false --> 
+				<parameter key="hasClarify">true</parameter> <!-- default is false --> 
+				<parameter key="recreateAfterSend">true</parameter> <!-- default is false --> 
+				<parameter key="allowsAttachments">true</parameter> <!-- default is false --> 
+			</parameters> 
+		</document> 
+ 
+		<document type="H006"> 
+			<parameters> 
+				<parameter key="hasMultipleVersions">true</parameter> <!-- default is false --> 
+				<parameter key="hasCancel">true</parameter> <!-- default is false --> 
+				<parameter key="hasClarify">true</parameter> <!-- default is false --> 				
+			</parameters> 
+		</document> 
+ 
+		<!-- Add Participant --> 
+		<document type="X005"> 
+			<!-- recreateAfterSend and hasBusinessValidation used if X005 may be sent (in current BUC, PO has hasAddParticipant=true) --> 
+			<parameters> 
+				<parameter key="recreateAfterSend">true</parameter> 
+				<parameter key="hasBusinessValidation">true</parameter> 
+			</parameters> 
+		</document> 
+ 
+		<!-- Remove Participant --> 
+		<document type="X006"> 
+			<!-- recreateAfterSend and hasBusinessValidation used if X006 may be sent (in current BUC, PO has hasRemoveParticipant=true) --> 
+			<parameters> 
+				<parameter key="recreateAfterSend">true</parameter> 
+				<parameter key="hasBusinessValidation">true</parameter> 
+			</parameters> 
+		</document> 
+ 
+		<!-- Forward Case --> 
+		<document type="X007"> 
+			<!-- hasBusinessValidation and CASE_ARCHIVE used if X007 may be sent (in current BUC, PO has hasForwardParticipant=true) --> 
+			<parameters> 
+				<parameter key="hasBusinessValidation">true</parameter> 
+			</parameters> 
+			<triggers> 
+				<createActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="CASE_ARCHIVE" /> 
+			</triggers> 
+		</document> 
+ 
+		<!-- Reminder --> 
+		<document type="X009"> 
+			<!-- If X009 may be sent (in current BUC, PO has canSendReminder=true) --> 
+			<parameters> 
+				<!-- X009 has to be sent to a subset of the participants --> 
+				<!-- current BUC is multilateral --> 
+				<parameter key="hasParticipantSelection">true</parameter> <!-- default is false --> 
+				<parameter key="recreateAfterSend">true</parameter> 
+			</parameters> 
+			<triggers> 
+				<!-- Create reply task if X010 may be sent (in current BUC, PO has canReplyReminder=false) --> 
+				<!-- Create receive task if X010 may be received (in current BUC, other side CP has canReplyReminder=true) --> 
+				<createActionTrigger onAction="DOC_SEND_PARTICIPANTS" onResult="SUCCESS" actionType="DOC_RECEIVE_REPLY" documentType="X010" /> 
+			</triggers> 
+		</document> 
+ 
+		<document type="X010"> 
+			<!-- in current BUC, PO has canReplyReminder=false --> 
+		</document> 
+ 
+	</documents> 
+</case> 

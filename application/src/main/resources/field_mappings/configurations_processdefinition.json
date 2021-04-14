@@ -1,0 +1,82 @@
+[
+  {
+    "esPath": "defaultFieldChooser.fields.id",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "fieldChooser.fields.id",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "defaultFieldChooser.fields.name",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "fieldChooser.fields.name",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "defaultFieldChooser.fields.show",
+    "esType": "boolean",
+    "sqlPath": "fieldChooser.fields.show",
+    "sqlType": "BOOL"
+  },
+  {
+    "esPath": "defaultFieldChooser.fields.sort",
+    "esType": "string",
+    "sqlPath": "fieldChooser.fields.sort",
+    "sqlType": "VARCHAR(60)"
+  },
+  {
+    "esPath": "defaultFieldChooser.fields.type",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "defaultFieldChooser.processDefinitionId",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "fieldChooser.processDef.id",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "defaultFieldChooser.userName",
+    "esType": "string",
+    "sqlPath": "fieldChooser.iamUser.username",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "id",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "esPath": "name",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "esPath": "sector",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "esPath": "versions.activeFrom",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "esPath": "versions.version",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  }
+]

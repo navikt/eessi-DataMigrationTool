@@ -1,0 +1,467 @@
+[
+  {
+    "esPath": "actionType",
+    "esType": "string",
+    "sqlPath": "pendingMessage.actionType",
+    "sqlType": "TEXT",
+    "value": "enum(ECaseActionType)"
+  },
+  {
+    "comment": "this goes both into sbdh and pendingAttachment",
+    "esPath": "atachmentIdentifications.contentLocation",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "sbdh.attachments.?, pendingAttachment.pathname",
+    "sqlType": "VARCHAR(1024)"
+  },
+  {
+    "comment": "this goes both into sbdh and pendingAttachment",
+    "esPath": "atachmentIdentifications.id",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "sbdh.attachments.identifier, pendingAttachment.id",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "comment": "this goes both into sbdh and pendingAttachment",
+    "esPath": "atachmentIdentifications.medical",
+    "esType": "boolean",
+    "sqlPath": "sbdh.attachments.isMedical, pendingAttachment.isMedical",
+    "sqlType": "BOOL"
+  },
+  {
+    "comment": "this goes both into sbdh and pendingAttachment",
+    "esPath": "atachmentIdentifications.mimeType",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "sbdh.attachments.internetMediaTypeCode, pendingAttachment.mimeType",
+    "sqlType": "TEXT",
+    "value": "enum(EMimeType)"
+  },
+  {
+    "comment": "this goes into sbdh; same value as name and sector",
+    "esPath": "BUCType.id",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "comment": "this goes into sbdh; same value as name and sector",
+    "esPath": "BUCType.name",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "esPath": "BUCType.sector",
+    "esType": "string",
+    "sqlPath": "sbdh.caseIdentification.type",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "comment": "this goes into sbdh",
+    "esPath": "BUCType.version",
+    "esType": "string",
+    "sqlPath": "sbdh.caseIdentification.version",
+    "sqlType": ""
+  },
+  {
+    "esPath": "cause",
+    "esType": "string",
+    "sqlPath": "pendingMessage.cause",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "date",
+    "esType": "date",
+    "sqlPath": "pendingMessage.date",
+    "sqlType": "TIMESTAMP WITH TIME ZONE"
+  },
+  {
+    "comment": "this goes into sbdh",
+    "esPath": "documentIdentification.contentLocation",
+    "esType": "string",
+    "sqlPath": "sbdh.documentIdentification.?",
+    "sqlType": ""
+  },
+  {
+    "comment": "this goes into sbdh",
+    "esPath": "documentIdentification.creationDate",
+    "esType": "string",
+    "sqlPath": "sbdh.documentIdentification.creationDate",
+    "sqlType": ""
+  },
+  {
+    "comment": "this goes into sbdh",
+    "esPath": "documentIdentification.id",
+    "esType": "string",
+    "sqlPath": "sbdh.documentIdentification.identifier",
+    "sqlType": ""
+  },
+  {
+    "comment": "this goes into sbdh",
+    "esPath": "documentIdentification.relatedDocumentId",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "comment": "this goes into sbdh",
+    "esPath": "documentIdentification.version",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "id",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "pendingMessage.id",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "internationalCaseId",
+    "esType": "string",
+    "sqlPath": "pendingMessage.internationalCaseId",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "localCaseId",
+    "esType": "string",
+    "sqlPath": "pendingMessage.rinaCase.id",
+    "sqlType": "VARCHAR(255)",
+    "importIgnore": true
+  },
+  {
+    "esPath": "notify",
+    "esType": "boolean",
+    "sqlPath": "pendingMessage.shouldNotify",
+    "sqlType": "BOOL"
+  },
+  {
+    "esPath": "participants.organisation.acronym",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "esPath": "participants.organisation.activeSince",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "esPath": "participants.organisation.address.country",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "esPath": "participants.organisation.address.town",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "esPath": "participants.organisation.address.street",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "esPath": "participants.organisation.address.postalCode",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "esPath": "participants.organisation.address.region",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "esPath": "participants.organisation.registryNumber",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "esPath": "participants.organisation.countryCode",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "comment": "use this to identify the role of the sender/receivers that go into sbdh",
+    "esPath": "participants.organisation.id",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "participants.organisation.name",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "esPath": "participants.organisation.contactMethods",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "esPath": "participants.organisation.location",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "comment": "use this to identify the role of the sender/receivers that go into sbdh",
+    "esPath": "participants.role",
+    "esType": "string",
+    "sqlPath": "sbdh.(sender|receivers).contactTypeIdentifier",
+    "sqlType": "VARCHAR(20)"
+  },
+  {
+    "esPath": "problem",
+    "esType": "string",
+    "sqlPath": "pendingMessage.problem",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "protectedPerson",
+    "esType": "boolean",
+    "sqlPath": "pendingMessage.isProtectedPerson",
+    "sqlType": "BOOL"
+  },
+  {
+    "esPath": "receiver.acronym",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "esPath": "receiver.activeSince",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "esPath": "receiver.address.country",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "esPath": "receiver.address.town",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "esPath": "receiver.address.street",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "esPath": "receiver.address.postalCode",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "esPath": "receiver.address.region",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "esPath": "receiver.contactMethods",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "esPath": "receiver.location",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "esPath": "receiver.registryNumber",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "esPath": "receiver.countryCode",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "comment": "this goes into sbdh",
+    "esPath": "receiver.id",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "sbdh.receivers.identifier",
+    "sqlType": "VARCHAR(50)",
+    "value": "reference(entities,organisation)"
+  },
+  {
+    "esPath": "receiver.name",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "comment": "this goes into sbdh",
+    "esPath": "SEDType.id",
+    "esType": "string",
+    "sqlPath": "sbdh.documentIdentification.type",
+    "sqlType": ""
+  },
+  {
+    "esPath": "SEDType.name",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "esPath": "SEDType.readTemplate",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "comment": "this goes into sbdh",
+    "esPath": "SEDType.version",
+    "esType": "string",
+    "sqlPath": "sbdh.documentIdentification.schemaVersion",
+    "sqlType": ""
+  },
+  {
+    "esPath": "sender.acronym",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "esPath": "sender.activeSince",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "esPath": "sender.address.country",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "esPath": "sender.address.town",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "esPath": "sender.address.street",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "esPath": "sender.address.postalCode",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "esPath": "sender.address.region",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "esPath": "sender.contactMethods",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "esPath": "sender.location",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "esPath": "sender.registryNumber",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "esPath": "sender.countryCode",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "comment": "this goes into sbdh",
+    "esPath": "sender.id",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "sbdh.sender.identifier",
+    "sqlType": "VARCHAR(50)",
+    "value": "reference(entities,organisation)"
+  },
+  {
+    "esPath": "sender.name",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  }
+]

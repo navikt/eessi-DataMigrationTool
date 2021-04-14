@@ -1,0 +1,57 @@
+[
+  {
+    "esPath": "be",
+    "esType": "boolean",
+    "sqlPath": "adminNotificationType.isBe",
+    "sqlType": "BOOL"
+  },
+  {
+    "esPath": "forAdmin",
+    "esType": "boolean",
+    "sqlPath": "adminNotificationType.isForAdmin",
+    "sqlType": "BOOL"
+  },
+  {
+    "esPath": "forClerk",
+    "esType": "boolean",
+    "sqlPath": "adminNotificationType.isForClerk",
+    "sqlType": "BOOL"
+  },
+  {
+    "esPath": "generateNIEEvent",
+    "esType": "boolean",
+    "sqlPath": "adminNotificationType.generateNieEvent",
+    "sqlType": "BOOL"
+  },
+  {
+    "esPath": "notificationPeriod",
+    "esType": "string",
+    "sqlPath": "adminNotificationType.notificationPeriod",
+    "sqlType": "INT8"
+  },
+  {
+    "esPath": "notificationType",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "adminNotificationType.notificationName",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "retentionPeriod",
+    "esType": "string",
+    "sqlPath": "adminNotificationType.retentionPeriod",
+    "sqlType": "INT8"
+  },
+  {
+    "esPath": "showForAdmin",
+    "esType": "boolean",
+    "sqlPath": "adminNotificationType.showForAdmin",
+    "sqlType": "BOOL"
+  },
+  {
+    "esPath": "showForClerk",
+    "esType": "boolean",
+    "sqlPath": "adminNotificationType.showForClerk",
+    "sqlType": "BOOL"
+  }
+]
