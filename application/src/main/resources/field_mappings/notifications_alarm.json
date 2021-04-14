@@ -45,39 +45,12 @@
     "importIgnore": true
   },
   {
-    "esPath": "creator.organisation.address.country",
-    "esType": "string",
+    "esPath": "creator.organisation.address",
+    "esType": "object",
+    "ignorePath": true,
+    "importIgnore": true,
     "sqlPath": "",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
-  },
-  {
-    "esPath": "creator.organisation.address.town",
-    "esType": "string",
-    "sqlPath": "",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
-  },
-  {
-    "esPath": "creator.organisation.address.street",
-    "esType": "string",
-    "sqlPath": "",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
-  },
-  {
-    "esPath": "creator.organisation.address.postalCode",
-    "esType": "string",
-    "sqlPath": "",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
-  },
-  {
-    "esPath": "creator.organisation.address.region",
-    "esType": "string",
-    "sqlPath": "",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "sqlType": ""
   },
   {
     "esPath": "creator.organisation.countryCode",

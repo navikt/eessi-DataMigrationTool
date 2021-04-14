@@ -146,11 +146,12 @@
     "importIgnore": true
   },
   {
-    "esPath": "creator.organisation.address.country",
-    "esType": "string",
-    "sqlPath": "iamUser.tenant.organisation.addressCountry",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "esPath": "creator.organisation.address",
+    "esType": "object",
+    "ignorePath": true,
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "creator.organisation.countryCode",
@@ -227,11 +228,12 @@
     "importIgnore": true
   },
   {
-    "esPath": "participants.organisation.address.country",
-    "esType": "string",
-    "sqlPath": "rinaCase.caseParticipants.organisation.addressCountry",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "esPath": "participants.organisation.address",
+    "esType": "object",
+    "ignorePath": true,
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "participants.organisation.countryCode",
@@ -340,11 +342,12 @@
     "importIgnore": true
   },
   {
-    "esPath": "whoami.address.country",
-    "esType": "string",
-    "sqlPath": "rinaCase.tenant.organisation.addressCountry",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "esPath": "whoami.address",
+    "esType": "object",
+    "ignorePath": true,
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "whoami.countryCode",

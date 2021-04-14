@@ -2,10 +2,6 @@ package eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper
 
 import static eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.CheckInstanceFields.*;
 
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.CheckBucket;

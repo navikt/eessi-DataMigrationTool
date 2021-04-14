@@ -100,10 +100,12 @@
     "sqlType": "TIMESTAMP WITH TIME ZONE"
   },
   {
-    "esPath": "rules.condition.ownerOrganization.address.country",
-    "esType": "string",
-    "sqlPath": "assignmentPolicy.assignmentPolicyRules.organisations.addressCountry",
-    "sqlType": "VARCHAR(255)"
+    "esPath": "rules.condition.ownerOrganization.address",
+    "esType": "object",
+    "ignorePath": true,
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "rules.condition.ownerOrganization.countryCode",

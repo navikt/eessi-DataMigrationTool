@@ -1,0 +1,29 @@
+{
+  "sid": "201",
+  "id": "11110623067a45b199dab6506b56f111",
+  "rinaCase": {},
+  "name": "",
+  "direction": "IN",
+  "status": "RECEIVED",
+  "docOrder": 1,
+  "internalId": "10124_78710623067a45b199dab6506b56f894",
+  "hasBusinessValidation": false,
+  "hasCancel": false,
+  "hasClarify": false,
+  "hasLetter": false,
+  "hasMultipleVersions": false,
+  "hasReject": false,
+  "documentTypeVersion": {
+    "sid": 1229,
+    "businessVersion": "4.2",
+    "documentType": {
+      "sid": 401,
+      "type": "X001",
+      "name": "Request For Close"
+    },
+    "defaultDocumentContent": "{\"X001\":{\"sedPackage\":\"SectorComponents/Administrative/X001\",\"sedGVer\":\"4\",\"sedVer\":\"2\",\"CaseContext\":{\"PersonContext\":{\"familyName\":\"\",\"forename\":\"\",\"dateBirth\":\"\",\"sex\":\"\"}},\"InformationAboutClose\":{\"closeDate\":\"\",\"close\":\"\",\"reasonForClosing\":\"\",\"pleaseProvideMoreDetailsIf99OtherSelected\":\"\"}}}"
+  },
+  "originalCreatedAt": null,
+  "originalUpdatedAt": null,
+  "counter": 1
+}

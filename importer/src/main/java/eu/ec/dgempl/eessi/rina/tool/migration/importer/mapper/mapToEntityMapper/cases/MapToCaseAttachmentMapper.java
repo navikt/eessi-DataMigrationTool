@@ -4,13 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import eu.ec.dgempl.eessi.rina.model.enumtypes.EMimeType;
-import eu.ec.dgempl.eessi.rina.model.exception.runtime.enums.EnumNotFoundEessiRuntimeException;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.CaseAttachment;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.IamUser;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.RinaCase;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity._abstraction.Audit;
 import eu.ec.dgempl.eessi.rina.repo.IamUserRepo;
 import eu.ec.dgempl.eessi.rina.repo.RinaCaseRepo;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.DmtEnumNotFoundException;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.CaseAttachmentFields;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.helper.AttachmentsHelper;
@@ -55,7 +55,9 @@ public class MapToCaseAttachmentMapper extends AbstractMapToEntityMapper<MapHold
 
     private void mapMimeType(final MapHolder a, final CaseAttachment b) {
         String mimeType = a.string(CaseAttachmentFields.MIME_TYPE);
-        EMimeType eMimeType = EMimeType.lookup(mimeType).orElseThrow(EnumNotFoundEessiRuntimeException::new);
+        EMimeType eMimeType = EMimeType.lookup(mimeType).orElseThrow(
+                () -> new DmtEnumNotFoundException(EMimeType.class, a.addPath(CaseAttachmentFields.MIME_TYPE), mimeType)
+        );
         b.setMimeType(eMimeType);
     }
 

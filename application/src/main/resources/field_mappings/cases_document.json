@@ -54,10 +54,12 @@
     "sqlType": "TIMESTAMP WITH TIME ZONE"
   },
   {
-    "esPath": "attachments.creator.organisation.address.country",
-    "esType": "string",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.addressCountry",
-    "sqlType": "VARCHAR(255)"
+    "esPath": "attachments.creator.organisation.address",
+    "esType": "object",
+    "ignorePath": true,
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "attachments.creator.organisation.countryCode",
@@ -100,7 +102,6 @@
   {
     "esPath": "attachments.fileName",
     "esType": "string",
-    "required": true,
     "sqlPath": "documentAttachment.filename",
     "sqlType": "VARCHAR(1024)"
   },
@@ -178,10 +179,12 @@
     "sqlType": "TIMESTAMP WITH TIME ZONE"
   },
   {
-    "esPath": "attachments.versions.user.organisation.address.country",
-    "esType": "string",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.addressCountry",
-    "sqlType": "VARCHAR(255)"
+    "esPath": "attachments.versions.user.organisation.address",
+    "esType": "object",
+    "ignorePath": true,
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "attachments.versions.user.organisation.countryCode",
@@ -261,11 +264,12 @@
     "importIgnore": true
   },
   {
-    "esPath": "conversations.participants.organisation.address.country",
-    "esType": "string",
-    "sqlPath": "document.documentConversations.conversationParticipants.organisation.addressCountry",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "esPath": "conversations.participants.organisation.address",
+    "esType": "object",
+    "ignorePath": true,
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "conversations.participants.organisation.countryCode",
@@ -346,11 +350,12 @@
     "importIgnore": true
   },
   {
-    "esPath": "conversations.userMessages.ack.receiver.address.country",
-    "esType": "string",
-    "sqlPath": "document.documentConversations.userMessages.receiver.addressCountry",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "esPath": "conversations.userMessages.ack.receiver.address",
+    "esType": "object",
+    "ignorePath": true,
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "conversations.userMessages.ack.receiver.countryCode",
@@ -391,11 +396,12 @@
     "importIgnore": true
   },
   {
-    "esPath": "conversations.userMessages.ack.sender.address.country",
-    "esType": "string",
-    "sqlPath": "document.documentConversations.userMessages.sender.addressCountry",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "esPath": "conversations.userMessages.ack.sender.address",
+    "esType": "object",
+    "ignorePath": true,
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "conversations.userMessages.ack.sender.countryCode",
@@ -469,11 +475,12 @@
     "importIgnore": true
   },
   {
-    "esPath": "conversations.userMessages.error.receiver.address.country",
-    "esType": "string",
-    "sqlPath": "document.documentConversations.userMessages.receiver.addressCountry",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "esPath": "conversations.userMessages.error.receiver.address",
+    "esType": "object",
+    "ignorePath": true,
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "conversations.userMessages.error.receiver.countryCode",
@@ -514,11 +521,12 @@
     "importIgnore": true
   },
   {
-    "esPath": "conversations.userMessages.error.sender.address.country",
-    "esType": "string",
-    "sqlPath": "document.documentConversations.userMessages.sender.addressCountry",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "esPath": "conversations.userMessages.error.sender.address",
+    "esType": "object",
+    "ignorePath": true,
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "conversations.userMessages.error.sender.countryCode",
@@ -579,11 +587,12 @@
     "importIgnore": true
   },
   {
-    "esPath": "conversations.userMessages.receiver.address.country",
-    "esType": "string",
-    "sqlPath": "document.documentConversations.userMessages.receiver.addressCountry",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "esPath": "conversations.userMessages.receiver.address",
+    "esType": "object",
+    "ignorePath": true,
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "conversations.userMessages.receiver.countryCode",
@@ -630,11 +639,12 @@
     "importIgnore": true
   },
   {
-    "esPath": "conversations.userMessages.sender.address.country",
-    "esType": "string",
-    "sqlPath": "document.documentConversations.userMessages.sender.addressCountry",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "esPath": "conversations.userMessages.sender.address",
+    "esType": "object",
+    "ignorePath": true,
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "conversations.userMessages.sender.countryCode",
@@ -708,11 +718,12 @@
     "importIgnore": true
   },
   {
-    "esPath": "creator.organisation.address.country",
-    "esType": "string",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.addressCountry",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "esPath": "creator.organisation.address",
+    "esType": "object",
+    "ignorePath": true,
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "creator.organisation.countryCode",
@@ -1025,11 +1036,12 @@
     "importIgnore": true
   },
   {
-    "esPath": "versions.user.organisation.address.country",
-    "esType": "string",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.addressCountry",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "esPath": "versions.user.organisation.address",
+    "esType": "object",
+    "ignorePath": true,
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "versions.user.organisation.countryCode",

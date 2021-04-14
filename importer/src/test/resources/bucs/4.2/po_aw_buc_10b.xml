@@ -1,5 +1,5 @@
 <?xml version="1.0"?> 
-<case name="AW_BUC_10b" version="${buc.model.version}" role="PO" xmlns="http://ec.europa.eu/eessi/rina/buc"> 
+<case name="AW_BUC_10b" version="4.2" role="PO" xmlns="http://ec.europa.eu/eessi/rina/buc"> 
  
 <!-- CONFIG FILE AW10b.conf
 PROC=[AW_BUC_10b]

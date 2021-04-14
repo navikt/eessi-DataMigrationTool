@@ -23,7 +23,7 @@ public class RepositoryUtils {
     public static <T extends PersistableWithSid> T findById(String id, Function<String, T> mapper, Class<T> clazz) {
 
         if (clazz != null && clazz.isAssignableFrom(IamUser.class)) {
-            id = id.equalsIgnoreCase("system") ? "0" : id;
+            id = "system".equalsIgnoreCase(id) ? "0" : id;
         }
 
         T t = mapper.apply(id);

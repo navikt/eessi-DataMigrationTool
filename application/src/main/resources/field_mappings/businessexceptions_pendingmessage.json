@@ -155,39 +155,12 @@
     "importIgnore": true
   },
   {
-    "esPath": "participants.organisation.address.country",
-    "esType": "string",
+    "esPath": "participants.organisation.address",
+    "esType": "object",
+    "ignorePath": true,
+    "importIgnore": true,
     "sqlPath": "",
-    "sqlType": "",
-    "importIgnore": true
-  },
-  {
-    "esPath": "participants.organisation.address.town",
-    "esType": "string",
-    "sqlPath": "",
-    "sqlType": "",
-    "importIgnore": true
-  },
-  {
-    "esPath": "participants.organisation.address.street",
-    "esType": "string",
-    "sqlPath": "",
-    "sqlType": "",
-    "importIgnore": true
-  },
-  {
-    "esPath": "participants.organisation.address.postalCode",
-    "esType": "string",
-    "sqlPath": "",
-    "sqlType": "",
-    "importIgnore": true
-  },
-  {
-    "esPath": "participants.organisation.address.region",
-    "esType": "string",
-    "sqlPath": "",
-    "sqlType": "",
-    "importIgnore": true
+    "sqlType": ""
   },
   {
     "esPath": "participants.organisation.registryNumber",
@@ -265,39 +238,12 @@
     "importIgnore": true
   },
   {
-    "esPath": "receiver.address.country",
-    "esType": "string",
+    "esPath": "receiver.address",
+    "esType": "object",
+    "ignorePath": true,
+    "importIgnore": true,
     "sqlPath": "",
-    "sqlType": "",
-    "importIgnore": true
-  },
-  {
-    "esPath": "receiver.address.town",
-    "esType": "string",
-    "sqlPath": "",
-    "sqlType": "",
-    "importIgnore": true
-  },
-  {
-    "esPath": "receiver.address.street",
-    "esType": "string",
-    "sqlPath": "",
-    "sqlType": "",
-    "importIgnore": true
-  },
-  {
-    "esPath": "receiver.address.postalCode",
-    "esType": "string",
-    "sqlPath": "",
-    "sqlType": "",
-    "importIgnore": true
-  },
-  {
-    "esPath": "receiver.address.region",
-    "esType": "string",
-    "sqlPath": "",
-    "sqlType": "",
-    "importIgnore": true
+    "sqlType": ""
   },
   {
     "esPath": "receiver.contactMethods",
@@ -386,39 +332,12 @@
     "importIgnore": true
   },
   {
-    "esPath": "sender.address.country",
-    "esType": "string",
+    "esPath": "sender.address",
+    "esType": "object",
+    "ignorePath": true,
+    "importIgnore": true,
     "sqlPath": "",
-    "sqlType": "",
-    "importIgnore": true
-  },
-  {
-    "esPath": "sender.address.town",
-    "esType": "string",
-    "sqlPath": "",
-    "sqlType": "",
-    "importIgnore": true
-  },
-  {
-    "esPath": "sender.address.street",
-    "esType": "string",
-    "sqlPath": "",
-    "sqlType": "",
-    "importIgnore": true
-  },
-  {
-    "esPath": "sender.address.postalCode",
-    "esType": "string",
-    "sqlPath": "",
-    "sqlType": "",
-    "importIgnore": true
-  },
-  {
-    "esPath": "sender.address.region",
-    "esType": "string",
-    "sqlPath": "",
-    "sqlType": "",
-    "importIgnore": true
+    "sqlType": ""
   },
   {
     "esPath": "sender.contactMethods",

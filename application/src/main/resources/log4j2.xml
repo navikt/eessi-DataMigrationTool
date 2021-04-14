@@ -9,8 +9,18 @@
         <Console name="ConsoleAppender" target="SYSTEM_OUT" follow="true">
             <PatternLayout pattern="${LOG_PATTERN}"/>
         </Console>
-        <RollingFile name="FileAppenderApplication" fileName="logs/app.log"
+        <RollingFile name="InfoFileAppender" fileName="logs/app.log"
                      filePattern="logs/app-%d{yyyy-MM-dd}-%i.log">
+            <PatternLayout>
+                <Pattern>${LOG_PATTERN}</Pattern>
+            </PatternLayout>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="100MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="100"/>
+        </RollingFile>
+        <RollingFile name="ErrorFileAppender" fileName="logs/error.log"
+                     filePattern="logs/error-%d{yyyy-MM-dd}-%i.log">
             <PatternLayout>
                 <Pattern>${LOG_PATTERN}</Pattern>
             </PatternLayout>
@@ -21,13 +31,10 @@
         </RollingFile>
     </Appenders>
     <Loggers>
-        <Logger name="eu.ec.dgempl.eessi.rina.tool.migration" level="info" additivity="false">
-            <AppenderRef ref="FileAppenderApplication"/>
-        </Logger>
-
         <Root level="info">
-            <AppenderRef ref="FileAppenderApplication"/>
+            <AppenderRef ref="InfoFileAppender"/>
             <!--            <AppenderRef ref="ConsoleAppender"/>-->
+            <AppenderRef ref="ErrorFileAppender" level="error"/>
         </Root>
     </Loggers>
 </Configuration>

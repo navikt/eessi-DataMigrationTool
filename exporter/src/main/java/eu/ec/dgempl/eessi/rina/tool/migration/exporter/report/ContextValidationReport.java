@@ -1,6 +1,7 @@
 package eu.ec.dgempl.eessi.rina.tool.migration.exporter.report;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.springframework.lang.Nullable;
@@ -15,6 +16,9 @@ import eu.ec.dgempl.eessi.rina.tool.migration.exporter.util.JsonPathHelper;
 public class ContextValidationReport {
     private final Map<EEsIndexType, Integer> documents;
     private final Map<String, Object> errorMap;
+    private final static String ERROR_TYPE_INVALID_ENUM = "invalidEnum";
+    private final static String VALUE_FOUND_FIELD = "valueFound";
+    private final static String VALUE_EXPECTED_FIELD = "valueExpected";
 
     /**
      * Class constructor
@@ -51,7 +55,8 @@ public class ContextValidationReport {
             }
             String indexType = error.getIndex() + "_" + error.getType();
             error.getErrors().stream().forEach(err -> {
-                addEntryInErrorMap(indexType, err.getResult().value(), JsonPathHelper.normalisePath(err.getField()), err.getValue());
+                addEntryInErrorMap(indexType, err.getResult().value(), JsonPathHelper.normalisePath(err.getField()), err.getValue(),
+                        err.getDetails());
             });
         });
     }
@@ -78,7 +83,7 @@ public class ContextValidationReport {
         // handle errors
         documentReport.getErrors().stream().forEach(error -> {
             addEntryInErrorMap(indexType.value(), error.getResult().value(), JsonPathHelper.normalisePath(error.getField()),
-                    error.getValue());
+                    error.getValue(), error.getDetails());
         });
     }
 
@@ -103,7 +108,7 @@ public class ContextValidationReport {
      * @param value
      *            the value that failed the validation
      */
-    private void addEntryInErrorMap(String indexType, String errType, String path, @Nullable Object value) {
+    private void addEntryInErrorMap(String indexType, String errType, String path, @Nullable Object value, Object details) {
         PreconditionsHelper.notEmpty(indexType, "indexType");
         PreconditionsHelper.notEmpty(errType, "errType");
         PreconditionsHelper.notEmpty(path, "path");
@@ -120,18 +125,29 @@ public class ContextValidationReport {
             errLevel.put(errType, pathLevel);
         }
 
-        Map<Object, Integer> valueLevel = (Map<Object, Integer>) pathLevel.get(path);
+        LinkedHashMap<Object, Object> valueLevel = (LinkedHashMap<Object, Object>) pathLevel.get(path);
         if (valueLevel == null) {
-            valueLevel = new HashMap<>();
+            valueLevel = new LinkedHashMap<>();
             pathLevel.put(path, valueLevel);
         }
 
+        valueLevel.putIfAbsent(VALUE_FOUND_FIELD, new HashMap<>());
+        Map<Object, Object> valueFoundLevel = (Map<Object, Object>) valueLevel.get(VALUE_FOUND_FIELD);
+
         // increment the number of occurrences of a specific value found
-        Integer no = valueLevel.get(value);
+        Integer no = (Integer) valueFoundLevel.get(value);
         if (no == null) {
-            valueLevel.put(value, 1);
+            valueFoundLevel.put(value, 1);
         } else {
-            valueLevel.put(value, no + 1);
+            valueFoundLevel.put(value, no + 1);
+        }
+
+        if (ERROR_TYPE_INVALID_ENUM.equals(errType) && details != null) {
+            if (!valueLevel.containsKey(VALUE_EXPECTED_FIELD)) {
+                if (details instanceof String) {
+                    valueLevel.put(VALUE_EXPECTED_FIELD, details);
+                }
+            }
         }
     }
 }

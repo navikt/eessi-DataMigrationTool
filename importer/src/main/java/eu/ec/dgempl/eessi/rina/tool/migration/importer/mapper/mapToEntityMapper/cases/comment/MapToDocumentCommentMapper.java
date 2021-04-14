@@ -10,10 +10,11 @@ import eu.ec.dgempl.eessi.rina.model.jpa.exception.EntityNotFoundEessiRuntimeExc
 import eu.ec.dgempl.eessi.rina.model.jpa.exception.UniqueIdentifier;
 import eu.ec.dgempl.eessi.rina.repo.DocumentRepo;
 import eu.ec.dgempl.eessi.rina.repo.IamUserRepo;
+import eu.ec.dgempl.eessi.rina.repo.IamUserRepoExtended;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.CommentFields;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper._abstract.AbstractMapToEntityMapper;
-import eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.RepositoryUtils;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.CasesUtils;
 
 import ma.glasnost.orika.MappingContext;
 
@@ -21,10 +22,15 @@ import ma.glasnost.orika.MappingContext;
 public class MapToDocumentCommentMapper extends AbstractMapToEntityMapper<MapHolder, DocumentComment> {
 
     private final IamUserRepo iamUserRepo;
+    private final IamUserRepoExtended iamUserRepoExtended;
     private final DocumentRepo documentRepo;
 
-    public MapToDocumentCommentMapper(final IamUserRepo iamUserRepo, final DocumentRepo documentRepo) {
+    public MapToDocumentCommentMapper(
+            final IamUserRepo iamUserRepo,
+            final IamUserRepoExtended iamUserRepoExtended,
+            final DocumentRepo documentRepo) {
         this.iamUserRepo = iamUserRepo;
+        this.iamUserRepoExtended = iamUserRepoExtended;
         this.documentRepo = documentRepo;
     }
 
@@ -44,8 +50,7 @@ public class MapToDocumentCommentMapper extends AbstractMapToEntityMapper<MapHol
         mapDate(a, CommentFields.DATE, audit::setCreatedAt);
         mapDate(a, CommentFields.DATE, audit::setUpdatedAt);
 
-        String creatorId = a.string(CommentFields.CREATOR_ID, true);
-        IamUser creator = RepositoryUtils.findById(creatorId, iamUserRepo::findById, IamUser.class);
+        IamUser creator = CasesUtils.Comments.getCreator(a, iamUserRepo, iamUserRepoExtended);
         audit.setCreatedBy(creator.getId());
         audit.setUpdatedBy(creator.getId());
 

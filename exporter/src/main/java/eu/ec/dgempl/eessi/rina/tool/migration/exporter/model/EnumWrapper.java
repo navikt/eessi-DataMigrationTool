@@ -21,7 +21,7 @@ public class EnumWrapper {
      * Method that initializes the entries of the EnumWrapper. The method gets through reflection the list of constants and maps each of
      * them to their associated values, all lower cased. For instance, an enum entry like `PENSION("Pension", "P")` will generate the map
      * entry `pension -> ("pension", "p")`
-     * 
+     *
      * @param clazz
      *            the enum class
      * @throws IllegalAccessException
@@ -55,7 +55,7 @@ public class EnumWrapper {
     /**
      * Method for looking up values in the enum name and values. The method returns true if {@code value} is found in the list of name and
      * values, false otherwise
-     * 
+     *
      * @param value
      *            the value that is searched in the enum
      * @return
@@ -76,4 +76,15 @@ public class EnumWrapper {
 
         return false;
     }
+
+    /**
+     * Method that returns the list of valid values defined for the enum.
+     *
+     * @return the list of values in the format key : value_list
+     */
+    public List<String> validValues() {
+
+        return entries.entrySet().stream().map(en -> en.getKey() + " : " + en.getValue()).collect(Collectors.toList());
+    }
+
 }

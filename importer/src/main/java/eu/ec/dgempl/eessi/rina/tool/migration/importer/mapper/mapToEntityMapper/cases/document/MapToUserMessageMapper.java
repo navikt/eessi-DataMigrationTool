@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import eu.ec.dgempl.eessi.rina.buc.core.model.sbdh.StandardBusinessDocumentHeader;
 import eu.ec.dgempl.eessi.rina.commons.transformation.RinaJsonMapper;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.ECaseActionType;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.ERINAMessageType;
@@ -20,6 +21,7 @@ import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.DocumentFields;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper._abstract.AbstractMapToEntityMapper;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.service.OrganisationService;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.SbdhUtils;
 
 import ma.glasnost.orika.MappingContext;
 
@@ -55,6 +57,18 @@ public class MapToUserMessageMapper extends AbstractMapToEntityMapper<MapHolder,
             fixMedicalFieldName(sbdh);
             // fix isProtectedPerson flag; in ES the field is named 'protectedPerson'; the DTOs use 'isProtectedPerson'
             fixProtectedFieldName(sbdh);
+
+            try {
+                rinaJsonMapper.mapToObject(sbdh, StandardBusinessDocumentHeader.class);
+            } catch (Exception e) {
+                SbdhUtils.fixSbdhEnumValues(sbdh, "");
+            }
+
+            try {
+                rinaJsonMapper.mapToObject(sbdh, StandardBusinessDocumentHeader.class);
+            } catch (Exception e) {
+                throw new RuntimeException("Could not deserialize sbdh for userMessage " + b.getId(), e);
+            }
 
             b.setSbdh(rinaJsonMapper.mapToJson(sbdh));
         } catch (JsonProcessingException e) {

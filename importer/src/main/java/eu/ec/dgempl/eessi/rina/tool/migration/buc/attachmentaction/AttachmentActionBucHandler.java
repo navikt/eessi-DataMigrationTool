@@ -61,7 +61,7 @@ public class AttachmentActionBucHandler implements BucHandler {
 
         PreconditionsHelper.notEmpty(caseId, "caseId");
 
-        logger.info("Processing ATTACHMENT actions for the case [caseId={}]", caseId);
+        logger.debug("Processing ATTACHMENT actions for the case [caseId={}]", caseId);
 
         RinaCase rinaCase = rinaCaseRepo.findById(caseId);
 

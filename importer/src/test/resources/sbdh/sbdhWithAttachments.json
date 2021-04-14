@@ -1,0 +1,52 @@
+{
+  "attachments": [
+    {
+      "identifier": "39f1cc31ecb944a1b5b6034708e544bb",
+      "fileName": "attachment_xml.xml",
+      "isMedical": false,
+      "sectionReference": null,
+      "internetMediaTypeCode": "text/xml"
+    },
+    {
+      "identifier": "39f1cc31ecb944a1b5b6034708e544cc",
+      "fileName": "attachment_xml.xml",
+      "isMedical": false,
+      "sectionReference": null,
+      "internetMediaTypeCode": "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    }
+  ],
+  "sender": {
+    "identifier": "PT:PTNA07",
+    "contactTypeIdentifier": "CaseOwner",
+    "authority": "urn:eu:europa:ec:dgempl:eessi:ir"
+  },
+  "receivers": [
+    {
+      "identifier": "FR:FRNA10",
+      "contactTypeIdentifier": "Counterparty",
+      "authority": "urn:eu:europa:ec:dgempl:eessi:ir"
+    },
+    {
+      "identifier": "FR:FRNA11",
+      "contactTypeIdentifier": "Counterparty",
+      "authority": "urn:eu:europa:ec:dgempl:eessi:ir"
+    }
+  ],
+  "headerVersion": "1.1",
+  "documentIdentification": {
+    "identifier": "38fa0b72eaab4aas125547f7360c012c",
+    "schemaVersion": "4.2",
+    "setIdentifier": "fa3ddb8e9bf0455b86531acfd5225fdc",
+    "action": "Start",
+    "relatedSetIdentifier": null,
+    "type": "P2000",
+    "creationDate": "2020-10-08T00:53:47.402Z",
+    "version": "1"
+  },
+  "caseIdentification": {
+    "identifier": "61eee278b31337408d4a3d0c9f985cdc",
+    "isProtectedPerson": false,
+    "type": "P_BUC_01",
+    "version": "4.2"
+  }
+}

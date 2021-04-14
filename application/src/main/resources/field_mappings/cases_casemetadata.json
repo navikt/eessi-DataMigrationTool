@@ -61,11 +61,12 @@
     "importIgnore": true
   },
   {
-    "esPath": "participants.organisation.address.country",
-    "esType": "string",
-    "sqlPath": "rinaCase.caseParticipants.organisation.addressCountry",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "esPath": "participants.organisation.address",
+    "esType": "object",
+    "ignorePath": true,
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "participants.organisation.countryCode",

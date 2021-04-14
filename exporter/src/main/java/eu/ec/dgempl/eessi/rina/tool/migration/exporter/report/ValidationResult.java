@@ -2,6 +2,7 @@ package eu.ec.dgempl.eessi.rina.tool.migration.exporter.report;
 
 import eu.ec.dgempl.eessi.rina.tool.migration.common.util.PreconditionsHelper;
 import eu.ec.dgempl.eessi.rina.tool.migration.exporter.model.EValidationResult;
+import eu.ec.dgempl.eessi.rina.tool.migration.common.util.GsonWrapper;
 
 /**
  * Class that defines the validation result at the field level
@@ -101,7 +102,7 @@ public class ValidationResult {
         PreconditionsHelper.notEmpty(field, "field");
         PreconditionsHelper.notNull(result, "result");
 
-        return new ValidationResult(field, value, result, details);
+        return new ValidationResult(field, value, result, GsonWrapper.stringify(details));
     }
 
     public EValidationResult getResult() {
@@ -114,6 +115,10 @@ public class ValidationResult {
 
     public Object getValue() {
         return value;
+    }
+
+    public Object getDetails() {
+        return details;
     }
 
     @Override

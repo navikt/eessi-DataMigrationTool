@@ -52,10 +52,12 @@
     "sqlType": "TIMESTAMP WITH TIME ZONE"
   },
   {
-    "esPath": "participants.address.country",
-    "esType": "string",
-    "sqlPath": "searchDefinition.organisations.addressCountry",
-    "sqlType": "VARCHAR(255)"
+    "esPath": "participants.address",
+    "esType": "object",
+    "ignorePath": true,
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "participants.countryCode",

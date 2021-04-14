@@ -25,7 +25,6 @@ import eu.ec.dgempl.eessi.rina.model.enumtypes.EPolicyType;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.ERole;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.ESector;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.EUserOrGroupType;
-import eu.ec.dgempl.eessi.rina.model.exception.runtime.enums.EnumNotFoundEessiRuntimeException;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.AssignmentPolicyRule;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.AssignmentPolicyRuleCountry;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.IamGroup;
@@ -36,6 +35,7 @@ import eu.ec.dgempl.eessi.rina.repo.IamUserRepo;
 import eu.ec.dgempl.eessi.rina.repo.ProcessDefRepo;
 import eu.ec.dgempl.eessi.rina.repo.RoleRepo;
 import eu.ec.dgempl.eessi.rina.repo.SectorRepo;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.DmtEnumNotFoundException;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.AssignmentPolicyFields;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper._abstract.AbstractMapToEntityMapper;
@@ -170,7 +170,12 @@ public class MapToAssignmentPolicyRuleMapper extends AbstractMapToEntityMapper<M
         List<String> countries = a.list(AssignmentPolicyFields.OWNER_COUNTRY, String.class, false);
         if (CollectionUtils.isNotEmpty(countries)) {
             countries.stream()
-                    .map(countryCode -> ECountryCode.lookup(countryCode).orElseThrow(EnumNotFoundEessiRuntimeException::new))
+                    .map(countryCode -> ECountryCode.lookup(countryCode).orElseThrow(
+                            () -> new DmtEnumNotFoundException(
+                                    ECountryCode.class,
+                                    a.addPath(AssignmentPolicyFields.OWNER_COUNTRY),
+                                    countryCode))
+                    )
                     .map(country -> new AssignmentPolicyRuleCountry(b, country))
                     .forEach(b::addRuleCountry);
         }
@@ -179,7 +184,9 @@ public class MapToAssignmentPolicyRuleMapper extends AbstractMapToEntityMapper<M
     private void mapAppRole(final MapHolder a, final AssignmentPolicyRule b) {
         String appRole = a.string(AssignmentPolicyFields.RULE_APP_ROLE);
         if (StringUtils.isNotBlank(appRole)) {
-            EApplicationRole eApplicationRole = EApplicationRole.lookup(appRole).orElseThrow(EnumNotFoundEessiRuntimeException::new);
+            EApplicationRole eApplicationRole = EApplicationRole.lookup(appRole).orElseThrow(
+                    () -> new DmtEnumNotFoundException(EApplicationRole.class, a.addPath(AssignmentPolicyFields.RULE_APP_ROLE), appRole)
+            );
             b.setApplicationRole(eApplicationRole);
         }
     }
@@ -189,7 +196,9 @@ public class MapToAssignmentPolicyRuleMapper extends AbstractMapToEntityMapper<M
         if (CollectionUtils.isNotEmpty(actors)) {
             actors.stream()
                     .filter(actor -> EPolicyType.CREATOR_ROLE.equalsIgnoreCase(actor) == false)
-                    .map(actor -> ERole.lookup(actor).orElseThrow(EnumNotFoundEessiRuntimeException::new))
+                    .map(actor -> ERole.lookup(actor).orElseThrow(
+                            () -> new DmtEnumNotFoundException(ERole.class, a.addPath(AssignmentPolicyFields.ACTORS), actor)
+                    ))
                     .map(roleRepo::findByName)
                     .filter(Objects::nonNull)
                     .forEach(b::addRole);
@@ -221,7 +230,7 @@ public class MapToAssignmentPolicyRuleMapper extends AbstractMapToEntityMapper<M
     private List<String> getUserGroupIdsByType(List<MapHolder> actors, EUserOrGroupType eUserOrGroupType) {
         return actors.stream()
                 .filter(actor -> eUserOrGroupType == EUserOrGroupType.lookup(actor.string(TYPE))
-                        .orElseThrow(EnumNotFoundEessiRuntimeException::new))
+                        .orElseThrow(() -> new DmtEnumNotFoundException(EUserOrGroupType.class, actor.addPath(TYPE), actor.string(TYPE))))
                 .map(actor -> actor.string(ID))
                 .collect(Collectors.toList());
     }
@@ -242,6 +251,6 @@ public class MapToAssignmentPolicyRuleMapper extends AbstractMapToEntityMapper<M
                         || sector.getDisplayName().equalsIgnoreCase(sectorId)
                         || sector.name().equalsIgnoreCase(sectorId))
                 .findFirst()
-                .orElseThrow(EnumNotFoundEessiRuntimeException::new);
+                .orElseThrow(() -> new DmtEnumNotFoundException(ESector.class, AssignmentPolicyFields.SECTOR, sectorId));
     }
 }

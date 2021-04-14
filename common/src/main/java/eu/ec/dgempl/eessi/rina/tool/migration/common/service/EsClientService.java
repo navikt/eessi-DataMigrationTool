@@ -127,6 +127,52 @@ public class EsClientService {
     }
 
     /**
+     * Method that retrieves the number of documents found in {@code index} by caseId and filtered by {@code types}
+     *
+     * @param caseId
+     *            the case id
+     * @param index
+     *            the elastic index
+     * @param types
+     *            the elastic type
+     * @return the number of documents
+     * @throws IOException
+     */
+    public long getCountByCaseId(String caseId, String index, String[] types) throws IOException {
+        PreconditionsHelper.notEmpty(caseId, "caseId");
+        PreconditionsHelper.notNull(index, "index");
+        PreconditionsHelper.notNull(types, "types");
+
+        // construct the query
+        EsSearchQueryTerm queryTerm;
+
+        if (types.length == 1 && EEsIndex.CASES.value().equals(index)
+                && (EEsType.CASESTRUCTUREDMETADATA.value().equals(types[0]) || EEsType.CASEMETADATA.value().equals(types[0]))) {
+            queryTerm = new EsSearchQueryTerm("id", caseId);
+        } else {
+            queryTerm = new EsSearchQueryTerm("caseId", caseId);
+        }
+        QueryBuilder query = QueryBuilders.boolQuery().must(QueryBuilders.termQuery(queryTerm.getField(), queryTerm.getValue()));
+
+        //@formatter:off
+        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder()
+                .query(query)
+                .size(0);
+        //@formatter:on
+
+        //@formatter:off
+        SearchRequest searchRequest = new SearchRequest()
+                .indices(index)
+                .types(types)
+                .source(sourceBuilder);
+        //@formatter:on
+
+        SearchResponse response = client.search(searchRequest);
+
+        return response.getHits().getTotalHits();
+    }
+
+    /**
      * Method for extracting the list of case ids from elasticsearch. The ids are extracted from
      * {@link eu.ec.dgempl.eessi.rina.tool.migration.common.model.EEsIndexType#CASES_CASEMETADATA}. The query that extracts the ids does not
      * fetch the source of the documents

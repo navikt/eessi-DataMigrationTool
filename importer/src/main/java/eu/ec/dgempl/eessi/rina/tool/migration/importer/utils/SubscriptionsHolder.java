@@ -1,13 +1,13 @@
 package eu.ec.dgempl.eessi.rina.tool.migration.importer.utils;
 
-import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.NieSubscriptionDto;
+import static eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.NieFields.*;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.NieFields.*;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.NieSubscriptionDto;
 
 public class SubscriptionsHolder {
 

@@ -16,7 +16,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import eu.ec.dgempl.eessi.rina.commons.transformation.RinaJsonMapper;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.EDocumentDirection;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.EDocumentStatus;
-import eu.ec.dgempl.eessi.rina.model.exception.runtime.enums.EnumNotFoundEessiRuntimeException;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.Document;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.DocumentConversation;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.DocumentTypeVersion;
@@ -28,6 +27,7 @@ import eu.ec.dgempl.eessi.rina.repo.DocumentRepo;
 import eu.ec.dgempl.eessi.rina.repo.DocumentTypeVersionRepo;
 import eu.ec.dgempl.eessi.rina.repo.IamUserRepo;
 import eu.ec.dgempl.eessi.rina.repo.RinaCaseRepo;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.DmtEnumNotFoundException;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.DocumentFields;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper._abstract.AbstractMapToEntityMapper;
@@ -168,7 +168,9 @@ public class MapToDocumentMapper extends AbstractMapToEntityMapper<MapHolder, Do
 
     private void mapStatus(final MapHolder a, final Document b) {
         String status = a.string(DocumentFields.STATUS);
-        EDocumentStatus eDocumentStatus = EDocumentStatus.lookup(status).orElseThrow(EnumNotFoundEessiRuntimeException::new);
+        EDocumentStatus eDocumentStatus = EDocumentStatus.lookup(status).orElseThrow(
+                () -> new DmtEnumNotFoundException(EDocumentStatus.class, a.addPath(DocumentFields.STATUS), status)
+        );
         b.setStatus(eDocumentStatus);
     }
 
@@ -183,7 +185,7 @@ public class MapToDocumentMapper extends AbstractMapToEntityMapper<MapHolder, Do
     private void mapDirection(final MapHolder a, final Document b) {
         String direction = a.string(DocumentFields.DIRECTION);
         EDocumentDirection eDocumentDirection = EDocumentDirection.lookup(direction).orElseThrow(
-                EnumNotFoundEessiRuntimeException::new
+                () -> new DmtEnumNotFoundException(EDocumentDirection.class, a.addPath(DocumentFields.DIRECTION), direction)
         );
         b.setDirection(eDocumentDirection);
     }

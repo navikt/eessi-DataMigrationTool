@@ -1,5 +1,13 @@
 package eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper.businessExceptions;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
+
 import eu.ec.dgempl.eessi.rina.commons.transformation.RinaJsonMapper;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.EUserMessageDirection;
 import eu.ec.dgempl.eessi.rina.model.jackson.JsonMapperQualifiers;
@@ -7,15 +15,8 @@ import eu.ec.dgempl.eessi.rina.model.jpa.entity.PendingSignature;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.PendingSignatureFields;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper._abstract.AbstractMapToEntityMapper;
+
 import ma.glasnost.orika.MappingContext;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
-
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.util.Map;
-
 
 @Component
 public class MapToPendingSignatureMapper extends AbstractMapToEntityMapper<MapHolder, PendingSignature> {

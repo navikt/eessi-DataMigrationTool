@@ -10,12 +10,11 @@ import eu.ec.dgempl.eessi.rina.model.enumtypes.audit.ECategoryType;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.audit.EComponentType;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.audit.EEventType;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.audit.EOutcomeType;
-import eu.ec.dgempl.eessi.rina.model.exception.runtime.enums.EnumEessiRuntimeException;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.AuditEvent;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.AuditObject;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.AuditParticipant;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity._abstraction.Audit;
-import eu.ec.dgempl.eessi.rina.repo.IamUserRepoExtended;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.DmtEnumNotFoundException;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.AuditEventFields;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper._abstract.AbstractMapToEntityMapper;
@@ -24,12 +23,6 @@ import ma.glasnost.orika.MappingContext;
 
 @Component
 public class MapToAuditEventMapper extends AbstractMapToEntityMapper<MapHolder, AuditEvent> {
-
-    private final IamUserRepoExtended iamUserRepo;
-
-    public MapToAuditEventMapper(final IamUserRepoExtended iamUserRepo) {
-        this.iamUserRepo = iamUserRepo;
-    }
 
     @Override
     public void mapAtoB(final MapHolder a, final AuditEvent b, final MappingContext context) {
@@ -73,21 +66,29 @@ public class MapToAuditEventMapper extends AbstractMapToEntityMapper<MapHolder, 
         MapHolder source = a.getMapHolder(AuditEventFields.SOURCE);
 
         String categoryType = source.string(AuditEventFields.CATEGORY_TYPE);
-        ECategoryType eCategoryType = ECategoryType.lookup(categoryType).orElseThrow(EnumEessiRuntimeException::new);
+        ECategoryType eCategoryType = ECategoryType.lookup(categoryType).orElseThrow(
+                () -> new DmtEnumNotFoundException(ECategoryType.class, source.addPath(AuditEventFields.CATEGORY_TYPE), categoryType)
+        );
         b.setCategoryType(eCategoryType);
 
         String componentType = source.string(AuditEventFields.COMPONENT_TYPE);
-        EComponentType eComponentType = EComponentType.lookup(componentType).orElseThrow(EnumEessiRuntimeException::new);
+        EComponentType eComponentType = EComponentType.lookup(componentType).orElseThrow(
+                () -> new DmtEnumNotFoundException(EComponentType.class, source.addPath(AuditEventFields.COMPONENT_TYPE), componentType)
+        );
         b.setComponentType(eComponentType);
 
         String eventType = source.string(AuditEventFields.EVENT_TYPE);
-        EEventType eEventType = EEventType.lookup(eventType).orElseThrow(EnumEessiRuntimeException::new);
+        EEventType eEventType = EEventType.lookup(eventType).orElseThrow(
+                () -> new DmtEnumNotFoundException(EEventType.class, source.addPath(AuditEventFields.EVENT_TYPE), eventType)
+        );
         b.setEventType(eEventType);
     }
 
     private void mapOutcomeType(final MapHolder mapHolder, final AuditEvent b) {
         String outcome = mapHolder.string(AuditEventFields.OUTCOME);
-        EOutcomeType eOutcomeType = EOutcomeType.lookup(outcome).orElseThrow(EnumEessiRuntimeException::new);
+        EOutcomeType eOutcomeType = EOutcomeType.lookup(outcome).orElseThrow(
+                () -> new DmtEnumNotFoundException(EOutcomeType.class, mapHolder.addPath(AuditEventFields.OUTCOME), outcome)
+        );
         b.setOutcomeType(eOutcomeType);
     }
 
@@ -105,7 +106,9 @@ public class MapToAuditEventMapper extends AbstractMapToEntityMapper<MapHolder, 
 
     private void mapActionType(final MapHolder a, final AuditEvent b) {
         String action = a.string(AuditEventFields.ACTION);
-        EActionType eActionType = EActionType.lookup(action).orElseThrow(EnumEessiRuntimeException::new);
+        EActionType eActionType = EActionType.lookup(action).orElseThrow(
+                () -> new DmtEnumNotFoundException(EActionType.class, a.addPath(AuditEventFields.ACTION), action)
+        );
         b.setActionType(eActionType);
     }
 }

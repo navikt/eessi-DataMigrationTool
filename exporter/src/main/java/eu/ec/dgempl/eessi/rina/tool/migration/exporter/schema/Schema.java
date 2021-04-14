@@ -12,7 +12,7 @@ import org.springframework.util.StringUtils;
 import eu.ec.dgempl.eessi.rina.tool.migration.common.util.PreconditionsHelper;
 import eu.ec.dgempl.eessi.rina.tool.migration.exporter.model.FieldInfo;
 import eu.ec.dgempl.eessi.rina.tool.migration.exporter.service.ValidatorProviderService;
-import eu.ec.dgempl.eessi.rina.tool.migration.exporter.util.GsonWrapper;
+import eu.ec.dgempl.eessi.rina.tool.migration.common.util.GsonWrapper;
 
 /**
  * Class for creating schemas used in the process of validation

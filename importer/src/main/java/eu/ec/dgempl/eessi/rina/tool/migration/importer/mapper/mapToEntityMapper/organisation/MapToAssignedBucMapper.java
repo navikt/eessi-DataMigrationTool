@@ -1,5 +1,7 @@
 package eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper.organisation;
 
+import org.springframework.stereotype.Component;
+
 import eu.ec.dgempl.eessi.rina.model.enumtypes.EApplicationRole;
 import eu.ec.dgempl.eessi.rina.model.exception.runtime.enums.EnumNotFoundEessiRuntimeException;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.AssignedBuc;
@@ -8,8 +10,8 @@ import eu.ec.dgempl.eessi.rina.repo.ProcessDefRepo;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.AssignedBucFields;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper._abstract.AbstractMapToEntityMapper;
+
 import ma.glasnost.orika.MappingContext;
-import org.springframework.stereotype.Component;
 
 @Component
 public class MapToAssignedBucMapper extends AbstractMapToEntityMapper<MapHolder, AssignedBuc> {

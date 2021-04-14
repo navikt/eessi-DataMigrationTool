@@ -16,7 +16,6 @@ import eu.ec.dgempl.eessi.rina.model.enumtypes.EApplicationRole;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.ECasePrefillGroup;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.ECasePropertyKey;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.ECaseStatus;
-import eu.ec.dgempl.eessi.rina.model.exception.runtime.enums.EnumNotFoundEessiRuntimeException;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.Assignment;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.CaseParticipant;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.DocumentType;
@@ -32,6 +31,7 @@ import eu.ec.dgempl.eessi.rina.repo.IamUserRepo;
 import eu.ec.dgempl.eessi.rina.repo.ProcessDefVersionRepo;
 import eu.ec.dgempl.eessi.rina.repo.TenantRepo;
 import eu.ec.dgempl.eessi.rina.service.tx.util.ProcessDefUtil;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.DmtEnumNotFoundException;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.EElasticType;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.CaseFields;
@@ -153,8 +153,10 @@ public class MapToRinaCaseMapper extends AbstractMapToEntityMapper<MapHolder, Ri
                     Organisation organisation = organisationService.getOrSaveOrganisation(organisationId);
 
                     String applicationRole = participant.string(ROLE);
-                    EApplicationRole eApplicationRole = EApplicationRole.lookup(applicationRole).orElseThrow(
-                            EnumNotFoundEessiRuntimeException::new);
+                    EApplicationRole eApplicationRole = EApplicationRole.lookup(applicationRole)
+                            .orElseThrow(
+                                    () -> new DmtEnumNotFoundException(EApplicationRole.class, participant.addPath(ROLE), applicationRole)
+                            );
 
                     return new CaseParticipant(b, organisation, eApplicationRole);
                 })
@@ -184,7 +186,9 @@ public class MapToRinaCaseMapper extends AbstractMapToEntityMapper<MapHolder, Ri
 
     private void mapStatus(final MapHolder a, final RinaCase b) {
         String status = a.string(STATUS);
-        ECaseStatus caseStatus = ECaseStatus.lookup(status).orElseThrow(EnumNotFoundEessiRuntimeException::new);
+        ECaseStatus caseStatus = ECaseStatus.lookup(status).orElseThrow(
+                () -> new DmtEnumNotFoundException(ECaseStatus.class, a.addPath(STATUS), status)
+        );
         b.setStatus(caseStatus);
     }
 

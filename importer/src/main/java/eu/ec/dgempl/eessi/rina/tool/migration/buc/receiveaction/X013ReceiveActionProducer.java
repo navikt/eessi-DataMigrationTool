@@ -52,20 +52,18 @@ public class X013ReceiveActionProducer implements ReceiveActionProducer {
 
     /**
      * Get all the X002, for which a RECEIVE action of X003 should be created
-     * 
+     *
      * @param caseId
      * @return
      */
-    protected List<Document> getAllX012(final String caseId) {        
+    protected List<Document> getAllX012(final String caseId) {
         // @formatter:off
         return documentRepo.
                 findByRinaCaseIdAndDocumentTypeVersionDocumentTypeType(caseId, EDocumentType.X_012.value());
         // @formatter:on        
     }
 
-    
     /**
-     * 
      * @param caseId
      * @param buc
      * @return
@@ -73,9 +71,9 @@ public class X013ReceiveActionProducer implements ReceiveActionProducer {
     protected List<ActionDO> getReceiveActions(final String caseId, final List<Document> docs, final Case buc) {
 
         List<ActionDO> receiveUpdateActions = new ArrayList<>();
-        
+
         for (Document doc : docs) {
-            
+
             receiveUpdateActions.add(createX013Receive(caseId, doc));
 
         }
@@ -83,11 +81,10 @@ public class X013ReceiveActionProducer implements ReceiveActionProducer {
         return receiveUpdateActions;
 
     }
-    
-    
+
     /**
      * Create an Action object for the DOC_RECEIVE of X003 as a reply to X002
-     * 
+     *
      * @param caseId
      * @param x002
      * @return

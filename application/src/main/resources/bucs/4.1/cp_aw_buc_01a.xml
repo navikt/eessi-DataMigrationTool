@@ -194,7 +194,7 @@ mayCreateH120=[false]
 mayCreateH121=[false]
 -->
 
-<case name="AW_BUC_01a" version="${buc.model.version}" role="CP"
+<case name="AW_BUC_01a" version="4.1" role="CP"
       xmlns="http://ec.europa.eu/eessi/rina/buc">
 
     <context>

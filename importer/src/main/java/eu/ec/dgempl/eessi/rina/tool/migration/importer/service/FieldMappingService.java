@@ -90,12 +90,9 @@ public class FieldMappingService {
      * Method that iterates through the fields of a document provided and generates a file containing all fields in the document that were
      * not ignored or visited previously
      *
-     * @param document
-     *            the document to be evaluated
-     * @param elasticType
-     *            the elastic type associated to the document
-     * @param visitedFieldsMap
-     *            the previously already visited fields of the document
+     * @param document         the document to be evaluated
+     * @param elasticType      the elastic type associated to the document
+     * @param visitedFieldsMap the previously already visited fields of the document
      */
     public List<String> checkUnreviewedFields(MapHolder document, EElasticType elasticType, Map visitedFieldsMap) {
         PreconditionsHelper.notNull(document, "document");
@@ -149,14 +146,10 @@ public class FieldMappingService {
     /**
      * Method used to iterate through a field of a document. This field can be a Map, an Array or a final leaf.
      *
-     * @param field
-     *            the field to be evaluated
-     * @param path
-     *            the relation of parents of the field
-     * @param visitedFields
-     *            the previously already visited fields of the document
-     * @param ignoredFields
-     *            the ignored fields of the document
+     * @param field         the field to be evaluated
+     * @param path          the relation of parents of the field
+     * @param visitedFields the previously already visited fields of the document
+     * @param ignoredFields the ignored fields of the document
      */
     private <T> List<String> walk(Object field, String path, List<String> visitedFields, List<String> ignoredFields) {
 

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import eu.ec.dgempl.eessi.rina.buc.core.model.Case;
 import eu.ec.dgempl.eessi.rina.buc.core.model.ECaseRole;
+import eu.ec.dgempl.eessi.rina.model.enumtypes.ECaseStatus;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.RinaCase;
 import eu.ec.dgempl.eessi.rina.repo.RinaCaseRepo;
 import eu.ec.dgempl.eessi.rina.tool.migration.buc.BucDefinitionImporterFactory;
@@ -40,10 +41,15 @@ public class ReceiveActionBucHandler implements BucHandler {
         PreconditionsHelper.notNull(caseRole, "caseRole");
         PreconditionsHelper.notEmpty(modelVersion, "modelVersion");
 
-        logger.info("Processing RECEIVE actions for the case [caseId={}]", caseId);
+        logger.debug("Processing RECEIVE actions for the case [caseId={}]", caseId);
 
         // TODO: check if the case has been started
         RinaCase rinaCase = rinaCaseRepo.findById(caseId);
+
+        // skip the removed cases
+        if (ECaseStatus.REMOVED.equals(rinaCase.getStatus())) {
+            return;
+        }
 
         // build the BUC definition object
         final Case buc = bucDefinitionFactory.loadBucConfiguration(bucType, caseRole, modelVersion);

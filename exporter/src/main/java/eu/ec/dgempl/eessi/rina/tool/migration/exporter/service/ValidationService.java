@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import eu.ec.dgempl.eessi.rina.tool.migration.common.model.EEsIndex;
 import eu.ec.dgempl.eessi.rina.tool.migration.common.model.EEsType;
 import eu.ec.dgempl.eessi.rina.tool.migration.common.service.EsClientService;
+import eu.ec.dgempl.eessi.rina.tool.migration.common.util.GsonWrapper;
 import eu.ec.dgempl.eessi.rina.tool.migration.common.util.PreconditionsHelper;
 import eu.ec.dgempl.eessi.rina.tool.migration.exporter.aggregator.Aggregator;
 import eu.ec.dgempl.eessi.rina.tool.migration.exporter.aggregator.ValidationAggregator;
@@ -30,7 +31,6 @@ import eu.ec.dgempl.eessi.rina.tool.migration.exporter.report.ContextValidationR
 import eu.ec.dgempl.eessi.rina.tool.migration.exporter.report.DocumentValidationReport;
 import eu.ec.dgempl.eessi.rina.tool.migration.exporter.report.ValidationResult;
 import eu.ec.dgempl.eessi.rina.tool.migration.exporter.util.ContentNavigator;
-import eu.ec.dgempl.eessi.rina.tool.migration.exporter.util.GsonWrapper;
 import eu.ec.dgempl.eessi.rina.tool.migration.exporter.util.IdHelper;
 import eu.ec.dgempl.eessi.rina.tool.migration.exporter.util.IndexTypeHelper;
 
@@ -234,11 +234,18 @@ public class ValidationService {
     public CaseValidationReport validateSingleCase(String caseId) throws IOException {
         PreconditionsHelper.notEmpty(caseId, "caseId");
 
-        Map<String, Object> tenant = elasticsearchService.getWhoami(caseId);
-        String tenantId = (String) ContentNavigator.getField(tenant, "whoami", "id");
-        if (tenantId == null) {
-            logger.error("Could not extract whoami [case={}]", caseId);
-            tenantId = "UNKNOWN";
+        String tenantId;
+
+        if (caseId.equals("0")) {
+            tenantId = "-";
+        } else {
+            Map<String, Object> tenant = elasticsearchService.getWhoami(caseId);
+            tenantId = (String) ContentNavigator.getField(tenant, "whoami", "id");
+
+            if (tenantId == null) {
+                logger.error("Could not extract whoami [case={}]", caseId);
+                tenantId = "UNKNOWN";
+            }
         }
 
         CaseValidationReport caseReport = new CaseValidationReport(caseId, tenantId);
@@ -294,7 +301,8 @@ public class ValidationService {
 
         // if there are any errors, write the report on the disk
         if (caseReport.getErrors().size() > 0) {
-            GsonWrapper.writeToFile(caseReport, reportsFolder + "/validator/cases/case_" + caseId + ".json");
+            String reportPath = reportsFolder + "/validator/cases/case_" + tenantId.replaceAll(":", "-") + "_" + caseId + ".json";
+            GsonWrapper.writeToFile(caseReport, reportPath);
         }
 
         return caseReport;

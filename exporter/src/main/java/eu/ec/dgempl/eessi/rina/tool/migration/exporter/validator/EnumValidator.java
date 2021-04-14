@@ -59,7 +59,9 @@ public class EnumValidator extends AbstractValidator {
                     if (found) {
                         results.add(ValidationResult.ok(path, obj));
                     } else {
-                        String details = "Expected value from enum " + params[0];
+                        String acceptedValues = enumService.getAcceptedValues(params[0]);
+                        String details = "Expected value from enum " + params[0] + ". Accepted values in format 'name:values' are: "
+                                + acceptedValues;
                         results.add(ValidationResult.error(path, obj, EValidationResult.INVALID_ENUM, details));
                     }
                 } catch (IllegalAccessException | NoClassDefFoundError e) {
@@ -69,8 +71,13 @@ public class EnumValidator extends AbstractValidator {
                 }
             }
         } else {
-            String details = "Value is not of type string";
-            results.add(ValidationResult.error(path, obj, EValidationResult.INVALID_ENUM, details));
+            try {
+                String acceptedValues = enumService.getAcceptedValues(params[0]);
+                String details = "Value is not of type string" + ". Accepted values in format 'name:values' are: " + acceptedValues;
+                results.add(ValidationResult.error(path, obj, EValidationResult.INVALID_ENUM, details));
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
         }
 
         return results;

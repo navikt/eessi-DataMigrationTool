@@ -21,7 +21,7 @@ public class ReceiveActionsHelper {
 
     /**
      * Returns the country code for the case owner participant
-     * 
+     *
      * @param participants
      * @return
      */
@@ -45,7 +45,8 @@ public class ReceiveActionsHelper {
     }
 
     /**
-     * Returns a new {@link ActionDO} object for the given {@code trigger}, which would have been created
+     * Returns a new {@link ActionDO} object for the given {@code trigger},
+     * which would have been created
      *
      * @param caseId
      * @param trigger
@@ -68,8 +69,9 @@ public class ReceiveActionsHelper {
     }
 
     /**
-     * Creates a new action object for the given {@code caseId} and {@code documentType}.
-     * 
+     * Creates a new action object for the given {@code caseId} and
+     * {@code documentType}.
+     *
      * @param caseId
      * @param documentType
      * @return
@@ -91,8 +93,9 @@ public class ReceiveActionsHelper {
     }
 
     /**
-     * Creates a new DOC_UPDATE_RECEIVE action object for the given {@code caseId} and {@code documentType}.
-     * 
+     * Creates a new DOC_UPDATE_RECEIVE action object for the given
+     * {@code caseId} and {@code documentType}.
+     *
      * @param caseId
      * @param documentType
      * @return
@@ -114,8 +117,9 @@ public class ReceiveActionsHelper {
     }
 
     /**
-     * Returns {@code true} if the trigger is a {@link CreateActionTrigger}, {@code false} otherwise.
-     * 
+     * Returns {@code true} if the trigger is a {@link CreateActionTrigger},
+     * {@code false} otherwise.
+     *
      * @param trigger
      * @return
      */
@@ -131,8 +135,9 @@ public class ReceiveActionsHelper {
     }
 
     /**
-     * Returns a list of {@link CreateActionTrigger}s for the given {@code doc}, which are creating a {@link EActionType#DOC_RECEIVE} tasks.
-     * 
+     * Returns a list of {@link CreateActionTrigger}s for the given {@code doc},
+     * which are creating a {@link EActionType#DOC_RECEIVE} tasks.
+     *
      * @param doc
      * @return
      */
@@ -154,9 +159,61 @@ public class ReceiveActionsHelper {
     }
 
     /**
-     * Returns {@code true} if the given {@code trigger} is of type {@link CreateActionTrigger} and the action it is supposed to create is
+     * Returns a list of {@link CreateActionTrigger}s for the given {@code doc},
+     * onAction {@link EActionType#DOC_RECEIVE} which are creating a
+     * {@link EActionType#DOC_RECEIVE} tasks.
+     *
+     * @param doc
+     * @return
+     */
+    public static List<CreateActionTrigger> getCreateOnReceiveReceiveActionTriggersForDocument(final Document doc) {
+
+        PreconditionsHelper.notNull(doc, "doc");
+
+        if (doc.getTriggers() == null) {
+            return Collections.emptyList();
+        }
+
+        // @formatter:off
+        return doc.getTriggers().getTrigger().stream()
+                    .filter(t -> isCreateOnReceiveReceiveActionTrigger(t))
+                    .map(CreateActionTrigger.class::cast)
+                    .collect(Collectors.toList());
+        // @formatter:on
+
+    }
+
+    /**
+     * Returns a list of {@link CreateActionTrigger}s for the given {@code doc},
+     * onAction {@link EActionType#DOC_SEND} and
+     * {@link EActionType#DOC_SEND_PARTICIPANTS} which are creating a
+     * {@link EActionType#DOC_RECEIVE} tasks.
+     *
+     * @param doc
+     * @return
+     */
+    public static List<CreateActionTrigger> getCreateOnSendReceiveActionTriggersForDocument(final Document doc) {
+
+        PreconditionsHelper.notNull(doc, "doc");
+
+        if (doc.getTriggers() == null) {
+            return Collections.emptyList();
+        }
+
+        // @formatter:off
+        return doc.getTriggers().getTrigger().stream()
+                    .filter(t -> isCreateOnSendReceiveActionTrigger(t))
+                    .map(CreateActionTrigger.class::cast)
+                    .collect(Collectors.toList());
+        // @formatter:on
+
+    }
+
+    /**
+     * Returns {@code true} if the given {@code trigger} is of type
+     * {@link CreateActionTrigger} and the action it is supposed to create is
      * {@link EActionType#DOC_RECEIVE}.
-     * 
+     *
      * @param trigger
      * @return
      */
@@ -171,5 +228,51 @@ public class ReceiveActionsHelper {
         CreateActionTrigger createActionTrigger = (CreateActionTrigger) trigger;
         return createActionTrigger.getActionType().equals(EActionType.DOC_RECEIVE);
 
+    }
+
+    /**
+     * Returns {@code true} if the given {@code trigger} is of type
+     * {@link CreateActionTrigger}, the action it is supposed to create is
+     * {@link EActionType#DOC_RECEIVE} and the OnAction type is
+     * {@link EActionType#DOC_RECEIVE}.
+     *
+     * @param trigger
+     * @return
+     */
+    public static boolean isCreateOnReceiveReceiveActionTrigger(final Trigger trigger) {
+
+        // check if it is create action trigger
+        if (CreateActionTrigger.class.isAssignableFrom(trigger.getClass()) == false) {
+            return false;
+        }
+
+        // cast and check the action type
+        CreateActionTrigger createActionTrigger = (CreateActionTrigger) trigger;
+        return (createActionTrigger.getActionType().equals(EActionType.DOC_RECEIVE)
+                && createActionTrigger.getOnAction().equals(EActionType.DOC_RECEIVE));
+    }
+
+    /**
+     * Returns {@code true} if the given {@code trigger} is of type
+     * {@link CreateActionTrigger}, the action it is supposed to create is
+     * {@link EActionType#DOC_RECEIVE} and the OnAction type is
+     * {@link EActionType#DOC_SEND} or
+     * {@link EActionType#DOC_SEND_PARTICIPANTS}.
+     *
+     * @param trigger
+     * @return
+     */
+    public static boolean isCreateOnSendReceiveActionTrigger(final Trigger trigger) {
+
+        // check if it is create action trigger
+        if (CreateActionTrigger.class.isAssignableFrom(trigger.getClass()) == false) {
+            return false;
+        }
+
+        // cast and check the action type
+        CreateActionTrigger createActionTrigger = (CreateActionTrigger) trigger;
+        return (createActionTrigger.getActionType().equals(EActionType.DOC_RECEIVE)
+                && (createActionTrigger.getOnAction().equals(EActionType.DOC_SEND)
+                || createActionTrigger.getOnAction().equals(EActionType.DOC_SEND_PARTICIPANTS)));
     }
 }

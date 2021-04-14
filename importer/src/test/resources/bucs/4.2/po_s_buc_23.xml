@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<case name="S_BUC_23" version="${buc.model.version}" role="PO"
+<case name="S_BUC_23" version="4.2" role="PO"
       xmlns="http://ec.europa.eu/eessi/rina/buc">
 
     <context>
@@ -83,7 +83,7 @@
 				-->
 				
 				<!-- The custom trigger is built to be activated by the following: (SendS053RPoTriggerHandlerTest.java)-->			
-                <createActionTrigger onAction="DOC_SEND" onParentDocumentType="S053C" onResult="SUCCESS" actionType="DOC_RECEIVE" documentType="S053A"/>			
+                <!-- <createActionTrigger onAction="DOC_SEND" onParentDocumentType="S053C" onResult="SUCCESS" actionType="DOC_RECEIVE" documentType="S053A"/>			 -->
 
             </triggers>
         </document>

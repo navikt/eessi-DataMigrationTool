@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<case name="H_BUC_10" version="${buc.model.version}" role="PO" xmlns="http://ec.europa.eu/eessi/rina/buc">
+<case name="H_BUC_10" version="4.2" role="PO" xmlns="http://ec.europa.eu/eessi/rina/buc">
 
 
     <!-- CONFIG FILE H10.conf
@@ -219,6 +219,9 @@
         </document>
 
         <document type="H131">
+			<parameters> 
+				<parameter key="hasCancel">true</parameter> <!-- default is false --> 
+			</parameters> 		
             <triggers>
                 <!-- onCondition (H130 asked for estimated costs) -->
                 <createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS"

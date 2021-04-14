@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<case name="R_BUC_01" version="${buc.model.version}" role="PO" xmlns="http://ec.europa.eu/eessi/rina/buc">
+<case name="R_BUC_01" version="4.1" role="PO" xmlns="http://ec.europa.eu/eessi/rina/buc">
 
     <!-- CONFIG FILE R1.conf
     PROC=[R_BUC_01]
@@ -292,7 +292,7 @@
                                      actionType="DOC_CREATE" documentType="R003"/>
                 <createActionTrigger onAction="DOC_UPDATE_RECEIVE" onResult="SUCCESS" onCondition="po_r_buc_01_FINAL"
                                      actionType="DOC_CREATE" documentType="R003"/>
-
+									 
             </triggers>
         </document>
 
@@ -304,11 +304,8 @@
                 <parameter key="allowsAttachments">true</parameter> <!-- default is false -->
             </parameters>
             <triggers>
-
                 <!-- onCondition (if there exists a R002 not cancelled) -->
-                <removeActionTrigger onAction="DOC_CANCEL" onResult="SUCCESS" onCondition="po_r_buc_01_VALID"
-                                     actionType="DOC_CREATE" documentType="R003"/>
-
+                <createActionTrigger onAction="DOC_CANCEL" onResult="SUCCESS" onCondition="po_r_buc_01_VALID" actionType="DOC_CREATE" documentType="R003"/>
             </triggers>
         </document>
 

@@ -1,7 +1,12 @@
 package eu.ec.dgempl.eessi.rina.tool.migration.buc.timedaction;
 
 import java.time.ZonedDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -18,9 +23,20 @@ import eu.ec.dgempl.eessi.rina.buc.core.model.EDocumentType;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.EConversationParticipantRole;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.EDocumentDirection;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.EDocumentStatus;
-import eu.ec.dgempl.eessi.rina.model.jpa.entity.*;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity.CaseParticipant;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity.ConversationParticipant;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity.Document;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity.DocumentConversation;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity.DocumentTypeVersion;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity.RinaCase;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity.UserMessage;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity.UserMessageResponse;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity._abstraction.Audit;
-import eu.ec.dgempl.eessi.rina.repo.*;
+import eu.ec.dgempl.eessi.rina.repo.DocumentConversationRepo;
+import eu.ec.dgempl.eessi.rina.repo.DocumentRepo;
+import eu.ec.dgempl.eessi.rina.repo.DocumentRepoExtended;
+import eu.ec.dgempl.eessi.rina.repo.DocumentTypeVersionRepo;
+import eu.ec.dgempl.eessi.rina.repo.RinaCaseRepo;
 import eu.ec.dgempl.eessi.rina.tool.migration.buc.BucHandler;
 import eu.ec.dgempl.eessi.rina.tool.migration.common.util.PreconditionsHelper;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.service.ActionService;
@@ -75,7 +91,7 @@ public class TimedActionBucHandler implements BucHandler {
 
         PreconditionsHelper.notEmpty(caseId, "caseId");
 
-        logger.info("Processing TIMED actions for the case [caseId={}]", caseId);
+        logger.debug("Processing TIMED actions for the case [caseId={}]", caseId);
 
         RinaCase rinaCase = rinaCaseRepo.findById(caseId);
         String buc = (caseRole.value() + "_" + bucType).toUpperCase();

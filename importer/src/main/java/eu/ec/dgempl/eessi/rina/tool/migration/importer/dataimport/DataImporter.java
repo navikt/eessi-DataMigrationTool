@@ -9,11 +9,5 @@ import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.EElasticType;
  */
 public interface DataImporter {
 
-    default void importData() {
-    }
-
-    default void importData(String caseId) {
-    }
-
     EElasticType inferElasticType();
 }

@@ -1,8 +1,8 @@
 package eu.ec.dgempl.eessi.rina.tool.migration.buc.receiveaction;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,8 +19,11 @@ import eu.ec.dgempl.eessi.rina.buc.core.model.EDocumentType;
 import eu.ec.dgempl.eessi.rina.buc.core.model.EResultType;
 import eu.ec.dgempl.eessi.rina.buc.core.model.Trigger;
 import eu.ec.dgempl.eessi.rina.buc.precondition.PreconditionsHelper;
+import eu.ec.dgempl.eessi.rina.model.enumtypes.EDocumentStatus;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.Document;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.RinaCase;
+import eu.ec.dgempl.eessi.rina.repo.DocumentRepo;
+import eu.ec.dgempl.eessi.rina.repo.DocumentRepoExtended;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.service.ActionService;
 
 /**
@@ -33,6 +36,12 @@ public class ReceiveReplyActionProducer implements ReceiveActionProducer {
 
     @Autowired
     private ActionService actionService;
+
+    @Autowired
+    private DocumentRepoExtended documentRepoEx;
+
+    @Autowired
+    private DocumentRepo documentRepo;
 
     @Override
     public void createReceiveActions(RinaCase rinaCase, Case buc) throws Exception {
@@ -49,35 +58,43 @@ public class ReceiveReplyActionProducer implements ReceiveActionProducer {
         // get the action objects for received docs
         actions.addAll(getReceiveActionsForSentDocs(caseId, buc));
 
-        // get the exceptional receive reply actions.
-
         // save actions
         actions.forEach(a -> actionService.saveAction(a));
     }
 
     /**
      * Returns a list of received {@link Document} objects for the given {@code caseId}
-     * 
+     *
      * @param caseId
      * @return
      */
     protected List<Document> getReceivedDocumentsNotCancelled(final String caseId) {
 
-        // TODO: retrieve the received documents from the DB
-        return Collections.emptyList();
+        // @formatter:off
+        List<Document> documents = documentRepoEx.findByRinaCaseId(caseId);
+        return documents
+                .stream()
+                .filter(d -> EDocumentStatus.RECEIVED.equals(d.getStatus()))
+                .collect(Collectors.toList());
+        // @formatter:on
 
     }
 
     /**
      * Returns a list of sent {@link Document} objects for the given {@code caseId}
-     * 
+     *
      * @param caseId
      * @return
      */
     protected List<Document> getSentDocuments(final String caseId) {
 
-        // TODO: retrieve the sent documents from the DB
-        return Collections.emptyList();
+        // @formatter:off
+        List<Document> documents = documentRepoEx.findByRinaCaseId(caseId);
+        return documents
+                .stream()
+                .filter(d -> EDocumentStatus.SENT.equals(d.getStatus()) || EDocumentStatus.ACTIVE.equals(d.getStatus()) )
+                .collect(Collectors.toList());
+        // @formatter:on
 
     }
 
@@ -105,11 +122,11 @@ public class ReceiveReplyActionProducer implements ReceiveActionProducer {
             // get BUC document definition
             eu.ec.dgempl.eessi.rina.buc.core.model.Document bucDocument = BucDefinitionHelper.getDocumentDefinition(docType, buc);
 
-            if (bucDocument.getTriggers() != null) {
+            if (bucDocument != null && bucDocument.getTriggers() != null) {
 
                 for (Trigger t : bucDocument.getTriggers().getTrigger()) {
 
-                    if (ReceiveActionsHelper.isCreateActionTrigger(t)) {
+                    if (ReceiveActionsHelper.isCreateActionTrigger(t) && filter((CreateActionTrigger) t)) {
 
                         // cast and create action
                         CreateActionTrigger createTrigger = (CreateActionTrigger) t;
@@ -119,7 +136,7 @@ public class ReceiveReplyActionProducer implements ReceiveActionProducer {
                                 && createTrigger.getActionType().equals(EActionType.DOC_RECEIVE_REPLY)) {
 
                             // create receive reply action
-                            receiveActions.add(createReceiveReplyActionForSentDocument(caseId, createTrigger, doc, bucDocument));
+                            receiveActions.add(createReceiveReplyAction(caseId, createTrigger, doc, bucDocument));
 
                         }
                     }
@@ -138,7 +155,7 @@ public class ReceiveReplyActionProducer implements ReceiveActionProducer {
      * For every document from the given {@code docs} list, will find in the {@code buc} definition if the document allows multiple
      * versions. If yes, it will create an action object with the type {@link EActionType#DOC_UPDATE_RECEIVE}. Method will return a
      * collection of all such actions.
-     * 
+     *
      * @param caseId
      * @param buc
      * @return
@@ -158,11 +175,11 @@ public class ReceiveReplyActionProducer implements ReceiveActionProducer {
             // get BUC document definition
             eu.ec.dgempl.eessi.rina.buc.core.model.Document bucDocument = BucDefinitionHelper.getDocumentDefinition(docType, buc);
 
-            if (bucDocument.getTriggers() != null) {
+            if (bucDocument != null && bucDocument.getTriggers() != null) {
 
                 for (Trigger t : bucDocument.getTriggers().getTrigger()) {
 
-                    if (ReceiveActionsHelper.isCreateActionTrigger(t)) {
+                    if (ReceiveActionsHelper.isCreateActionTrigger(t) && filter((CreateActionTrigger) t)) {
 
                         // cast and create action
                         CreateActionTrigger createTrigger = (CreateActionTrigger) t;
@@ -171,7 +188,7 @@ public class ReceiveReplyActionProducer implements ReceiveActionProducer {
                                 && createTrigger.getActionType().equals(EActionType.DOC_RECEIVE_REPLY)) {
 
                             // create receive reply action
-                            receiveActions.add(createReceiveReplyActionForNonCancelledDocument(caseId, createTrigger, doc, bucDocument));
+                            receiveActions.add(createReceiveReplyAction(caseId, createTrigger, doc, bucDocument));
 
                         }
                     }
@@ -187,15 +204,16 @@ public class ReceiveReplyActionProducer implements ReceiveActionProducer {
     }
 
     /**
-     * Returns a new {@link ActionDO} object with {@link EActionType#DOC_RECEIVE} for the given parameters in the context of a SENT document
-     * 
+     * Returns a new {@link ActionDO} object with {@link EActionType#DOC_RECEIVE} for the given parameters in the context of the RECEIVED
+     * document.
+     *
      * @param caseId
      * @param trigger
      * @param dbDocument
      * @param document
      * @return
      */
-    protected ActionDO createReceiveReplyActionForSentDocument(String caseId, CreateActionTrigger trigger, Document dbDocument,
+    protected ActionDO createReceiveReplyAction(String caseId, CreateActionTrigger trigger, Document dbDocument,
             final eu.ec.dgempl.eessi.rina.buc.core.model.Document document) {
 
         PreconditionsHelper.notBlank(caseId, "caseId");
@@ -206,56 +224,43 @@ public class ReceiveReplyActionProducer implements ReceiveActionProducer {
         logger.debug("Creating RECEIVE action for a REPLY [caseId={}, docType={}, docId={}]", caseId, document.getType(),
                 dbDocument.getId());
 
+        // create the default receive action
         ActionDO actionDO = ReceiveActionsHelper.createReceiveActionForTrigger(caseId, trigger);
+
+        // set either the grandparent as related
+        if (trigger.isSameParentDocument()) {
+
+            // get the parent doc
+            if (dbDocument.getParent() == null) {
+                throw new IllegalStateException(String.format("sameParentDocument set to true for document with no Parent document"));
+            }
+
+            actionDO.setParentDocumentId(dbDocument.getParent().getId());
+            actionDO.setParentDocumentType(
+                    EDocumentType.fromValue(dbDocument.getParent().getDocumentTypeVersion().getDocumentType().getType()));
+
+        }
+        // or set the parent as related
+        else {
+
+            actionDO.setParentDocumentId(dbDocument.getId());
+            actionDO.setParentDocumentType(EDocumentType.fromValue(dbDocument.getDocumentTypeVersion().getDocumentType().getType()));
+
+        }
 
         return actionDO;
     }
 
     /**
-     * Returns a new {@link ActionDO} object with {@link EActionType#DOC_RECEIVE} for the given parameters in the context of the RECEIVED
-     * document.
-     * 
-     * @param caseId
+     * Filter method
+     *
      * @param trigger
-     * @param dbDocument
-     * @param document
      * @return
      */
-    protected ActionDO createReceiveReplyActionForNonCancelledDocument(String caseId, CreateActionTrigger trigger, Document dbDocument,
-            final eu.ec.dgempl.eessi.rina.buc.core.model.Document document) {
-
-        PreconditionsHelper.notBlank(caseId, "caseId");
-        PreconditionsHelper.notNull(dbDocument, "dbDocument");
-        PreconditionsHelper.notNull(document, "document");
-        PreconditionsHelper.notNull(trigger, "trigger");
-
-        logger.debug("Creating RECEIVE action for a REPLY [caseId={}, docType={}, docId={}]", caseId, document.getType(),
-                dbDocument.getId());
-
-        ActionDO actionDO = ReceiveActionsHelper.createReceiveActionForTrigger(caseId, trigger);
-        // DocumentMetadataDO parentDocument = documentMetadataService.findByDocumentIdAndCaseId(relatedDocumentId, caseId);
-        //
-        // if (trigger.isSameParentDocument()) {
-        //
-        // if (StringUtils.isBlank(parentDocument.getParentDocumentId())) {
-        // throw new IllegalArgumentException(String.format("sameParentDocument set to true for document with no Parent document"));
-        // }
-        //
-        // DocumentMetadataDO grandParentDocument = documentMetadataService.findByDocumentIdAndCaseId(parentDocument.getParentDocumentId(),
-        // caseId);
-        // actionDO.setParentDocumentId(grandParentDocument.getId());
-        // actionDO.setParentDocumentType(grandParentDocument.getDocumentType());
-        // } else {
-        // actionDO.setParentDocumentId(relatedDocumentId);
-        // actionDO.setParentDocumentType(parentDocument.getDocumentType());
-        // }
-
-        return actionDO;
-    }
-
-    protected boolean filter(final Document dbDoc, eu.ec.dgempl.eessi.rina.buc.core.model.Document bucDoc) {
+    protected boolean filter(final CreateActionTrigger trigger) {
 
         return true;
+
     }
 
 }

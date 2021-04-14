@@ -7,16 +7,32 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import eu.ec.dgempl.eessi.rina.model.enumtypes.*;
+import eu.ec.dgempl.eessi.rina.model.enumtypes.EAssignmentRequestStatus;
+import eu.ec.dgempl.eessi.rina.model.enumtypes.ENotificationStatus;
+import eu.ec.dgempl.eessi.rina.model.enumtypes.ENotificationType;
+import eu.ec.dgempl.eessi.rina.model.enumtypes.ERole;
+import eu.ec.dgempl.eessi.rina.model.enumtypes.ESeverity;
+import eu.ec.dgempl.eessi.rina.model.enumtypes.ESourceType;
 import eu.ec.dgempl.eessi.rina.model.exception.runtime.enums.EnumNotFoundEessiRuntimeException;
-import eu.ec.dgempl.eessi.rina.model.jpa.entity.*;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity.AssignmentRequest;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity.DocumentType;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity.IamUser;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity.Notification;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity.Organisation;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity.RinaCase;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity.Role;
 import eu.ec.dgempl.eessi.rina.model.jpa.exception.EntityNotFoundEessiRuntimeException;
 import eu.ec.dgempl.eessi.rina.model.jpa.exception.UniqueIdentifier;
-import eu.ec.dgempl.eessi.rina.repo.*;
+import eu.ec.dgempl.eessi.rina.repo.DocumentTypeRepo;
+import eu.ec.dgempl.eessi.rina.repo.IamUserRepo;
+import eu.ec.dgempl.eessi.rina.repo.IamUserRepoExtended;
+import eu.ec.dgempl.eessi.rina.repo.RinaCaseRepo;
+import eu.ec.dgempl.eessi.rina.repo.RoleRepo;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.NotificationFields;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper._abstract.AbstractMapToEntityMapper;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.service.OrganisationService;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.CasesUtils;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.RepositoryUtils;
 
 import ma.glasnost.orika.MappingContext;
@@ -160,9 +176,10 @@ public class MapToNotificationMapper extends AbstractMapToEntityMapper<MapHolder
     private void mapCase(final MapHolder a, final Notification b) {
         String caseId = a.string(NotificationFields.CASE_ID);
 
-        RinaCase rinaCase = RepositoryUtils.findById(caseId, rinaCaseRepo::findById, RinaCase.class);
-
-        b.setRinaCase(rinaCase);
+        if (!CasesUtils.isDefaultCase(caseId)) {
+            RinaCase rinaCase = RepositoryUtils.findById(caseId, rinaCaseRepo::findById, RinaCase.class);
+            b.setRinaCase(rinaCase);
+        }
     }
 
     private void mapUsers(final MapHolder a, final Notification b) {

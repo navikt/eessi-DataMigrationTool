@@ -1,5 +1,5 @@
 <?xml version="1.0"?> 
-<case name="FB_BUC_02" version="${buc.model.version}" role="CP" xmlns="http://ec.europa.eu/eessi/rina/buc">
+<case name="FB_BUC_02" version="4.1" role="CP" xmlns="http://ec.europa.eu/eessi/rina/buc">
 
 
 <!-- CONFIG FILE FB2.conf

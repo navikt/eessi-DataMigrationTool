@@ -37,7 +37,7 @@ public class SequenceUpdateService {
         final ResourceDatabasePopulator rdp = new ResourceDatabasePopulator();
         rdp.setSqlScriptEncoding(StandardCharsets.UTF_8.name());
 
-        rdp.addScript(resourceLoader.getResource("file:" + scriptsPath + "/post-merge/updateSequences.sql"));
+        rdp.addScript(resourceLoader.getResource("file:" + scriptsPath + "/post-migrate/updateSequences.sql"));
 
         DatabasePopulatorUtils.execute(rdp, dataSource);
 

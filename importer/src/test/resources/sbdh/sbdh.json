@@ -1,0 +1,31 @@
+{
+  "attachments": [],
+  "receivers": [
+    {
+      "identifier": "PT:PTNA06",
+      "contactTypeIdentifier": "Counterparty",
+      "authority": "urn:eu:europa:ec:dgempl:eessi:ir"
+    }
+  ],
+  "sender": {
+    "identifier": "FR:FRNA10",
+    "contactTypeIdentifier": "CaseOwner",
+    "authority": "urn:eu:europa:ec:dgempl:eessi:ir"
+  },
+  "headerVersion": "1.1",
+  "documentIdentification": {
+    "identifier": "590783ffe9974e95a0ae07a6ceb25f1e",
+    "schemaVersion": "4.2",
+    "setIdentifier": "79f1b67c955d4a399b93b731d7bba51a",
+    "action": "Start",
+    "creationDate": "2021-01-17T20:34:11.882Z",
+    "type": "H001",
+    "version": "1"
+  },
+  "caseIdentification": {
+    "identifier": "86c7b4d60efa4b328862ca0ddc8cf45a",
+    "isProtectedPerson": false,
+    "type": "H_BUC_01",
+    "version": "4.2"
+  }
+}

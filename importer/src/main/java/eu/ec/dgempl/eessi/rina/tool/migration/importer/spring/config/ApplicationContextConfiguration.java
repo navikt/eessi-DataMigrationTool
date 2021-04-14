@@ -1,6 +1,10 @@
 package eu.ec.dgempl.eessi.rina.tool.migration.importer.spring.config;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

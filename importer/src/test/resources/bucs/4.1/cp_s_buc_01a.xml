@@ -1,5 +1,5 @@
 <?xml version="1.0"?> 
-<case name="S_BUC_01a" version="${buc.model.version}" role="CP" xmlns="http://ec.europa.eu/eessi/rina/buc"> 
+<case name="S_BUC_01a" version="4.1" role="CP" xmlns="http://ec.europa.eu/eessi/rina/buc"> 
  
 <!-- CONFIG FILE S1a.conf
 PROC=[S_BUC_01a]
@@ -193,6 +193,7 @@ mayLoopH070=[false]
  
 				<!-- for starter only, X007 --> 
 				<createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS" actionType="DOC_CREATE" documentType="X007" /> 
+ 				<createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE" documentType="X007" /> 				
  
 				<!-- for starter only, X009 --> 
 				<createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS" actionType="DOC_CREATE" documentType="X009" /> 

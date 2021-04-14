@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 
 import eu.ec.dgempl.eessi.rina.model.enumtypes.ERole;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.EUserOrGroupType;
-import eu.ec.dgempl.eessi.rina.model.exception.runtime.enums.EnumNotFoundEessiRuntimeException;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.Assignment;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.IamGroup;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.IamUser;
@@ -24,6 +23,7 @@ import eu.ec.dgempl.eessi.rina.model.jpa.exception.UniqueIdentifier;
 import eu.ec.dgempl.eessi.rina.repo.IamGroupRepo;
 import eu.ec.dgempl.eessi.rina.repo.IamUserRepo;
 import eu.ec.dgempl.eessi.rina.repo.RoleRepo;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.DmtEnumNotFoundException;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper._abstract.AbstractMapToEntityMapper;
 
@@ -75,7 +75,7 @@ public class MapToAssignmentMapper extends AbstractMapToEntityMapper<MapHolder, 
 
     private void mapRole(final MapHolder a, final Assignment b) {
         String roleName = a.string(NAME);
-        ERole eRole = ERole.lookup(roleName).orElseThrow(EnumNotFoundEessiRuntimeException::new);
+        ERole eRole = ERole.lookup(roleName).orElseThrow(() -> new DmtEnumNotFoundException(ERole.class, a.addPath(NAME), roleName));
 
         Role role = roleRepo.findByName(eRole);
         if (role == null) {
@@ -102,7 +102,9 @@ public class MapToAssignmentMapper extends AbstractMapToEntityMapper<MapHolder, 
     private List<String> getUserGroupIdsByType(List<MapHolder> actors, EUserOrGroupType eUserOrGroupType) {
         return actors.stream()
                 .filter(actor -> eUserOrGroupType == EUserOrGroupType.lookup(actor.string(TYPE))
-                        .orElseThrow(EnumNotFoundEessiRuntimeException::new))
+                        .orElseThrow(
+                                () -> new DmtEnumNotFoundException(EUserOrGroupType.class, actor.addPath(TYPE), actor.string(TYPE))
+                        ))
                 .map(actor -> actor.string(ID))
                 .collect(Collectors.toList());
     }

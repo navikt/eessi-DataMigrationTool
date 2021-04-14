@@ -3,8 +3,8 @@ package eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper
 import org.springframework.stereotype.Component;
 
 import eu.ec.dgempl.eessi.rina.model.enumtypes.audit.EAuditedObjectType;
-import eu.ec.dgempl.eessi.rina.model.exception.runtime.enums.EnumEessiRuntimeException;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.AuditObject;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.DmtEnumNotFoundException;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.AuditEventFields;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper._abstract.AbstractMapToEntityMapper;
@@ -24,7 +24,9 @@ public class MapToAuditObjectMapper extends AbstractMapToEntityMapper<MapHolder,
 
     private void mapType(final MapHolder a, final AuditObject b) {
         String type = a.string(AuditEventFields.AUDIT_OBJECT_TYPE);
-        EAuditedObjectType eAuditedObjectType = EAuditedObjectType.lookup(type).orElseThrow(EnumEessiRuntimeException::new);
+        EAuditedObjectType eAuditedObjectType = EAuditedObjectType.lookup(type).orElseThrow(
+                () -> new DmtEnumNotFoundException(EAuditedObjectType.class, a.addPath(AuditEventFields.AUDIT_OBJECT_TYPE), type)
+        );
         b.setAuditObjectType(eAuditedObjectType);
     }
 }

@@ -9,6 +9,8 @@ package eu.ec.dgempl.eessi.rina.tool.migration.importer.dto;
 public enum EElasticType {
 
     NONE("none", "none", 1),
+
+    // PRE-CASE IMPORTERS
     VOCABULARIES_CONCEPT("vocabularies", "concept", 2),
     PROCESSDEFINITION("configurations", "processdefinition", 3),
     ORGANISATION("entities", "organisation", 4),
@@ -40,6 +42,7 @@ public enum EElasticType {
     ADMIN_ADMINNOTIFICATIONTYPE("admin", "adminNotificationType", 30),
     AUDIT_AUDITENTRY("audit", "auditentry", 31),
 
+    // CASE IMPORTERS
     CASES_CASESTRUCTUREDMETADATA("cases", "casestructuredmetadata", 1),
     CASES_CASEMETADATA("cases", "casemetadata", 2),
     CASES_DOCUMENT("cases", "document", 3),
@@ -51,15 +54,14 @@ public enum EElasticType {
     CASES_SIGNATURE("cases", "signature", 9),
     // actions need to be imported last in the case
     CASES_TASKMETADATA("cases", "taskmetadata", 10),
+    NOTIFICATION("notifications", "notification", 11),
+    NOTIFICATION_ALARM("notifications", "alarm", 12),
 
-    //ABSTRACT_CASE_IMPORTER HAS ORDER 99
-    ACTIVITY("identity_v1", "activity", 100),
-    BUSINESS_EXCEPTION_PENDING_MESSAGE("businessexceptions", "pendingmessage", 101),
-    BUSINESS_EXCEPTION_EXCEPTION("businessexceptions", "exception", 102),
-    BUSINESS_EXCEPTION_PENDING_SIGNATURE("businessexceptions", "signature", 103),
-    NOTIFICATION("notifications", "notification", 104),
-    NOTIFICATION_ALARM("notifications", "alarm", 105);
-
+    // POST-CASE IMPORTERS
+    ACTIVITY("identity_v1", "activity", 1),
+    BUSINESS_EXCEPTION_PENDING_MESSAGE("businessexceptions", "pendingmessage", 2),
+    BUSINESS_EXCEPTION_EXCEPTION("businessexceptions", "exception", 3),
+    BUSINESS_EXCEPTION_PENDING_SIGNATURE("businessexceptions", "signature", 4);
 
     private final String index;
 
@@ -67,7 +69,7 @@ public enum EElasticType {
 
     private final int order;
 
-    private EElasticType(final String index, final String type, final int order) {
+    EElasticType(final String index, final String type, final int order) {
         this.index = index;
         this.type = type;
         this.order = order;
@@ -84,4 +86,5 @@ public enum EElasticType {
     public int getOrder() {
         return order;
     }
+
 }

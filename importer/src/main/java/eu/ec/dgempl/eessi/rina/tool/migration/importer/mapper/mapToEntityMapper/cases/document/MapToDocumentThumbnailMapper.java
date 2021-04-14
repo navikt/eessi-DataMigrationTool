@@ -3,12 +3,12 @@ package eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper
 import org.springframework.stereotype.Component;
 
 import eu.ec.dgempl.eessi.rina.model.enumtypes.ELanguage;
-import eu.ec.dgempl.eessi.rina.model.exception.runtime.enums.EnumEessiRuntimeException;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.DocumentBversion;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.DocumentThumbnail;
 import eu.ec.dgempl.eessi.rina.model.jpa.exception.EntityNotFoundEessiRuntimeException;
 import eu.ec.dgempl.eessi.rina.model.jpa.exception.UniqueIdentifier;
 import eu.ec.dgempl.eessi.rina.repo.DocumentBversionRepo;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.DmtEnumNotFoundException;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.DocumentThumbnailFields;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper._abstract.AbstractMapToEntityMapper;
@@ -61,7 +61,9 @@ public class MapToDocumentThumbnailMapper extends AbstractMapToEntityMapper<MapH
         }
 
         String lang = idParts[idParts.length - 1];
-        ELanguage eLanguage = ELanguage.lookup(lang).orElseThrow(EnumEessiRuntimeException::new);
+        ELanguage eLanguage = ELanguage.lookup(lang).orElseThrow(
+                () -> new DmtEnumNotFoundException(ELanguage.class, a.addPath(DocumentThumbnailFields.INTERNAL_ID), lang)
+        );
         b.setLang(eLanguage);
     }
 }

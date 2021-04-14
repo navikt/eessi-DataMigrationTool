@@ -1,5 +1,5 @@
 <?xml version="1.0"?> 
-<case name="P_BUC_09" version="${buc.model.version}" role="PO" xmlns="http://ec.europa.eu/eessi/rina/buc">
+<case name="P_BUC_09" version="4.1" role="PO" xmlns="http://ec.europa.eu/eessi/rina/buc">
 
 
 

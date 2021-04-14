@@ -7,11 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import eu.ec.dgempl.eessi.rina.model.enumtypes.EApplicationRole;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.ESector;
-import eu.ec.dgempl.eessi.rina.model.exception.runtime.enums.EnumNotFoundEessiRuntimeException;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity._abstraction.Policy;
 import eu.ec.dgempl.eessi.rina.repo.ProcessDefRepo;
 import eu.ec.dgempl.eessi.rina.repo.SectorRepo;
 import eu.ec.dgempl.eessi.rina.repo.TenantRepo;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.DmtEnumNotFoundException;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.PolicyFields;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper._abstract.AbstractMapToEntityMapper;
@@ -22,7 +22,6 @@ public abstract class AbstractMapToPolicyMapper<T extends Policy> extends Abstra
 
     private ProcessDefRepo processDefRepo;
     private SectorRepo sectorRepo;
-    private TenantRepo tenantRepo;
 
     @Override
     public void mapAtoB(MapHolder a, Policy b, MappingContext context) {
@@ -32,7 +31,6 @@ public abstract class AbstractMapToPolicyMapper<T extends Policy> extends Abstra
         mapProcessDef(a, b);
         mapApplicationRole(a, b);
         mapPolicy(a, b);
-        //        b.setTenant(tenantRepo.findById());
     }
 
     private void mapPolicy(final MapHolder a, final Policy b) {
@@ -52,7 +50,7 @@ public abstract class AbstractMapToPolicyMapper<T extends Policy> extends Abstra
                         || sector.getDisplayName().equalsIgnoreCase(sectorId)
                         || sector.name().equalsIgnoreCase(sectorId))
                 .findFirst()
-                .orElseThrow(EnumNotFoundEessiRuntimeException::new);
+                .orElseThrow(() -> new DmtEnumNotFoundException(ESector.class, a.addPath(PolicyFields.SECTOR_ID), sectorId));
 
         b.setSector(sectorRepo.findByName(eSector));
     }
@@ -60,8 +58,12 @@ public abstract class AbstractMapToPolicyMapper<T extends Policy> extends Abstra
     private void mapApplicationRole(final MapHolder a, final Policy b) {
         String applicationRole = a.string(PolicyFields.APPLICATION_ROLE_ID);
         if (StringUtils.isNotBlank(applicationRole)) {
-            EApplicationRole eApplicationRole = EApplicationRole.lookup(applicationRole)
-                    .orElseThrow(EnumNotFoundEessiRuntimeException::new);
+            EApplicationRole eApplicationRole = EApplicationRole.lookup(applicationRole).orElseThrow(
+                    () -> new DmtEnumNotFoundException(
+                            EApplicationRole.class,
+                            a.addPath(PolicyFields.APPLICATION_ROLE_ID),
+                            applicationRole)
+            );
             b.setApplicationRole(eApplicationRole);
         }
     }
@@ -74,10 +76,5 @@ public abstract class AbstractMapToPolicyMapper<T extends Policy> extends Abstra
     @Autowired
     public void setSectorRepo(SectorRepo sectorRepo) {
         this.sectorRepo = sectorRepo;
-    }
-
-    @Autowired
-    public void setTenantRepo(TenantRepo tenantRepo) {
-        this.tenantRepo = tenantRepo;
     }
 }

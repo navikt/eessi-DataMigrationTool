@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import eu.ec.dgempl.eessi.rina.model.enumtypes.EConversationParticipantRole;
-import eu.ec.dgempl.eessi.rina.model.exception.runtime.enums.EnumNotFoundEessiRuntimeException;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.ConversationParticipant;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.Organisation;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.DmtEnumNotFoundException;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.DocumentFields;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper._abstract.AbstractMapToEntityMapper;
@@ -34,7 +34,8 @@ public class MapToConversationParticipantMapper extends AbstractMapToEntityMappe
 
     private void mapRole(final MapHolder a, final ConversationParticipant b) {
         String role = a.string(DocumentFields.ROLE);
-        EConversationParticipantRole eRole = EConversationParticipantRole.lookup(role).orElseThrow(EnumNotFoundEessiRuntimeException::new);
+        EConversationParticipantRole eRole = EConversationParticipantRole.lookup(role).orElseThrow(
+                () -> new DmtEnumNotFoundException(EConversationParticipantRole.class, a.addPath(DocumentFields.ROLE), role));
         b.setConversationParticipantRole(eRole);
     }
 }

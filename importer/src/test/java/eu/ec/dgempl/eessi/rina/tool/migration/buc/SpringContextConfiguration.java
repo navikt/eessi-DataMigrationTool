@@ -17,8 +17,8 @@ import eu.ec.dgempl.eessi.rina.commons.transformation.RinaJsonMapper;
 import eu.ec.dgempl.eessi.rina.model.jpa.listener.LogListener;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.auditor.AuditorAwareImpl;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.service.ActionService;
-import eu.ec.dgempl.eessi.rina.tool.migration.importer.service.AssignmentPolicyService;
-import eu.ec.dgempl.eessi.rina.tool.migration.importer.service.AssignmentPolicyServiceTest;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.service.BonitaProcessDefMappingsService;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.service.BonitaProcessDefMappingsServiceTest;
 
 // @formatter:off
 @Configuration
@@ -26,11 +26,16 @@ import eu.ec.dgempl.eessi.rina.tool.migration.importer.service.AssignmentPolicyS
         basePackages = {
                 "eu.ec.dgempl.eessi.rina.tool.migration.buc",
                 "eu.ec.dgempl.eessi.rina.tool.migration.importer",
-                "eu.ec.dgempl.eessi.rina.repo"
+                "eu.ec.dgempl.eessi.rina.repo",
+                "eu.ec.dgempl.eessi.rina.tool.migration.common.service"
         },
         excludeFilters = {
+                @ComponentScan.Filter(type = FilterType.REGEX, pattern = "eu\\.ec\\.dgempl\\.eessi\\.rina\\.tool\\.migration\\.importer\\.service\\.DatabaseCleanupService"),
+                @ComponentScan.Filter(type = FilterType.REGEX, pattern = "eu\\.ec\\.dgempl\\.eessi\\.rina\\.tool\\.migration\\.importer\\.service\\.BonitaProcessDefMappingsService"),
                 @ComponentScan.Filter(type = FilterType.REGEX, pattern = "eu\\.ec\\.dgempl\\.eessi\\.rina\\.tool\\.migration\\.importer\\.service\\.FieldMappingService"),
                 @ComponentScan.Filter(type = FilterType.REGEX, pattern = "eu\\.ec\\.dgempl\\.eessi\\.rina\\.tool\\.migration\\.importer\\.service\\.AssignmentPolicyService"),
+                @ComponentScan.Filter(type = FilterType.REGEX, pattern = "eu\\.ec\\.dgempl\\.eessi\\.rina\\.tool\\.migration\\.importer\\.service\\.SequenceUpdateService"),
+                @ComponentScan.Filter(type = FilterType.REGEX, pattern = "eu\\.ec\\.dgempl\\.eessi\\.rina\\.tool\\.migration\\.common\\.service\\.EsClientService"),
                 @ComponentScan.Filter(type = FilterType.REGEX, pattern = "eu\\.ec\\.dgempl\\.eessi\\.rina\\.tool\\.migration\\.importer\\.dataimport.*"),
                 @ComponentScan.Filter(type = FilterType.REGEX, pattern = "eu\\.ec\\.dgempl\\.eessi\\.rina\\.tool\\.migration\\.importer\\.dataprocessor.*")
         }
@@ -64,10 +69,10 @@ public class SpringContextConfiguration {
     }
 
     @Bean
-    public AssignmentPolicyService assignmentPolicyService() throws IOException {
+    public BonitaProcessDefMappingsService assignmentPolicyService() throws IOException {
 
-        String path = AssignmentPolicyServiceTest.class.getClassLoader().getResource("ProcessDefinitionAssignments.json").getPath();
-        return new AssignmentPolicyService(new RinaJsonMapper(new ObjectMapper()), path);
+        String path = BonitaProcessDefMappingsServiceTest.class.getClassLoader().getResource("BonitaProcessDefinitionActors.json").getPath();
+        return new BonitaProcessDefMappingsService(new RinaJsonMapper(new ObjectMapper()), path);
 
     }
 

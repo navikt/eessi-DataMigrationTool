@@ -17,7 +17,6 @@
   {
     "esPath": "creator.id",
     "esType": "string",
-    "required": true,
     "sqlPath": "iamUser.id",
     "sqlType": "VARCHAR(255)",
     "value": "reference(identity_v1,user)"
@@ -124,11 +123,12 @@
     "importIgnore": true
   },
   {
-    "esPath": "creator.organisation.address.country",
-    "esType": "string",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.addressCountry",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "esPath": "creator.organisation.address",
+    "esType": "object",
+    "ignorePath": true,
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "creator.organisation.assignedBUCs.applicationRole",
@@ -185,8 +185,8 @@
     "esType": "string",
     "required": true,
     "sqlPath": "",
-    "sqlType": "VARCHAR(4)",
-    "value": "regex(User)",
+    "sqlType": "VARCHAR(12)",
+    "value": "regex((User|ROLE_REGULAR))",
     "importIgnore": true
   },
   {

@@ -1,5 +1,38 @@
 EESSI-RINA-DATA-MIGRATION
 
+v2.1.0
+--------------------------------------
+Note: Entries marked with (*) are resolved in DMT. To consider these fully resolved, they need to be tested with the next public RINA release
+
+Validator:
+- (*) updated length constraints for audit event fields
+- (*) removed null constraint for attachment filename
+- normalized (stringified) the error details displayed in the case reports
+- added the enum expected values for enum validation errors
+- allow empty strings for the document conversation versionId
+- removed non-null constraint for currentProcessDefinition (in user profile configuration)
+- added tenantId in the case report filename
+- updated validation of organisation address fields
+- validation no longer requires connection to PostgreSQL
+Importer:
+- added new import endpoints: import-bulk, (re)import-case
+- unified the way enum values are stored in SBDH
+- fixed missing RECEIVE REPLY actions that affected viewing SEDs
+- fixed organisations duplicate assigned BUCs, due to IR sync
+- fixed missing information of the latest sent/received X001 document in case_prefill table after import
+- notifications and notification alarms are treated as case-related resources
+- removed requirement for running resetschema before DMT Import
+- fixed processing null userId references
+- updated mechanism for handling comments creator
+- replace the value of cases_comment creator type from "ROLE_REGULAR" to "User" during import
+- improved error handling
+- improved reporting
+- improved logging
+Other:
+- replaced mechanism of extracting actor roles mapping (connection to Bonita DB is required)
+- fixed the ids of inactive organisations in Organisations.csv
+- redirected STDERR to './logs/err.txt'
+
 v2.0.2
 --------------------------------------
 Validator:
@@ -48,11 +81,9 @@ Validator:
 - added validation for indices ADMIN, AUDIT, BUSINESSEXCEPTIONS, CHECKS, CONFIGURATIONS, GLOBALCONFIGURATIONS, NOTIFICATIONS, RESOURCES, VOCABULARIES
 - added the case tenant in the case reports
 
-
 v1.0.2
 --------------------------------------
 Fix for EESSI 7742: incorrect propagation of errors caused by unknown fields (fields that are not present in the aggregated Elasticsearch mapping),no other functionalities added or changed
-
 
 v1.0.1
 --------------------------------------

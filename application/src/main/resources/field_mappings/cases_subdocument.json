@@ -76,10 +76,12 @@
     "sqlType": "TIMESTAMP WITH TIME ZONE"
   },
   {
-    "esPath": "subdocuments.attachments.creator.organisation.address.country",
-    "esType": "string",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.addressCountry",
-    "sqlType": "VARCHAR(255)"
+    "esPath": "subdocuments.attachments.creator.organisation.address",
+    "esType": "object",
+    "ignorePath": true,
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "subdocuments.attachments.creator.organisation.countryCode",
@@ -121,7 +123,6 @@
   {
     "esPath": "subdocuments.attachments.fileName",
     "esType": "string",
-    "required": true,
     "sqlPath": "subdocument.subdocumentAttachments.filename",
     "sqlType": "VARCHAR(1024)"
   },
@@ -206,10 +207,12 @@
     "sqlType": "TIMESTAMP WITH TIME ZONE"
   },
   {
-    "esPath": "subdocuments.attachments.versions.user.organisation.address.country",
-    "esType": "string",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.addressCountry",
-    "sqlType": "VARCHAR(255)"
+    "esPath": "subdocuments.attachments.versions.user.organisation.address",
+    "esType": "object",
+    "ignorePath": true,
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "subdocuments.attachments.versions.user.organisation.countryCode",
@@ -283,10 +286,12 @@
     "sqlType": "TIMESTAMP WITH TIME ZONE"
   },
   {
-    "esPath": "subdocuments.creator.organisation.address.country",
-    "esType": "string",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.addressCountry",
-    "sqlType": "VARCHAR(255)"
+    "esPath": "subdocuments.creator.organisation.address",
+    "esType": "object",
+    "ignorePath": true,
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "subdocuments.creator.organisation.countryCode",
@@ -429,11 +434,12 @@
     "importIgnore": true
   },
   {
-    "esPath": "subdocuments.versions.user.organisation.address.country",
-    "esType": "string",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.addressCountry",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "esPath": "subdocuments.versions.user.organisation.address",
+    "esType": "object",
+    "ignorePath": true,
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "subdocuments.versions.user.organisation.countryCode",

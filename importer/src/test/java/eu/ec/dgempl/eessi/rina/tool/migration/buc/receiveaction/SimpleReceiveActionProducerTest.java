@@ -85,6 +85,42 @@ public class SimpleReceiveActionProducerTest extends AbstractBucProcessorTest {
         Assert.assertEquals(14, actions.size());
 
     }
+    
+    /**
+     * Check when case is created but no document is sent or received.
+     * @throws Exception
+     */
+    @Test
+    public void testPBuc01_PO_NoReceiveAction() throws Exception {
+
+        Case pBuc01_v42 = bucDefinitionImporterFactory.loadBucConfiguration("p_buc_01", ECaseRole.PO, "4.2");
+        Assert.assertNotNull(pBuc01_v42);
+
+        RinaCase rinaCase = rinaCaseRepo.findById("3");
+
+        List<ActionDO> actions = simpleReceiveActionProducer.getReceiveActions(rinaCase, pBuc01_v42);
+        Assert.assertNotNull(actions);
+        logger.info("{}", getLogActions(actions));
+
+        Assert.assertEquals(0, actions.size());
+
+    }
+
+    @Test
+    public void testAwBuc23_PO() throws Exception {
+
+        Case awBuc23_v42 = bucDefinitionImporterFactory.loadBucConfiguration("aw_buc_23", ECaseRole.PO, "4.2");
+        Assert.assertNotNull(awBuc23_v42);
+
+        RinaCase rinaCase = rinaCaseRepo.findById("4");
+
+        List<ActionDO> actions = simpleReceiveActionProducer.getReceiveActions(rinaCase, awBuc23_v42);
+        Assert.assertNotNull(actions);
+        logger.info("{}", getLogActions(actions));
+
+        Assert.assertEquals(14, actions.size());
+
+    }
 
     @Test
     public void testPBuc01_CP() throws Exception {

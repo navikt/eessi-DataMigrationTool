@@ -42,10 +42,12 @@
     "sqlType": "TIMESTAMP WITH TIME ZONE"
   },
   {
-    "esPath": "creator.organisation.address.country",
-    "esType": "string",
-    "sqlPath": "(iamUser|iamGroup).tenant.organisation.addressCountry",
-    "sqlType": "VARCHAR(255)"
+    "esPath": "creator.organisation.address",
+    "esType": "object",
+    "ignorePath": true,
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "creator.organisation.countryCode",
@@ -80,7 +82,6 @@
   {
     "esPath": "fileName",
     "esType": "string",
-    "required": true,
     "sqlPath": "caseAttachment.filename",
     "sqlType": "VARCHAR(1024)"
   },

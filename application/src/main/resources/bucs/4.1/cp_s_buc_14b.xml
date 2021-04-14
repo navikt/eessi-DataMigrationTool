@@ -1,5 +1,5 @@
 <?xml version="1.0"?> 
-<case name="S_BUC_14b" version="${buc.model.version}" role="CP" xmlns="http://ec.europa.eu/eessi/rina/buc"> 
+<case name="S_BUC_14b" version="4.1" role="CP" xmlns="http://ec.europa.eu/eessi/rina/buc"> 
  
 <!-- CONFIG FILE S14b.conf
 PROC=[S_BUC_14b]

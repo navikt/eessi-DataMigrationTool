@@ -2,10 +2,14 @@ package eu.ec.dgempl.eessi.rina.tool.migration.importer.dataprocessor.impl;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.elasticsearch.search.SearchHit;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +18,14 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import eu.ec.dgempl.eessi.rina.tool.migration.common.model.EsSearchQueryTerm;
 import eu.ec.dgempl.eessi.rina.tool.migration.common.service.EsClientService;
+import eu.ec.dgempl.eessi.rina.tool.migration.common.util.PreconditionsHelper;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dataprocessor.DataProcessor;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.datareport.DataReporter;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.EElasticType;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.GenericImporterException;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.report.DocumentsReport;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.report.ReportError;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.service.FieldMappingService;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.ProgrammaticTransactionUtil;
 
@@ -37,7 +45,7 @@ public class EsDataProcessor implements DataProcessor {
     private FieldMappingService fieldMappingService;
 
     @Override
-    public void process(final EElasticType eElasticType, final Consumer<MapHolder> docProcessor, final boolean transactional)
+    public DocumentsReport process(final EElasticType eElasticType, final Consumer<MapHolder> docProcessor, final boolean transactional)
             throws Exception {
 
         String index = eElasticType.getIndex();
@@ -48,7 +56,10 @@ public class EsDataProcessor implements DataProcessor {
 
         long docCount = esClientService.getCount(index, types);
 
-        Consumer<SearchHit[]> hitsConsumer = getHitsConsumer(docProcessor, transactional, eElasticType);
+        DocumentsReport documentsReport = new DocumentsReport(eElasticType);
+        documentsReport.getTotal().set(docCount);
+
+        Consumer<SearchHit[]> hitsConsumer = getHitsConsumer(docProcessor, () -> documentsReport, transactional, eElasticType);
 
         if (eElasticType == EElasticType.CONFIGURATIONS_ASSIGNMENTPOLICY) {
             esClientService.processAssignmentPoliciesWithoutChildren(hitsConsumer);
@@ -65,17 +76,23 @@ public class EsDataProcessor implements DataProcessor {
         System.out.println("Finished processing for index: " + eElasticType.name() + ", with " + docCount + " documents in " + processTime
                 + " seconds");
         System.out.println("\n-----------------------------------------------------");
+
+        return documentsReport;
     }
 
     @Override
-    public void process(final EElasticType eElasticType, final Consumer<MapHolder> docProcessor, final String caseId,
+    public DocumentsReport process(
+            final EElasticType eElasticType,
+            final Consumer<MapHolder> docProcessor,
+            final String caseId,
             final boolean transactional) throws Exception {
+
         String index = eElasticType.getIndex();
         String[] types = new String[] { eElasticType.getType() };
 
-        long docCount = esClientService.getCount(index, types);
+        DocumentsReport documentsReport = new DocumentsReport(eElasticType);
 
-        Consumer<SearchHit[]> hitsConsumer = getHitsConsumer(docProcessor, transactional, eElasticType);
+        Consumer<SearchHit[]> hitsConsumer = getHitsConsumer(docProcessor, () -> documentsReport, transactional, eElasticType);
         if (eElasticType == EElasticType.CASES_DOCUMENT) {
             esClientService.processDocumentsWithoutParent(caseId, hitsConsumer);
             esClientService.processDocumentsWithParent(caseId, hitsConsumer);
@@ -88,13 +105,28 @@ public class EsDataProcessor implements DataProcessor {
             }
             esClientService.processAllFilterByTerms(index, types, hitsConsumer, queryTerm);
         }
+
+        return documentsReport;
+    }
+
+    public long countDocsByCaseId(final String caseId, final EElasticType eElasticType) throws Exception {
+        PreconditionsHelper.notEmpty(caseId, "caseId");
+        PreconditionsHelper.notNull(eElasticType, "elasticType");
+
+        String index = eElasticType.getIndex();
+        String[] types = new String[] { eElasticType.getType() };
+
+        return esClientService.getCountByCaseId(caseId, index, types);
     }
 
     @NotNull
-    private Consumer<SearchHit[]> getHitsConsumer(final Consumer<MapHolder> docProcessor, final boolean transactional,
+    private Consumer<SearchHit[]> getHitsConsumer(
+            final Consumer<MapHolder> docProcessor,
+            final Supplier<DocumentsReport> reportSupplier,
+            final boolean transactional,
             final EElasticType eElasticType) {
 
-        Consumer<SearchHit[]> searchHits = (hits) -> {
+        return (hits) -> {
             // List<String> unreviewedResult = new ArrayList<>();
             for (SearchHit searchHit : hits) {
 
@@ -107,14 +139,37 @@ public class EsDataProcessor implements DataProcessor {
                 MapHolder docHolder = new MapHolder(doc, visitedFields, "");
                 if (transactional) {
                     try {
-                        ProgrammaticTransactionUtil.processSuccessfulTransaction(transactionManager, () -> docProcessor.accept(docHolder));
-
+                        ProgrammaticTransactionUtil.processSuccessfulTransaction(transactionManager, () -> {
+                            docProcessor.accept(docHolder);
+                            reportSupplier.get().getProcessed().incrementAndGet();
+                        });
                     } catch (Exception e) {
-                        dataReporter.reportProblem(eElasticType, docHolder.string("_id"), e.getMessage(), e);
+                        String documentId = docHolder.string("_id");
+                        dataReporter.reportProblem(eElasticType, documentId, e.getMessage(), e);
+
+                        List<ReportError> errors = reportSupplier.get().getErrors();
+
+                        if (errors == null) {
+                            errors = new ArrayList<>();
+                            reportSupplier.get().setErrors(errors);
+                        }
+
+                        errors.add(new ReportError(
+                                eElasticType.getIndex(),
+                                eElasticType.getType(),
+                                documentId,
+                                null,
+                                ExceptionUtils.getStackTrace(e)));
                     }
                 } else {
-                    docProcessor.accept(docHolder);
+                    try {
+                        docProcessor.accept(docHolder);
+                        reportSupplier.get().getProcessed().incrementAndGet();
+                    } catch (Exception e) {
+                        throw new GenericImporterException(e, eElasticType, docHolder.string("_id"));
+                    }
                 }
+
                 // unreviewedResult.addAll(
                 // new ArrayList<>(fieldMappingService.checkUnreviewedFields(docHolder, eElasticType, docHolder.getVisitedFields())));
 
@@ -125,7 +180,5 @@ public class EsDataProcessor implements DataProcessor {
             // System.out.println("created file with unreviewed fields for elastic type: " + eElasticType);
             // }
         };
-
-        return searchHits;
     }
 }

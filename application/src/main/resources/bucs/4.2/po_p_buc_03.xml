@@ -1,5 +1,5 @@
 <?xml version="1.0"?> 
-<case name="P_BUC_03" version="${buc.model.version}" role="PO" xmlns="http://ec.europa.eu/eessi/rina/buc"> 
+<case name="P_BUC_03" version="4.2" role="PO" xmlns="http://ec.europa.eu/eessi/rina/buc"> 
  
 <!-- CONFIG FILE P3.conf
 PROC=[P_BUC_03]
@@ -433,7 +433,7 @@ mayLoopH070=[false]
         <document type="P3000">
             <parameters>
 				<parameter key="allowsAttachments">true</parameter> <!-- default is false -->            
-                <parameter key="hasMultipleVersions">false</parameter>
+                <parameter key="hasMultipleVersions">true</parameter>
                 <parameter key="hasCancel">true</parameter>
                 <parameter key="recreateAfterCancel">true</parameter>
             </parameters>

@@ -3,7 +3,10 @@ package eu.ec.dgempl.eessi.rina.tool.migration.exporter.validator;
 import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
@@ -12,6 +15,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import eu.ec.dgempl.eessi.rina.tool.migration.exporter.model.EValidationResult;
 import eu.ec.dgempl.eessi.rina.tool.migration.exporter.model.EsDocument;
 import eu.ec.dgempl.eessi.rina.tool.migration.exporter.model.ValidationContext;
 import eu.ec.dgempl.eessi.rina.tool.migration.exporter.report.ValidationResult;
@@ -177,5 +181,25 @@ public class StringValidatorTest {
 
         assertEquals(exception.getClass(), NullPointerException.class);
         assertEquals(exception.getMessage(), "The parameter 'context' cannot be empty");
+    }
+
+    @Test
+    public void whenThereIs1ValidatorParamAndValueIsStringAndHasIncorrectLength_thenValidationResultIsError() throws IOException {
+
+        Object object = testString;
+        String maxLength = "3";
+
+        stringValidatorWith1Param = new StringValidator(maxLength);
+
+        Map<String, Integer> details = new HashMap<>();
+        details.put("expected", Integer.parseInt(maxLength));
+        details.put("actual", testString.length());
+
+        ValidationResult expectedResult = ValidationResult.error(path, object, EValidationResult.INVALID_LENGTH, details);
+
+        List<ValidationResult> result = stringValidatorWith1Param.validate(path, object, validationContext);
+
+        assertEquals(1, result.size());
+        Assertions.assertThat(result.get(0)).isEqualToComparingFieldByField(expectedResult);
     }
 }

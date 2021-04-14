@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import eu.ec.dgempl.eessi.rina.model.enumtypes.EMimeType;
-import eu.ec.dgempl.eessi.rina.model.exception.runtime.enums.EnumNotFoundEessiRuntimeException;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.Document;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.DocumentAttachment;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.IamUser;
@@ -14,6 +13,7 @@ import eu.ec.dgempl.eessi.rina.model.jpa.exception.EntityNotFoundEessiRuntimeExc
 import eu.ec.dgempl.eessi.rina.model.jpa.exception.UniqueIdentifier;
 import eu.ec.dgempl.eessi.rina.repo.DocumentRepo;
 import eu.ec.dgempl.eessi.rina.repo.IamUserRepo;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.DmtEnumNotFoundException;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.DocumentFields;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.helper.AttachmentsHelper;
@@ -43,10 +43,18 @@ public class MapToDocumentAttachmentMapper extends AbstractMapToEntityMapper<Map
         b.setFilename(a.string(DocumentFields.FILE_NAME));
         b.setId(a.string(DocumentFields.ATTACHMENT_ID));
         b.setMedical(a.bool(DocumentFields.MEDICAL, Boolean.FALSE));
-        b.setMimeType(EMimeType.lookup(a.string(DocumentFields.ATTACHMENT_MIME_TYPE)).orElseThrow(EnumNotFoundEessiRuntimeException::new));
         b.setName(a.string(DocumentFields.ATTACHMENT_NAME));
 
+        mapMimeType(a, b);
         mapPathname(a, b);
+    }
+
+    private void mapMimeType(MapHolder a, DocumentAttachment b) {
+        String mimeType = a.string(DocumentFields.ATTACHMENT_MIME_TYPE);
+        EMimeType eMimeType = EMimeType.lookup(mimeType).orElseThrow(
+                () -> new DmtEnumNotFoundException(EMimeType.class, a.addPath(DocumentFields.MIME_TYPE), mimeType)
+        );
+        b.setMimeType(eMimeType);
     }
 
     private void mapPathname(final MapHolder a, final DocumentAttachment b) {

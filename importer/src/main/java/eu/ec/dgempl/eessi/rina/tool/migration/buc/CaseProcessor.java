@@ -30,7 +30,7 @@ public class CaseProcessor {
 
     /**
      * Executes any implemented and registered {@link BucHandler} implementations for the given case.
-     * 
+     *
      * @param caseId
      * @param bucType
      * @param caseRole
@@ -44,7 +44,7 @@ public class CaseProcessor {
         PreconditionsHelper.notNull(caseRole, "caseRole");
         PreconditionsHelper.notEmpty(modelVersion, "modelVersion");
 
-        logger.info("Processing additional operations on the case [caseId={}]", caseId);
+        logger.debug("Processing additional operations on the case [caseId={}]", caseId);
 
         // call all defined handlers
         if (handlers != null) {

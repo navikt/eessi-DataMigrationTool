@@ -1,6 +1,6 @@
 package eu.ec.dgempl.eessi.rina.tool.migration.importer.dto;
 
-import static eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.NieFields.ID;
+import static eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.NieFields.*;
 
 import java.util.HashMap;
 import java.util.Map;

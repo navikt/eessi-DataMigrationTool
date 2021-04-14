@@ -1,5 +1,5 @@
 <?xml version="1.0"?> 
-<case name="S_BUC_22" version="${buc.model.version}" role="CP" xmlns="http://ec.europa.eu/eessi/rina/buc"> 
+<case name="S_BUC_22" version="4.2" role="CP" xmlns="http://ec.europa.eu/eessi/rina/buc"> 
 	<context> 
 		<parameters> 
 			<!-- isML (default is true; the current BUC is isML=false) --> 

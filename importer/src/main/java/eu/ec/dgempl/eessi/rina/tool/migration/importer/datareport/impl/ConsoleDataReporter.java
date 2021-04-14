@@ -15,6 +15,6 @@ public class ConsoleDataReporter implements DataReporter {
 
     @Override
     public void reportProblem(EElasticType elasticType, String id, String message, Object... e) {
-        logger.error(String.format(MESSAGE_FORMAT, elasticType, id, message));
+        logger.error(String.format(MESSAGE_FORMAT, elasticType, id, message), e);
     }
 }

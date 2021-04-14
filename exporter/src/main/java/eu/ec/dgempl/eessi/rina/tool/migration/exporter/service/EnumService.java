@@ -29,7 +29,7 @@ public class EnumService {
 
     /**
      * Method that checks if a value can be found in an enum
-     * 
+     *
      * @param enumName
      *            the enum class name
      * @param value
@@ -41,6 +41,30 @@ public class EnumService {
     public boolean exists(String enumName, String value) throws IllegalAccessException, NoClassDefFoundError {
         PreconditionsHelper.notEmpty(enumName, "enumName");
         PreconditionsHelper.notNull(value, "value");
+
+        EnumWrapper enumWrapper = getEnumWrapper(enumName);
+
+        return enumWrapper.lookup(value);
+    }
+
+    /**
+     * Method that returns a string with all values found in an enum
+     *
+     * @param enumName
+     *            the enum class name
+     * @return
+     * @throws IllegalAccessException
+     * @throws NoClassDefFoundError
+     */
+    public String getAcceptedValues(String enumName) throws IllegalAccessException, NoClassDefFoundError {
+        PreconditionsHelper.notEmpty(enumName, "enumName");
+
+        EnumWrapper enumWrapper = getEnumWrapper(enumName);
+
+        return enumWrapper.validValues().toString();
+    }
+
+    private EnumWrapper getEnumWrapper(final String enumName) throws IllegalAccessException {
 
         EnumWrapper enumWrapper = enums.get(enumName);
 
@@ -70,6 +94,6 @@ public class EnumService {
             enums.put(enumName, enumWrapper);
         }
 
-        return enumWrapper.lookup(value);
+        return enumWrapper;
     }
 }

@@ -10,12 +10,12 @@ import org.springframework.stereotype.Component;
 
 import eu.ec.dgempl.eessi.rina.model.enumtypes.EApplicationRole;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.EPolicyType;
-import eu.ec.dgempl.eessi.rina.model.exception.runtime.enums.EnumNotFoundEessiRuntimeException;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.AssignmentPolicy;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.AssignmentPolicyRule;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.Tenant;
 import eu.ec.dgempl.eessi.rina.repo.AssignmentPolicyRepo;
 import eu.ec.dgempl.eessi.rina.repo.TenantRepo;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.DmtEnumNotFoundException;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.AssignmentPolicyFields;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper._abstract.AbstractMapToEntityMapper;
@@ -87,7 +87,9 @@ public class MapToAssignmentPolicyMapper extends AbstractMapToEntityMapper<MapHo
         String appRole = a.string(AssignmentPolicyFields.APP_ROLE);
         if (StringUtils.isNotBlank(appRole)) {
 
-            EApplicationRole eApplicationRole = EApplicationRole.lookup(appRole).orElseThrow(EnumNotFoundEessiRuntimeException::new);
+            EApplicationRole eApplicationRole = EApplicationRole.lookup(appRole).orElseThrow(
+                    () -> new DmtEnumNotFoundException(EApplicationRole.class, a.addPath(AssignmentPolicyFields.APP_ROLE), appRole)
+            );
             b.setApplicationRole(eApplicationRole);
         }
     }

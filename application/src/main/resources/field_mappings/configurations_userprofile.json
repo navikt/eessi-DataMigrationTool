@@ -39,7 +39,6 @@
     "comment": "Reference to ProcessDefinition by id",
     "esPath": "currentProcessDefinition",
     "esType": "string",
-    "required": true,
     "sqlPath": "userProfile.currentProcessDef",
     "sqlType": "VARCHAR(255)",
     "value": "reference(configurations,processdefinition)"

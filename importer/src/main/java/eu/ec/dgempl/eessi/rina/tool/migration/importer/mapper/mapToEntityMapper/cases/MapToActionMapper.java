@@ -9,7 +9,6 @@ import eu.ec.dgempl.eessi.rina.model.enumtypes.EOperationType;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.ERole;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.portal.ETagCategory;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.portal.ETagType;
-import eu.ec.dgempl.eessi.rina.model.exception.runtime.enums.EnumNotFoundEessiRuntimeException;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.Action;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.ActionTag;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.Document;
@@ -18,6 +17,7 @@ import eu.ec.dgempl.eessi.rina.model.jpa.entity.RinaCase;
 import eu.ec.dgempl.eessi.rina.repo.DocumentRepo;
 import eu.ec.dgempl.eessi.rina.repo.DocumentTypeVersionRepo;
 import eu.ec.dgempl.eessi.rina.repo.RinaCaseRepo;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.DmtEnumNotFoundException;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.ActionFields;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper._abstract.AbstractMapToEntityMapper;
@@ -74,7 +74,8 @@ public class MapToActionMapper extends AbstractMapToEntityMapper<MapHolder, Acti
 
     private void mapActor(final MapHolder a, final Action b) {
         String actor = a.string(ActionFields.ACTOR);
-        ERole eRole = ERole.lookup(actor).orElseThrow(EnumNotFoundEessiRuntimeException::new);
+        ERole eRole = ERole.lookup(actor).orElseThrow(
+                () -> new DmtEnumNotFoundException(ERole.class, a.addPath(ActionFields.ACTOR), actor));
         b.setActor(eRole);
     }
 
@@ -123,7 +124,7 @@ public class MapToActionMapper extends AbstractMapToEntityMapper<MapHolder, Acti
                 .filter(operationType ->
                         operationType.getTypeName().equalsIgnoreCase(operation) || operationType.name().equalsIgnoreCase(operation))
                 .findFirst()
-                .orElseThrow(EnumNotFoundEessiRuntimeException::new);
+                .orElseThrow(() -> new DmtEnumNotFoundException(EOperationType.class, a.addPath(ActionFields.OPERATION), operation));
 
         b.setOperationType(eOperationType);
     }

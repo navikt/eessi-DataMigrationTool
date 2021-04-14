@@ -75,7 +75,7 @@
     "esPath": "message.networkLocation.ip",
     "esType": "string",
     "sqlPath": "auditEvent.netLocationIp",
-    "sqlType": "VARCHAR(20)"
+    "sqlType": "VARCHAR(50)"
   },
   {
     "esPath": "message.networkLocation.machine",

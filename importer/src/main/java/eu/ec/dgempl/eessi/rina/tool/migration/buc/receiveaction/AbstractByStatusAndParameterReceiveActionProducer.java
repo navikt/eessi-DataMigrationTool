@@ -38,21 +38,21 @@ public abstract class AbstractByStatusAndParameterReceiveActionProducer implemen
 
     /**
      * Which status of document should be filtered
-     * 
+     *
      * @return
      */
     protected abstract EDocumentStatus getDocumentStatus();
 
     /**
      * Which parameter must be {@code true}
-     * 
+     *
      * @return
      */
     protected abstract EDocumentParameterType getDocumentParameter();
 
     /**
      * Which document type should be set to created receive action
-     * 
+     *
      * @return
      */
     protected abstract EDocumentType getDocumentTypeForReceiveAction();
@@ -76,7 +76,7 @@ public abstract class AbstractByStatusAndParameterReceiveActionProducer implemen
 
     /**
      * Returns a list of received {@link Document} objects for the given {@code caseId}
-     * 
+     *
      * @param rinaCase
      * @return
      */
@@ -96,7 +96,7 @@ public abstract class AbstractByStatusAndParameterReceiveActionProducer implemen
      * For every document from the given {@code docs} list, will find in the {@code buc} definition if the document allows multiple
      * versions. If yes, it will create an action object with the type {@link EActionType#DOC_UPDATE_RECEIVE}. Method will return a
      * collection of all such actions.
-     * 
+     *
      * @param caseId
      * @param buc
      * @return
@@ -149,7 +149,7 @@ public abstract class AbstractByStatusAndParameterReceiveActionProducer implemen
 
     /**
      * Returns a new {@link ActionDO} object with {@link EActionType#DOC_RECEIVE} for X008 for the given {@code document} and {@code caseId}
-     * 
+     *
      * @param caseId
      * @return
      */
@@ -173,7 +173,7 @@ public abstract class AbstractByStatusAndParameterReceiveActionProducer implemen
 
     /**
      * Filter admin docs
-     * 
+     *
      * @param doc
      * @return
      */

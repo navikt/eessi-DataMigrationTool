@@ -39,7 +39,7 @@ public class X003ReceiveActionProducer implements ReceiveActionProducer {
     @Override
     public void createReceiveActions(final RinaCase rinaCase, Case bucDefinition) throws Exception {
 
-        logger.debug("Creating X003 RECEIVE actions for case [id={}, type={}]", rinaCase.getId(), 
+        logger.debug("Creating X003 RECEIVE actions for case [id={}, type={}]", rinaCase.getId(),
                 NamingHelper.getBucId(bucDefinition));
 
         List<Document> x002Documents = documentRepo
@@ -54,7 +54,7 @@ public class X003ReceiveActionProducer implements ReceiveActionProducer {
 
     /**
      * Create an Action object for the DOC_RECEIVE of X003 as a reply to X002
-     * 
+     *
      * @param caseId
      * @param x002
      * @return
@@ -78,9 +78,10 @@ public class X003ReceiveActionProducer implements ReceiveActionProducer {
     }
 
     // methods used solely for testing purposes in the jUnit.
+
     /**
      * Get all the X002, for which a RECEIVE action of X003 should be created
-     * 
+     *
      * @param caseId
      * @return
      */
@@ -90,7 +91,6 @@ public class X003ReceiveActionProducer implements ReceiveActionProducer {
     }
 
     /**
-     * 
      * @param caseId
      * @param buc
      * @return

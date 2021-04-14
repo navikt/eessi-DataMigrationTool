@@ -15,7 +15,7 @@ import eu.ec.dgempl.eessi.rina.repo.TenantRepo;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.AssignmentPolicyFields;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper._abstract.AbstractMapToEntityMapper;
-import eu.ec.dgempl.eessi.rina.tool.migration.importer.service.AssignmentPolicyService;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.service.BonitaProcessDefMappingsService;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.RepositoryUtils;
 
 import ma.glasnost.orika.MappingContext;
@@ -30,7 +30,7 @@ public class MapToAssignmentPolicyTargetMapper extends AbstractMapToEntityMapper
     private final TenantRepo tenantRepo;
 
     @Autowired
-    private AssignmentPolicyService assignmentPolicyService;
+    private BonitaProcessDefMappingsService bonitaProcessDefMappingsService;
 
     public MapToAssignmentPolicyTargetMapper(final AssignmentPolicyRepo assignmentPolicyRepo,
             final TenantRepo tenantRepo) {
@@ -59,7 +59,7 @@ public class MapToAssignmentPolicyTargetMapper extends AbstractMapToEntityMapper
                 if (processParts.length != 4) {
                     throw new RuntimeException("Could not process targetId");
                 }
-                String actorName = assignmentPolicyService.getActorName(
+                String actorName = bonitaProcessDefMappingsService.getActorName(
                         processParts[0],
                         String.join(PROCESS_SEPARATOR, processParts[1], processParts[2], processParts[3]),
                         parts[1]);

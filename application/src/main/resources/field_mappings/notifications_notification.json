@@ -132,11 +132,12 @@
     "importIgnore": true
   },
   {
-    "esPath": "creator.organisation.address.country",
-    "esType": "string",
-    "sqlPath": "notification.creator.tenant.organisation.addressCountry",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "esPath": "creator.organisation.address",
+    "esType": "object",
+    "ignorePath": true,
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "creator.organisation.countryCode",
@@ -192,11 +193,12 @@
     "importIgnore": true
   },
   {
-    "esPath": "document.receiver.address.country",
-    "esType": "string",
-    "sqlPath": "notification.receiver.addressCountry",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "esPath": "document.receiver.address",
+    "esType": "object",
+    "ignorePath": true,
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "document.receiver.countryCode",
@@ -235,11 +237,12 @@
     "importIgnore": true
   },
   {
-    "esPath": "document.receiver.organisation.address.country",
-    "esType": "string",
-    "sqlPath": "notification.receiver.addressCountry",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "esPath": "document.receiver.organisation.address",
+    "esType": "object",
+    "ignorePath": true,
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "document.receiver.organisation.countryCode",
@@ -352,39 +355,12 @@
     "importIgnore": true
   },
   {
-    "esPath": "responsibleParties.organisation.address.country",
-    "esType": "string",
-    "sqlPath": "notification.iamUsers.tenant.organisation.addressCountry",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
-  },
-  {
-    "esPath": "responsibleParties.organisation.address.town",
-    "esType": "string",
-    "sqlPath": "notification.iamUsers.tenant.organisation.addressTown",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
-  },
-  {
-    "esPath": "responsibleParties.organisation.address.street",
-    "esType": "string",
-    "sqlPath": "notification.iamUsers.tenant.organisation.addressStreet",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
-  },
-  {
-    "esPath": "responsibleParties.organisation.address.postalCode",
-    "esType": "string",
-    "sqlPath": "notification.iamUsers.tenant.organisation.addressPostalCode",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
-  },
-  {
-    "esPath": "responsibleParties.organisation.address.region",
-    "esType": "string",
-    "sqlPath": "notification.iamUsers.tenant.organisation.addressRegion",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "esPath": "responsibleParties.organisation.address",
+    "esType": "object",
+    "ignorePath": true,
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "responsibleParties.organisation.countryCode",
