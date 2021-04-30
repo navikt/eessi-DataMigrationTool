@@ -15,7 +15,7 @@ import eu.ec.dgempl.eessi.rina.tool.migration.importer.dataimport._abstract.Abst
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.report.DocumentsReport;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.EElasticType;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
-import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.CaseFields;
+import eu.ec.dgempl.eessi.rina.tool.migration.common.model.fields.CaseFields;
 
 @Component
 @ElasticTypeImporter(type = EElasticType.CASES_CASEMETADATA)

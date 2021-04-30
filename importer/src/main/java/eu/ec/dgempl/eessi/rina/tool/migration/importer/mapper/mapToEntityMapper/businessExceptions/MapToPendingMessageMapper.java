@@ -3,11 +3,7 @@ package eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -29,15 +25,12 @@ import eu.ec.dgempl.eessi.rina.model.enumtypes.EApplicationRole;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.ECaseActionType;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.ECaseStatus;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.EMimeType;
-import eu.ec.dgempl.eessi.rina.model.jpa.entity.Organisation;
-import eu.ec.dgempl.eessi.rina.model.jpa.entity.PendingAttachment;
-import eu.ec.dgempl.eessi.rina.model.jpa.entity.PendingMessage;
-import eu.ec.dgempl.eessi.rina.model.jpa.entity.ProcessDefVersion;
-import eu.ec.dgempl.eessi.rina.model.jpa.entity.RinaCase;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity.*;
 import eu.ec.dgempl.eessi.rina.model.jpa.exception.EntityWithTooManyRecordsEessiRuntimeException;
 import eu.ec.dgempl.eessi.rina.model.jpa.exception.UniqueIdentifier;
 import eu.ec.dgempl.eessi.rina.repo.ProcessDefVersionRepo;
 import eu.ec.dgempl.eessi.rina.repo.RinaCaseRepo;
+import eu.ec.dgempl.eessi.rina.tool.migration.common.util.DateResolver;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.PendingMessageFields;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper._abstract.AbstractMapToEntityMapper;
@@ -57,9 +50,7 @@ public class MapToPendingMessageMapper extends AbstractMapToEntityMapper<MapHold
     @Autowired
     private OrganisationService organisationService;
 
-    public MapToPendingMessageMapper(
-            final ProcessDefVersionRepo processDefVersionRepo,
-            final RinaCaseRepo rinaCaseRepo,
+    public MapToPendingMessageMapper(final ProcessDefVersionRepo processDefVersionRepo, final RinaCaseRepo rinaCaseRepo,
             final RinaJsonMapper rinaJsonMapper) {
 
         this.processDefVersionRepo = processDefVersionRepo;
@@ -104,7 +95,7 @@ public class MapToPendingMessageMapper extends AbstractMapToEntityMapper<MapHold
             throw new RuntimeException("Date is missing for pending message with id " + b.getId());
         }
 
-        b.setDate(parseDate(date));
+        b.setDate(DateResolver.parse(date));
     }
 
     private void mapReceiver(MapHolder a, PendingMessage b) {
@@ -226,26 +217,15 @@ public class MapToPendingMessageMapper extends AbstractMapToEntityMapper<MapHold
         String sedId = a.string(PendingMessageFields.SED_ID, true);
         String sedVersion = a.string(PendingMessageFields.SED_VERSION, true);
         CaseActionType caseActionType = CaseActionType.fromValue(a.string(PendingMessageFields.ACTION_TYPE));
-        ZonedDateTime creationDate = parseDate(a.string(PendingMessageFields.SED_CREATION_DATE, true));
+        ZonedDateTime creationDate = DateResolver.parse(a.string(PendingMessageFields.SED_CREATION_DATE, true));
 
-        sbdhBuilder.withDocumentIdentification(
-                sedType,
-                sedTypeVersion,
-                sedId,
-                sedVersion,
-                id,
-                caseActionType,
-                Date.from(creationDate.toInstant())
-        );
+        sbdhBuilder.withDocumentIdentification(sedType, sedTypeVersion, sedId, sedVersion, id, caseActionType,
+                Date.from(creationDate.toInstant()));
 
         for (PendingAttachment pendingAttachment : b.getPendingAttachments()) {
-            sbdhBuilder.withAddedAttachment(
-                    InternetMediaType.fromValue(pendingAttachment.getMimeType().toString()),
-                    pendingAttachment.getId(),
-                    pendingAttachment.getSectionReference(),
-                    pendingAttachment.getFilename(),
-                    pendingAttachment.isMedical()
-            );
+            sbdhBuilder.withAddedAttachment(InternetMediaType.fromValue(pendingAttachment.getMimeType().toString()),
+                    pendingAttachment.getId(), pendingAttachment.getSectionReference(), pendingAttachment.getFilename(),
+                    pendingAttachment.isMedical());
         }
 
         String caseInternationalId = a.string(PendingMessageFields.INTERNATIONAL_CASE_ID);

@@ -138,4 +138,57 @@ public class EnumValidatorTest {
         assertEquals(1, result.size());
         Assertions.assertThat(result.get(0)).isEqualToComparingFieldByField(expectedResult);
     }
+
+
+    @Test
+    public void check_conversationsParticipantsRole_CounterParty_fromAT() {
+
+        setUpValidationContextWithFiles("CaseDocumentWithConversationsParticipantsRoleCounterParty.json");
+        path = "conversations[1].participants[1].role";
+        Object object = "CounterParty";
+        String enumType = "EConversationParticipantRole";
+        enumValidator = new EnumValidator(enumService, enumType);
+
+        ValidationResult expectedResult = ValidationResult.ok(path, object, null);
+
+        List<ValidationResult> result = enumValidator.validate(path, object, validationContext);
+
+        assertEquals(1, result.size());
+        Assertions.assertThat(result.get(0)).isEqualToComparingFieldByField(expectedResult);
+    }
+
+    @Test
+    public void check_conversationsParticipantsRole_CounterParty_notFromAT() {
+
+        setUpValidationContextWithFiles("CaseDocumentWithConversationsParticipantsRoleCounterParty.json");
+        path = "conversations[2].participants[1].role";
+        Object object = "CounterParty";
+        String enumType = "EConversationParticipantRole";
+        enumValidator = new EnumValidator(enumService, enumType);
+
+        ValidationResult expectedResult = ValidationResult.error(path, object, EValidationResult.INVALID_ENUM,
+                "Expected value from enum EConversationParticipantRole. Accepted values in format 'name:values' are: [receiver : [receiver], sender : [sender], participant : [participant]]");
+
+        List<ValidationResult> result = enumValidator.validate(path, object, validationContext);
+
+        assertEquals(1, result.size());
+        Assertions.assertThat(result.get(0)).isEqualToComparingFieldByField(expectedResult);
+    }
+
+    @Test
+    public void check_conversationsParticipantsRole_notCounterParty_fromAT() {
+
+        setUpValidationContextWithFiles("CaseDocumentWithConversationsParticipantsRoleCounterParty.json");
+        path = "conversations[3].participants[0].role";
+        Object object = "Sender";
+        String enumType = "EConversationParticipantRole";
+        enumValidator = new EnumValidator(enumService, enumType);
+
+        ValidationResult expectedResult = ValidationResult.ok(path, object, null);
+
+        List<ValidationResult> result = enumValidator.validate(path, object, validationContext);
+
+        assertEquals(1, result.size());
+        Assertions.assertThat(result.get(0)).isEqualToComparingFieldByField(expectedResult);
+    }
 }

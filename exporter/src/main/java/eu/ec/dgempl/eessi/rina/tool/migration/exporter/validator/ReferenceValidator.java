@@ -11,8 +11,10 @@ import org.springframework.util.StringUtils;
 
 import eu.ec.dgempl.eessi.rina.tool.migration.common.model.EEsIndex;
 import eu.ec.dgempl.eessi.rina.tool.migration.common.model.EEsType;
+import eu.ec.dgempl.eessi.rina.tool.migration.common.model.fields.CaseFields;
 import eu.ec.dgempl.eessi.rina.tool.migration.common.service.EsClientService;
 import eu.ec.dgempl.eessi.rina.tool.migration.common.service.OrganisationLoaderService;
+import eu.ec.dgempl.eessi.rina.tool.migration.common.util.EsDocumentHelper;
 import eu.ec.dgempl.eessi.rina.tool.migration.common.util.PreconditionsHelper;
 import eu.ec.dgempl.eessi.rina.tool.migration.exporter.cache.CacheEntry;
 import eu.ec.dgempl.eessi.rina.tool.migration.exporter.model.EValidationResult;
@@ -32,13 +34,15 @@ public class ReferenceValidator extends AbstractValidator {
     private final EsClientService elasticClient;
     private final CacheService cacheService;
     private final OrganisationLoaderService organisationLoaderService;
+    private final Boolean ignoreInvalidReferencesPolicy;
 
-    public ReferenceValidator(EsClientService elasticClient, CacheService cacheService, OrganisationLoaderService organisationLoaderService,
+    public ReferenceValidator(EsClientService elasticClient, CacheService cacheService, OrganisationLoaderService organisationLoaderService, Boolean ignoreInvalidReferencesPolicy,
             String... params) {
         super(params);
         this.elasticClient = elasticClient;
         this.cacheService = cacheService;
         this.organisationLoaderService = organisationLoaderService;
+        this.ignoreInvalidReferencesPolicy = ignoreInvalidReferencesPolicy;
     }
 
     @Override
@@ -122,6 +126,17 @@ public class ReferenceValidator extends AbstractValidator {
                 format = "caseId__id";
             }
 
+            // add a special handler for invalid policies references in configurations_assignmenttarget
+            // if the 'ignore.invalid.references.policy' field in the application.properties file is true,
+            // the importer will ignore the invalid policy references
+            if (index.equalsIgnoreCase(EEsIndex.CONFIGURATIONS.value()) && type.equalsIgnoreCase(EEsType.ASSIGNMENTPOLICY.value())
+                    && documentType.equalsIgnoreCase(EEsType.ASSIGNMENTTARGET.value())) {
+                if (normalisedPath.equalsIgnoreCase("policies") && ignoreInvalidReferencesPolicy != null && ignoreInvalidReferencesPolicy) {
+                    results.add(ValidationResult.ok(path, obj));
+                    return results;
+                }
+            }
+
             // construct the documentId based on the params
             String id = "";
             if (StringUtils.isEmpty(format)) {
@@ -172,8 +187,19 @@ public class ReferenceValidator extends AbstractValidator {
                     } else {
                         CacheEntry entry = new CacheEntry(false, index, type, id, cacheEntryContext);
                         cacheService.add(entry);
-                        String details = String.format("Invalid reference id [index=%s,type=%s,id=%s]", index, type, id);
-                        results.add(ValidationResult.error(path, obj, EValidationResult.INVALID_REFERENCE, details));
+
+                        if (EEsIndex.CASES.value().equalsIgnoreCase(context.getDocument().getIndex())
+                                && EEsType.TASKMETADATA.value().equalsIgnoreCase(documentType)) {
+                            if (!isTaskMetadataInvalidReferenceException(obj, index, type, document)) {
+                                String details = String.format("Invalid reference id [index=%s,type=%s,id=%s]", index, type, id);
+                                results.add(ValidationResult.error(path, obj, EValidationResult.INVALID_REFERENCE, details));
+                            } else {
+                                results.add(ValidationResult.ok(path, obj));
+                            }
+                        } else {
+                            String details = String.format("Invalid reference id [index=%s,type=%s,id=%s]", index, type, id);
+                            results.add(ValidationResult.error(path, obj, EValidationResult.INVALID_REFERENCE, details));
+                        }
                     }
                 } catch (IOException e) {
                     throw new IllegalStateException(e);
@@ -203,6 +229,42 @@ public class ReferenceValidator extends AbstractValidator {
         }
 
         return results;
+    }
+
+    private boolean isTaskMetadataInvalidReferenceException(final Object obj, final String index, final String type,
+            final Map<String, Object> document) {
+        if (EEsIndex.CASES.value().equalsIgnoreCase(index) && EEsType.DOCUMENT.value().equalsIgnoreCase(type)) {
+            try {
+                // get object from elasticsearch
+                Map<String, Object> _obj = elasticClient.get(index, EEsType.CASEMETADATA.value(), (String) document.get("caseId"));
+                if (_obj != null) {
+
+                    String role = "";
+                    Object _processDefinitionName = _obj.get(CaseFields.PROCESS_DEFINITION_NAME);
+                    if (_processDefinitionName instanceof String && ((String) _processDefinitionName).length() > 2) {
+                        role = ((String) _processDefinitionName).substring(0, 2);
+                    }
+
+                    Map<String, Object> params = Map.of(EsDocumentHelper.APPLICATION_ROLE, role,
+                            EsDocumentHelper.IS_MULTI_STARTER, _obj.get(CaseFields.IS_MULTI_STARTER),
+                            EsDocumentHelper.STARTER_TYPE, _obj.get(CaseFields.STARTER_TYPE),
+                            EsDocumentHelper.IS_STARTER_SENT, _obj.get(CaseFields.IS_STARTER_SENT),
+                            EsDocumentHelper.DOCTYPE, document.get("documentType"));
+
+                    if (EsDocumentHelper.isTaskMetadataInvalidReferenceException(params)) {
+                        logger.info(String.format(
+                                "Invalid document reference %s in taskmetadata in document with id %s. This document belongs to a multi-starter case and is a draft that should have been previously removed by Bonita. Ignoring document reference.",
+                                obj, document.get("id")));
+                        return true;
+                    }
+                }
+            } catch (Exception ex) {
+                logger.info(String.format(
+                        "Error trying to get document from type %s and index %s for case with id %s to check if this invalid reference document should be ignored in case it belongs to a multi-starter case and is a draft that should have been previously removed by Bonita",
+                        index, EEsType.CASEMETADATA.value(), document.get("caseId")));
+            }
+        }
+        return false;
     }
 
     /**

@@ -22,6 +22,7 @@ import eu.ec.dgempl.eessi.rina.model.jpa.exception.EntityNotFoundEessiRuntimeExc
 import eu.ec.dgempl.eessi.rina.model.jpa.exception.UniqueIdentifier;
 import eu.ec.dgempl.eessi.rina.repo.IamOriginRepo;
 import eu.ec.dgempl.eessi.rina.repo.TenantRepo;
+import eu.ec.dgempl.eessi.rina.tool.migration.common.service.DefaultValuesService;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.UserFields;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper._abstract.AbstractMapToEntityMapper;
@@ -36,10 +37,12 @@ public class MapToIamUserMapper extends AbstractMapToEntityMapper<MapHolder, Iam
 
     private final IamOriginRepo iamOriginRepo;
     private final TenantRepo tenantRepo;
+    private final DefaultValuesService defaultsService;
 
-    public MapToIamUserMapper(IamOriginRepo iamOriginRepo, TenantRepo tenantRepo) {
+    public MapToIamUserMapper(IamOriginRepo iamOriginRepo, TenantRepo tenantRepo, DefaultValuesService defaultsService) {
         this.iamOriginRepo = iamOriginRepo;
         this.tenantRepo = tenantRepo;
+        this.defaultsService = defaultsService;
     }
 
     @Override
@@ -57,22 +60,21 @@ public class MapToIamUserMapper extends AbstractMapToEntityMapper<MapHolder, Iam
         b.setEmail(a.string(UserFields.EMAIL));
         b.setPassword(a.string(UserFields.PASSWORD));
         b.setIsSystem(false);
-        b.setIsEnabled(a.bool(UserFields.IS_ENABLED));
-        b.setIsDeleted(a.bool(UserFields.IS_DELETED));
-        b.setIsAdmin(a.bool(UserFields.IS_ADMIN));
         b.setPhoneNumber(a.string(PHONE_NUMBER));
         b.setKeystoreAlias(a.string(KEYSTORE_ALIAS));
 
         setValue(a, FIRST_NAME, b::setFirstName);
         setValue(a, LAST_NAME, b::setLastName);
+
+        setValueWithFallback(a, IS_ENABLED, ENABLED, b::setIsEnabled);
+        setValueWithFallback(a, IS_DELETED, DELETED, b::setIsDeleted);
+        setValueWithFallback(a, IS_ADMIN, ADMIN, b::setIsAdmin);
     }
 
     private void mapGroups(final MapHolder a, final IamUser b, final MappingContext context) {
         List<MapHolder> groups = a.listToMapHolder(UserFields.GROUPS);
         if (!CollectionUtils.isEmpty(groups)) {
-            groups.stream()
-                    .map(holder -> mapperFacade.map(holder, IamUserGroup.class, context))
-                    .forEach(b::addIamUserGroup);
+            groups.stream().map(holder -> mapperFacade.map(holder, IamUserGroup.class, context)).forEach(b::addIamUserGroup);
         }
     }
 
@@ -115,13 +117,22 @@ public class MapToIamUserMapper extends AbstractMapToEntityMapper<MapHolder, Iam
         b.setTenant(tenant);
     }
 
-    private void setValue(final MapHolder a, final String path, Consumer<String> valueConsumer){
-        String defaultValue = "unknown";
+    private void setValue(final MapHolder a, final String path, Consumer<String> valueConsumer) {
         String value = a.string(path, true);
-        if (Strings.isBlank(value)){
-            value = defaultValue;
-            logger.info(String.format("User %s is empty. Setting default value %s", path, defaultValue));
+        if (Strings.isBlank(value)) {
+            value = defaultsService.getDefaultValue(path);
+            logger.info(String.format("User %s is empty. Setting default value %s", path, value));
         }
+        valueConsumer.accept(value);
+    }
+
+    private void setValueWithFallback(MapHolder a, String valuePath, String fallbackValuePath, Consumer<Boolean> valueConsumer) {
+        Boolean value = a.bool(valuePath);
+
+        if (value == null) {
+            value = a.bool(fallbackValuePath);
+        }
+
         valueConsumer.accept(value);
     }
 

@@ -12,7 +12,7 @@ import eu.ec.dgempl.eessi.rina.model.jpa.entity.RinaCase;
 import eu.ec.dgempl.eessi.rina.repo.IamUserRepo;
 import eu.ec.dgempl.eessi.rina.repo.IamUserRepoExtended;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
-import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.CaseFields;
+import eu.ec.dgempl.eessi.rina.tool.migration.common.model.fields.CaseFields;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.CommentFields;
 
 public final class CasesUtils {

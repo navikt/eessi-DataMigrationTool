@@ -85,8 +85,8 @@ DELETE FROM assignment_policy_rule;
 DELETE FROM assignment_policy_policy;
 DELETE FROM assignment_policy;
 
-DELETE FROM field;
-DELETE FROM field_chooser;
+DELETE FROM field where fk_field_chooser_sid not in (select sid from field_chooser where fk_user_sid = 0);
+DELETE FROM field_chooser where fk_user_sid <> '0';
 
 DELETE FROM search_def_user;
 DELETE FROM search_def_group;
@@ -101,7 +101,6 @@ DELETE FROM iam_user where id <> '0';
 DELETE FROM iam_origin where sid <> 1;
 
 DELETE FROM archiving_volume;
-DELETE FROM business_exception_settings;
 
 DELETE FROM tenant_param;
 DELETE FROM tenant_param_group;
@@ -112,11 +111,8 @@ DELETE FROM organisation;
 
 DELETE FROM cluster_node;
 DELETE FROM business_key;
-DELETE FROM global_param where key not in ('app.profile.installation.component.server.date','app.profile.installation.component.server.version');
-DELETE FROM global_param_group;
 
 DELETE FROM check_instance;
 DELETE FROM check_bucket;
-DELETE FROM check_definition;
 
 DELETE FROM resource;

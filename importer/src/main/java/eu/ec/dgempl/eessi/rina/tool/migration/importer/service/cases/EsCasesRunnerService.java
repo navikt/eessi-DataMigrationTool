@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.CaseFields;
+import eu.ec.dgempl.eessi.rina.tool.migration.common.model.fields.CaseFields;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.service.cases._abstract.AbstractCasesRunnerService;
 
 @Service

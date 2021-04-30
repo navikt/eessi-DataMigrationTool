@@ -1,6 +1,7 @@
 package eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper.cases.subdocument;
 
-import static eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.DateUtils.*;
+import static eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.DateUtils.getIntervalIndex;
+import static eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.DateUtils.getIntervalsMap;
 
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -16,18 +17,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import eu.ec.dgempl.eessi.rina.commons.date.ZonedDateTimePeriod;
 import eu.ec.dgempl.eessi.rina.commons.transformation.RinaJsonMapper;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.ESubdocPrefillGroup;
-import eu.ec.dgempl.eessi.rina.model.jpa.entity.Document;
-import eu.ec.dgempl.eessi.rina.model.jpa.entity.IamUser;
-import eu.ec.dgempl.eessi.rina.model.jpa.entity.RinaCase;
-import eu.ec.dgempl.eessi.rina.model.jpa.entity.Subdocument;
-import eu.ec.dgempl.eessi.rina.model.jpa.entity.SubdocumentAttachment;
-import eu.ec.dgempl.eessi.rina.model.jpa.entity.SubdocumentBversion;
-import eu.ec.dgempl.eessi.rina.model.jpa.entity.SubdocumentPrefill;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity.*;
 import eu.ec.dgempl.eessi.rina.model.jpa.exception.EntityNotFoundEessiRuntimeException;
 import eu.ec.dgempl.eessi.rina.model.jpa.exception.UniqueIdentifier;
 import eu.ec.dgempl.eessi.rina.repo.DocumentRepo;
 import eu.ec.dgempl.eessi.rina.repo.IamUserRepo;
 import eu.ec.dgempl.eessi.rina.repo.RinaCaseRepo;
+import eu.ec.dgempl.eessi.rina.tool.migration.common.util.DateResolver;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper._abstract.AbstractMapToEntityMapper;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.RepositoryUtils;
@@ -79,9 +75,7 @@ public class MapToSubdocumentMapper extends AbstractMapToEntityMapper<MapHolder,
     private void mapAttachments(final MapHolder a, final Subdocument b) {
         List<MapHolder> attachmentMapHolders = a.listToMapHolder("attachments");
         if (CollectionUtils.isNotEmpty(attachmentMapHolders)) {
-            attachmentMapHolders.stream()
-                    .map(subdocument -> mapSubdocumentAttachment(subdocument, b))
-                    .forEach(b::addSubdocumentAttachment);
+            attachmentMapHolders.stream().map(subdocument -> mapSubdocumentAttachment(subdocument, b)).forEach(b::addSubdocumentAttachment);
         }
     }
 
@@ -92,17 +86,15 @@ public class MapToSubdocumentMapper extends AbstractMapToEntityMapper<MapHolder,
         if (CollectionUtils.isNotEmpty(versions)) {
             Map<ZonedDateTimePeriod, Integer> intervalPairs = getIntervalsMap(subdocumentBversions);
 
-            versions.forEach(
-                    version -> {
-                        ZonedDateTime creationDate = parseDate(version.string("date"));
-                        int intervalIndex = getIntervalIndex(intervalPairs, creationDate);
-                        if (intervalIndex > -1) {
-                            for (int idx = intervalIndex; idx < subdocumentBversions.size(); idx++) {
-                                subdocumentBversions.get(idx).addSubdocumentAttachment(subdocumentAttachment);
-                            }
-                        }
+            versions.forEach(version -> {
+                ZonedDateTime creationDate = DateResolver.parse(version.string("date"));
+                int intervalIndex = getIntervalIndex(intervalPairs, creationDate);
+                if (intervalIndex > -1) {
+                    for (int idx = intervalIndex; idx < subdocumentBversions.size(); idx++) {
+                        subdocumentBversions.get(idx).addSubdocumentAttachment(subdocumentAttachment);
                     }
-            );
+                }
+            });
         } else {
             subdocumentBversions.forEach(bversion -> bversion.addSubdocumentAttachment(subdocumentAttachment));
         }
@@ -113,9 +105,7 @@ public class MapToSubdocumentMapper extends AbstractMapToEntityMapper<MapHolder,
     private void mapBVersions(final MapHolder a, final Subdocument b) {
         List<MapHolder> versions = a.listToMapHolder("versions");
         if (CollectionUtils.isNotEmpty(versions)) {
-            versions.stream()
-                    .map(version -> mapperFacade.map(version, SubdocumentBversion.class))
-                    .forEach(b::addSubdocumentBversion);
+            versions.stream().map(version -> mapperFacade.map(version, SubdocumentBversion.class)).forEach(b::addSubdocumentBversion);
         }
     }
 

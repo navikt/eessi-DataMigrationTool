@@ -5,7 +5,7 @@ The version of RINA on which a certain release of DMT depends on can be found in
 
 1. Building RINA sources
 In order to build DMT, you need to build first the corresponding RINA sources.
-For DMT v.2.1.1, the correspong RINA version is RINA 6.2.4.
+For DMT v.2.1.2, the correspong RINA version is RINA 6.2.5
 
 2. Building DMT
 DMT can be built by running the following command:

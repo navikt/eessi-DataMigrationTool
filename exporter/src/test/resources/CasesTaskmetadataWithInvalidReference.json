@@ -1,0 +1,42 @@
+{
+  "index": "cases",
+  "type": "taskmetadata",
+  "objectId": "317123_def051fa04044a7fa703338c4be412f2",
+  "object": {
+    "canClose": true,
+    "template": "Send_Document",
+    "isDocumentRelated": true,
+    "documentType": "S008",
+    "requiresValidDocument": true,
+    "displayName": "Send",
+    "tempDocumentId": "75fd4546d92142cbb0a4551d9037b340",
+    "type": "popup",
+    "tags": {
+      "category": "Documents",
+      "type": "sectorial"
+    },
+    "actor": "Authorized",
+    "typeVersion": "1.0",
+    "poolGroup": {
+      "Type": "S008",
+      "DMProcessId": "317126",
+      "DocumentId": "invalid_52e18741d6664106bbe54aa064a34016",
+      "Operation": "Send"
+    },
+    "caseId": "317123",
+    "isCaseRelated": false,
+    "hasBusinessValidation": false,
+    "name": "Send",
+    "documentId": "invalid_52e18741d6664106bbe54aa064a34016",
+    "id": "317123_def051fa04044a7fa703338c4be412f2",
+    "actionGroup": {
+      "Type": "S008",
+      "DMProcessId": "317126",
+      "DocumentId": "invalid_52e18741d6664106bbe54aa064a34016",
+      "Operation": "Send"
+    },
+    "isBulk": false,
+    "operation": "Send",
+    "status": "active"
+  }
+}

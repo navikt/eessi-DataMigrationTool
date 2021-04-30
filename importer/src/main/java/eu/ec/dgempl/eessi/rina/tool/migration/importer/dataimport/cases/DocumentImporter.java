@@ -1,6 +1,5 @@
 package eu.ec.dgempl.eessi.rina.tool.migration.importer.dataimport.cases;
 
-import static eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper._abstract.AbstractLocalMapper.*;
 import static eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.DateUtils.*;
 import static eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.RepositoryUtils.*;
 
@@ -20,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import eu.ec.dgempl.eessi.rina.buc.core.model.EDocumentType;
 import eu.ec.dgempl.eessi.rina.commons.date.ZonedDateTimePeriod;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.EUserMessageDirection;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.Document;
@@ -34,6 +34,7 @@ import eu.ec.dgempl.eessi.rina.repo.DocumentConversationRepo;
 import eu.ec.dgempl.eessi.rina.repo.DocumentRepo;
 import eu.ec.dgempl.eessi.rina.repo.UserMessageRepo;
 import eu.ec.dgempl.eessi.rina.repo.UserMessageResponseRepo;
+import eu.ec.dgempl.eessi.rina.tool.migration.common.util.DateResolver;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dataimport.CaseImporter;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dataimport.ElasticTypeImporter;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dataimport._abstract.AbstractDataImporter;
@@ -88,6 +89,8 @@ public class DocumentImporter extends AbstractDataImporter implements CaseImport
 
         mapDocumentBversions(doc, document);
 
+        mapParentIfR018(document);
+
         documentRepo.saveAndFlush(document);
 
         updateUserMessagesDirection(document, document.getDocumentConversations());
@@ -106,6 +109,34 @@ public class DocumentImporter extends AbstractDataImporter implements CaseImport
 
         mapDocumentBversion(doc, document);
         mapAttachments(doc);
+    }
+
+    private void mapParentIfR018(Document document) {
+        if (EDocumentType.R_018.value().equalsIgnoreCase(document.getDocumentTypeVersion().getDocumentType().getType())) {
+            String rinaCaseId = document.getRinaCase().getId();
+
+            List<Document> documentsWithTypeR017 = documentRepo.findByRinaCaseIdAndDocumentTypeVersionDocumentTypeType(
+                    rinaCaseId,
+                    EDocumentType.R_017.value());
+
+            if (CollectionUtils.isEmpty(documentsWithTypeR017)) {
+                throw new RuntimeException(String.format(
+                        "Could not find parent for document R018, with id=%s and caseId=%s",
+                        document.getId(),
+                        rinaCaseId));
+            }
+
+            Document parent = getParent(documentsWithTypeR017, document);
+
+            if (parent == null) {
+                throw new RuntimeException(String.format(
+                        "Could not find parent for document R018, with id=%s and caseId=%s",
+                        document.getId(),
+                        rinaCaseId));
+            }
+
+            document.setParent(parent);
+        }
     }
 
     private List<UserMessage> setUserMessageResponseAndGet(List<UserMessageResponse> userMessageResponses) {
@@ -227,7 +258,7 @@ public class DocumentImporter extends AbstractDataImporter implements CaseImport
         if (CollectionUtils.isNotEmpty(versions)) {
             Map<ZonedDateTimePeriod, Integer> intervalPairs = getIntervalsMap(documentBversions);
             versions.forEach(version -> {
-                ZonedDateTime creationDate = parseDate(version.string("date"));
+                ZonedDateTime creationDate = DateResolver.parse(version.string("date"));
                 int intervalIndex = getIntervalIndex(intervalPairs, creationDate);
                 if (intervalIndex > -1) {
                     for (int idx = intervalIndex; idx < documentBversions.size(); idx++) {
@@ -240,6 +271,17 @@ public class DocumentImporter extends AbstractDataImporter implements CaseImport
         }
 
         return documentBversions;
+    }
+
+    private Document getParent(List<Document> possibleParentDocuments, Document document) {
+        Map<ZonedDateTimePeriod, Integer> intervalPairs = getIntervalsMap(possibleParentDocuments);
+        int documentIdx = getIntervalIndex(intervalPairs, document.getAudit().getCreatedAt());
+
+        if (documentIdx > -1) {
+            return possibleParentDocuments.get(documentIdx);
+        }
+
+        return null;
     }
 
     @Override

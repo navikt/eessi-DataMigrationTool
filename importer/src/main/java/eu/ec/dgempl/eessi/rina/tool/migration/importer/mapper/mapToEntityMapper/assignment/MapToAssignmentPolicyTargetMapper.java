@@ -1,15 +1,20 @@
 package eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper.assignment;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.AssignmentPolicy;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.AssignmentPolicyTarget;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.Tenant;
+import eu.ec.dgempl.eessi.rina.model.jpa.exception.EntityNotFoundEessiRuntimeException;
 import eu.ec.dgempl.eessi.rina.repo.AssignmentPolicyRepo;
 import eu.ec.dgempl.eessi.rina.repo.TenantRepo;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
@@ -23,8 +28,12 @@ import ma.glasnost.orika.MappingContext;
 @Component
 public class MapToAssignmentPolicyTargetMapper extends AbstractMapToEntityMapper<MapHolder, AssignmentPolicyTarget> {
 
+    private static final Logger logger = LoggerFactory.getLogger(MapToAssignmentPolicyTargetMapper.class);
     public static final String TAGET_SEPARATOR = "-";
     public static final String PROCESS_SEPARATOR = "_";
+
+    @Value("${ignore.invalid.references.policy:#{false}}")
+    private Boolean ignoreInvalidReferencesPolicy;
 
     private final AssignmentPolicyRepo assignmentPolicyRepo;
     private final TenantRepo tenantRepo;
@@ -77,8 +86,21 @@ public class MapToAssignmentPolicyTargetMapper extends AbstractMapToEntityMapper
         List<String> policies = a.list(AssignmentPolicyFields.TARGET_POLICIES, String.class, false);
         if (CollectionUtils.isNotEmpty(policies)) {
             policies.stream()
-                    .map(policyId -> RepositoryUtils.findById(policyId, assignmentPolicyRepo::findById, AssignmentPolicy.class))
-                    .forEach(b::addAssignmentPolicy);
+                .map(policyId -> {
+                    try {
+                        return RepositoryUtils.findById(policyId, assignmentPolicyRepo::findById, AssignmentPolicy.class);
+                    } catch (EntityNotFoundEessiRuntimeException ex) {
+                        if (ignoreInvalidReferencesPolicy) {
+                            logger.info(String.format(
+                                    "Policy with id %s from assignmentTarget was not found in policies repository but the policy was ignored because the property to ignore invalid policy references was set to true",
+                                    policyId));
+                        } else {
+                            throw ex;
+                        }
+                        return null;
+                    }})
+                .filter(Objects::nonNull)
+                .forEach(b::addAssignmentPolicy);
         }
     }
 

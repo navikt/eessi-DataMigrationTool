@@ -1,7 +1,7 @@
 package eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper.cases;
 
-import static eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.CaseFields.*;
-import static eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.CasesUtils.*;
+import static eu.ec.dgempl.eessi.rina.tool.migration.common.model.fields.CaseFields.*;
+import static eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.CasesUtils.addCasePrefills;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,14 +19,7 @@ import eu.ec.dgempl.eessi.rina.model.enumtypes.EApplicationRole;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.ECasePrefillGroup;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.ECasePropertyKey;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.ECaseStatus;
-import eu.ec.dgempl.eessi.rina.model.jpa.entity.Assignment;
-import eu.ec.dgempl.eessi.rina.model.jpa.entity.CaseParticipant;
-import eu.ec.dgempl.eessi.rina.model.jpa.entity.DocumentType;
-import eu.ec.dgempl.eessi.rina.model.jpa.entity.IamUser;
-import eu.ec.dgempl.eessi.rina.model.jpa.entity.Organisation;
-import eu.ec.dgempl.eessi.rina.model.jpa.entity.ProcessDefVersion;
-import eu.ec.dgempl.eessi.rina.model.jpa.entity.RinaCase;
-import eu.ec.dgempl.eessi.rina.model.jpa.entity.Tenant;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity.*;
 import eu.ec.dgempl.eessi.rina.model.jpa.exception.EntityNotFoundEessiRuntimeException;
 import eu.ec.dgempl.eessi.rina.model.jpa.exception.UniqueIdentifier;
 import eu.ec.dgempl.eessi.rina.repo.DocumentTypeRepo;
@@ -34,11 +27,12 @@ import eu.ec.dgempl.eessi.rina.repo.IamUserRepo;
 import eu.ec.dgempl.eessi.rina.repo.ProcessDefVersionRepo;
 import eu.ec.dgempl.eessi.rina.repo.TenantRepo;
 import eu.ec.dgempl.eessi.rina.service.tx.util.ProcessDefUtil;
+import eu.ec.dgempl.eessi.rina.tool.migration.common.service.DefaultValuesService;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.DmtEnumNotFoundException;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.EElasticType;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.AssignmentFields;
-import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.CaseFields;
+import eu.ec.dgempl.eessi.rina.tool.migration.common.model.fields.CaseFields;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper._abstract.AbstractMapToEntityMapper;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.service.OrganisationService;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.RepositoryUtils;
@@ -54,18 +48,18 @@ public class MapToRinaCaseMapper extends AbstractMapToEntityMapper<MapHolder, Ri
     private final IamUserRepo iamUserRepo;
     private final ProcessDefVersionRepo processDefVersionRepo;
     private final TenantRepo tenantRepo;
+    private final DefaultValuesService defaultsService;
 
     @Autowired
     private OrganisationService organisationService;
 
-    public MapToRinaCaseMapper(
-            final DocumentTypeRepo documentTypeRepo, final IamUserRepo iamUserRepo,
-            final ProcessDefVersionRepo processDefVersionRepo,
-            final TenantRepo tenantRepo) {
+    public MapToRinaCaseMapper(final DocumentTypeRepo documentTypeRepo, final IamUserRepo iamUserRepo,
+            final ProcessDefVersionRepo processDefVersionRepo, final TenantRepo tenantRepo, final DefaultValuesService defaultsService) {
         this.documentTypeRepo = documentTypeRepo;
         this.iamUserRepo = iamUserRepo;
         this.processDefVersionRepo = processDefVersionRepo;
         this.tenantRepo = tenantRepo;
+        this.defaultsService = defaultsService;
     }
 
     @Override
@@ -153,20 +147,16 @@ public class MapToRinaCaseMapper extends AbstractMapToEntityMapper<MapHolder, Ri
 
         List<MapHolder> participants = a.listToMapHolder(PARTICIPANTS);
 
-        List<CaseParticipant> caseParticipants = participants.stream()
-                .map(participant -> {
-                    String organisationId = participant.string(ORGANISATION_ID, true);
-                    Organisation organisation = organisationService.getOrSaveOrganisation(organisationId);
+        List<CaseParticipant> caseParticipants = participants.stream().map(participant -> {
+            String organisationId = participant.string(ORGANISATION_ID, true);
+            Organisation organisation = organisationService.getOrSaveOrganisation(organisationId);
 
-                    String applicationRole = participant.string(ROLE);
-                    EApplicationRole eApplicationRole = EApplicationRole.lookup(applicationRole)
-                            .orElseThrow(
-                                    () -> new DmtEnumNotFoundException(EApplicationRole.class, participant.addPath(ROLE), applicationRole)
-                            );
+            String applicationRole = participant.string(ROLE);
+            EApplicationRole eApplicationRole = EApplicationRole.lookup(applicationRole)
+                    .orElseThrow(() -> new DmtEnumNotFoundException(EApplicationRole.class, participant.addPath(ROLE), applicationRole));
 
-                    return new CaseParticipant(b, organisation, eApplicationRole);
-                })
-                .collect(Collectors.toList());
+            return new CaseParticipant(b, organisation, eApplicationRole);
+        }).collect(Collectors.toList());
 
         b.setParticipants(caseParticipants);
     }
@@ -176,10 +166,8 @@ public class MapToRinaCaseMapper extends AbstractMapToEntityMapper<MapHolder, Ri
 
         if (CollectionUtils.isNotEmpty(actors)) {
             context.setProperty("caseId", a.string(ID));
-            List<Assignment> assignments = actors.stream()
-                    .filter(actor -> !"System".equalsIgnoreCase(actor.string(AssignmentFields.NAME)))
-                    .map(actor -> mapperFacade.map(actor, Assignment.class, context))
-                    .collect(Collectors.toList());
+            List<Assignment> assignments = actors.stream().filter(actor -> !"System".equalsIgnoreCase(actor.string(AssignmentFields.NAME)))
+                    .map(actor -> mapperFacade.map(actor, Assignment.class, context)).collect(Collectors.toList());
             assignments.forEach(b::addAssignment);
         }
     }
@@ -193,9 +181,8 @@ public class MapToRinaCaseMapper extends AbstractMapToEntityMapper<MapHolder, Ri
 
     private void mapStatus(final MapHolder a, final RinaCase b) {
         String status = a.string(STATUS);
-        ECaseStatus caseStatus = ECaseStatus.lookup(status).orElseThrow(
-                () -> new DmtEnumNotFoundException(ECaseStatus.class, a.addPath(STATUS), status)
-        );
+        ECaseStatus caseStatus = ECaseStatus.lookup(status)
+                .orElseThrow(() -> new DmtEnumNotFoundException(ECaseStatus.class, a.addPath(STATUS), status));
         b.setStatus(caseStatus);
     }
 
@@ -221,8 +208,7 @@ public class MapToRinaCaseMapper extends AbstractMapToEntityMapper<MapHolder, Ri
 
         BucProcessDefinition bucProcessDefinition = ProcessDefUtil.retrieveProcessDefinitionInfo(processDefName);
         String processDefinitionName = bucProcessDefinition.getProcessDefinitionName();
-        ProcessDefVersion processDefVersion = processDefVersionRepo.findByProcessDefIdAndBusinessVersion(
-                processDefinitionName,
+        ProcessDefVersion processDefVersion = processDefVersionRepo.findByProcessDefIdAndBusinessVersion(processDefinitionName,
                 bucProcessDefinition.getVersion());
         if (processDefVersion == null) {
             throw new EntityNotFoundEessiRuntimeException(ProcessDefVersion.class, UniqueIdentifier.processId, processDefinitionName);
@@ -233,16 +219,19 @@ public class MapToRinaCaseMapper extends AbstractMapToEntityMapper<MapHolder, Ri
 
     private int getCaseProperty(final MapHolder a, final ECasePropertyKey key) {
 
+        String property = defaultsService.getDefaultValue(key.getPropertyKey());
+        int defaultValue = Integer.parseInt(property);
+
         if (a == null || MapUtils.isEmpty(a.getHolding())) {
-            logger.info("CaseAssignment property {} value not found. Setting default value 1.", key);
-            return 1;
+            logger.info("CaseAssignment property {} value not found. Setting the default value {}.", key, defaultValue);
+            return defaultValue;
         }
 
         String propertyValue = a.string(key.getPropertyKey());
 
         if (StringUtils.isEmpty(propertyValue)) {
-            logger.info("CaseAssignment property {} value not found. Setting default value 1.", key);
-            return 1;
+            logger.info("CaseAssignment property {} value not found. Setting the default value {}.", key, defaultValue);
+            return defaultValue;
         }
 
         return Integer.parseInt(propertyValue);

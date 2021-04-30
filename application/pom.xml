@@ -7,12 +7,12 @@
     <parent>
         <groupId>eu.ec.dgempl.eessi</groupId>
         <artifactId>ES2SQL_data_migration</artifactId>
-        <version>2.1.1</version>
-        <relativePath>../</relativePath>
+        <version>2.1.2</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>application</artifactId>
-    <version>2.1.1</version>
+    <version>2.1.2</version>
 
     <dependencies>
         <dependency>
@@ -28,7 +28,7 @@
     </dependencies>
 
     <build>
-        <finalName>EESSI-RINA-DATA-MIGRATION-${version}</finalName>
+        <finalName>EESSI-RINA-DATA-MIGRATION-${project.version}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -72,6 +72,7 @@
                                         <include>application.properties</include>
                                         <include>log4j2.xml</include>
                                         <include>Organisations.csv</include>
+                                        <include>defaults.properties</include>
                                     </includes>
                                 </resource>
                             </resources>
@@ -104,12 +105,85 @@
                                 <resource>
                                     <directory>target</directory>
                                     <includes>
-                                        <include>EESSI-RINA-DATA-MIGRATION-${version}.jar</include>
+                                        <include>EESSI-RINA-DATA-MIGRATION-${project.version}.jar</include>
                                     </includes>
                                 </resource>
                             </resources>
                         </configuration>
                     </execution>
+
+                    <!--                    uncomment the following block to generate the lib folder containing the RINA jars-->
+                    <!--                    <execution>-->
+                    <!--                        <id>copy-resources-3</id>-->
+                    <!--                        <phase>install</phase>-->
+                    <!--                        <goals>-->
+                    <!--                            <goal>copy-resources</goal>-->
+                    <!--                        </goals>-->
+                    <!--                        <configuration>-->
+                    <!--                            <outputDirectory>${basedir}/lib</outputDirectory>-->
+                    <!--                            <resources>-->
+                    <!--                                <resource>-->
+                    <!--                                    <directory>${user.home}/.m2/repository/eu/ec/dgempl/eessi/rina/buc/buc-engine-api/${buc.engine.version}-->
+                    <!--                                    </directory>-->
+                    <!--                                    <includes>-->
+                    <!--                                        <include>-->
+                    <!--                                            buc-engine-api-${buc.engine.version}.jar-->
+                    <!--                                        </include>-->
+                    <!--                                    </includes>-->
+                    <!--                                </resource>-->
+                    <!--                                <resource>-->
+                    <!--                                    <directory>-->
+                    <!--                                        ${user.home}/.m2/repository/eu/ec/dgempl/eessi/eessi-rina-apclient-api/${eessi.rina.version}-->
+                    <!--                                    </directory>-->
+                    <!--                                    <includes>-->
+                    <!--                                        <include>-->
+                    <!--                                            eessi-rina-apclient-api-${eessi.rina.version}.jar-->
+                    <!--                                        </include>-->
+                    <!--                                    </includes>-->
+                    <!--                                </resource>-->
+                    <!--                                <resource>-->
+                    <!--                                    <directory>-->
+                    <!--                                        ${user.home}/.m2/repository/eu/ec/dgempl/eessi/eessi-rina-client-repo/${eessi.rina.version}-->
+                    <!--                                    </directory>-->
+                    <!--                                    <includes>-->
+                    <!--                                        <include>-->
+                    <!--                                            eessi-rina-client-repo-${eessi.rina.version}.jar-->
+                    <!--                                        </include>-->
+                    <!--                                    </includes>-->
+                    <!--                                </resource>-->
+                    <!--                                <resource>-->
+                    <!--                                    <directory>-->
+                    <!--                                        ${user.home}/.m2/repository/eu/ec/dgempl/eessi/eessi-rina-model-common/${eessi.rina.version}-->
+                    <!--                                    </directory>-->
+                    <!--                                    <includes>-->
+                    <!--                                        <include>-->
+                    <!--                                            eessi-rina-model-common-${eessi.rina.version}.jar-->
+                    <!--                                        </include>-->
+                    <!--                                    </includes>-->
+                    <!--                                </resource>-->
+                    <!--                                <resource>-->
+                    <!--                                    <directory>-->
+                    <!--                                        ${user.home}/.m2/repository/eu/ec/dgempl/eessi/eessi-rina-model-dto/${eessi.rina.version}-->
+                    <!--                                    </directory>-->
+                    <!--                                    <includes>-->
+                    <!--                                        <include>-->
+                    <!--                                            eessi-rina-model-dto-${eessi.rina.version}.jar-->
+                    <!--                                        </include>-->
+                    <!--                                    </includes>-->
+                    <!--                                </resource>-->
+                    <!--                                <resource>-->
+                    <!--                                    <directory>-->
+                    <!--                                        ${user.home}/.m2/repository/eu/ec/dgempl/eessi/eessi-rina-services-util/${eessi.rina.version}-->
+                    <!--                                    </directory>-->
+                    <!--                                    <includes>-->
+                    <!--                                        <include>-->
+                    <!--                                            eessi-rina-services-util-${eessi.rina.version}.jar-->
+                    <!--                                        </include>-->
+                    <!--                                    </includes>-->
+                    <!--                                </resource>-->
+                    <!--                            </resources>-->
+                    <!--                        </configuration>-->
+                    <!--                    </execution>-->
                 </executions>
             </plugin>
         </plugins>
@@ -127,6 +201,7 @@
                     <exclude>application.properties</exclude>
                     <exclude>log4j2.xml</exclude>
                     <exclude>Organisations.csv</exclude>
+                    <exclude>defaults.properties</exclude>
                 </excludes>
             </resource>
         </resources>

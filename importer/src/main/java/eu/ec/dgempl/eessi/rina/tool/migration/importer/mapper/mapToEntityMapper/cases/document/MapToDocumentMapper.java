@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-import eu.ec.dgempl.eessi.rina.buc.core.model.EDocumentType;
 import eu.ec.dgempl.eessi.rina.commons.transformation.RinaJsonMapper;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.EDocumentDirection;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.EDocumentStatus;
@@ -166,30 +165,6 @@ public class MapToDocumentMapper extends AbstractMapToEntityMapper<MapHolder, Do
         if (parent != null) {
             b.setParent(parent);
         }
-
-        if (EDocumentType.R_018.value().equalsIgnoreCase(b.getDocumentTypeVersion().getDocumentType().getType())) {
-            List<Document> documentsWithTypeR017 = documentRepo.findByRinaCaseIdAndDocumentTypeVersionDocumentTypeType(
-                    rinaCaseId,
-                    EDocumentType.R_017.value());
-
-            if (CollectionUtils.isEmpty(documentsWithTypeR017)) {
-                throw new RuntimeException(String.format(
-                        "Could not find parent for document R018, with id=%s and caseId=%s",
-                        b.getId(),
-                        rinaCaseId));
-            }
-
-            if (documentsWithTypeR017.size() > 1) {
-                throw new RuntimeException(String.format(
-                        "Too many parents found for document R018, with id=%s and caseId=%s",
-                        b.getId(),
-                        rinaCaseId
-                ));
-            }
-
-            b.setParent(documentsWithTypeR017.get(0));
-        }
-
     }
 
     private void mapStatus(final MapHolder a, final Document b) {

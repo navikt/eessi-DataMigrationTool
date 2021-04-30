@@ -12,8 +12,11 @@ public class UserFields {
     public static final String PASSWORD = "password";
     public static final String SALT = "salt";
     public static final String IS_ENABLED = "isEnabled";
+    public static final String ENABLED = "enabled";
     public static final String IS_DELETED = "isDeleted";
+    public static final String DELETED = "deleted";
     public static final String IS_ADMIN = "isAdministrator";
+    public static final String ADMIN = "administrator";
     public static final String GROUPS = "groups";
     public static final String PHONE_NUMBER = "phoneNumber";
     public static final String KEYSTORE_ALIAS = "keystoreAlias";

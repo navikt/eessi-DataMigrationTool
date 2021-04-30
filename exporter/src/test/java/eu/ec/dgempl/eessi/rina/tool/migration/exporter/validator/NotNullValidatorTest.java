@@ -89,4 +89,58 @@ public class NotNullValidatorTest {
             e.printStackTrace();
         }
     }
+
+    @Test
+    public void testSearchDefinitionWithValidName() {
+        try {
+            Map<String, Object> obj = GsonWrapper.loadFromClasspathResource("ConfigurationsSearchdefinition.json", Map.class);
+
+            EsDocument esDocument = new EsDocument("configurations", "searchdefinition", "objectId");
+            esDocument.setObject(obj);
+
+            DocumentValidationReport documentReport = Whitebox.invokeMethod(validationService, "validateSingleDocument", esDocument,
+                    esDocument);
+
+            List<ValidationResult> errors = documentReport.getErrors();
+            Assert.assertEquals(0, errors.size());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testSearchDefinitionWithNullName() {
+        try {
+            Map<String, Object> obj = GsonWrapper.loadFromClasspathResource("ConfigurationsSearchdefinitionWithNullName.json", Map.class);
+
+            EsDocument esDocument = new EsDocument("configurations", "searchdefinition", "objectId");
+            esDocument.setObject(obj);
+
+            DocumentValidationReport documentReport = Whitebox.invokeMethod(validationService, "validateSingleDocument", esDocument,
+                    esDocument);
+
+            List<ValidationResult> errors = documentReport.getErrors();
+            Assert.assertEquals(0, errors.size());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testSearchDefinitionWithEmptyName() {
+        try {
+            Map<String, Object> obj = GsonWrapper.loadFromClasspathResource("ConfigurationsSearchdefinitionWithEmptyName.json", Map.class);
+
+            EsDocument esDocument = new EsDocument("configurations", "searchdefinition", "objectId");
+            esDocument.setObject(obj);
+
+            DocumentValidationReport documentReport = Whitebox.invokeMethod(validationService, "validateSingleDocument", esDocument,
+                    esDocument);
+
+            List<ValidationResult> errors = documentReport.getErrors();
+            Assert.assertEquals(0, errors.size());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

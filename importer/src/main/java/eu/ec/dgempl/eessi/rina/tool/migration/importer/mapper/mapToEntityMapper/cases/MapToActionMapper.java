@@ -1,10 +1,15 @@
 package eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper.cases;
 
 import java.util.Arrays;
+import java.util.Map;
 
+import org.apache.logging.log4j.util.Strings;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import eu.ec.dgempl.eessi.rina.model.enumtypes.EActionStatus;
+import eu.ec.dgempl.eessi.rina.model.enumtypes.EApplicationRole;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.EOperationType;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.ERole;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.portal.ETagCategory;
@@ -12,11 +17,13 @@ import eu.ec.dgempl.eessi.rina.model.enumtypes.portal.ETagType;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.Action;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.ActionTag;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.Document;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity.DocumentType;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.DocumentTypeVersion;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.RinaCase;
 import eu.ec.dgempl.eessi.rina.repo.DocumentRepo;
 import eu.ec.dgempl.eessi.rina.repo.DocumentTypeVersionRepo;
 import eu.ec.dgempl.eessi.rina.repo.RinaCaseRepo;
+import eu.ec.dgempl.eessi.rina.tool.migration.common.util.EsDocumentHelper;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.DmtEnumNotFoundException;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.ActionFields;
@@ -27,6 +34,8 @@ import ma.glasnost.orika.MappingContext;
 @Component
 public class MapToActionMapper extends AbstractMapToEntityMapper<MapHolder, Action> {
 
+    private static final Logger logger = LoggerFactory.getLogger(MapToActionMapper.class);
+
     private final DocumentRepo documentRepo;
     private final DocumentTypeVersionRepo documentTypeVersionRepo;
     private final RinaCaseRepo rinaCaseRepo;
@@ -35,8 +44,7 @@ public class MapToActionMapper extends AbstractMapToEntityMapper<MapHolder, Acti
             final DocumentTypeVersionRepo documentTypeVersionRepo, final RinaCaseRepo rinaCaseRepo) {
         this.documentRepo = documentRepo;
         this.documentTypeVersionRepo = documentTypeVersionRepo;
-        this.rinaCaseRepo = rinaCaseRepo;
-    }
+        this.rinaCaseRepo = rinaCaseRepo; }
 
     @Override
     public void mapAtoB(final MapHolder a, final Action b, final MappingContext context) {
@@ -93,10 +101,19 @@ public class MapToActionMapper extends AbstractMapToEntityMapper<MapHolder, Acti
         String caseId = a.string(ActionFields.CASE_ID);
         String documentId = a.string(ActionFields.DOCUMENT_ID);
 
-        Document document = documentRepo.findByIdAndRinaCaseId(documentId, caseId);
-
-        if (document != null) {
-            b.setDocument(document);
+        if (Strings.isNotBlank(documentId)) {
+            Document document = documentRepo.findByIdAndRinaCaseId(documentId, caseId);
+            if (document != null) {
+                b.setDocument(document);
+            } else {
+                if (!isTaskMetadataInvalidReferenceException(a, caseId, documentId)) {
+                    throw new RuntimeException(String.format("Invalid document reference with id %s", documentId));
+                }   else {
+                    logger.info(String.format(
+                            "Invalid document reference %s in taskmetadata in document with id %s. This document belongs to a multi-starter case and is a draft that should have been previously removed by Bonita. Ignoring document reference.",
+                            documentId, a.getHolding().get("id")));
+                }
+            }
         }
     }
 
@@ -145,4 +162,40 @@ public class MapToActionMapper extends AbstractMapToEntityMapper<MapHolder, Acti
         b.setActionTag(new ActionTag(b, eTagType, eTagCategory));
     }
 
+    private boolean isTaskMetadataInvalidReferenceException(final MapHolder a, final String caseId, final String documentId) {
+
+        if (Strings.isNotBlank(caseId) && a.getHolding() != null) {
+            try {
+                // get case from DDBB
+                RinaCase rinaCase = rinaCaseRepo.findById(caseId);
+                if (rinaCase != null) {
+
+                    EApplicationRole applicationRole = rinaCase.getApplicationRole();
+                    String bucType = rinaCase.getProcessDefVersion().getProcessDef().getId();
+                    boolean isMultiStarter = EsDocumentHelper.isMultiStarterBUC(bucType);
+                    DocumentType documentType = rinaCase.getStarterDocumentType();
+                    String starterType = "";
+                    if (documentType != null && documentType.getType() != null) {
+                        starterType = documentType.getType();
+                    }
+                    boolean isStarterSent = rinaCase.isStarterSent();
+                    Object docType = a.string("documentType");
+
+                    Map<String, Object> params = Map.of(EsDocumentHelper.APPLICATION_ROLE, applicationRole.name(),
+                            EsDocumentHelper.IS_MULTI_STARTER, isMultiStarter,
+                            EsDocumentHelper.STARTER_TYPE, starterType,
+                            EsDocumentHelper.IS_STARTER_SENT, isStarterSent,
+                            EsDocumentHelper.DOCTYPE, docType);
+
+                    return EsDocumentHelper.isTaskMetadataInvalidReferenceException(params);
+                }
+            } catch (Exception ex) {
+                logger.info(String.format(
+                        "Error trying to get document case with id %s from DDBB to check if the invalid reference for document with id %s should be ignored in case it belongs to a multi-starter case and is a draft that should have been previously removed by Bonita",
+                        caseId,
+                        documentId));
+            }
+        }
+        return false;
+    }
 }

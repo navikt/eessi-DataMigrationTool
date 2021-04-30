@@ -1,5 +1,32 @@
 EESSI-RINA-DATA-MIGRATION
 
+v2.1.2
+--------------------------------------
+Validator:
+- added exception for missing policies in assignmentTarget if property 'ignore.invalid.references.policy' is true
+- added exception for taskmetadata invalid document references in orphan actions from multi-starter cases
+- updated field_mapping configurations_searchdefinition: ignore field name
+- added mechanism to control the behavior of DMT when handling missing policies in assignmentTarget (added property 'ignore.invalid.references.policy' in config/application.properties)
+- updated field_mapping cases_casestructuredmetadata: ignore fields searchMetadata.status and searchMetaData.status
+- updated field_mapping configurations_searchdefinition: ignore field name
+- updated field_mapping identity_user: ignore fields administrator, enabled, deleted, version, locked
+- updated field_mapping notifications_notification: ignore fields caseInfo.properties.criticality and caseInfo.properties.importance
+- fixed issue with allowing cases_document.conversations.participants.role to be 'CounterParty'
+- fixed parsing dates in different formats
+Importer:
+- ignored missing policies in assignmentTarget if property 'ignore.invalid.references.policy' is true
+- ignored taskmetadata invalid document references in orphan actions from multi-starter cases
+- fixed link between R018 and R017, based on their creation date
+- added mechanism to control the behavior of DMT when handling missing policies in assignmentTarget (added property 'ignore.invalid.references.policy' in config/application.properties)
+- added mechanism to control the default values of different fields (added config/defaults.properties)
+- fixed relation parent-child between R018 and R017, based on their creation date
+- set default value to configurations_searchdefinition.name if missing
+- updated import of users to have fallback values in fields ("administrator", "deleted", "enabled")
+- fixed NIE subscriptions with same processdefinition, different version
+- fixed parsing dates in different formats
+Other:
+- added mechanism to tweak batch size and scroll timeout
+
 v2.1.1
 --------------------------------------
 Validator:
@@ -27,6 +54,7 @@ Importer:
 - fixed issue with updating server version and date
 - fixed validityEndDate NPE when importing organisation assignedBUCs
 - fixed handling hierarchies of groups
+- fixed NIE subscriptions duplicate subscribers
 - set default values to caseAssignment.properties.importance and caseAssignment.properties.criticality if missing
 - set default values to identity_user.firstName and identity_user.lastName if missing
 - set default value to notifications_alarm.creationDate if missing

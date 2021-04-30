@@ -28,6 +28,7 @@ import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.fetch.subphase.FetchSourceContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import eu.ec.dgempl.eessi.rina.tool.migration.common.model.EEsIndex;
@@ -42,8 +43,12 @@ import eu.ec.dgempl.eessi.rina.tool.migration.common.util.PreconditionsHelper;
 public class EsClientService {
     private final RestHighLevelClient client;
     private final RestClient lowLevelClient;
-    private final int BATCH_SIZE = 1000;
-    private final long SCROLL_KEEP_ALIVE_MINS = 5L;
+
+    @Value("${elasticsearch.batch.size:1000}")
+    private int BATCH_SIZE;
+
+    @Value("${elasticsearch.scroll.keepAlive:5L}")
+    private long SCROLL_KEEP_ALIVE_MINS;
 
     @Autowired
     public EsClientService(@Qualifier("highLevelClient") RestHighLevelClient client, RestClient lowLevelClient) {
@@ -307,7 +312,7 @@ public class EsClientService {
      * @param processor
      *            the processing method that will be called on all the query results
      * @param documentType
-     *              the type of the documents that need to be processed
+     *            the type of the documents that need to be processed
      * @throws IOException
      */
     public void processDocumentsWithType(String caseId, Consumer<SearchHit[]> processor, String documentType) throws IOException {

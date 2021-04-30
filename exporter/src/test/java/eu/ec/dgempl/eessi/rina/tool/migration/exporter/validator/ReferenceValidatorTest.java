@@ -1,15 +1,16 @@
 package eu.ec.dgempl.eessi.rina.tool.migration.exporter.validator;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doReturn;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
@@ -18,9 +19,12 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.powermock.reflect.Whitebox;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import com.google.gson.Gson;
 
+import eu.ec.dgempl.eessi.rina.tool.migration.common.model.EEsIndex;
 import eu.ec.dgempl.eessi.rina.tool.migration.common.model.EEsType;
 import eu.ec.dgempl.eessi.rina.tool.migration.common.service.EsClientService;
 import eu.ec.dgempl.eessi.rina.tool.migration.common.service.OrganisationLoaderService;
@@ -28,9 +32,15 @@ import eu.ec.dgempl.eessi.rina.tool.migration.exporter.cache.CacheEntry;
 import eu.ec.dgempl.eessi.rina.tool.migration.exporter.model.EValidationResult;
 import eu.ec.dgempl.eessi.rina.tool.migration.exporter.model.EsDocument;
 import eu.ec.dgempl.eessi.rina.tool.migration.exporter.model.ValidationContext;
+import eu.ec.dgempl.eessi.rina.tool.migration.exporter.report.DocumentValidationReport;
 import eu.ec.dgempl.eessi.rina.tool.migration.exporter.report.ValidationResult;
 import eu.ec.dgempl.eessi.rina.tool.migration.exporter.schema.Schema;
 import eu.ec.dgempl.eessi.rina.tool.migration.exporter.service.CacheService;
+import eu.ec.dgempl.eessi.rina.tool.migration.exporter.service.EnumService;
+import eu.ec.dgempl.eessi.rina.tool.migration.exporter.service.ParserService;
+import eu.ec.dgempl.eessi.rina.tool.migration.exporter.service.SchemaProviderService;
+import eu.ec.dgempl.eessi.rina.tool.migration.exporter.service.ValidationService;
+import eu.ec.dgempl.eessi.rina.tool.migration.exporter.service.ValidatorProviderService;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ReferenceValidatorTest {
@@ -101,7 +111,7 @@ public class ReferenceValidatorTest {
     }
 
     private void setUpReferenceValidatorWithParams(String param1, String param2) {
-        referenceValidator = new ReferenceValidator(elasticClient, cacheService, organisationLoaderService, param1, param2);
+        referenceValidator = new ReferenceValidator(elasticClient, cacheService, organisationLoaderService, false, param1, param2);
     }
 
     /*
@@ -410,8 +420,8 @@ public class ReferenceValidatorTest {
         String param4 = "param4";
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            referenceValidator = new ReferenceValidator(elasticClient, cacheService, organisationLoaderService, param1, param2, param3,
-                    param4);
+            referenceValidator = new ReferenceValidator(elasticClient, cacheService, organisationLoaderService, false, param1, param2,
+                    param3, param4);
         });
 
         assertEquals(exception.getClass(), IllegalArgumentException.class);
@@ -425,7 +435,7 @@ public class ReferenceValidatorTest {
         String param1 = "param1";
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            referenceValidator = new ReferenceValidator(elasticClient, cacheService, organisationLoaderService, param1);
+            referenceValidator = new ReferenceValidator(elasticClient, cacheService, organisationLoaderService, false, param1);
         });
 
         assertEquals(exception.getClass(), IllegalArgumentException.class);
@@ -470,7 +480,7 @@ public class ReferenceValidatorTest {
         String type = "notFoundType";
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            referenceValidator = new ReferenceValidator(elasticClient, cacheService, organisationLoaderService, index, type);
+            referenceValidator = new ReferenceValidator(elasticClient, cacheService, organisationLoaderService, false, index, type);
         });
 
         assertEquals(exception.getClass(), IllegalArgumentException.class);
@@ -1115,5 +1125,301 @@ public class ReferenceValidatorTest {
         ArgumentCaptor<CacheEntry> argument = ArgumentCaptor.forClass(CacheEntry.class);
         Mockito.verify(cacheService).add(argument.capture());
         Assertions.assertThat(argument.getValue()).isEqualToComparingFieldByField(expectedEntry);
+    }
+
+    @Test
+    public void testIgnoreInvalidReferencesPolicy_propertyFalse_1exists_2dontExist() throws IOException {
+
+        // Setup
+
+        EnumService enumService = new EnumService();
+        CacheService cacheService = new CacheService();
+        OrganisationLoaderService organisationLoaderService = new OrganisationLoaderService();
+        ValidatorProviderService validatorProviderService = new ValidatorProviderService(elasticClient, cacheService, enumService,
+                organisationLoaderService);
+
+        ReflectionTestUtils.setField(validatorProviderService, "ignoreInvalidReferencesPolicy", false);
+
+        SchemaProviderService schemaProviderService = new SchemaProviderService(validatorProviderService,
+                "src/test/resources/field_mappings");
+        ParserService parserService = new ParserService(schemaProviderService);
+        ValidationService validationService = new ValidationService(elasticClient, parserService, cacheService);
+
+        String folderPath = "/src/test/resources/";
+        String filePath = new File("").getAbsolutePath().concat(folderPath);
+        Gson gson = new Gson();
+
+        try {
+            mockedEsDocument = gson.fromJson(new FileReader(filePath.concat("ConfigurationsAssignmenttarget.json")), EsDocument.class);
+            mockedEsDocumentParent = gson.fromJson(new FileReader(filePath.concat("Parent.json")), EsDocument.class);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        // Set reference values
+
+        when(elasticClient.exists(
+                EEsIndex.ENTITIES.value(),
+                EEsType.ORGANISATION.value(),
+                (String) mockedEsDocument.getObject().get("institutionId")))
+                .thenReturn(true);
+
+        when(elasticClient.exists(
+                EEsIndex.CONFIGURATIONS.value(),
+                EEsType.ASSIGNMENTPOLICY.value(),
+                "policy2"))
+                .thenReturn(true);
+
+        // Validate
+
+        try {
+            DocumentValidationReport documentReport = Whitebox.invokeMethod(validationService, "validateSingleDocument", mockedEsDocument,
+                    mockedEsDocumentParent);
+
+            // Check results
+
+            List<ValidationResult> errors = documentReport.getErrors();
+            assertEquals(errors.size(), 2);
+            assertEquals(errors.get(0).getValue(), "policy1");
+            assertEquals(errors.get(1).getValue(), "policy3");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testIgnoreInvalidReferencesPolicy_propertyTrue_1exists_2dontExist() throws IOException {
+
+        // Setup
+
+        EnumService enumService = new EnumService();
+        CacheService cacheService = new CacheService();
+        OrganisationLoaderService organisationLoaderService = new OrganisationLoaderService();
+        ValidatorProviderService validatorProviderService = new ValidatorProviderService(elasticClient, cacheService, enumService,
+                organisationLoaderService);
+
+        ReflectionTestUtils.setField(validatorProviderService, "ignoreInvalidReferencesPolicy", true);
+
+        SchemaProviderService schemaProviderService = new SchemaProviderService(validatorProviderService,
+                "src/test/resources/field_mappings");
+        ParserService parserService = new ParserService(schemaProviderService);
+        ValidationService validationService = new ValidationService(elasticClient, parserService, cacheService);
+
+        String folderPath = "/src/test/resources/";
+        String filePath = new File("").getAbsolutePath().concat(folderPath);
+        Gson gson = new Gson();
+
+        try {
+            mockedEsDocument = gson.fromJson(new FileReader(filePath.concat("ConfigurationsAssignmenttarget.json")), EsDocument.class);
+            mockedEsDocumentParent = gson.fromJson(new FileReader(filePath.concat("Parent.json")), EsDocument.class);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        // Set reference values
+
+        when(elasticClient.exists(
+                EEsIndex.ENTITIES.value(),
+                EEsType.ORGANISATION.value(),
+                (String) mockedEsDocument.getObject().get("institutionId")))
+                .thenReturn(true);
+
+        Mockito.lenient().when(elasticClient.exists(
+                EEsIndex.CONFIGURATIONS.value(),
+                EEsType.ASSIGNMENTTARGET.value(),
+                "policy2"))
+                .thenReturn(true);
+
+        // Validate
+
+        try {
+            DocumentValidationReport documentReport = Whitebox.invokeMethod(validationService, "validateSingleDocument", mockedEsDocument,
+                    mockedEsDocumentParent);
+
+            // Check results
+
+            List<ValidationResult> errors = documentReport.getErrors();
+            assertEquals(errors.size(), 0);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testIgnoreInvalidDocumentReferences_taskMetadata_conditionsMet() throws IOException {
+
+        // Setup
+
+        EnumService enumService = new EnumService();
+        CacheService cacheService = new CacheService();
+        OrganisationLoaderService organisationLoaderService = new OrganisationLoaderService();
+        ValidatorProviderService validatorProviderService = new ValidatorProviderService(elasticClient, cacheService, enumService,
+                organisationLoaderService);
+
+        SchemaProviderService schemaProviderService = new SchemaProviderService(validatorProviderService,
+                "src/test/resources/field_mappings");
+        ParserService parserService = new ParserService(schemaProviderService);
+        ValidationService validationService = new ValidationService(elasticClient, parserService, cacheService);
+
+        String folderPath = "/src/test/resources/";
+        String filePath = new File("").getAbsolutePath().concat(folderPath);
+        Gson gson = new Gson();
+
+        Map file = null;
+
+        try {
+            mockedEsDocument = gson.fromJson(new FileReader(filePath.concat("CasesTaskmetadataWithInvalidReference.json")), EsDocument.class);
+            mockedEsDocumentParent = gson.fromJson(new FileReader(filePath.concat("Parent.json")), EsDocument.class);
+            file = gson.fromJson(new FileReader(filePath.concat("CasesTaskmetadataWithInvalidReference_ESCaseMetadata.json")), Map.class);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        // Set reference values
+
+        when(elasticClient.get(
+                EEsIndex.CASES.value(),
+                EEsType.CASEMETADATA.value(),
+                (String) mockedEsDocument.getObject().get("caseId")))
+                .thenReturn(file);
+
+        // Validate
+
+        try {
+            DocumentValidationReport documentReport = Whitebox.invokeMethod(validationService, "validateSingleDocument", mockedEsDocument,
+                    mockedEsDocumentParent);
+
+            // Check results
+
+            List<ValidationResult> errors = documentReport.getErrors();
+            assertEquals(errors.size(), 0);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testIgnoreInvalidDocumentReferences_taskMetadata_sameStarterType_fails() throws IOException {
+
+        // Setup
+
+        EnumService enumService = new EnumService();
+        CacheService cacheService = new CacheService();
+        OrganisationLoaderService organisationLoaderService = new OrganisationLoaderService();
+        ValidatorProviderService validatorProviderService = new ValidatorProviderService(elasticClient, cacheService, enumService,
+                organisationLoaderService);
+
+        SchemaProviderService schemaProviderService = new SchemaProviderService(validatorProviderService,
+                "src/test/resources/field_mappings");
+        ParserService parserService = new ParserService(schemaProviderService);
+        ValidationService validationService = new ValidationService(elasticClient, parserService, cacheService);
+
+        String folderPath = "/src/test/resources/";
+        String filePath = new File("").getAbsolutePath().concat(folderPath);
+        Gson gson = new Gson();
+
+        Map file = null;
+
+        try {
+            mockedEsDocument = gson.fromJson(new FileReader(filePath.concat("CasesTaskmetadataWithInvalidReference.json")), EsDocument.class);
+            mockedEsDocumentParent = gson.fromJson(new FileReader(filePath.concat("Parent.json")), EsDocument.class);
+            file = gson.fromJson(new FileReader(filePath.concat("CasesTaskmetadataWithInvalidReference_ESCaseMetadata2.json")), Map.class);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        // Set reference values
+
+        String caseId = (String) mockedEsDocument.getObject().get("caseId");
+        when(elasticClient.get(
+                EEsIndex.CASES.value(),
+                EEsType.CASEMETADATA.value(),
+                caseId))
+                .thenReturn(file);
+
+        // Validate
+
+        try {
+            DocumentValidationReport documentReport = Whitebox.invokeMethod(validationService, "validateSingleDocument", mockedEsDocument,
+                    mockedEsDocumentParent);
+
+            // Check results
+            String index = "cases";
+            String type = "document";
+            String object = (String) mockedEsDocument.getObject().get("documentId");
+            ValidationResult expectedResult = ValidationResult.error("documentId", object, EValidationResult.INVALID_REFERENCE,
+                    String.format("Invalid reference id [index=%s,type=%s,id=%s]", index, type, caseId.concat("_").concat(object)));
+
+            List<ValidationResult> errors = documentReport.getErrors();
+            assertEquals(1, errors.size());
+            Assertions.assertThat(errors.get(0)).isEqualToComparingFieldByField(expectedResult);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testIgnoreInvalidDocumentReferences_taskMetadata_notMultiStarter_fails() throws IOException {
+
+        // Setup
+
+        EnumService enumService = new EnumService();
+        CacheService cacheService = new CacheService();
+        OrganisationLoaderService organisationLoaderService = new OrganisationLoaderService();
+        ValidatorProviderService validatorProviderService = new ValidatorProviderService(elasticClient, cacheService, enumService,
+                organisationLoaderService);
+
+        SchemaProviderService schemaProviderService = new SchemaProviderService(validatorProviderService,
+                "src/test/resources/field_mappings");
+        ParserService parserService = new ParserService(schemaProviderService);
+        ValidationService validationService = new ValidationService(elasticClient, parserService, cacheService);
+
+        String folderPath = "/src/test/resources/";
+        String filePath = new File("").getAbsolutePath().concat(folderPath);
+        Gson gson = new Gson();
+
+        Map file = null;
+
+        try {
+            mockedEsDocument = gson.fromJson(new FileReader(filePath.concat("CasesTaskmetadataWithInvalidReference.json")), EsDocument.class);
+            mockedEsDocumentParent = gson.fromJson(new FileReader(filePath.concat("Parent.json")), EsDocument.class);
+            file = gson.fromJson(new FileReader(filePath.concat("CasesTaskmetadataWithInvalidReference_ESCaseMetadata3.json")), Map.class);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        // Set reference values
+
+        String caseId = (String) mockedEsDocument.getObject().get("caseId");
+        when(elasticClient.get(
+                EEsIndex.CASES.value(),
+                EEsType.CASEMETADATA.value(),
+                caseId))
+                .thenReturn(file);
+
+        // Validate
+
+        try {
+            DocumentValidationReport documentReport = Whitebox.invokeMethod(validationService, "validateSingleDocument", mockedEsDocument,
+                    mockedEsDocumentParent);
+
+            // Check results
+            String index = "cases";
+            String type = "document";
+            String object = (String) mockedEsDocument.getObject().get("documentId");
+            ValidationResult expectedResult = ValidationResult.error("documentId", object, EValidationResult.INVALID_REFERENCE,
+                    String.format("Invalid reference id [index=%s,type=%s,id=%s]", index, type, caseId.concat("_").concat(object)));
+
+            List<ValidationResult> errors = documentReport.getErrors();
+            assertEquals(1, errors.size());
+            Assertions.assertThat(errors.get(0)).isEqualToComparingFieldByField(expectedResult);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

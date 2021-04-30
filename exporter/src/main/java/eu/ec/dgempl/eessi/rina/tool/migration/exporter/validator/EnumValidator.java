@@ -1,9 +1,10 @@
 package eu.ec.dgempl.eessi.rina.tool.migration.exporter.validator;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
-import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
@@ -71,7 +72,7 @@ public class EnumValidator extends AbstractValidator {
                 exceptionPath = JsonPathHelper.normalisePath(path).equals("conversations.participants.role");
                 exceptionValue = ((String) obj).equalsIgnoreCase("CounterParty");
                 if (exceptionIndex && exceptionType && exceptionPath && exceptionValue) {
-                    Object orgId = ContentNavigator.getField(context.getDocument().getObject(), "conversations", "participants", "organisation", "id");
+                    Object orgId = getOrganisationId(path, context.getDocument().getObject());
                     if (orgId instanceof String) {
                         String organisationId = (String) orgId;
                         if (organisationId.startsWith("AT:")) {
@@ -111,6 +112,12 @@ public class EnumValidator extends AbstractValidator {
         }
 
         return results;
+    }
+
+    private Object getOrganisationId(final String path, final Map<String, Object> map) {
+        String orgIdPath = path.replace("role", "organisation.id");
+        LinkedHashMap<String, Integer> constructedPath = ContentNavigator.constructNavigationPath(orgIdPath);
+        return ContentNavigator.getFieldWithArrays(map, constructedPath);
     }
 
     @Override

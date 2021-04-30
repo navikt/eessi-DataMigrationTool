@@ -309,6 +309,20 @@
     "sqlType": ""
   },
   {
+    "esPath": "searchMetaData.status",
+    "esType": "string",
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "searchMetadata.status",
+    "esType": "string",
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
     "esPath": "sensitive",
     "esType": "boolean",
     "sqlPath": "rinaCase.isSensitive",

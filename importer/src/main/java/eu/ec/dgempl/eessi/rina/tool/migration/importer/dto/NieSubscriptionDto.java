@@ -23,8 +23,8 @@ public class NieSubscriptionDto {
         this.isCase = isCase;
     }
 
-    public void addSubscriber(MapHolder subscriber) {
-        subscribers.put(subscriber.string(ID), subscriber);
+    public void addSubscriber(String key, MapHolder subscriber) {
+        subscribers.put(key, subscriber);
     }
 
     public void removeSubscriber(String id) {

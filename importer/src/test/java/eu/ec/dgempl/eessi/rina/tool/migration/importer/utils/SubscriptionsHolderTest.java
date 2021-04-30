@@ -271,6 +271,77 @@ public class SubscriptionsHolderTest {
         assertFalse(subscriptionDO1.isCase());
     }
 
+    @Test
+    public void testDuplicateSubscriberProcessDefName() {
+
+        final String SUBSCRIPTION1_ID = "subscription1";
+        final String SUBSCRIPTION1_NAME = "name";
+
+        final String SUBSCRIBER1_ID = "P2000";
+        final String SUBSCRIBER1_VERSION = "4.1";
+
+        final String LISTENER1_ID = "listener1";
+        final String LISTENER1_LABEL = "listener 1";
+        final String LISTENER1_LISTENER = "http://listener1";
+
+        final String SUBSCRIPTION2_ID = "subscription2";
+        final String SUBSCRIPTION2_NAME = "name_";
+
+        final String SUBSCRIBER2_ID = "P2000";
+        final String SUBSCRIBER2_VERSION = "4.2";
+
+        final String LISTENER2_ID = "listener2";
+        final String LISTENER2_LABEL = "listener 2";
+        final String LISTENER2_LISTENER = "http://listener2";
+
+        final List<Map<String, Object>> s1subscribers = new ArrayList<>();
+        s1subscribers.add(Map.of(ID, SUBSCRIBER1_ID, VERSION, SUBSCRIBER1_VERSION));
+        s1subscribers.add(Map.of(ID, SUBSCRIBER2_ID, VERSION, SUBSCRIBER2_VERSION));
+
+        final List<Map<String, Object>> s1listeners = new ArrayList<>();
+        s1listeners.add(Map.of(ID, LISTENER1_ID, LABEL, LISTENER1_LABEL, LISTENER, LISTENER1_LISTENER));
+
+        final MapHolder subscription1 = createSubscription(
+                SUBSCRIPTION1_ID,
+                SUBSCRIPTION1_NAME,
+                true,
+                s1subscribers,
+                s1listeners);
+
+        final List<Map<String, Object>> s2subscribers = new ArrayList<>();
+        s2subscribers.add(Map.of(ID, SUBSCRIBER1_ID, VERSION, SUBSCRIBER1_VERSION));
+
+        final List<Map<String, Object>> s2listeners = new ArrayList<>();
+        s2listeners.add(Map.of(ID, LISTENER2_ID, LABEL, LISTENER2_LABEL, LISTENER, LISTENER2_LISTENER));
+
+        final MapHolder subscription2 = createSubscription(
+                SUBSCRIPTION2_ID,
+                SUBSCRIPTION1_NAME,
+                true,
+                s2subscribers,
+                s2listeners);
+
+        List<NieSubscriptionDto> subscriptions = NieSubscriptionUtils.getNieSubscriptions(List.of(subscription1, subscription2));
+
+        assertEquals(2, subscriptions.size());
+
+        NieSubscriptionDto subscriptionDO = subscriptions.get(0);
+
+        assertEquals(1, subscriptionDO.getSubscribers().size());
+        assertEquals(1, subscriptionDO.getListeners().size());
+        assertEquals(SUBSCRIPTION1_ID, subscriptionDO.getId());
+        assertEquals(SUBSCRIPTION1_NAME, subscriptionDO.getName());
+        assertTrue(subscriptionDO.isCase());
+
+        subscriptionDO = subscriptions.get(1);
+        assertEquals(1, subscriptionDO.getSubscribers().size());
+        assertEquals(2, subscriptionDO.getListeners().size());
+        assertEquals(SUBSCRIPTION2_ID, subscriptionDO.getId());
+        assertEquals(SUBSCRIPTION2_NAME, subscriptionDO.getName());
+        assertTrue(subscriptionDO.isCase());
+
+    }
+
     private MapHolder createSubscription(
             final String id,
             final String name,

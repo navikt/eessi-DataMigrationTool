@@ -13,7 +13,7 @@
 
     <groupId>eu.ec.dgempl.eessi</groupId>
     <artifactId>ES2SQL_data_migration</artifactId>
-    <version>2.1.1</version>
+    <version>2.1.2</version>
     <packaging>pom</packaging>
 
     <modules>
@@ -28,9 +28,9 @@
         <maven.compiler.target>11</maven.compiler.target>
         <java.version>11</java.version>
         <!-- Common -->
-        <data.migration.version>2.1.1</data.migration.version>
+        <data.migration.version>2.1.2</data.migration.version>
         <!-- EESSI -->
-        <eessi.rina.version>6.2.4</eessi.rina.version>
+        <eessi.rina.version>RINA-6.2.5</eessi.rina.version>
         <!-- ElasticSearch -->
         <elasticsearch.version>5.6.16</elasticsearch.version>
         <!-- SpringFramework -->

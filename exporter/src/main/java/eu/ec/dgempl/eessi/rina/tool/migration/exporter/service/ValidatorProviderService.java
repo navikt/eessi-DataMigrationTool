@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import eu.ec.dgempl.eessi.rina.tool.migration.common.service.EsClientService;
@@ -18,6 +19,10 @@ import eu.ec.dgempl.eessi.rina.tool.migration.exporter.validator.*;
  */
 @Service
 public class ValidatorProviderService {
+
+    @Value("${ignore.invalid.references.policy:#{false}}")
+    private Boolean ignoreInvalidReferencesPolicy;
+
     private final EsClientService elasticsearchService;
     private final CacheService cacheService;
     private final EnumService enumService;
@@ -156,7 +161,7 @@ public class ValidatorProviderService {
         // select the type validator
         switch (valueProperty.getType().toLowerCase()) {
         case "reference":
-            validator = new ReferenceValidator(elasticsearchService, cacheService, organisationLoaderService, valueProperty.getParams());
+            validator = new ReferenceValidator(elasticsearchService, cacheService, organisationLoaderService, ignoreInvalidReferencesPolicy, valueProperty.getParams());
             break;
         case "duplicate":
             validator = new DuplicateValidator(valueProperty.getParams());

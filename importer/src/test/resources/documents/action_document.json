@@ -1,0 +1,37 @@
+{
+  "canClose": true,
+  "template": "S008",
+  "isDocumentRelated": true,
+  "documentType": "S008",
+  "displayName": "Edit draft",
+  "tempDocumentId": "032addfceed8484ca900436e53a5e124",
+  "type": "existing.regular",
+  "tags": {
+    "category": "Documents",
+    "type": "sectorial"
+  },
+  "actor": "Authorized",
+  "typeVersion": "4.2",
+  "poolGroup": {
+    "Type": "S008",
+    "DMProcessId": "317126",
+    "DocumentId": "52e18741d6664106bbe54aa064a34016",
+    "Operation": "Update"
+  },
+  "caseId": "317123",
+  "isCaseRelated": false,
+  "hasBusinessValidation": false,
+  "name": "Update",
+  "documentId": "52e18741d6664106bbe54aa064a34016",
+  "id": "317123_8dfa4ce538b34fb7b25121a94b66cdfb",
+  "actionGroup": {
+    "Type": "S008",
+    "DMProcessId": "317126",
+    "DocumentId": "52e18741d6664106bbe54aa064a34016",
+    "Operation": "Update"
+  },
+  "_id": "317123_8dfa4ce538b34fb7b25121a94b66cdfb",
+  "isBulk": false,
+  "operation": "Update",
+  "status": "active"
+}

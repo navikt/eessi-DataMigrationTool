@@ -82,27 +82,27 @@ public class SubscriptionsHolder {
         if (subscription != null && subscriber != null) {
 
             String subscriptionId = subscription.string(ID);
-            String subscriberId = subscriber.string(ID);
+            String subscriberKey = getSubscriberKey();
             List<MapHolder> listenersToBeAdded = new ArrayList<>();
 
-            if (subscribersConfiguration.containsKey(subscriberId)) {
-                NieSubscriber nieSubscriber = subscribersConfiguration.get(subscriberId);
+            if (subscribersConfiguration.containsKey(subscriberKey)) {
+                NieSubscriber nieSubscriber = subscribersConfiguration.get(subscriberKey);
                 if (!nieSubscriber.subscriptionId.equals(subscriptionId)) {
 
                     NieSubscriptionDto nieSubscriptionDto = subscriptions.get(nieSubscriber.subscriptionId);
                     if (nieSubscriptionDto != null) {
                         Map<String, MapHolder> listeners = nieSubscriptionDto.getListeners();
                         listenersToBeAdded.addAll(listeners.values());
-                        nieSubscriptionDto.removeSubscriber(nieSubscriber.subscriber.string(ID));
+                        nieSubscriptionDto.removeSubscriber(subscriberKey);
                     }
                 }
             }
 
             NieSubscriptionDto nieSubscriptionDto = subscriptions.get(subscriptionId);
-            nieSubscriptionDto.addSubscriber(subscriber);
+            nieSubscriptionDto.addSubscriber(subscriberKey, subscriber);
             listenersToBeAdded.forEach(nieSubscriptionDto::addListener);
 
-            subscribersConfiguration.put(subscriberId, new NieSubscriber(subscriptionId, subscriber));
+            subscribersConfiguration.put(subscriberKey, new NieSubscriber(subscriptionId, subscriber));
         }
     }
 

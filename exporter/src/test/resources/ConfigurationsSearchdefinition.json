@@ -1,0 +1,18 @@
+{
+  "processDefinitions": [],
+  "userGroups": [
+    {
+      "name": "TestMedical",
+      "id": "AXYJi1235FptbEy-Xj",
+      "type": "User"
+    }
+  ],
+  "color": "red",
+  "importances": [],
+  "name": "SearchDefinitionName",
+  "statuses": [],
+  "criticalities": [],
+  "id": "4c3d17c5f3123e91cdf97beaedb76b",
+  "userName": "TestMedical",
+  "participants": []
+}

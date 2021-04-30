@@ -1,0 +1,90 @@
+{
+  "preFill": {
+    "ForenameAtBirth": "",
+    "Email": "",
+    "FamilyName": "",
+    "Sex": "",
+    "PreviousForename": "",
+    "PostalCode": "",
+    "PreviousFamilyName": "",
+    "TelephoneNumber": "",
+    "FamilyNameAtBirth": "",
+    "Town": "",
+    "Forename": "",
+    "Street": "",
+    "PersonPersonFamilyName": "aaa",
+    "PersonPersonSex": {
+      "value": [
+        "01"
+      ]
+    },
+    "FatherFamilyNameAtBirth": "",
+    "ForenameOfMother": "",
+    "Nationality": "",
+    "ForenameOfFather": "",
+    "MotherFamilyNameAtBirth": "",
+    "PersonPersonForename": "aaa",
+    "PIN": "",
+    "PersonPersonDateBirth": "2020-09-15",
+    "TownOfBirth": "",
+    "IdentityProtected": "",
+    "RegionOfBirth": "",
+    "Region": "",
+    "Country": "",
+    "CountryOfBirth": ""
+  },
+  "isMultiStarter": false,
+  "messages": {},
+  "hasValidStarter": true,
+  "processDefinitionName": "PO_S_BUC_18_v4.2",
+  "id": "317123",
+  "starterType": "S008",
+  "isStarterSent": true,
+  "diagramVersions": {
+    "Reminder": "Reminder_v4.2",
+    "SUBPROCESS_2_H_BUC_02abc": "SUBPROCESS_2_H_BUC_02abc_v4.2",
+    "AddRemoveForward": "AddRemoveForward_v4.2",
+    "DocumentManager": "DOCUMENT_MANAGER_v4.2",
+    "SUBPROCESS_1_H_BUC_02abc": "SUBPROCESS_1_H_BUC_02abc_v4.2",
+    "Reopen": "Reopen_v4.2",
+    "Common": "Common_v4.2",
+    "SUBPROCESS_H_BUC_03b": "SUBPROCESS_H_BUC_03b_v4.2",
+    "SUBPROCESS_H_BUC_03a": "SUBPROCESS_H_BUC_03a_v4.2",
+    "SUBPROCESS_H_BUC_10": "SUBPROCESS_H_BUC_10_v4.2",
+    "SUBPROCESS_H_BUC_08_09": "SUBPROCESS_H_BUC_08_09_v4.2",
+    "SUBPROCESS_H_BUC_01": "SUBPROCESS_H_BUC_01_v4.2",
+    "ReadAdminHelper": "ReadAdminHelper_v4.2",
+    "SUBPROCESS_H_BUC_04": "SUBPROCESS_H_BUC_04_v4.2",
+    "SUBPROCESS_H_BUC_05": "SUBPROCESS_H_BUC_05_v4.2",
+    "SUBPROCESS_H_BUC_06": "SUBPROCESS_H_BUC_06_v4.2",
+    "SUBPROCESS_H_BUC_07": "SUBPROCESS_H_BUC_07_v4.2"
+  },
+  "participants": [
+    {
+      "role": "CaseOwner",
+      "organisation": {
+        "activeSince": "2020-06-25T22:00:00.000Z",
+        "address": {
+          "country": "FR"
+        },
+        "acronym": "FR:FRNA10",
+        "countryCode": "FR",
+        "name": "FR:FRNA10",
+        "id": "FR:FRNA10"
+      }
+    },
+    {
+      "role": "CounterParty",
+      "organisation": {
+        "address": {
+          "country": "FR"
+        },
+        "activeSince": "2020-06-25T22:00:00.000Z",
+        "acronym": "FR:FRNA11",
+        "countryCode": "FR",
+        "name": "FR:FRNA11",
+        "id": "FR:FRNA11"
+      }
+    }
+  ]
+}

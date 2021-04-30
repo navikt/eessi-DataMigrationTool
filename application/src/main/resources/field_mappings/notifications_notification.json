@@ -26,18 +26,16 @@
   {
     "esPath": "caseInfo.properties.criticality",
     "esType": "string",
-    "required": true,
-    "sqlPath": "notification.rinaCase.caseProperties.value",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "caseInfo.properties.importance",
     "esType": "string",
-    "required": true,
-    "sqlPath": "notification.rinaCase.caseProperties.value",
-    "sqlType": "VARCHAR(255)",
-    "importIgnore": true
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
   },
   {
     "esPath": "caseInfo.subject",

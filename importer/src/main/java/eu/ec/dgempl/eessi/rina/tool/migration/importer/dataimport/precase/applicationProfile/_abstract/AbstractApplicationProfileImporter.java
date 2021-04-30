@@ -45,9 +45,16 @@ public abstract class AbstractApplicationProfileImporter extends AbstractDataImp
                 .map(entry -> {
                     Object value = doc.get(entry.getKey(), true);
                     String stringValue = value != null ? String.valueOf(value) : null;
-                    return new GlobalParam(
-                            entry.getValue(),
-                            fieldSupplier.apply(entry.getValue(), stringValue));
+
+                    GlobalParam globalParam = globalParamRepo.findByKey(entry.getValue());
+
+                    if (globalParam != null) {
+                        globalParam.setValue(fieldSupplier.apply(entry.getValue(), stringValue));
+                    } else {
+                        globalParam = new GlobalParam(entry.getValue(),fieldSupplier.apply(entry.getValue(), stringValue));
+                    }
+
+                    return globalParam;
                 })
                 .collect(Collectors.toList());
         globalParamRepo.saveAll(globalParams);

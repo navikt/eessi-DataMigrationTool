@@ -1,0 +1,15 @@
+{
+  "index": "configurations",
+  "type": "assignmenttarget",
+  "objectId": "FR:FRNA10_FB",
+  "object": {
+    "targetId": "FB",
+    "institutionId": "FR:FRNA10",
+    "policies": [
+      "policy1",
+      "policy2",
+      "policy3"
+    ],
+    "storageId": "FR:FRNA10_FB"
+  }
+}

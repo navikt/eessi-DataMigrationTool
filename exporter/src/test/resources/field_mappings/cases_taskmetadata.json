@@ -1,0 +1,213 @@
+[
+  {
+    "esPath": "actionGroup",
+    "esType": "object",
+    "ignorePath": true,
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "actor",
+    "esType": "string",
+    "sqlPath": "action.actor.roleName",
+    "sqlType": "TEXT",
+    "value": "enum(ERole)"
+  },
+  {
+    "esPath": "bulk",
+    "esType": "boolean",
+    "sqlPath": "action.isBulk",
+    "sqlType": "BOOL"
+  },
+  {
+    "esPath": "canClose",
+    "esType": "boolean",
+    "sqlPath": "action.canClose",
+    "sqlType": "BOOL"
+  },
+  {
+    "comment": "do not add reference validation",
+    "esPath": "caseId",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "action.rinaCase.id",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "caseRelated",
+    "esType": "boolean",
+    "sqlPath": "action.isCaseRelated",
+    "sqlType": "BOOL"
+  },
+  {
+    "esPath": "displayName",
+    "esType": "string",
+    "sqlPath": "action.displayName",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "documentId",
+    "esType": "string",
+    "sqlPath": "action.document.id",
+    "sqlType": "VARCHAR(255)",
+    "value": "reference(cases,document,caseId_documentId)"
+  },
+  {
+    "esPath": "documentRelated",
+    "esType": "boolean",
+    "sqlPath": "action.isDocumentRelated",
+    "sqlType": "BOOL"
+  },
+  {
+    "esPath": "documentType",
+    "esType": "string",
+    "sqlPath": "action.documentTypeVersion.documentType.type",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "hasBusinessValidation",
+    "esType": "boolean",
+    "sqlPath": "action.hasBusinessValidation",
+    "sqlType": "BOOL"
+  },
+  {
+    "esPath": "hasSendValidationOnBulk",
+    "esType": "boolean",
+    "sqlPath": "action.hasBusinessValidation",
+    "sqlType": "BOOL"
+  },
+  {
+    "esPath": "id",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "action.id",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "isBulk",
+    "esType": "boolean",
+    "sqlPath": "action.isBulk",
+    "sqlType": "BOOL"
+  },
+  {
+    "esPath": "isCaseRelated",
+    "esType": "boolean",
+    "sqlPath": "action.isCaseRelated",
+    "sqlType": "BOOL"
+  },
+  {
+    "esPath": "isDocumentRelated",
+    "esType": "boolean",
+    "sqlPath": "action.isDocumentRelated",
+    "sqlType": "BOOL"
+  },
+  {
+    "esPath": "name",
+    "esType": "string",
+    "sqlPath": "action.name",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "operation",
+    "esType": "string",
+    "sqlPath": "action.operationType.typeName",
+    "sqlType": "TEXT",
+    "value": "enum(EOperationType)"
+  },
+  {
+    "esPath": "parentDocumentId",
+    "esType": "string",
+    "sqlPath": "action.displayInDocumentId",
+    "sqlType": "VARCHAR(255)",
+    "value": "reference(cases,document,caseId_parentDocumentId)"
+  },
+  {
+    "esPath": "poolGroup",
+    "esType": "object",
+    "ignorePath": true,
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "requiresValidDocument",
+    "esType": "boolean",
+    "sqlPath": "action.requiresValidDocument",
+    "sqlType": "BOOL"
+  },
+  {
+    "esPath": "status",
+    "esType": "string",
+    "required": true,
+    "sqlPath": "action.status.typeName",
+    "sqlType": "TEXT",
+    "value": "enum(EActionStatus)"
+  },
+  {
+    "esPath": "subdocumentId",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "esPath": "tags.category",
+    "esType": "string",
+    "sqlPath": "action.actionTag.category.value",
+    "sqlType": "TEXT",
+    "value": "enum(ETagCategory)"
+  },
+  {
+    "esPath": "tags.DMProcessId",
+    "esType": "long",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "esPath": "tags.dmprocessId",
+    "esType": "long",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "esPath": "tags.Operation",
+    "esType": "string",
+    "sqlPath": "action.operationType.typeName",
+    "sqlType": "TEXT",
+    "value": "enum(EOperationType)",
+    "importIgnore": true
+  },
+  {
+    "esPath": "tags.type",
+    "esType": "string",
+    "sqlPath": "action.actionTag.type.value",
+    "sqlType": "TEXT",
+    "value": "enum(ETagType)"
+  },
+  {
+    "esPath": "tempDocumentId",
+    "esType": "string",
+    "sqlPath": "",
+    "sqlType": "",
+    "importIgnore": true
+  },
+  {
+    "esPath": "template",
+    "esType": "string",
+    "sqlPath": "action.template",
+    "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "type",
+    "esType": "string",
+    "sqlPath": "action.displayType",
+    "sqlType": "VARCHAR(50)"
+  },
+  {
+    "esPath": "typeVersion",
+    "esType": "string",
+    "sqlPath": "action.templateVersion",
+    "sqlType": "VARCHAR(10)"
+  }
+]

@@ -27,4 +27,6 @@ public class ActionFields {
     public static final String TAGS_TYPE = "tags.type";
     public static final String TAGS_CATEGORY = "tags.category";
     public static final String TEMPLATE_TYPE_VERSION = "typeVersion";
+    public static final String ACTION_GROUP_TYPE = "actionGroup.Type";
+    public static final String POOL_GROUP_TYPE = "poolGroup.Type";
 }
