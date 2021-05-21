@@ -98,6 +98,9 @@ public class GlobalParamHelper {
 
     private String getGlobalParamNoCache(final EGlobalParam key) {
         final GlobalParam gap = globalParamRepo.findByKey(key);
+        if (gap == null) {
+            throw new GenericEessiRuntimeException(String.format("Could not find global param with key=%s", key));
+        }
         return gap.getValue();
     }
 

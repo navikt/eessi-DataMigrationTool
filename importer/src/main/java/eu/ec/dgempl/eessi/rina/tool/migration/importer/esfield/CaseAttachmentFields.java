@@ -10,4 +10,5 @@ public class CaseAttachmentFields {
     public static final String CREATION_DATE = "creationDate";
     public static final String LAST_UPDATE = "lastUpdate";
     public static final String CREATOR_ID = "creator.id";
+    public static final String CREATOR_NAME = "creator.name";
 }

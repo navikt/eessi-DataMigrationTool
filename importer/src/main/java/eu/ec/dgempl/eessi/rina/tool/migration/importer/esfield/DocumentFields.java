@@ -61,17 +61,21 @@ public class DocumentFields {
     public static final String VALIDATION_MESSAGES = "validation.messages";
     public static final String IS_VALID = "validation.status";
     public static final String USER_ID = "user.id";
+    public static final String USER_NAME = "user.name";
     public static final String ATTACHMENT_VERSIONS = "versions";
     public static final String ATTACHMENT_VERSION_ID = "id";
     public static final String FILE_NAME = "fileName";
     public static final String ATTACHMENT_ID = "id";
     public static final String MEDICAL = "medical";
     public static final String IS_MEDICAL = "isMedical";
+    public static final String CREATOR_ID = "creator.id";
+    public static final String CREATOR_NAME = "creator.name";
     public static final String ATTACHMENT_MIME_TYPE = "mimeType";
     public static final String ATTACHMENT_NAME = "name";
     public static final String ATTACHMENT_CREATION_DATE = "creationDate";
     public static final String ATTACHMENT_LAST_UPDATE = "lastUpdate";
     public static final String ATTACHMENT_CREATOR_ID = "creator.id";
+    public static final String ATTACHMENT_CREATOR_NAME = "creator.name";
 
     public static final String CASE_IDENTIFICATION = "caseIdentification";
     public static final String PROTECTED_PERSON = "protectedPerson";

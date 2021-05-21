@@ -1,6 +1,5 @@
 package eu.ec.dgempl.eessi.rina.tool.migration.exporter.validator;
 
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,8 +26,17 @@ public class DateValidator extends AbstractValidator {
         } else if (obj instanceof String) {
             try {
                 DateResolver.parse((String) obj);
-            } catch (DateTimeParseException dtpe) {
-                String details = "Object is of type String, and cannot be converted to date";
+            } catch (Exception e) {
+                String details = e.getMessage();
+                results.add(ValidationResult.error(path, obj, EValidationResult.INVALID_DATE, details));
+            }
+            results.add(ValidationResult.ok(path, obj));
+            return results;
+        } else if (obj instanceof Number) {
+            try {
+                DateResolver.parse(String.valueOf(obj));
+            } catch (Exception e) {
+                String details = e.getMessage();
                 results.add(ValidationResult.error(path, obj, EValidationResult.INVALID_DATE, details));
             }
             results.add(ValidationResult.ok(path, obj));

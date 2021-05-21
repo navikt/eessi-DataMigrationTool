@@ -1,7 +1,7 @@
 package eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper.cases;
 
 import static eu.ec.dgempl.eessi.rina.tool.migration.common.model.fields.CaseFields.*;
-import static eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.CasesUtils.addCasePrefills;
+import static eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.CasesUtils.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -11,7 +11,6 @@ import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import eu.ec.dgempl.eessi.rina.model.common.BucProcessDefinition;
@@ -19,23 +18,29 @@ import eu.ec.dgempl.eessi.rina.model.enumtypes.EApplicationRole;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.ECasePrefillGroup;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.ECasePropertyKey;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.ECaseStatus;
-import eu.ec.dgempl.eessi.rina.model.jpa.entity.*;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity.Assignment;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity.CaseParticipant;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity.DocumentType;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity.IamUser;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity.Organisation;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity.ProcessDefVersion;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity.RinaCase;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity.Tenant;
 import eu.ec.dgempl.eessi.rina.model.jpa.exception.EntityNotFoundEessiRuntimeException;
 import eu.ec.dgempl.eessi.rina.model.jpa.exception.UniqueIdentifier;
 import eu.ec.dgempl.eessi.rina.repo.DocumentTypeRepo;
-import eu.ec.dgempl.eessi.rina.repo.IamUserRepo;
 import eu.ec.dgempl.eessi.rina.repo.ProcessDefVersionRepo;
 import eu.ec.dgempl.eessi.rina.repo.TenantRepo;
 import eu.ec.dgempl.eessi.rina.service.tx.util.ProcessDefUtil;
+import eu.ec.dgempl.eessi.rina.tool.migration.common.model.fields.CaseFields;
 import eu.ec.dgempl.eessi.rina.tool.migration.common.service.DefaultValuesService;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.DmtEnumNotFoundException;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.EElasticType;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.AssignmentFields;
-import eu.ec.dgempl.eessi.rina.tool.migration.common.model.fields.CaseFields;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper._abstract.AbstractMapToEntityMapper;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.service.OrganisationService;
-import eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.RepositoryUtils;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.service.UserService;
 
 import ma.glasnost.orika.MappingContext;
 
@@ -45,21 +50,25 @@ public class MapToRinaCaseMapper extends AbstractMapToEntityMapper<MapHolder, Ri
     private static final Logger logger = LoggerFactory.getLogger(MapToRinaCaseMapper.class);
 
     private final DocumentTypeRepo documentTypeRepo;
-    private final IamUserRepo iamUserRepo;
     private final ProcessDefVersionRepo processDefVersionRepo;
     private final TenantRepo tenantRepo;
     private final DefaultValuesService defaultsService;
+    private final OrganisationService organisationService;
+    private final UserService userService;
 
-    @Autowired
-    private OrganisationService organisationService;
-
-    public MapToRinaCaseMapper(final DocumentTypeRepo documentTypeRepo, final IamUserRepo iamUserRepo,
-            final ProcessDefVersionRepo processDefVersionRepo, final TenantRepo tenantRepo, final DefaultValuesService defaultsService) {
+    public MapToRinaCaseMapper(
+            final DocumentTypeRepo documentTypeRepo,
+            final ProcessDefVersionRepo processDefVersionRepo,
+            final TenantRepo tenantRepo,
+            final DefaultValuesService defaultsService,
+            final OrganisationService organisationService,
+            final UserService userService) {
         this.documentTypeRepo = documentTypeRepo;
-        this.iamUserRepo = iamUserRepo;
         this.processDefVersionRepo = processDefVersionRepo;
         this.tenantRepo = tenantRepo;
         this.defaultsService = defaultsService;
+        this.organisationService = organisationService;
+        this.userService = userService;
     }
 
     @Override
@@ -99,8 +108,9 @@ public class MapToRinaCaseMapper extends AbstractMapToEntityMapper<MapHolder, Ri
     private void mapAudit(final MapHolder a, final RinaCase b) {
         setDefaultAudit(b::setAudit);
 
-        String creatorId = a.string("creator.id", true);
-        IamUser creator = RepositoryUtils.findById(creatorId, iamUserRepo::findById, IamUser.class);
+        String creatorId = a.string(CREATOR_ID, true);
+        String creatorName = a.string(CREATOR_NAME, true);
+        IamUser creator = userService.resolveUser(creatorId, creatorName, b);
 
         b.getAudit().setCreatedBy(creator.getId());
         b.getAudit().setUpdatedBy(creator.getId());

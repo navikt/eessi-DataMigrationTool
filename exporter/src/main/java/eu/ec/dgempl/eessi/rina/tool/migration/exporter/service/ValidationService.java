@@ -3,10 +3,12 @@ package eu.ec.dgempl.eessi.rina.tool.migration.exporter.service;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
 
@@ -31,7 +33,6 @@ import eu.ec.dgempl.eessi.rina.tool.migration.exporter.report.ContextValidationR
 import eu.ec.dgempl.eessi.rina.tool.migration.exporter.report.DocumentValidationReport;
 import eu.ec.dgempl.eessi.rina.tool.migration.exporter.report.ValidationResult;
 import eu.ec.dgempl.eessi.rina.tool.migration.exporter.util.ContentNavigator;
-import eu.ec.dgempl.eessi.rina.tool.migration.exporter.util.IdHelper;
 import eu.ec.dgempl.eessi.rina.tool.migration.exporter.util.IndexTypeHelper;
 
 /**
@@ -58,39 +59,39 @@ public class ValidationService {
 
     /**
      * Method for validating all the resources in the entire Elasticsearch, in all known indices
-     * 
+     *
      * @throws IOException
      */
-    public List<DocumentValidationReport> validateAll() throws IOException {
+    public int validateAll() throws IOException {
         globalStart = Instant.now();
+        int numberOfErrors = 0;
 
-        List<DocumentValidationReport> reportsResult = new ArrayList<>();
+        numberOfErrors += validateAllInIndex(EEsIndex.ADMIN.value());
+        numberOfErrors += validateAllInIndex(EEsIndex.AUDIT.value());
+        numberOfErrors += validateAllInIndex(EEsIndex.BUSINESSEXCEPTIONS.value());
+        numberOfErrors += validateAllInIndex(EEsIndex.CHECKS.value());
+        numberOfErrors += validateAllInIndex(EEsIndex.CONFIGURATIONS.value());
+        numberOfErrors += validateAllInIndex(EEsIndex.ENTITIES.value());
+        numberOfErrors += validateAllInIndex(EEsIndex.GLOBALCONFIGURATIONS.value());
+        numberOfErrors += validateAllInIndex(EEsIndex.IDENTITY.value());
+        numberOfErrors += validateAllInIndex(EEsIndex.RESOURCES.value());
+        numberOfErrors += validateAllInIndex(EEsIndex.VOCABULARIES.value());
+        numberOfErrors += validateAllCases();
 
-        reportsResult.addAll(validateAllInIndex(EEsIndex.ADMIN.value()));
-        reportsResult.addAll(validateAllInIndex(EEsIndex.AUDIT.value()));
-        reportsResult.addAll(validateAllInIndex(EEsIndex.BUSINESSEXCEPTIONS.value()));
-        reportsResult.addAll(validateAllInIndex(EEsIndex.CHECKS.value()));
-        reportsResult.addAll(validateAllInIndex(EEsIndex.CONFIGURATIONS.value()));
-        reportsResult.addAll(validateAllInIndex(EEsIndex.ENTITIES.value()));
-        reportsResult.addAll(validateAllInIndex(EEsIndex.GLOBALCONFIGURATIONS.value()));
-        reportsResult.addAll(validateAllInIndex(EEsIndex.IDENTITY.value()));
-        reportsResult.addAll(validateAllInIndex(EEsIndex.RESOURCES.value()));
-        reportsResult.addAll(validateAllInIndex(EEsIndex.VOCABULARIES.value()));
-        reportsResult.addAll(validateAllCases());
+        reportIgnoredDocuments();
 
         System.out.println("Validation has finished.");
 
-        return reportsResult;
+        return numberOfErrors;
     }
 
     /**
      * Method for validating all the resources found in a specific {@code index}
-     * 
-     * @param index
-     *            the elasticsearch index
+     *
+     * @param index the elasticsearch index
      * @throws IOException
      */
-    public List<DocumentValidationReport> validateAllInIndex(String index) throws IOException {
+    public int validateAllInIndex(String index) throws IOException {
         PreconditionsHelper.notEmpty(index, "index");
 
         // initialize stats variables
@@ -98,6 +99,8 @@ public class ValidationService {
         Instant indexStart = Instant.now();
 
         ContextValidationReport report = new ContextValidationReport();
+        AtomicInteger numberOfErrors = new AtomicInteger();
+        int part = -1;
 
         // get the list of types in the index
         String[] types = IndexTypeHelper.getTypesByIndex(index).toArray(new String[0]);
@@ -105,11 +108,7 @@ public class ValidationService {
         // get the number of documents in the index to be processed
         long totalCount = elasticsearchService.getCount(index, types);
 
-        List<DocumentValidationReport> reportsResult = new ArrayList<>();
-
-        System.out.println("Start validating documents in index " + index + ".\n");
-
-        logger.info("Start validating documents in index {}. Documents found: {}.", index, totalCount);
+        logStartValidation(index, totalCount);
 
         if (totalCount == 0) {
             System.out.println(String.format("Index: %s. Documents in index: 0.", index));
@@ -127,7 +126,8 @@ public class ValidationService {
                     // validate the document
                     DocumentValidationReport internalReport = validateSingleDocument(internalDocument, internalParent);
 
-                    reportsResult.add(internalReport);
+                    // update the total number of errors
+                    numberOfErrors.addAndGet(internalReport.getErrors().size());
 
                     // aggregate results at the index level
                     report.swallow(internalReport);
@@ -135,9 +135,9 @@ public class ValidationService {
 
                 Instant now = Instant.now();
                 processedCount.addAndGet(hits.length);
-                float batchTime = Duration.between(batchStart, now).toMillis() / 1000F;
-                float indexTime = Duration.between(indexStart, now).toMillis() / 1000F;
-                float totalTime = Duration.between(globalStart, now).toMillis() / 1000F;
+                float batchTime = calculateTimeBetween(batchStart, now);
+                float indexTime = calculateTimeBetween(indexStart, now);
+                float totalTime = calculateTimeBetween(globalStart, now);
 
                 System.out.println(String.format("Index: %s. Processed: %d/%d. Batch time: %.2f. Index time: %.2f. Total time: %.2f.",
                         index, processedCount.get(), totalCount, batchTime, indexTime, totalTime));
@@ -147,16 +147,11 @@ public class ValidationService {
             elasticsearchService.processAll(index, types, processor);
         }
 
-        System.out.println("\nFinished validating documents in index " + index + ".");
-        System.out.println("\n-----------------------------------------------------\n");
+        logFinishedValidation(index, report);
 
-        logger.info("Finished validating documents in index {}. Processing time: {}s.", index,
-                Duration.between(globalStart, Instant.now()).toMillis() / 1000F);
-        logger.info(report.toString());
+        writeReport(report, index, part);
 
-        GsonWrapper.writeToFile(report, reportsFolder + "/validator/" + index + ".json");
-
-        return reportsResult;
+        return numberOfErrors.get();
     }
 
     /**
@@ -164,13 +159,8 @@ public class ValidationService {
      *
      * @throws IOException
      */
-    public List<DocumentValidationReport> validateAllCases() throws IOException {
-        ContextValidationReport report = new ContextValidationReport();
-
-        Instant indexStart = Instant.now();
-        Instant batchStart = Instant.now();
-
-        String index = EEsIndex.CASES.value();
+    public int validateAllCases() throws IOException {
+        int batchSize = 50;
 
         // get the list of caseIds
         List<String> caseIds = elasticsearchService.getCaseIds();
@@ -181,58 +171,92 @@ public class ValidationService {
         // add the special value "tempcaseid"
         // caseIds.add("tempcaseid");
 
-        System.out.println("Start validating documents in index " + index + ".\n");
+        return processCases(caseIds, batchSize);
+    }
 
-        List<DocumentValidationReport> reportsResult = new ArrayList<>();
+    /**
+     * Method for validating all the resources contained in a list of cases
+     *
+     * @throws IOException
+     */
+    public int validateBulkCases(final List<String> caseIds) throws IOException {
+        int batchSize = 10;
 
-        logger.info("Start validating documents in index {}. Documents found: {}.", index, caseIds.size());
+        return processCases(caseIds, batchSize);
+    }
 
-        for (int i = 0; i < caseIds.size(); i++) {
-            String caseId = caseIds.get(i);
+    public int validateCase(String caseId) throws IOException {
+        String index = EEsIndex.CASES.value();
+        int part = -1;
 
-            // generate validation report
-            CaseValidationReport caseReport = validateSingleCase(caseId);
+        ContextValidationReport report = new ContextValidationReport();
 
-            // propagate the report upward
-            report.swallow(caseReport);
+        // generate validation report
+        CaseValidationReport caseReport = validateSingleCase(caseId);
 
-            reportsResult.addAll(caseReport.getErrors());
+        // propagate the report
+        report.swallow(caseReport);
 
-            if (((i + 1) % 50 == 0) || (i + 1 == caseIds.size())) {
-                Instant now = Instant.now();
-                float batchTime = Duration.between(batchStart, now).toMillis() / 1000F;
-                float indexTime = Duration.between(indexStart, now).toMillis() / 1000F;
-                float totalTime = Duration.between(globalStart, now).toMillis() / 1000F;
+        writeReport(report, index, part);
 
-                System.out.println(String.format("Index: %s. Processed: %d/%d. Batch time: %.2f. Index time: %.2f. Total time: %.2f.",
-                        index, i + 1, caseIds.size(), batchTime, indexTime, totalTime));
+        return caseReport.getErrors().size();
+    }
 
-                batchStart = Instant.now();
-            }
-        }
+    private void reportIgnoredDocuments() throws IOException {
+        String index = EEsIndex.CASES.value();
+        String[] types = IndexTypeHelper.getTypesByIndex(index).toArray(new String[0]);
 
-        System.out.println("\nFinished validating documents in index " + index + ".");
+        System.out.println("Start compiling the list of documents that can be ignored.\n");
+        logger.info("Start compiling the list of documents that can be ignored.");
+
+        Instant indexStart = Instant.now();
+
+        Map<String, Map<String, Integer>> ignored = elasticsearchService.getOrphanResources(index, types);
+
+        Map<String, Object> processed = new LinkedHashMap<>();
+
+        Map<String, Integer> aggregated = new HashMap<>();
+        ignored.values().stream().forEach(v -> {
+            v.entrySet().stream().forEach(entry -> {
+                Integer no = aggregated.get(entry.getKey());
+                if (no == null) {
+                    aggregated.put(entry.getKey(), entry.getValue());
+                } else {
+                    aggregated.put(entry.getKey(), no + entry.getValue());
+                }
+            });
+        });
+        processed.put("aggregated", aggregated);
+        processed.put("detailed", ignored);
+
+        Instant now = Instant.now();
+        float indexTime = Duration.between(indexStart, now).toMillis() / 1000F;
+        float totalTime = Duration.between(globalStart, now).toMillis() / 1000F;
+
+        System.out.println(String.format("Index: %s. Index time: %.2f. Total time: %.2f.", index, indexTime, totalTime));
+        System.out.println("\nFinished compiling the list of documents that can be ignored.");
         System.out.println("\n-----------------------------------------------------\n");
 
-        logger.info("Finished validating documents in index {}. Processing time: {}s.", index,
-                Duration.between(globalStart, Instant.now()).toMillis() / 1000F);
-        logger.info(report.toString());
+        logger.info("Finished compiling the list of documents that can be ignored.");
+        logger.info(GsonWrapper.stringify(processed));
 
-        GsonWrapper.writeToFile(report, reportsFolder + "/validator/" + index + ".json");
-
-        return reportsResult;
+        GsonWrapper.writeToFile(processed, reportsFolder + "/validator/ignored.json");
     }
 
     /**
      * Method for validating all the resources contained in a single case identified by {@code caseId}
      *
-     * @param caseId
-     *            the id of the case
+     * @param caseId the id of the case
      * @return the case-level report
      * @throws IOException
      */
-    public CaseValidationReport validateSingleCase(String caseId) throws IOException {
+    private CaseValidationReport validateSingleCase(String caseId) throws IOException {
         PreconditionsHelper.notEmpty(caseId, "caseId");
+
+        // TODO comment/uncomment lines below; they are just for testing
+//        Instant globalStart = Instant.now();
+//        AtomicReference<Instant> batchStart = new AtomicReference<>(Instant.now());
+//        AtomicInteger totalNumberOfDocuments = new AtomicInteger();
 
         String tenantId;
 
@@ -266,15 +290,13 @@ public class ValidationService {
             caseReport.swallow(documentReport);
         }
 
-        // prepare the cache entry context; this will be cases_casemetadata_<caseId>
-        String cacheEntryContext = IdHelper.getDocumentReference(EEsIndex.CASES.value(), EEsType.CASEMETADATA.value(), caseId);
-
         // define a processor that will be applied to all the SearchHit results
         Consumer<SearchHit[]> processor = hits -> {
             Arrays.stream(hits).forEach(hit -> {
                 // try to help the cache - add document and subdocument ids (they are searched the most)
-                if (hit.getType().equals(EEsType.DOCUMENT.value()) || hit.getType().equals(EEsType.SUBDOCUMENT.value())) {
-                    CacheEntry entry = new CacheEntry(true, hit.getIndex(), hit.getType(), hit.getId(), cacheEntryContext);
+                if (!caseId.equals("0") && (hit.getType().equals(EEsType.DOCUMENT.value()) || hit.getType().equals(
+                        EEsType.SUBDOCUMENT.value()))) {
+                    CacheEntry entry = new CacheEntry(true, hit.getIndex(), hit.getType(), hit.getId());
                     cacheService.add(entry);
                 }
 
@@ -289,13 +311,19 @@ public class ValidationService {
                 // aggregate results at the case level
                 caseReport.swallow(internalReport);
             });
+
+            // TODO comment/uncomment lines below; they are just for testing
+//            Instant current = Instant.now();
+//            float batchTime = Duration.between(batchStart.get(), current).toMillis() / 1000F;
+//            float totalTime = Duration.between(globalStart, current).toMillis() / 1000F;
+//            totalNumberOfDocuments.addAndGet(hits.length);
+//            System.out.println(String.format("Batch: %d. Total: %d. Batch time: %.2f. Total time: %.2f.", hits.length,
+//                    totalNumberOfDocuments.get(), batchTime, totalTime));
+//            batchStart.set(Instant.now());
         };
 
         // process all resources belonging to a case, except for CASEMETADATA and CASESTRUCTUREDMETADATA
         elasticsearchService.processAll(caseId, processor);
-
-        // clear resources from cache
-        cacheService.removeEntriesByContext(cacheEntryContext);
 
         logger.info(caseReport.toString());
 
@@ -308,13 +336,52 @@ public class ValidationService {
         return caseReport;
     }
 
+    private int processCases(final List<String> caseIds, final int batchSize) throws IOException {
+        ContextValidationReport report = new ContextValidationReport();
+        int numberOfErrors = 0;
+        String index = EEsIndex.CASES.value();
+        int casesCount = caseIds.size();
+        int part = -1;
+
+        Instant indexStart = Instant.now();
+        Instant batchStart = Instant.now();
+
+        logStartValidation(index, casesCount);
+
+        for (int i = 0; i < casesCount; i++) {
+            int processed = i + 1;
+
+            String caseId = caseIds.get(i);
+
+            logger.info("Start validating case with id {}", caseId);
+
+            // generate validation report
+            CaseValidationReport caseReport = validateSingleCase(caseId);
+
+            // propagate the report upward
+            report.swallow(caseReport);
+
+            // update the total number of errors
+            numberOfErrors += caseReport.getErrors().size();
+
+            if (finishedProcessingBatch(processed, batchSize, casesCount)) {
+                logBatchStats(index, processed, casesCount, batchStart, indexStart);
+                batchStart = Instant.now();
+            }
+        }
+
+        logFinishedValidation(index, report);
+
+        writeReport(report, index, part);
+
+        return numberOfErrors;
+    }
+
     /**
      * Method for validating all the fields contained in a document identified by {@code document}
-     * 
-     * @param document
-     *            the document that is validated
-     * @param parent
-     *            the parent of {@code document}
+     *
+     * @param document the document that is validated
+     * @param parent   the parent of {@code document}
      * @return the document-level report
      */
     private DocumentValidationReport validateSingleDocument(EsDocument document, EsDocument parent) {
@@ -337,11 +404,9 @@ public class ValidationService {
 
     /**
      * Method for validating documents of type CASEMETADATA and CASESTRUCTUREDMETADATA
-     * 
-     * @param caseId
-     *            the case id
-     * @param type
-     *            CASEMETADATA or CASESTRUCTUREDMETADATA
+     *
+     * @param caseId the case id
+     * @param type   CASEMETADATA or CASESTRUCTUREDMETADATA
      * @return
      */
     private DocumentValidationReport validateCaseDocument(String caseId, EEsType type) throws IOException {
@@ -374,4 +439,47 @@ public class ValidationService {
         return validateSingleDocument(document, parent);
     }
 
+    private void logStartValidation(String index, long count) {
+        System.out.println("Start validating documents in index " + index + ".\n");
+
+        logger.info("Start validating documents in index {}. Documents found: {}.", index, count);
+    }
+
+    private void logBatchStats(String index, int batchSize, int indexSize, Instant batchStart, Instant indexStart) {
+        Instant now = Instant.now();
+        float batchTime = calculateTimeBetween(batchStart, now);
+        float indexTime = calculateTimeBetween(indexStart, now);
+        float totalTime = calculateTimeBetween(globalStart, now);
+
+        System.out.println(String.format("Index: %s. Processed: %d/%d. Batch time: %.2f. Index time: %.2f. Total time: %.2f.",
+                index, batchSize, indexSize, batchTime, indexTime, totalTime));
+    }
+
+    private void logFinishedValidation(String index, ContextValidationReport report) {
+        System.out.println("\nFinished validating documents in index " + index + ".");
+        System.out.println("\n-----------------------------------------------------\n");
+
+        logger.info("Finished validating documents in index {}. Processing time: {}s.", index,
+                calculateTimeBetween(globalStart, Instant.now()));
+        logger.info(report.toString());
+    }
+
+    private void writeReport(ContextValidationReport report, String index, int part) throws IOException {
+        String path = reportsFolder + "/validator/";
+        if (part == -1) {
+            path += index + ".json";
+        } else {
+            path += index + "_part" + part + ".json";
+        }
+
+        GsonWrapper.writeToFile(report, path);
+    }
+
+    private boolean finishedProcessingBatch(int processed, int batchSize, int totalSize) {
+        return processed % batchSize == 0 || processed == totalSize;
+    }
+
+    private float calculateTimeBetween(final Instant start, final Instant end) {
+        return Duration.between(start, end).toMillis() / 1000F;
+    }
 }

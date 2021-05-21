@@ -248,6 +248,13 @@
     "value": "reference(entities,organisation)"
   },
   {
+    "esPath": "conversations.participants.organisation.identifier",
+    "esType": "string",
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
     "esPath": "conversations.participants.organisation.location",
     "esType": "geo_point",
     "importIgnore": true,
@@ -606,6 +613,13 @@
     "value": "reference(entities,organisation)"
   },
   {
+    "esPath": "conversations.userMessages.receiver.identifier",
+    "esType": "string",
+    "importIgnore": true,
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
     "esPath": "conversations.userMessages.receiver.name",
     "esType": "string",
     "importIgnore": true,
@@ -625,8 +639,7 @@
     "esType": "object",
     "ignorePath": true,
     "sqlPath": "",
-    "sqlType": "",
-    "required": true
+    "sqlType": ""
   },
   {
     "esPath": "conversations.userMessages.sender.acronym",

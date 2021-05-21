@@ -413,5 +413,19 @@
     "importIgnore": true,
     "sqlPath": "",
     "sqlType": ""
+  },
+  {
+    "esPath": "documents",
+    "esType": "object",
+    "ignorePath": true,
+    "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "actions",
+    "esType": "object",
+    "ignorePath": true,
+    "sqlPath": "",
+    "sqlType": ""
   }
 ]

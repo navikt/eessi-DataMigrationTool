@@ -6,25 +6,25 @@ import org.springframework.stereotype.Component;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.EMimeType;
 import eu.ec.dgempl.eessi.rina.model.exception.runtime.enums.EnumNotFoundEessiRuntimeException;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.IamUser;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity.RinaCase;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.SubdocumentAttachment;
-import eu.ec.dgempl.eessi.rina.repo.IamUserRepo;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.helper.AttachmentsHelper;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper._abstract.AbstractMapToEntityMapper;
-import eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.RepositoryUtils;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.service.UserService;
 
 import ma.glasnost.orika.MappingContext;
 
 @Component
 public class MapToSubdocumentAttachmentMapper extends AbstractMapToEntityMapper<MapHolder, SubdocumentAttachment> {
 
-    private final IamUserRepo iamUserRepo;
-
     @Autowired
     private AttachmentsHelper attachmentsHelper;
 
-    public MapToSubdocumentAttachmentMapper(final IamUserRepo iamUserRepo) {
-        this.iamUserRepo = iamUserRepo;
+    private final UserService userService;
+
+    public MapToSubdocumentAttachmentMapper(final UserService userService) {
+        this.userService = userService;
     }
 
     @Override
@@ -58,7 +58,13 @@ public class MapToSubdocumentAttachmentMapper extends AbstractMapToEntityMapper<
         mapDate(a, "lastUpdate", b.getAudit()::setUpdatedAt);
 
         String userId = a.string("creator.id", true);
-        IamUser iamUser = RepositoryUtils.findById(userId, iamUserRepo::findById, IamUser.class);
+        String userName = a.string("creator.name", true);
+        RinaCase rinaCase = null;
+        if (b.getSubdocument() != null && b.getSubdocument().getRinaCase() != null) {
+            rinaCase = b.getSubdocument().getRinaCase();
+        }
+        IamUser iamUser = userService.resolveUser(userId, userName, rinaCase);
+
         b.getAudit().setCreatedBy(iamUser.getId());
         b.getAudit().setUpdatedBy(iamUser.getId());
     }

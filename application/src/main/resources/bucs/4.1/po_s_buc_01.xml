@@ -58,6 +58,7 @@
                 <!-- for starter only, receivers -->
                 <createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE"
                                      documentType="S050"/>
+									 
                 <!-- end receivers -->
 				
                 <createActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_RECEIVE_REPLY"
@@ -90,7 +91,7 @@
                 <!-- empty!! -->
             </parameters>
             <triggers>
-                <createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_CREATE"
+                <createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_CREATE_REPLY"
                                      documentType="S073"/>
             </triggers>
         </document>

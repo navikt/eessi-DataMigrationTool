@@ -8,13 +8,13 @@ import eu.ec.dgempl.eessi.rina.model.jpa.entity.CaseAttachment;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.IamUser;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.RinaCase;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity._abstraction.Audit;
-import eu.ec.dgempl.eessi.rina.repo.IamUserRepo;
 import eu.ec.dgempl.eessi.rina.repo.RinaCaseRepo;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.DmtEnumNotFoundException;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.CaseAttachmentFields;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.helper.AttachmentsHelper;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper._abstract.AbstractMapToEntityMapper;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.service.UserService;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.RepositoryUtils;
 
 import ma.glasnost.orika.MappingContext;
@@ -22,15 +22,16 @@ import ma.glasnost.orika.MappingContext;
 @Component
 public class MapToCaseAttachmentMapper extends AbstractMapToEntityMapper<MapHolder, CaseAttachment> {
 
-    private final IamUserRepo iamUserRepo;
     private final RinaCaseRepo rinaCaseRepo;
+    private final UserService userService;
 
     @Autowired
     private AttachmentsHelper attachmentsHelper;
 
-    public MapToCaseAttachmentMapper(final IamUserRepo iamUserRepo, final RinaCaseRepo rinaCaseRepo) {
-        this.iamUserRepo = iamUserRepo;
+    public MapToCaseAttachmentMapper(final RinaCaseRepo rinaCaseRepo,
+            final UserService userService) {
         this.rinaCaseRepo = rinaCaseRepo;
+        this.userService = userService;
     }
 
     @Override
@@ -67,7 +68,9 @@ public class MapToCaseAttachmentMapper extends AbstractMapToEntityMapper<MapHold
         mapDate(a, CaseAttachmentFields.LAST_UPDATE, audit::setUpdatedAt);
 
         String creatorId = a.string(CaseAttachmentFields.CREATOR_ID, true);
-        IamUser iamUser = RepositoryUtils.findById(creatorId, iamUserRepo::findById, IamUser.class);
+        String creatorName = a.string(CaseAttachmentFields.CREATOR_NAME, true);
+        IamUser iamUser = userService.resolveUser(creatorId, creatorName, b.getRinaCase());
+
         audit.setCreatedBy(iamUser.getId());
         audit.setUpdatedBy(iamUser.getId());
 

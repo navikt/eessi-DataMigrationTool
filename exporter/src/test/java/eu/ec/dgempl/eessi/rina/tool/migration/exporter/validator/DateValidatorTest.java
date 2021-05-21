@@ -1,7 +1,7 @@
 package eu.ec.dgempl.eessi.rina.tool.migration.exporter.validator;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -58,6 +58,62 @@ public class DateValidatorTest {
 
         assertEquals(1, result.size());
         Assertions.assertThat(result.get(0)).isEqualToComparingFieldByField(expectedResult);
+
+        // 2020-06-25T22:00:00.000Z
+        object = "2020-06-25T22:00:00.000Z";
+        expectedResult = ValidationResult.ok(path, object, null);
+        result = dateValidator.validate(path, object, validationContext);
+
+        assertEquals(1, result.size());
+        Assertions.assertThat(result.get(0)).isEqualToComparingFieldByField(expectedResult);
+
+        // 2020-06-25T22:00:00.000 (local time, no timezone)
+        object = "2020-06-25T22:00:00.000";
+        expectedResult = ValidationResult.ok(path, object, null);
+        result = dateValidator.validate(path, object, validationContext);
+
+        assertEquals(1, result.size());
+        Assertions.assertThat(result.get(0)).isEqualToComparingFieldByField(expectedResult);
+
+        // 1593122400 (unix timestamp in seconds, as string)
+        object = "1593122400";
+        expectedResult = ValidationResult.ok(path, object, null);
+        result = dateValidator.validate(path, object, validationContext);
+
+        assertEquals(1, result.size());
+        Assertions.assertThat(result.get(0)).isEqualToComparingFieldByField(expectedResult);
+
+        // 1593122400000 (unix timestamp in millis, as string)
+        object = "1593122400000";
+        expectedResult = ValidationResult.ok(path, object, null);
+        result = dateValidator.validate(path, object, validationContext);
+
+        assertEquals(1, result.size());
+        Assertions.assertThat(result.get(0)).isEqualToComparingFieldByField(expectedResult);
+
+        // 1593122400 (unix timestamp in seconds, as int)
+        object = 1593122400;
+        expectedResult = ValidationResult.ok(path, object, null);
+        result = dateValidator.validate(path, object, validationContext);
+
+        assertEquals(1, result.size());
+        Assertions.assertThat(result.get(0)).isEqualToComparingFieldByField(expectedResult);
+
+        // 1593122400 (unix timestamp in seconds, as long)
+        object = 1593122400L;
+        expectedResult = ValidationResult.ok(path, object, null);
+        result = dateValidator.validate(path, object, validationContext);
+
+        assertEquals(1, result.size());
+        Assertions.assertThat(result.get(0)).isEqualToComparingFieldByField(expectedResult);
+
+        // 1593122400000 (unix timestamp in millis, as long)
+        object = 1593122400000L;
+        expectedResult = ValidationResult.ok(path, object, null);
+        result = dateValidator.validate(path, object, validationContext);
+
+        assertEquals(1, result.size());
+        Assertions.assertThat(result.get(0)).isEqualToComparingFieldByField(expectedResult);
     }
 
     @Test
@@ -79,7 +135,7 @@ public class DateValidatorTest {
         Object object = incorrectDate;
 
         ValidationResult expectedResult = ValidationResult.error(path, incorrectDate, EValidationResult.INVALID_DATE,
-                "Object is of type String, and cannot be converted to date");
+                "Could not parse ZonedDateTime: " + incorrectDate);
 
         List<ValidationResult> result = dateValidator.validate(path, object, validationContext);
 

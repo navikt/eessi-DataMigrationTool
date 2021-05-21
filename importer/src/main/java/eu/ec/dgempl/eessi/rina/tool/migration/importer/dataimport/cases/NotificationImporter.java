@@ -1,5 +1,7 @@
 package eu.ec.dgempl.eessi.rina.tool.migration.importer.dataimport.cases;
 
+import static eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.RepositoryUtils.*;
+
 import org.springframework.stereotype.Component;
 
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.Notification;
@@ -8,9 +10,9 @@ import eu.ec.dgempl.eessi.rina.repo.NotificationRepo;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dataimport.CaseImporter;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dataimport.ElasticTypeImporter;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dataimport._abstract.AbstractDataImporter;
-import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.report.DocumentsReport;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.EElasticType;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.report.DocumentsReport;
 
 @Component
 @ElasticTypeImporter(type = EElasticType.NOTIFICATION)
@@ -29,18 +31,14 @@ public class NotificationImporter extends AbstractDataImporter implements CaseIm
         return run(this::processNotificationData, caseId);
     }
 
-    @Override
-    public boolean processesEmptyCase() {
-        return true;
+    public DocumentsReport importDataWithoutTransaction(final String caseId) {
+        return run(this::processNotificationData, caseId, true);
     }
 
     private void processNotificationData(final MapHolder doc) {
         Notification notification = beanMapper.map(doc, Notification.class);
         notificationRepo.saveAndFlush(notification);
 
-        if (notification.getAssignmentRequests() != null && !notification.getAssignmentRequests().isEmpty()) {
-            assignmentRequestRepo.saveAll(notification.getAssignmentRequests());
-        }
-
+        saveInBulk(notification::getAssignmentRequests, () -> assignmentRequestRepo);
     }
 }

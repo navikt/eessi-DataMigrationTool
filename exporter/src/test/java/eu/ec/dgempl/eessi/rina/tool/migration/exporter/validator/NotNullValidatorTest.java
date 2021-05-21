@@ -79,12 +79,7 @@ public class NotNullValidatorTest {
                     esDocument1);
 
             List<ValidationResult> errors = documentReport.getErrors();
-            Assert.assertEquals(2, errors.size());
-            Assert.assertEquals(errors.get(0).getResult(), EValidationResult.INVALID_NULL);
-            Assert.assertEquals(errors.get(0).getField(), "conversations[0].userMessages[0].sbdh");
-            Assert.assertEquals(errors.get(1).getResult(), EValidationResult.INVALID_NULL);
-            Assert.assertEquals(errors.get(1).getField(), "conversations[1].userMessages[0].sbdh");
-
+            Assert.assertEquals(0, errors.size());
         } catch (Exception e) {
             e.printStackTrace();
         }

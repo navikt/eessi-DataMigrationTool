@@ -5,13 +5,11 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.function.Consumer;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import eu.ec.dgempl.eessi.rina.model.jpa.entity._abstraction.Audit;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity._abstraction.Log;
-import eu.ec.dgempl.eessi.rina.tool.migration.common.util.DateResolver;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
 
 import ma.glasnost.orika.CustomMapper;
@@ -20,9 +18,13 @@ import ma.glasnost.orika.CustomMapper;
 public abstract class AbstractLocalMapper<A, B> extends CustomMapper<A, B> implements LocalMapper<A, B> {
 
     protected void mapDate(final MapHolder a, String key, Consumer<ZonedDateTime> dateConsumer) {
-        String date = a.string(key);
-        if (StringUtils.isNotBlank(date)) {
-            dateConsumer.accept(DateResolver.parse(date));
+        try {
+            ZonedDateTime date = a.date(key);
+            if (date != null) {
+                dateConsumer.accept(date);
+            }
+        } catch (Exception e) {
+            // ignore exception caused by empty date ("")
         }
     }
 

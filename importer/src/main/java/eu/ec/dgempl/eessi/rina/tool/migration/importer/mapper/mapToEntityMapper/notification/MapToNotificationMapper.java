@@ -1,11 +1,12 @@
 package eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper.notification;
 
+import static eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.RepositoryUtils.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import eu.ec.dgempl.eessi.rina.model.enumtypes.EAssignmentRequestStatus;
@@ -25,14 +26,13 @@ import eu.ec.dgempl.eessi.rina.model.jpa.entity.Role;
 import eu.ec.dgempl.eessi.rina.model.jpa.exception.EntityNotFoundEessiRuntimeException;
 import eu.ec.dgempl.eessi.rina.model.jpa.exception.UniqueIdentifier;
 import eu.ec.dgempl.eessi.rina.repo.DocumentTypeRepo;
-import eu.ec.dgempl.eessi.rina.repo.IamUserRepo;
-import eu.ec.dgempl.eessi.rina.repo.IamUserRepoExtended;
 import eu.ec.dgempl.eessi.rina.repo.RinaCaseRepo;
 import eu.ec.dgempl.eessi.rina.repo.RoleRepo;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.NotificationFields;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper._abstract.AbstractMapToEntityMapper;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.service.OrganisationService;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.service.UserService;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.CasesUtils;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.MapUtils;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.RepositoryUtils;
@@ -46,23 +46,22 @@ public class MapToNotificationMapper extends AbstractMapToEntityMapper<MapHolder
     private final String SYSTEM_ID = "0";
     private final String NO_USERNAME = "-1";
 
-    private final IamUserRepo iamUserRepo;
-    private final IamUserRepoExtended iamUserRepoExtended;
     private final DocumentTypeRepo documentTypeRepo;
     private final RinaCaseRepo rinaCaseRepo;
     private final RoleRepo roleRepo;
+    private final OrganisationService organisationService;
+    private final UserService userService;
 
-    @Autowired
-    private OrganisationService organisationService;
-
-    public MapToNotificationMapper(final IamUserRepo iamUserRepo, final IamUserRepoExtended iamUserRepoExtended,
-            final DocumentTypeRepo documentTypeRepo, final RinaCaseRepo rinaCaseRepo, final RoleRepo roleRepo) {
-
-        this.iamUserRepo = iamUserRepo;
-        this.iamUserRepoExtended = iamUserRepoExtended;
+    public MapToNotificationMapper(final DocumentTypeRepo documentTypeRepo,
+            final RinaCaseRepo rinaCaseRepo,
+            final RoleRepo roleRepo,
+            final OrganisationService organisationService,
+            final UserService userService) {
         this.documentTypeRepo = documentTypeRepo;
         this.rinaCaseRepo = rinaCaseRepo;
         this.roleRepo = roleRepo;
+        this.organisationService = organisationService;
+        this.userService = userService;
     }
 
     @Override
@@ -81,11 +80,11 @@ public class MapToNotificationMapper extends AbstractMapToEntityMapper<MapHolder
         b.setIsRead(Boolean.parseBoolean(a.string(NotificationFields.IS_READ)));
         b.setSourceType(ESourceType.getByType(a.string(NotificationFields.SOURCE_TYPE)));
 
+        mapCase(a, b);
         mapCreator(a, b);
         mapSender(a, b);
         mapReceiver(a, b);
         mapDocumentType(a, b);
-        mapCase(a, b);
         mapUsers(a, b);
         mapAssignmentRequests(a, b);
         mapLog(a, b);
@@ -99,17 +98,10 @@ public class MapToNotificationMapper extends AbstractMapToEntityMapper<MapHolder
     }
 
     private void mapCreator(final MapHolder a, final Notification b) {
-        IamUser iamUser = null;
 
-        final String userId = getUserId(a);
-        if (StringUtils.isNotBlank(userId)) {
-            iamUser = RepositoryUtils.findById(userId, iamUserRepo::findById);
-        }
-
-        if (iamUser == null) {
-            final String username = getUsername(a, NotificationFields.CREATOR_NAME);
-            iamUser = RepositoryUtils.getIamUser(() -> username, () -> iamUserRepoExtended);
-        }
+        String userId = getUserId(a);
+        String username = getUsername(a, NotificationFields.CREATOR_NAME);
+        IamUser iamUser = userService.resolveUser(userId, username, b.getRinaCase());
 
         b.setCreator(iamUser);
     }
@@ -135,7 +127,7 @@ public class MapToNotificationMapper extends AbstractMapToEntityMapper<MapHolder
 
     private void mapSender(final MapHolder a, final Notification b) {
         String senderId = a.string(NotificationFields.SENDER, true);
-        Organisation sender = organisationService.getOrSaveOrganisation(senderId);
+        Organisation sender = organisationService.getOrSaveOrganisationWithDefault(senderId, null);
 
         b.setSender(sender);
     }
@@ -156,12 +148,12 @@ public class MapToNotificationMapper extends AbstractMapToEntityMapper<MapHolder
         if (receiver == null) {
             final String username = getUsername(a, NotificationFields.RECEIVER_NAME);
             try {
-                IamUser iamUser = RepositoryUtils.getIamUser(() -> username, () -> iamUserRepoExtended);
+                // In this case we don't want to use the fallback of the default user
+                IamUser iamUser = userService.resolveUser(null, username, null);
                 receiver = iamUser.getTenant().getOrganisation();
             } catch (Exception e) {
                 // ignore exception
             }
-
         }
 
         b.setReceiver(receiver);
@@ -190,21 +182,33 @@ public class MapToNotificationMapper extends AbstractMapToEntityMapper<MapHolder
         responsibleParties = distinctResponsibleParties(responsibleParties);
 
         for (MapHolder responsibleParty : responsibleParties) {
+            String userId = responsibleParty.string(NotificationFields.ID);
             String username = responsibleParty.string(NotificationFields.NAME);
-
-            IamUser iamUser = RepositoryUtils.getIamUser(() -> username, () -> iamUserRepoExtended);
-
+            IamUser iamUser = userService.resolveUser(userId, username, b.getRinaCase());
             iamUsers.add(iamUser);
         }
-
         b.setIamUsers(iamUsers);
     }
 
     private List<MapHolder> distinctResponsibleParties(final List<MapHolder> responsibleParties) {
         if (responsibleParties != null && responsibleParties.size() > 1) {
-            return responsibleParties.stream()
-                    .filter(rp -> rp.getHolding() != null && rp.getHolding().containsKey(NotificationFields.ID))
+
+            List<MapHolder> responsiblePartiesWithID = responsibleParties.stream()
+                    .filter(rp -> rp.getHolding() != null
+                            && rp.getHolding().containsKey(NotificationFields.ID))
                     .filter(MapUtils.distinctByKey(rp -> rp.getHolding().get(NotificationFields.ID)))
+                    .collect(Collectors.toList());
+
+            List<MapHolder> responsiblePartiesWithoutId = responsibleParties.stream()
+                    .filter(rp -> rp.getHolding() != null
+                            && !rp.getHolding().containsKey(NotificationFields.ID)
+                            && rp.getHolding().containsKey(NotificationFields.NAME))
+                    .filter(MapUtils.distinctByKey(rp -> rp.getHolding().get(NotificationFields.NAME)))
+                    .collect(Collectors.toList());
+
+            return Stream
+                    .concat(responsiblePartiesWithID.stream(),
+                            responsiblePartiesWithoutId.stream())
                     .collect(Collectors.toList());
         }
         return responsibleParties;

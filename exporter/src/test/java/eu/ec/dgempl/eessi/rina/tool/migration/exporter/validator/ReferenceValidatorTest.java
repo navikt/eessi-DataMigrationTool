@@ -309,9 +309,7 @@ public class ReferenceValidatorTest {
         assertEquals(1, result.size());
         Assertions.assertThat(result.get(0)).isEqualToComparingFieldByField(expectedResult);
 
-        String cacheEntryContext = mockedEsDocumentParent.getIndex() + "_" + mockedEsDocumentParent.getType() + "_"
-                + mockedEsDocumentParent.getObjectId();
-        CacheEntry expectedEntry = new CacheEntry(true, validParam1, EEsType.SUBDOCUMENT.value(), "case__" + object, cacheEntryContext);
+        CacheEntry expectedEntry = new CacheEntry(true, validParam1, EEsType.SUBDOCUMENT.value(), "case__" + object);
 
         ArgumentCaptor<CacheEntry> argument = ArgumentCaptor.forClass(CacheEntry.class);
         Mockito.verify(cacheService).add(argument.capture());
@@ -326,7 +324,7 @@ public class ReferenceValidatorTest {
         Object object = "1";
         path = "id";
 
-        CacheEntry cacheEntry = new CacheEntry(true, "index", "type", "documentId", "context");
+        CacheEntry cacheEntry = new CacheEntry(true, "index", "type", "documentId");
         doReturn(cacheEntry).when(cacheService).get(any(), any(), any());
 
         ValidationResult expectedResult = ValidationResult.ok(path, object, null);
@@ -402,9 +400,7 @@ public class ReferenceValidatorTest {
         assertEquals(1, result.size());
         Assertions.assertThat(result.get(0)).isEqualToComparingFieldByField(expectedResult);
 
-        String cacheEntryContext = mockedEsDocumentParent.getIndex() + "_" + mockedEsDocumentParent.getType() + "_"
-                + mockedEsDocumentParent.getObjectId();
-        CacheEntry expectedEntry = new CacheEntry(false, validParam1, EEsType.SUBDOCUMENT.value(), "case__" + object, cacheEntryContext);
+        CacheEntry expectedEntry = new CacheEntry(false, validParam1, EEsType.SUBDOCUMENT.value(), "case__" + object);
 
         ArgumentCaptor<CacheEntry> argument = ArgumentCaptor.forClass(CacheEntry.class);
         Mockito.verify(cacheService).add(argument.capture());
@@ -517,9 +513,7 @@ public class ReferenceValidatorTest {
         assertEquals(1, result.size());
         Assertions.assertThat(result.get(0)).isEqualToComparingFieldByField(expectedResult);
 
-        String cacheEntryContext = mockedEsDocumentParent.getIndex() + "_" + mockedEsDocumentParent.getType() + "_"
-                + mockedEsDocumentParent.getObjectId();
-        CacheEntry expectedEntry = new CacheEntry(false, index, type, object.toString(), cacheEntryContext);
+        CacheEntry expectedEntry = new CacheEntry(false, index, type, object.toString());
 
         ArgumentCaptor<CacheEntry> argument = ArgumentCaptor.forClass(CacheEntry.class);
         Mockito.verify(cacheService).add(argument.capture());
@@ -550,9 +544,7 @@ public class ReferenceValidatorTest {
         assertEquals(1, result.size());
         Assertions.assertThat(result.get(0)).isEqualToComparingFieldByField(expectedResult);
 
-        String cacheEntryContext = mockedEsDocumentParent.getIndex() + "_" + mockedEsDocumentParent.getType() + "_"
-                + mockedEsDocumentParent.getObjectId();
-        CacheEntry expectedEntry = new CacheEntry(true, index, type, object.toString(), cacheEntryContext);
+        CacheEntry expectedEntry = new CacheEntry(true, index, type, object.toString());
 
         ArgumentCaptor<CacheEntry> argument = ArgumentCaptor.forClass(CacheEntry.class);
         Mockito.verify(cacheService).add(argument.capture());
@@ -588,9 +580,7 @@ public class ReferenceValidatorTest {
         assertEquals(1, result.size());
         Assertions.assertThat(result.get(0)).isEqualToComparingFieldByField(expectedResult);
 
-        String cacheEntryContext = mockedEsDocumentParent.getIndex() + "_" + mockedEsDocumentParent.getType() + "_"
-                + mockedEsDocumentParent.getObjectId();
-        CacheEntry expectedEntry = new CacheEntry(false, index, type, object.toString(), cacheEntryContext);
+        CacheEntry expectedEntry = new CacheEntry(false, index, type, object.toString());
 
         ArgumentCaptor<CacheEntry> argument = ArgumentCaptor.forClass(CacheEntry.class);
         Mockito.verify(cacheService).add(argument.capture());
@@ -621,9 +611,7 @@ public class ReferenceValidatorTest {
         assertEquals(1, result.size());
         Assertions.assertThat(result.get(0)).isEqualToComparingFieldByField(expectedResult);
 
-        String cacheEntryContext = mockedEsDocumentParent.getIndex() + "_" + mockedEsDocumentParent.getType() + "_"
-                + mockedEsDocumentParent.getObjectId();
-        CacheEntry expectedEntry = new CacheEntry(true, index, type, object.toString(), cacheEntryContext);
+        CacheEntry expectedEntry = new CacheEntry(true, index, type, object.toString());
 
         ArgumentCaptor<CacheEntry> argument = ArgumentCaptor.forClass(CacheEntry.class);
         Mockito.verify(cacheService).add(argument.capture());
@@ -659,9 +647,7 @@ public class ReferenceValidatorTest {
         assertEquals(1, result.size());
         Assertions.assertThat(result.get(0)).isEqualToComparingFieldByField(expectedResult);
 
-        String cacheEntryContext = mockedEsDocumentParent.getIndex() + "_" + mockedEsDocumentParent.getType() + "_"
-                + mockedEsDocumentParent.getObjectId();
-        CacheEntry expectedEntry = new CacheEntry(false, index, type, object.toString(), cacheEntryContext);
+        CacheEntry expectedEntry = new CacheEntry(false, index, type, object.toString());
 
         ArgumentCaptor<CacheEntry> argument = ArgumentCaptor.forClass(CacheEntry.class);
         Mockito.verify(cacheService).add(argument.capture());
@@ -692,9 +678,7 @@ public class ReferenceValidatorTest {
         assertEquals(1, result.size());
         Assertions.assertThat(result.get(0)).isEqualToComparingFieldByField(expectedResult);
 
-        String cacheEntryContext = mockedEsDocumentParent.getIndex() + "_" + mockedEsDocumentParent.getType() + "_"
-                + mockedEsDocumentParent.getObjectId();
-        CacheEntry expectedEntry = new CacheEntry(true, index, type, object.toString(), cacheEntryContext);
+        CacheEntry expectedEntry = new CacheEntry(true, index, type, object.toString());
 
         ArgumentCaptor<CacheEntry> argument = ArgumentCaptor.forClass(CacheEntry.class);
         Mockito.verify(cacheService).add(argument.capture());
@@ -730,9 +714,7 @@ public class ReferenceValidatorTest {
         assertEquals(1, result.size());
         Assertions.assertThat(result.get(0)).isEqualToComparingFieldByField(expectedResult);
 
-        String cacheEntryContext = mockedEsDocumentParent.getIndex() + "_" + mockedEsDocumentParent.getType() + "_"
-                + mockedEsDocumentParent.getObjectId();
-        CacheEntry expectedEntry = new CacheEntry(false, index, type, object.toString(), cacheEntryContext);
+        CacheEntry expectedEntry = new CacheEntry(false, index, type, object.toString());
 
         ArgumentCaptor<CacheEntry> argument = ArgumentCaptor.forClass(CacheEntry.class);
         Mockito.verify(cacheService).add(argument.capture());
@@ -763,9 +745,7 @@ public class ReferenceValidatorTest {
         assertEquals(1, result.size());
         Assertions.assertThat(result.get(0)).isEqualToComparingFieldByField(expectedResult);
 
-        String cacheEntryContext = mockedEsDocumentParent.getIndex() + "_" + mockedEsDocumentParent.getType() + "_"
-                + mockedEsDocumentParent.getObjectId();
-        CacheEntry expectedEntry = new CacheEntry(true, index, type, object.toString(), cacheEntryContext);
+        CacheEntry expectedEntry = new CacheEntry(true, index, type, object.toString());
 
         ArgumentCaptor<CacheEntry> argument = ArgumentCaptor.forClass(CacheEntry.class);
         Mockito.verify(cacheService).add(argument.capture());
@@ -801,9 +781,7 @@ public class ReferenceValidatorTest {
         assertEquals(1, result.size());
         Assertions.assertThat(result.get(0)).isEqualToComparingFieldByField(expectedResult);
 
-        String cacheEntryContext = mockedEsDocumentParent.getIndex() + "_" + mockedEsDocumentParent.getType() + "_"
-                + mockedEsDocumentParent.getObjectId();
-        CacheEntry expectedEntry = new CacheEntry(false, index, type, object.toString(), cacheEntryContext);
+        CacheEntry expectedEntry = new CacheEntry(false, index, type, object.toString());
 
         ArgumentCaptor<CacheEntry> argument = ArgumentCaptor.forClass(CacheEntry.class);
         Mockito.verify(cacheService).add(argument.capture());
@@ -834,9 +812,7 @@ public class ReferenceValidatorTest {
         assertEquals(1, result.size());
         Assertions.assertThat(result.get(0)).isEqualToComparingFieldByField(expectedResult);
 
-        String cacheEntryContext = mockedEsDocumentParent.getIndex() + "_" + mockedEsDocumentParent.getType() + "_"
-                + mockedEsDocumentParent.getObjectId();
-        CacheEntry expectedEntry = new CacheEntry(true, index, type, object.toString(), cacheEntryContext);
+        CacheEntry expectedEntry = new CacheEntry(true, index, type, object.toString());
 
         ArgumentCaptor<CacheEntry> argument = ArgumentCaptor.forClass(CacheEntry.class);
         Mockito.verify(cacheService).add(argument.capture());
@@ -872,9 +848,7 @@ public class ReferenceValidatorTest {
         assertEquals(1, result.size());
         Assertions.assertThat(result.get(0)).isEqualToComparingFieldByField(expectedResult);
 
-        String cacheEntryContext = mockedEsDocumentParent.getIndex() + "_" + mockedEsDocumentParent.getType() + "_"
-                + mockedEsDocumentParent.getObjectId();
-        CacheEntry expectedEntry = new CacheEntry(false, index, type, object.toString(), cacheEntryContext);
+        CacheEntry expectedEntry = new CacheEntry(false, index, type, object.toString());
 
         ArgumentCaptor<CacheEntry> argument = ArgumentCaptor.forClass(CacheEntry.class);
         Mockito.verify(cacheService).add(argument.capture());
@@ -905,9 +879,7 @@ public class ReferenceValidatorTest {
         assertEquals(1, result.size());
         Assertions.assertThat(result.get(0)).isEqualToComparingFieldByField(expectedResult);
 
-        String cacheEntryContext = mockedEsDocumentParent.getIndex() + "_" + mockedEsDocumentParent.getType() + "_"
-                + mockedEsDocumentParent.getObjectId();
-        CacheEntry expectedEntry = new CacheEntry(true, index, type, object.toString(), cacheEntryContext);
+        CacheEntry expectedEntry = new CacheEntry(true, index, type, object.toString());
 
         ArgumentCaptor<CacheEntry> argument = ArgumentCaptor.forClass(CacheEntry.class);
         Mockito.verify(cacheService).add(argument.capture());
@@ -943,9 +915,7 @@ public class ReferenceValidatorTest {
         assertEquals(1, result.size());
         Assertions.assertThat(result.get(0)).isEqualToComparingFieldByField(expectedResult);
 
-        String cacheEntryContext = mockedEsDocumentParent.getIndex() + "_" + mockedEsDocumentParent.getType() + "_"
-                + mockedEsDocumentParent.getObjectId();
-        CacheEntry expectedEntry = new CacheEntry(false, index, type, object.toString(), cacheEntryContext);
+        CacheEntry expectedEntry = new CacheEntry(false, index, type, object.toString());
 
         ArgumentCaptor<CacheEntry> argument = ArgumentCaptor.forClass(CacheEntry.class);
         Mockito.verify(cacheService).add(argument.capture());
@@ -976,9 +946,7 @@ public class ReferenceValidatorTest {
         assertEquals(1, result.size());
         Assertions.assertThat(result.get(0)).isEqualToComparingFieldByField(expectedResult);
 
-        String cacheEntryContext = mockedEsDocumentParent.getIndex() + "_" + mockedEsDocumentParent.getType() + "_"
-                + mockedEsDocumentParent.getObjectId();
-        CacheEntry expectedEntry = new CacheEntry(true, index, type, object.toString(), cacheEntryContext);
+        CacheEntry expectedEntry = new CacheEntry(true, index, type, object.toString());
 
         ArgumentCaptor<CacheEntry> argument = ArgumentCaptor.forClass(CacheEntry.class);
         Mockito.verify(cacheService).add(argument.capture());
@@ -1014,9 +982,7 @@ public class ReferenceValidatorTest {
         assertEquals(1, result.size());
         Assertions.assertThat(result.get(0)).isEqualToComparingFieldByField(expectedResult);
 
-        String cacheEntryContext = mockedEsDocumentParent.getIndex() + "_" + mockedEsDocumentParent.getType() + "_"
-                + mockedEsDocumentParent.getObjectId();
-        CacheEntry expectedEntry = new CacheEntry(false, index, type, object.toString(), cacheEntryContext);
+        CacheEntry expectedEntry = new CacheEntry(false, index, type, object.toString());
 
         ArgumentCaptor<CacheEntry> argument = ArgumentCaptor.forClass(CacheEntry.class);
         Mockito.verify(cacheService).add(argument.capture());
@@ -1047,9 +1013,7 @@ public class ReferenceValidatorTest {
         assertEquals(1, result.size());
         Assertions.assertThat(result.get(0)).isEqualToComparingFieldByField(expectedResult);
 
-        String cacheEntryContext = mockedEsDocumentParent.getIndex() + "_" + mockedEsDocumentParent.getType() + "_"
-                + mockedEsDocumentParent.getObjectId();
-        CacheEntry expectedEntry = new CacheEntry(true, index, type, object.toString(), cacheEntryContext);
+        CacheEntry expectedEntry = new CacheEntry(true, index, type, object.toString());
 
         ArgumentCaptor<CacheEntry> argument = ArgumentCaptor.forClass(CacheEntry.class);
         Mockito.verify(cacheService).add(argument.capture());
@@ -1085,9 +1049,7 @@ public class ReferenceValidatorTest {
         assertEquals(1, result.size());
         Assertions.assertThat(result.get(0)).isEqualToComparingFieldByField(expectedResult);
 
-        String cacheEntryContext = mockedEsDocumentParent.getIndex() + "_" + mockedEsDocumentParent.getType() + "_"
-                + mockedEsDocumentParent.getObjectId();
-        CacheEntry expectedEntry = new CacheEntry(false, index, type, object.toString(), cacheEntryContext);
+        CacheEntry expectedEntry = new CacheEntry(false, index, type, object.toString());
 
         ArgumentCaptor<CacheEntry> argument = ArgumentCaptor.forClass(CacheEntry.class);
         Mockito.verify(cacheService).add(argument.capture());
@@ -1118,9 +1080,7 @@ public class ReferenceValidatorTest {
         assertEquals(1, result.size());
         Assertions.assertThat(result.get(0)).isEqualToComparingFieldByField(expectedResult);
 
-        String cacheEntryContext = mockedEsDocumentParent.getIndex() + "_" + mockedEsDocumentParent.getType() + "_"
-                + mockedEsDocumentParent.getObjectId();
-        CacheEntry expectedEntry = new CacheEntry(true, index, type, object.toString(), cacheEntryContext);
+        CacheEntry expectedEntry = new CacheEntry(true, index, type, object.toString());
 
         ArgumentCaptor<CacheEntry> argument = ArgumentCaptor.forClass(CacheEntry.class);
         Mockito.verify(cacheService).add(argument.capture());
@@ -1270,7 +1230,8 @@ public class ReferenceValidatorTest {
         Map file = null;
 
         try {
-            mockedEsDocument = gson.fromJson(new FileReader(filePath.concat("CasesTaskmetadataWithInvalidReference.json")), EsDocument.class);
+            mockedEsDocument = gson.fromJson(new FileReader(filePath.concat("CasesTaskmetadataWithInvalidReference.json")),
+                    EsDocument.class);
             mockedEsDocumentParent = gson.fromJson(new FileReader(filePath.concat("Parent.json")), EsDocument.class);
             file = gson.fromJson(new FileReader(filePath.concat("CasesTaskmetadataWithInvalidReference_ESCaseMetadata.json")), Map.class);
         } catch (FileNotFoundException e) {
@@ -1324,7 +1285,8 @@ public class ReferenceValidatorTest {
         Map file = null;
 
         try {
-            mockedEsDocument = gson.fromJson(new FileReader(filePath.concat("CasesTaskmetadataWithInvalidReference.json")), EsDocument.class);
+            mockedEsDocument = gson.fromJson(new FileReader(filePath.concat("CasesTaskmetadataWithInvalidReference.json")),
+                    EsDocument.class);
             mockedEsDocumentParent = gson.fromJson(new FileReader(filePath.concat("Parent.json")), EsDocument.class);
             file = gson.fromJson(new FileReader(filePath.concat("CasesTaskmetadataWithInvalidReference_ESCaseMetadata2.json")), Map.class);
         } catch (FileNotFoundException e) {
@@ -1385,7 +1347,8 @@ public class ReferenceValidatorTest {
         Map file = null;
 
         try {
-            mockedEsDocument = gson.fromJson(new FileReader(filePath.concat("CasesTaskmetadataWithInvalidReference.json")), EsDocument.class);
+            mockedEsDocument = gson.fromJson(new FileReader(filePath.concat("CasesTaskmetadataWithInvalidReference.json")),
+                    EsDocument.class);
             mockedEsDocumentParent = gson.fromJson(new FileReader(filePath.concat("Parent.json")), EsDocument.class);
             file = gson.fromJson(new FileReader(filePath.concat("CasesTaskmetadataWithInvalidReference_ESCaseMetadata3.json")), Map.class);
         } catch (FileNotFoundException e) {

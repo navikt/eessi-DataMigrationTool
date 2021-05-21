@@ -1,6 +1,7 @@
 package eu.ec.dgempl.eessi.rina.tool.migration.importer.dataimport.cases;
 
 import static eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.DateUtils.*;
+import static eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.MappingContextBuilder.*;
 import static eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.RepositoryUtils.*;
 
 import java.time.ZonedDateTime;
@@ -34,7 +35,6 @@ import eu.ec.dgempl.eessi.rina.repo.DocumentConversationRepo;
 import eu.ec.dgempl.eessi.rina.repo.DocumentRepo;
 import eu.ec.dgempl.eessi.rina.repo.UserMessageRepo;
 import eu.ec.dgempl.eessi.rina.repo.UserMessageResponseRepo;
-import eu.ec.dgempl.eessi.rina.tool.migration.common.util.DateResolver;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dataimport.CaseImporter;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dataimport.ElasticTypeImporter;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dataimport._abstract.AbstractDataImporter;
@@ -72,10 +72,10 @@ public class DocumentImporter extends AbstractDataImporter implements CaseImport
 
     @Override
     public DocumentsReport importData(final String caseId) {
-        return run(this::importDocumentData, caseId);
+        return run(this::processDocumentData, caseId);
     }
 
-    private void importDocumentData(final MapHolder doc) {
+    public void processDocumentData(final MapHolder doc) {
         String docType = doc.string(DocumentFields.TYPE);
 
         if (UNSUPPORTED_DOCUMENT_TYPES.contains(docType)) {
@@ -115,24 +115,19 @@ public class DocumentImporter extends AbstractDataImporter implements CaseImport
         if (EDocumentType.R_018.value().equalsIgnoreCase(document.getDocumentTypeVersion().getDocumentType().getType())) {
             String rinaCaseId = document.getRinaCase().getId();
 
-            List<Document> documentsWithTypeR017 = documentRepo.findByRinaCaseIdAndDocumentTypeVersionDocumentTypeType(
-                    rinaCaseId,
+            List<Document> documentsWithTypeR017 = documentRepo.findByRinaCaseIdAndDocumentTypeVersionDocumentTypeType(rinaCaseId,
                     EDocumentType.R_017.value());
 
             if (CollectionUtils.isEmpty(documentsWithTypeR017)) {
-                throw new RuntimeException(String.format(
-                        "Could not find parent for document R018, with id=%s and caseId=%s",
-                        document.getId(),
-                        rinaCaseId));
+                throw new RuntimeException(
+                        String.format("Could not find parent for document R018, with id=%s and caseId=%s", document.getId(), rinaCaseId));
             }
 
             Document parent = getParent(documentsWithTypeR017, document);
 
             if (parent == null) {
-                throw new RuntimeException(String.format(
-                        "Could not find parent for document R018, with id=%s and caseId=%s",
-                        document.getId(),
-                        rinaCaseId));
+                throw new RuntimeException(
+                        String.format("Could not find parent for document R018, with id=%s and caseId=%s", document.getId(), rinaCaseId));
             }
 
             document.setParent(parent);
@@ -258,7 +253,15 @@ public class DocumentImporter extends AbstractDataImporter implements CaseImport
         if (CollectionUtils.isNotEmpty(versions)) {
             Map<ZonedDateTimePeriod, Integer> intervalPairs = getIntervalsMap(documentBversions);
             versions.forEach(version -> {
-                ZonedDateTime creationDate = DateResolver.parse(version.string("date"));
+                ZonedDateTime creationDate = version.date("date");
+
+                if (creationDate == null) {
+                    throw new RuntimeException(String.format(
+                            "Could not link documentAttachment with id %s to the version of document with id %s.",
+                            b.getId(),
+                            b.getDocument().getId()));
+                }
+
                 int intervalIndex = getIntervalIndex(intervalPairs, creationDate);
                 if (intervalIndex > -1) {
                     for (int idx = intervalIndex; idx < documentBversions.size(); idx++) {
@@ -282,10 +285,5 @@ public class DocumentImporter extends AbstractDataImporter implements CaseImport
         }
 
         return null;
-    }
-
-    @Override
-    public boolean processesEmptyCase() {
-        return true;
     }
 }

@@ -54,6 +54,7 @@ public class MapToIamUserMapper extends AbstractMapToEntityMapper<MapHolder, Iam
         mapLog(a, b);
         mapOrigin(a, b);
         mapSalt(a, b);
+        // mapGroups() to be processed after mapTenant()
         mapGroups(a, b, context);
 
         b.setUsername(a.string(UserFields.USERNAME));
@@ -74,6 +75,7 @@ public class MapToIamUserMapper extends AbstractMapToEntityMapper<MapHolder, Iam
     private void mapGroups(final MapHolder a, final IamUser b, final MappingContext context) {
         List<MapHolder> groups = a.listToMapHolder(UserFields.GROUPS);
         if (!CollectionUtils.isEmpty(groups)) {
+            context.setProperty("tenantId", b.getTenant().getId());
             groups.stream().map(holder -> mapperFacade.map(holder, IamUserGroup.class, context)).forEach(b::addIamUserGroup);
         }
     }
@@ -87,8 +89,8 @@ public class MapToIamUserMapper extends AbstractMapToEntityMapper<MapHolder, Iam
     }
 
     private void mapSalt(final MapHolder a, final IamUser b) {
-        if (a.string(UserFields.SALT) == null) {
-            if (a.string(UserFields.PASSWORD) != null) {
+        if (StringUtils.isBlank(a.string(UserFields.SALT))) {
+            if (StringUtils.isNotBlank(a.string(UserFields.PASSWORD))) {
                 throw new RuntimeException("For user " + b.getUsername() + " the salt is null and the password is not null");
             }
             b.setSalt(generatePasswordSalt());

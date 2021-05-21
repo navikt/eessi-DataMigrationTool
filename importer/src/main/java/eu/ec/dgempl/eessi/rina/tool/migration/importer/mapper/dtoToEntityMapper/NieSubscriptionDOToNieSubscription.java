@@ -36,10 +36,11 @@ public class NieSubscriptionDOToNieSubscription extends AbstractDtoToEntityMappe
         b.setSubscriptionName(a.getName());
         b.setIsCase(a.isCase());
 
-        a.getSubscribers().forEach((subscriberId, subscriber) -> {
+        a.getSubscribers().values().forEach((subscriber) -> {
             NieSubscriber nieSubscriber;
 
             String version = subscriber.string(NieFields.VERSION);
+            String subscriberId = subscriber.string(NieFields.ID);
             if (a.isCase()) {
                 nieSubscriber = new NieSubscriber(b, processDefVersionRepo.findByProcessDefIdAndBusinessVersion(subscriberId, version));
             } else {
@@ -55,7 +56,7 @@ public class NieSubscriptionDOToNieSubscription extends AbstractDtoToEntityMappe
 
             nieListener.setId(listenerId);
             nieListener.setLabel(listener.string(NieFields.LABEL));
-            
+
             String listenerListener = listener.string(NieFields.LISTENER);
             String listenerUrl = listener.string(NieFields.URL);
 

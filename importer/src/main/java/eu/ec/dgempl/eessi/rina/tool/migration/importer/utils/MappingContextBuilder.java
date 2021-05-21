@@ -33,6 +33,10 @@ public class MappingContextBuilder {
         return context;
     }
 
+    public static MappingContextBuilder mctxb() {
+        return MappingContextBuilder.instance();
+    }
+
     /**
      * Provide a Mapping context with a property
      *

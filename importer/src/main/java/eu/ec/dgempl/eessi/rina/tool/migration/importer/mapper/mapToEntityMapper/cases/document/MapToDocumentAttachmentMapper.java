@@ -1,7 +1,5 @@
 package eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper.cases.document;
 
-import static eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.RepositoryUtils.*;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -9,15 +7,16 @@ import eu.ec.dgempl.eessi.rina.model.enumtypes.EMimeType;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.Document;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.DocumentAttachment;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.IamUser;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity.RinaCase;
 import eu.ec.dgempl.eessi.rina.model.jpa.exception.EntityNotFoundEessiRuntimeException;
 import eu.ec.dgempl.eessi.rina.model.jpa.exception.UniqueIdentifier;
 import eu.ec.dgempl.eessi.rina.repo.DocumentRepo;
-import eu.ec.dgempl.eessi.rina.repo.IamUserRepo;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.DmtEnumNotFoundException;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.DocumentFields;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.helper.AttachmentsHelper;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper._abstract.AbstractMapToEntityMapper;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.service.UserService;
 
 import ma.glasnost.orika.MappingContext;
 
@@ -25,14 +24,15 @@ import ma.glasnost.orika.MappingContext;
 public class MapToDocumentAttachmentMapper extends AbstractMapToEntityMapper<MapHolder, DocumentAttachment> {
 
     private final DocumentRepo documentRepo;
-    private final IamUserRepo iamUserRepo;
+    private final UserService userService;
 
     @Autowired
     private AttachmentsHelper attachmentsHelper;
 
-    public MapToDocumentAttachmentMapper(final DocumentRepo documentRepo, final IamUserRepo iamUserRepo) {
+    public MapToDocumentAttachmentMapper(final DocumentRepo documentRepo,
+            final UserService userService) {
         this.documentRepo = documentRepo;
-        this.iamUserRepo = iamUserRepo;
+        this.userService = userService;
     }
 
     @Override
@@ -70,7 +70,13 @@ public class MapToDocumentAttachmentMapper extends AbstractMapToEntityMapper<Map
         mapDate(a, DocumentFields.ATTACHMENT_LAST_UPDATE, b.getAudit()::setUpdatedAt);
 
         String creatorId = a.string(DocumentFields.ATTACHMENT_CREATOR_ID, true);
-        IamUser creator = findById(creatorId, iamUserRepo::findById, IamUser.class);
+        String creatorName = a.string(DocumentFields.ATTACHMENT_CREATOR_NAME, true);
+        RinaCase rinaCase = null;
+        if (b.getDocument() != null && b.getDocument().getRinaCase() != null) {
+            rinaCase = b.getDocument().getRinaCase();
+        }
+        IamUser creator = userService.resolveUser(creatorId, creatorName, rinaCase);
+
         b.getAudit().setCreatedBy(creator.getId());
         b.getAudit().setUpdatedBy(creator.getId());
 

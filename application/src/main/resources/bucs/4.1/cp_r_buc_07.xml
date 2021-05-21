@@ -360,8 +360,11 @@
                 <createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE" documentType="R034"/>
                 <!-- <createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE" documentType="R033"/> -->
                 <createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE" documentType="R036"/>
-                <createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE" documentType="R029"/>
                 <createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE" documentType="R004"/>
+				
+				<!-- RELAXATION temporarily needed for DMT -->
+                <createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE" documentType="R029"/>
+				
                 <!-- end receivers -->
 
                 <!-- though not explicit in Bonita, R018 effectively behaves as a reply to R017, we can safely use the action type DOC_CREATE_REPLY -->
@@ -480,6 +483,9 @@
                 <parameter key="recreateAfterCancel">true</parameter> <!-- default is false -->
                 <parameter key="allowsAttachments">true</parameter> <!-- default is false -->
             </parameters>
+            <triggers>
+                <createActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_RECEIVE_REPLY" documentType="R029"/>
+            </triggers>			
         </document>
 
         <document type="R025">

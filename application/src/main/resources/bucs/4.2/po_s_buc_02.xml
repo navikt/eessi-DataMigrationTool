@@ -49,7 +49,8 @@
 				<!-- MAIN FLOW ENCODING --> 
  
 				<!-- for starter only, receivers --> 
-				<createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE" documentType="S050" /> 
+				<createActionTrigger onAction="DOC_SEND" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE" documentType="S050" />
+
 				<!-- end receivers --> 
  
 			</triggers> 
@@ -58,7 +59,7 @@
 		<document type="S050"> 
 			<triggers> 
 				<!-- S073 is not reply of S050 in Bonita -->
-				<createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_CREATE" documentType="S073" /> 
+				<createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_CREATE_REPLY" documentType="S073" /> 
 			</triggers> 
 		</document> 
  

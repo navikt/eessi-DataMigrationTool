@@ -73,6 +73,10 @@
 				<!-- No need of hasParticipantSelection if isML(case level)=false --> 
 				<parameter key="allowsAttachments">true</parameter> <!-- default is false --> 
 			</parameters> 
+            <triggers>
+                <createActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_RECEIVE_REPLY"
+                                     documentType="S073"/>
+            </triggers>			
 		</document> 
  
 		<document type="S073"> 

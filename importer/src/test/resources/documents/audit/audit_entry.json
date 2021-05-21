@@ -1,0 +1,37 @@
+{
+  "syslog_severity_code": 5,
+  "syslog_facility": "user-level",
+  "syslog_facility_code": 1,
+  "syslog5424_ver": "1",
+  "thread": "pool-16-thread-1",
+  "message": {
+    "date": "2020-09-23T14:00:51Z",
+    "outcomeDetails": "java.lang.RuntimeException: CreateProcess - Failed to start process [UpdateMessageSignature_v1.0] with parameters [{messageSignature={sedSignature=<ds:Signature xmlns:ds=\"http://www.w3.org/2000/09/xmldsig#\" Id=\"id-7e80db402ef288c0c675d22e6278f633\">\n<ds:SignedInfo>\n<ds:CanonicalizationMethod Algorithm=\"http://www.w3.org/2001/10/xml-exc-c14n#\"/>\n<ds:SignatureMethod Algorithm=\"http://www.w3.org/2001/04/xmldsig-more#rsa-sha256\"/>\n<ds:Reference Id=\"r-id-1\" Type=\"\" URI=\"\">\n<ds:Transforms>\n<ds:Transform Algorithm=\"http://www.w3.org/2000/09/xmldsig#enveloped-signature\"/>\n<ds:Transform Algorithm=\"http://www.w3.org/2001/10/xml-exc-c14n#\"/>\n</ds:Transforms>\n<ds:DigestMethod Algorithm=\"http://www.w3.org/2001/04/xmlenc#sha256\"/>\n<ds:DigestValue>1e05vE+G4Zsj8fyp96xCgHnP4NMJOCUYbjEhwjohSQw=</ds:DigestValue>\n</ds:Reference>\n<ds:Reference Type=\"http://uri.etsi.org/01903#SignedProperties\" URI=\"#xades-id-7e80db402ef288c0c675d22e6278f633\">\n<ds:Transforms>\n<ds:Transform Algorithm=\"http://www.w3.org/2001/10/xml-exc-c14n#\"/>\n</ds:Transforms>\n<ds:DigestMethod Algorithm=\"http://www.w3.org/2001/04/xmlenc#sha256\"/>\n<ds:DigestValue>3ov1/vXWa0PAUCr0TAOZrr94LoxsgaNN1NlrCsmbLQc=</ds:DigestValue>\n</ds:Reference>\n</ds:SignedInfo>\n<ds:SignatureValue Id=\"value-id-7e80db402ef288c0c675d22e6278f633\">d5eCrwzSDQ/9lOUBRIKQLgii3XBBYNy5TXsh03zy71hLyR33BkO3NwTTW9DXrt3Icl0B8qbq1mbXqMVcva4+MiAaL6pZ3zW77dLjKEZJFRxfTKuvauvqcf00tmEoY6+ObPQARjn+kPj2alz6bE8b7zrT538Aoqlfoj8UaYF+h4KVdtn3hMfkSn/sGIsmRczuZXySQvvAVHn1zKrPQ7ThuS/TMS5Gt2c1Jmj6dJJ60sjfsh8mF3vevxuaxsR6m8GYPdIblfYVLZ0fJRLHP0ya05nfUoA9e049JsCY+Mn6lHp9fGBf6POjSye8eCs/zwrKpXvRnFB3hitxqLs1PgD+pg==</ds:SignatureValue>\n<ds:KeyInfo>\n<ds:X509Data>\n<ds:X509Certificate>MIIF7DCCA9SgAwIBAgIUT3Te76kUzR+u/AkN4VFwBDn4FhQwDQYJKoZIhvcNAQELBQAwSTELMAkGA1UEBhMCQk0xGTAXBgNVBAoTEFF1b1ZhZGlzIExpbWl0ZWQxHzAdBgNVBAMTFlF1b1ZhZGlzIElzc3VpbmcgQ0EgRzQwHhcNMTgwNDIzMTE1MjI1WhcNMjEwMzE3MTgzMzMzWjCBkjELMAkGA1UEBhMCQkUxEDAOBgNVBAgTB0JydXNzZWwxEDAOBgNVBAcTB0JydXNzZWwxLzAtBgNVBAoTJktydWlzcHVudGJhbmsgdmFuIGRlIFNvY2lhbGUgWmVrZXJoZWlkMS4wLAYDVQQDEyVuYXRndy1zaWduLWVlc3NpLWFjYy5rc3otYmNzcy5mZ292LmJlMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAu3Z75k970PA4OV2z32tJT0IpFiPbbkdFoF9JUckNq1E1MbTDAccMDqNvyJ+oo5gu9pFtlqnzRlKQn4v6KS6t6bcOxxdXl+Gi7cjViwzjbdQuOskcgAEeyiJyHsrpByb/TituVqqKm2/cIHuzNgsdp2PTnv9BqtV9XOxsgCaTKBrBbC7UhzAG87y4/TapJWiXRip/k1Z0vuGI3GcNKItk/9WS7Tut9nrzjrJxwv5LkDXoFUSIn79DLnSF6nxJ+HAamX6pNWR9OXuiOLUfQ10dGc3w040jjunGZ+kYUUs3jLaA+ot5qa1i9kCEWComTNC1V/i2NziqkPGTenqpzvDQ9wIDAQABo4IBgDCCAXwwcwYIKwYBBQUHAQEEZzBlMCoGCCsGAQUFBzABhh5odHRwOi8vb2NzcC5xdW92YWRpc2dsb2JhbC5jb20wNwYIKwYBBQUHMAKGK2h0dHA6Ly90cnVzdC5xdW92YWRpc2dsb2JhbC5jb20vcXZpY2FnNC5jcnQwTgYDVR0gBEcwRTBDBgkrBgEEAb5YAWQwNjA0BggrBgEFBQcCARYoaHR0cDovL3d3dy5xdW92YWRpc2dsb2JhbC5jb20vcmVwb3NpdG9yeTAOBgNVHQ8BAf8EBAMCBeAwKQYDVR0lBCIwIAYKKwYBBAGCNxQCAgYIKwYBBQUHAwIGCCsGAQUFBwMEMB8GA1UdIwQYMBaAFPM0EhHxjMb2sqe0mUtwispgoctFMDoGA1UdHwQzMDEwL6AtoCuGKWh0dHA6Ly9jcmwucXVvdmFkaXNnbG9iYWwuY29tL3F2aWNhZzQuY3JsMB0GA1UdDgQWBBTL/5LR548OmAe/AR57n4hUrYw+yTANBgkqhkiG9w0BAQsFAAOCAgEAO18VDgF8DXyBOK6nL5bWbvU21wyWCwlqoKyCO9lHz9opKmBqq6FHdqpN9YGYPg2WGtR143UYxiL4Grbc0q1l26QVTOJjpsvm2YQEX/CPNAenldIYKvPeXRsHd+Seup51aSN5eRX6q8BRlx2jhWGkvoqtQzpynqkvS45kWVvJfPhA8ksi2yzRX+2B4/pbFET3BffDjs1RZJySGKbf/Sk8+duNZrem4AHdHBmWyc3gLwm32Zc2coufQs0n8axVhOeuNE0WgZ4QCm3wbcHJMph0LvqJiyd04SBQ78bJmWg+lQG9IQyZoT0CxTZc4NbBdCiWmQyWYy7BNo5FM3NmtG9Y8TCb478/5vjXKqcWkOlhaIn82MznVUgMddBUS98HCssO7pwNiPcnZMbn9ce3AAuHda6HLzuNjnQ6/VwH1LyXSJUwmWsbbJ1zOoYE2vmhuoxgk5jHQj9Y//z19KztPxPtRgQ2MJZNSdLzZDiorUSCFiUu97wPAQgdo3Gg5wamsr2QAiw8C9BbRH672JG5h3bKITbTwQSgMMzeETieNzLGTfdSAU/W81cIrsMPLcVZRbVKN7VNY0SznodfXkU+Snlz3eNw7EpoHlV9r7TTDUQODN/DZGEK6of8wicjoTZ6Zj3rzHmOLmybN2oiIMfiBeltqXmI4Yt6LyuICxGxZcR0k2A=</ds:X509Certificate>\n</ds:X509Data>\n</ds:KeyInfo>\n<ds:Object>\n<xades:QualifyingProperties xmlns:xades=\"http://uri.etsi.org/01903/v1.3.2#\" Target=\"#id-7e80db402ef288c0c675d22e6278f633\">\n<xades:SignedProperties Id=\"xades-id-7e80db402ef288c0c675d22e6278f633\">\n<xades:SignedSignatureProperties>\n<xades:SigningTime>2020-09-22T15:01:04Z</xades:SigningTime>\n<xades:SigningCertificate>\n<xades:Cert>\n<xades:CertDigest>\n<ds:DigestMethod Algorithm=\"http://www.w3.org/2001/04/xmlenc#sha256\"/>\n<ds:DigestValue>dZtUHj/CMnUYLviLHy5vpbTtE/lh7uPKLMRqU6v9WFQ=</ds:DigestValue>\n</xades:CertDigest>\n<xades:IssuerSerial>\n<ds:X509IssuerName>CN=QuoVadis Issuing CA G4,O=QuoVadis Limited,C=BM</ds:X509IssuerName>\n<ds:X509SerialNumber>453616577817822957206903177298632617765847438868</ds:X509SerialNumber>\n</xades:IssuerSerial>\n</xades:Cert>\n</xades:SigningCertificate>\n</xades:SignedSignatureProperties>\n<xades:SignedDataObjectProperties>\n<xades:DataObjectFormat ObjectReference=\"#r-id-1\">\n<xades:MimeType>application/octet-stream</xades:MimeType>\n</xades:DataObjectFormat>\n</xades:SignedDataObjectProperties>\n</xades:SignedProperties>\n</xades:QualifyingProperties>\n</ds:Object>\n</ds:Signature>\n, versionId=1, targetSedId=3d87f9d3d8ab42e5bf81395e1c939558, messageId=8aac02f4b89b4dc3bdf11ff011fac8f9}, direction=IN}].",
+    "action": null,
+    "id": "0",
+    "source": {
+      "categoryType": "bus",
+      "componentType": "bmsg",
+      "eventType": "retr_cas_by_business_id"
+    },
+    "userName": null,
+    "auditedObjects": [],
+    "networkLocation": null,
+    "outcome": "err",
+    "participants": []
+  },
+  "type": "audit",
+  "priority": "INFO",
+  "syslog5424_app": "/eessi/share/rest/log4j2.xml",
+  "syslog5424_proc": "-",
+  "syslog_severity": "notice",
+  "@timestamp": "2020-09-23T14:00:51.249Z",
+  "syslog5424_ts": "2020-09-23T16:00:51.229+02:00",
+  "syslog5424_pri": "134",
+  "@version": "1",
+  "host": "127.0.0.1",
+  "logger_name": "audit.eu.ec.dgempl.eessi.audit.client.AuditClientUtil",
+  "stack_trace": "\"\"",
+  "syslog5424_host": "c59tce101.sigmap.msanet",
+  "_id": "AXS7RFNBMlXIygIu4MPE"
+}

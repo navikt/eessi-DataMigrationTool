@@ -224,7 +224,11 @@ mayLoopH070=[false]
 		<document type="S073"> 
 			<parameters> 
 				<parameter key="allowsAttachments">true</parameter> <!-- default is false --> 
-			</parameters> 
+			</parameters>
+			<triggers>
+				<createActionTrigger onAction="DOC_SEND" onlyStarter="true" 
+					onResult="SUCCESS" actionType="DOC_RECEIVE_REPLY" documentType="S050" /> 
+			</triggers> 
 		</document> 
  
 		<document type="S050"> 

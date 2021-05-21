@@ -12,12 +12,14 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.util.CollectionUtils;
 
 import eu.ec.dgempl.eessi.rina.tool.migration.application.full.FullApp;
+import eu.ec.dgempl.eessi.rina.tool.migration.application.utils.DatabaseExecutionUtils;
 import eu.ec.dgempl.eessi.rina.tool.migration.application.validation.ValidationApp;
 
 public class Application {
 
     private final static String ARG_VALIDATE_ALL = "-validate-all";
     private final static String ARG_VALIDATE_CASE = "-validate-case";
+    private final static String ARG_VALIDATE_CASES_BULK = "-validate-cases-bulk";
     private final static String ARG_VALIDATE_AND_IMPORT = "-validate-import";
     private final static String ARG_IMPORT_ALL = "-import-all";
     private final static String ARG_IMPORT_CASE = "-import-case";
@@ -30,6 +32,7 @@ public class Application {
         //
         // -validate-all (default)
         // -validate-case case
+        // -validate-cases-bulk filename
         // -validate-import [importer_name]
         // -import-all [importer_name]
         // -import-case case
@@ -46,8 +49,10 @@ public class Application {
                 break;
             }
             case 1: {
-                if ((arguments.contains(ARG_HELP_LONG) || arguments.contains(ARG_HELP_SHORT)) || (!arguments.contains(ARG_VALIDATE_ALL)
-                        && !arguments.contains(ARG_VALIDATE_AND_IMPORT) && !arguments.contains(ARG_IMPORT_ALL))) {
+                if ((arguments.contains(ARG_HELP_LONG) || arguments.contains(ARG_HELP_SHORT))
+                        || (!arguments.contains(ARG_VALIDATE_ALL)
+                        && !arguments.contains(ARG_VALIDATE_AND_IMPORT)
+                        && !arguments.contains(ARG_IMPORT_ALL))) {
                     showHelp();
                     proceed = false;
                 }
@@ -56,6 +61,7 @@ public class Application {
             case 2: {
                 String importOption = arguments.get(0);
                 if (!importOption.equals(ARG_VALIDATE_CASE) &&
+                        !importOption.equals(ARG_VALIDATE_CASES_BULK) &&
                         !importOption.equals(ARG_IMPORT_CASE) &&
                         !importOption.equals(ARG_VALIDATE_AND_IMPORT) &&
                         !importOption.equals(ARG_IMPORT_ALL) &&
@@ -74,9 +80,13 @@ public class Application {
         if (proceed) {
             redirectSystemErr();
 
-            if (arguments.contains(ARG_VALIDATE_ALL) || arguments.contains(ARG_VALIDATE_CASE) || CollectionUtils.isEmpty(arguments)) {
+            if (arguments.contains(ARG_VALIDATE_ALL)
+                    || arguments.contains(ARG_VALIDATE_CASE)
+                    || arguments.contains(ARG_VALIDATE_CASES_BULK)
+                    || CollectionUtils.isEmpty(arguments)) {
                 SpringApplication.run(ValidationApp.class, args);
             } else {
+                DatabaseExecutionUtils.createTempTables();
                 SpringApplication.run(FullApp.class, args);
             }
         }
@@ -88,6 +98,7 @@ public class Application {
                 "                                    indicated in the config/applications.properties", "",
                 " " + ARG_VALIDATE_CASE + " value               Validates the specified caseId indicated",
                 "                                    in the 'value' parameter", "",
+                " " + ARG_VALIDATE_CASES_BULK + " filename      Validates the caseIds specified in the file, one caseId per line", "",
                 " " + ARG_VALIDATE_AND_IMPORT + "                   First validates the data and then imports it", "",
                 " " + ARG_IMPORT_ALL + "                        Imports the data without previous validation", "",
                 " " + ARG_IMPORT_CASE + " value                 Imports the specified caseId indicated",

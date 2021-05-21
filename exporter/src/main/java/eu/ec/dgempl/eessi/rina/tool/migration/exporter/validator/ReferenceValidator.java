@@ -18,11 +18,9 @@ import eu.ec.dgempl.eessi.rina.tool.migration.common.util.EsDocumentHelper;
 import eu.ec.dgempl.eessi.rina.tool.migration.common.util.PreconditionsHelper;
 import eu.ec.dgempl.eessi.rina.tool.migration.exporter.cache.CacheEntry;
 import eu.ec.dgempl.eessi.rina.tool.migration.exporter.model.EValidationResult;
-import eu.ec.dgempl.eessi.rina.tool.migration.exporter.model.EsDocument;
 import eu.ec.dgempl.eessi.rina.tool.migration.exporter.model.ValidationContext;
 import eu.ec.dgempl.eessi.rina.tool.migration.exporter.report.ValidationResult;
 import eu.ec.dgempl.eessi.rina.tool.migration.exporter.service.CacheService;
-import eu.ec.dgempl.eessi.rina.tool.migration.exporter.util.IdHelper;
 import eu.ec.dgempl.eessi.rina.tool.migration.exporter.util.JsonPathHelper;
 
 /**
@@ -36,7 +34,8 @@ public class ReferenceValidator extends AbstractValidator {
     private final OrganisationLoaderService organisationLoaderService;
     private final Boolean ignoreInvalidReferencesPolicy;
 
-    public ReferenceValidator(EsClientService elasticClient, CacheService cacheService, OrganisationLoaderService organisationLoaderService, Boolean ignoreInvalidReferencesPolicy,
+    public ReferenceValidator(EsClientService elasticClient, CacheService cacheService, OrganisationLoaderService organisationLoaderService,
+            Boolean ignoreInvalidReferencesPolicy,
             String... params) {
         super(params);
         this.elasticClient = elasticClient;
@@ -177,15 +176,12 @@ public class ReferenceValidator extends AbstractValidator {
             CacheEntry cacheEntry = cacheService.get(index, type, id);
             if (cacheEntry == null) {
                 try {
-                    EsDocument parent = context.getParent();
-                    String cacheEntryContext = IdHelper.getDocumentReference(parent.getIndex(), parent.getType(), parent.getObjectId());
-
                     if (elasticClient.exists(index, type, id)) {
-                        CacheEntry entry = new CacheEntry(true, index, type, id, cacheEntryContext);
+                        CacheEntry entry = new CacheEntry(true, index, type, id);
                         cacheService.add(entry);
                         results.add(ValidationResult.ok(path, obj));
                     } else {
-                        CacheEntry entry = new CacheEntry(false, index, type, id, cacheEntryContext);
+                        CacheEntry entry = new CacheEntry(false, index, type, id);
                         cacheService.add(entry);
 
                         if (EEsIndex.CASES.value().equalsIgnoreCase(context.getDocument().getIndex())
@@ -271,9 +267,8 @@ public class ReferenceValidator extends AbstractValidator {
      * The first param (required) is the elasticsearch index. The second param (required) is the elasticsearch type. The third param
      * (optional) is the format used for composing the reference. This format must be: path[_path]*. For example, a reference to a document
      * is formed as pathToTheCaseId_pathToTheDocumentId
-     * 
-     * @param params
-     *            the injected parameters
+     *
+     * @param params the injected parameters
      * @return
      */
     @Override

@@ -7,19 +7,16 @@ public class CacheEntry {
     private final String index;
     private final String type;
     private final String documentId;
-    private final String context;
 
-    public CacheEntry(boolean exists, String index, String type, String documentId, String context) {
+    public CacheEntry(boolean exists, String index, String type, String documentId) {
         PreconditionsHelper.notEmpty(index, "index");
         PreconditionsHelper.notEmpty(type, "type");
         PreconditionsHelper.notEmpty(documentId, "documentId");
-        PreconditionsHelper.notEmpty(context, "context");
 
         this.exists = exists;
         this.index = index;
         this.type = type;
         this.documentId = documentId;
-        this.context = context;
     }
 
     public boolean isExists() {
@@ -36,9 +33,5 @@ public class CacheEntry {
 
     public String getDocumentId() {
         return documentId;
-    }
-
-    public String getContext() {
-        return context;
     }
 }

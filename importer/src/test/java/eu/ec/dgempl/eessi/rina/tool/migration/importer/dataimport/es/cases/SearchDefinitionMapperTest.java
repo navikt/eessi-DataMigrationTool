@@ -42,7 +42,7 @@ public class SearchDefinitionMapperTest {
     public void setUp() {
         objectMapper = new ObjectMapper();
         String defaultsPath = this.getClass().getClassLoader().getResource("defaults.properties").getPath();
-        defaultsService = new DefaultValuesService(defaultsPath);
+        defaultsService = new DefaultValuesService(defaultsPath, null, null);
         mapToSearchDefinitionMapper = new MapToSearchDefinitionMapper(iamUserRepo, iamGroupRepo, processDefRepo, defaultsService);
     }
 

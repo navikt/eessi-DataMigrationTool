@@ -43,7 +43,7 @@ public class IamUserMapperTest {
     public void testEmptyValues() throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         String defaultsPath = this.getClass().getClassLoader().getResource("defaults.properties").getPath();
-        defaultsService = new DefaultValuesService(defaultsPath);
+        defaultsService = new DefaultValuesService(defaultsPath, null, null);
         MapToIamUserMapper mapToIamUserMapper = new MapToIamUserMapper(iamOriginRepo, tenantRepo, defaultsService);
         mapToIamUserMapper.setMapperFacade(mapperFacade);
         Mockito.when(tenantRepo.findById(anyString())).thenReturn(new Tenant());

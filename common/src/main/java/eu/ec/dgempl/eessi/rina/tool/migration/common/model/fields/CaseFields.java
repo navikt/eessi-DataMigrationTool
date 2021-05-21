@@ -27,5 +27,11 @@ public class CaseFields {
     public static final String CASE_ASSIGNMENT_ACTORS = "caseAssignment.actors";
     public static final String CASE_ASSIGNMENT_PROPERTIES = "caseAssignment.properties";
     public static final String STATUS = "status";
+
+    public static final String ACTIONS = "actions";
+    public static final String DOCUMENTS = "documents";
+
     public static final String DEFAULT_CASE_ID = "0";
+    public static final String CREATOR_ID = "creator.id";
+    public static final String CREATOR_NAME = "creator.name";
 }

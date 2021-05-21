@@ -97,7 +97,8 @@
 				<!-- MAIN FLOW --> 
  
 				<!-- for starter only, receivers --> 
-				<createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE_REPLY" documentType="F002" /> 
+				<createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_RECEIVE_REPLY" documentType="F002" />
+				<createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE" documentType="F002" /> 				
 				<createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE" documentType="F004" /> 
 				<createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE" documentType="F005" /> 
 				<createActionTrigger onAction="DOC_RECEIVE" onlyStarter="true" onResult="SUCCESS" actionType="DOC_RECEIVE" documentType="F022" /> 
@@ -119,7 +120,6 @@
  
 		<document type="F002"> 
 			<parameters> 
-
 				<parameter key="hasMultipleVersions">true</parameter> <!-- default is false --> 
 				<parameter key="hasCancel">true</parameter> <!-- default is false --> 
 				<parameter key="recreateAfterSend">true</parameter> <!-- default is false --> 

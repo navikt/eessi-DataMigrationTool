@@ -18,9 +18,9 @@ import eu.ec.dgempl.eessi.rina.repo.SubdocumentContentRepo;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dataimport.CaseImporter;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dataimport.ElasticTypeImporter;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dataimport._abstract.AbstractDataImporter;
-import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.report.DocumentsReport;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.EElasticType;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.report.DocumentsReport;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.DocumentContentFields;
 
 @Component
@@ -44,10 +44,10 @@ public class DocumentContentImporter extends AbstractDataImporter implements Cas
 
     @Override
     public DocumentsReport importData(final String caseId) {
-        return run(this::processDocumentContentData, caseId);
+        return run(this::processDocumentData, caseId);
     }
 
-    private void processDocumentContentData(final MapHolder doc) {
+    public void processDocumentData(final MapHolder doc) {
         String parentDocumentId = doc.string(DocumentContentFields.PARENT_DOCUMENT_ID);
 
         if (StringUtils.isNotBlank(parentDocumentId)) {
@@ -88,10 +88,5 @@ public class DocumentContentImporter extends AbstractDataImporter implements Cas
             documentBversion.setDocumentContent(documentContent);
             documentBversionRepo.saveAndFlush(documentBversion);
         }
-    }
-
-    @Override
-    public boolean processesEmptyCase() {
-        return true;
     }
 }

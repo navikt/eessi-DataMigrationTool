@@ -1,28 +1,49 @@
 EESSI-RINA-DATA-MIGRATION
 
+v2.1.3
+--------------------------------------
+Validator:
+- added functionality of bulk validation
+- added report on ignored Elasticsearch documents
+- improved caching
+- updated field_mapping cases_document: ignore field conversations.userMessages.receiver.identifier
+- updated field_mapping cases_document: ignore field conversations.participants.organisation.identifier
+- updated field_mapping cases_document: ignore null values in conversations.userMessages.sbdh
+- updated field_mapping cases_casestructuredmetadata: ignore documents and actions
+- fixed parsing dates in numeric format
+- re-generate cases report for case and bulk validation
+Importer:
+- added DMT configuration - reassign resources with null/missing references to provided default users and groups
+- redesigned the processing of special case with id="0"
+- documents and actions in casestructuredmetadata are now saved in temp tables
+- recreate null/missing SBDH in cases_document.conversations.userMessages
+- fixed migration of NIE settings
+- fixed resolving users referenced in notifications.responsibleParties
+- fixed issue with NPE when importing audit entries
+- timezones vocabularies are no longer migrated
+- fixed parsing dates in numeric format
+- handle empty values of salt
+Other:
+- updated the list of inactive organisations for prod, acc, test environments (date 12.05.2021)
+
 v2.1.2
 --------------------------------------
 Validator:
-- added exception for missing policies in assignmentTarget if property 'ignore.invalid.references.policy' is true
 - added exception for taskmetadata invalid document references in orphan actions from multi-starter cases
 - updated field_mapping configurations_searchdefinition: ignore field name
 - added mechanism to control the behavior of DMT when handling missing policies in assignmentTarget (added property 'ignore.invalid.references.policy' in config/application.properties)
 - updated field_mapping cases_casestructuredmetadata: ignore fields searchMetadata.status and searchMetaData.status
-- updated field_mapping configurations_searchdefinition: ignore field name
 - updated field_mapping identity_user: ignore fields administrator, enabled, deleted, version, locked
 - updated field_mapping notifications_notification: ignore fields caseInfo.properties.criticality and caseInfo.properties.importance
 - fixed issue with allowing cases_document.conversations.participants.role to be 'CounterParty'
 - fixed parsing dates in different formats
 Importer:
-- ignored missing policies in assignmentTarget if property 'ignore.invalid.references.policy' is true
 - ignored taskmetadata invalid document references in orphan actions from multi-starter cases
-- fixed link between R018 and R017, based on their creation date
 - added mechanism to control the behavior of DMT when handling missing policies in assignmentTarget (added property 'ignore.invalid.references.policy' in config/application.properties)
 - added mechanism to control the default values of different fields (added config/defaults.properties)
 - fixed relation parent-child between R018 and R017, based on their creation date
 - set default value to configurations_searchdefinition.name if missing
 - updated import of users to have fallback values in fields ("administrator", "deleted", "enabled")
-- fixed NIE subscriptions with same processdefinition, different version
 - fixed parsing dates in different formats
 Other:
 - added mechanism to tweak batch size and scroll timeout
@@ -54,7 +75,6 @@ Importer:
 - fixed issue with updating server version and date
 - fixed validityEndDate NPE when importing organisation assignedBUCs
 - fixed handling hierarchies of groups
-- fixed NIE subscriptions duplicate subscribers
 - set default values to caseAssignment.properties.importance and caseAssignment.properties.criticality if missing
 - set default values to identity_user.firstName and identity_user.lastName if missing
 - set default value to notifications_alarm.creationDate if missing

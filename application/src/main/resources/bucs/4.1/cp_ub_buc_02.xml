@@ -229,7 +229,7 @@
                 <parameter key="allowsAttachments">true</parameter> <!-- default is false -->
             </parameters>
 			<triggers>
-				<createActionTrigger onAction="DOC_CREATE" onResult="SUCCESS" actionType="DOC_RECEIVE_REPLY" documentType="U013" />
+				<createActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_RECEIVE_REPLY" documentType="U013" />
 			</triggers>				
         </document>
 

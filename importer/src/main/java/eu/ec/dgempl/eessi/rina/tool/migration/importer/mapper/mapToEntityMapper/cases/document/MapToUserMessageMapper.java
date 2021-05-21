@@ -3,21 +3,37 @@ package eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-import eu.ec.dgempl.eessi.rina.buc.core.model.sbdh.StandardBusinessDocumentHeader;
+import eu.ec.dgempl.apclient.sbdh.builder.DocumentIdentificationBuilder;
+import eu.ec.dgempl.apclient.sbdh.builder.StandardBusinessDocumentHeaderBuilder;
+import eu.ec.dgempl.apclient.sbdh.model.CaseActionType;
+import eu.ec.dgempl.apclient.sbdh.model.CaseIdentification;
+import eu.ec.dgempl.apclient.sbdh.model.DocumentIdentification;
+import eu.ec.dgempl.apclient.sbdh.model.Partner;
+import eu.ec.dgempl.apclient.sbdh.model.StandardBusinessDocumentHeader;
 import eu.ec.dgempl.eessi.rina.commons.transformation.RinaJsonMapper;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.ECaseActionType;
+import eu.ec.dgempl.eessi.rina.model.enumtypes.EConversationParticipantRole;
+import eu.ec.dgempl.eessi.rina.model.enumtypes.EDocumentStatus;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.ERINAMessageType;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.EUserMessageStatus;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity.Document;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity.DocumentConversation;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.Organisation;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity.RinaCase;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.UserMessage;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.UserMessageResponse;
+import eu.ec.dgempl.eessi.rina.tool.migration.common.util.PreconditionsHelper;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.DmtEnumNotFoundException;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.DocumentFields;
@@ -29,6 +45,8 @@ import ma.glasnost.orika.MappingContext;
 
 @Component
 public class MapToUserMessageMapper extends AbstractMapToEntityMapper<MapHolder, UserMessage> {
+
+    private static final Logger logger = LoggerFactory.getLogger(MapToUserMessageMapper.class);
 
     private final RinaJsonMapper rinaJsonMapper;
 
@@ -43,20 +61,30 @@ public class MapToUserMessageMapper extends AbstractMapToEntityMapper<MapHolder,
     public void mapAtoB(final MapHolder a, final UserMessage b, final MappingContext context) {
         b.setId(a.string(DocumentFields.USER_MESSAGE_ID));
 
-        mapSbdh(a, b);
-        mapAction(a, b);
-        mapStatus(a, b);
         mapOrganisation(a, DocumentFields.SENDER, b::setSender);
         mapOrganisation(a, DocumentFields.RECEIVER, b::setReceiver);
+        mapSbdh(a, b, context);
+        mapAction(a, b);
+        mapStatus(a, b);
         mapResponse(a, b);
     }
 
-    private void mapSbdh(final MapHolder a, final UserMessage b) {
+    private void mapSbdh(final MapHolder a, final UserMessage b, final MappingContext context) {
         try {
             Map<String, Object> sbdh = a.getMap(DocumentFields.SBDH);
 
             if (sbdh == null) {
-                throw new RuntimeException("Error getting sbdh from userMessage. Sbdh is null");
+                try {
+                    // Create and empty default SBDH and resolve the actionType
+                    sbdh = rinaJsonMapper.transformObjectToMap(generateEmptySbdhWithActionType(a, b, context));
+                    a.put(DocumentFields.SBDH, sbdh);
+                    b.setSbdh(rinaJsonMapper.mapToJson(sbdh));
+                    logger.info("Sbdh is null. Added a default empty sbdh to usermessage and resolved the action type");
+                    return;
+                } catch (Exception e) {
+                    throw new RuntimeException(
+                            "Error getting sbdh from userMessage. Sbdh is null. Tried to replace null sbdh with default empty sbdh but creation of the empty sbdh failed.");
+                }
             }
 
             // fix isMedical flag; in ES the field is named 'medical'; the DTOs use 'isMedical'
@@ -122,9 +150,11 @@ public class MapToUserMessageMapper extends AbstractMapToEntityMapper<MapHolder,
 
     private void mapAction(final MapHolder a, final UserMessage b) {
         MapHolder sbdhHolder = a.getMapHolder(DocumentFields.SBDH);
-        String action = sbdhHolder.string(DocumentFields.DOCUMENT_IDENTIFICATION_ACTION, true);
-        ECaseActionType eCaseActionType = ECaseActionType.fromString(action);
-        b.setAction(eCaseActionType);
+        if (sbdhHolder != null && sbdhHolder.getHolding() != null) {
+            String action = sbdhHolder.string(DocumentFields.DOCUMENT_IDENTIFICATION_ACTION, true);
+            ECaseActionType eCaseActionType = ECaseActionType.fromString(action);
+            b.setAction(eCaseActionType);
+        }
     }
 
     private void mapResponse(final MapHolder a, final UserMessage b) {
@@ -156,4 +186,124 @@ public class MapToUserMessageMapper extends AbstractMapToEntityMapper<MapHolder,
         return organisationService.getOrSaveOrganisation(orgId);
     }
 
+    @NotNull
+    private StandardBusinessDocumentHeader generateEmptySbdhWithActionType(
+            final MapHolder a,
+            final UserMessage b,
+            final MappingContext context) {
+
+        Document document = (Document) context.getProperty("doc");
+        DocumentConversation documentConversation = (DocumentConversation) context.getProperty("conversation");
+        RinaCase rinaCase = document.getRinaCase();
+
+        DocumentIdentification documentIdentification = createDocumentIdentification(a, document);
+        CaseIdentification caseIdentification = createCaseIdentification(rinaCase);
+        Partner sender = createSender(b);
+        List<Partner> receivers = createReceivers(documentConversation);
+
+        StandardBusinessDocumentHeaderBuilder sbdhBuilder = StandardBusinessDocumentHeaderBuilder.aStandardBusinessDocumentHeader();
+        sbdhBuilder.withCaseIdentification(caseIdentification);
+        sbdhBuilder.withDocumentIdentification(documentIdentification);
+        sbdhBuilder.withSender(sender);
+        sbdhBuilder.withReceivers(receivers);
+
+        return sbdhBuilder.build();
+    }
+
+    private List<Partner> createReceivers(DocumentConversation documentConversation) {
+        return documentConversation.getConversationParticipants()
+                .stream()
+                .filter(conversationParticipant -> conversationParticipant
+                        .getConversationParticipantRole() == EConversationParticipantRole.RECEIVER)
+                .map(conversationParticipant -> {
+                    Partner partner = new Partner();
+                    partner.setIdentifier(conversationParticipant.getOrganisation().getId());
+                    return partner;
+                })
+                .collect(Collectors.toList());
+    }
+
+    @NotNull
+    private DocumentIdentification createDocumentIdentification(MapHolder a, Document document) {
+        ECaseActionType actionType = getActionType(document, a.string(DocumentFields.ID));
+
+        DocumentIdentificationBuilder documentIdentificationBuilder = DocumentIdentificationBuilder.aDocumentIdentification();
+        documentIdentificationBuilder.withSetIdentifier(document.getId());
+        documentIdentificationBuilder.withAction(CaseActionType.fromValue(actionType.value()));
+        return documentIdentificationBuilder.build();
+    }
+
+    @NotNull
+    private Partner createSender(UserMessage b) {
+        Partner sender = new Partner();
+        Organisation senderOrg = b.getSender();
+        sender.setIdentifier(senderOrg.getId());
+        return sender;
+    }
+
+    @NotNull
+    private CaseIdentification createCaseIdentification(RinaCase rinaCase) {
+        CaseIdentification caseIdentification = new CaseIdentification();
+
+        String caseInternationalId = rinaCase.getInternationalId();
+        if (caseInternationalId != null) {
+            caseInternationalId = caseInternationalId.replace("_Removed", "");
+            caseIdentification.setIdentifier(caseInternationalId);
+        }
+        return caseIdentification;
+    }
+
+    private ECaseActionType getActionType(final Document document, String userMessageId) {
+        PreconditionsHelper.notNull(document, "document");
+        PreconditionsHelper.notNull(userMessageId, "userMessageId");
+
+        ECaseActionType actionType = null;
+
+        boolean isStarter = false;
+        if (document.isStarter() != null) {
+            isStarter = document.isStarter();
+        }
+
+        boolean isStarterSent = false;
+        RinaCase rinaCase = document.getRinaCase();
+        if (rinaCase != null) {
+            if (rinaCase.isStarterSent() != null) {
+                isStarterSent = rinaCase.isStarterSent();
+            }
+        } else {
+            logger.info(String.format(
+                    "Could not resolve the action type for userMessage with id %s because rina case was not found",
+                    userMessageId));
+            return actionType;
+        }
+
+        EDocumentStatus documentStatus = document.getStatus();
+        if (documentStatus == null) {
+            logger.info(
+                    String.format("Could not resolve the action type for userMessage with id %s because document status is null",
+                            userMessageId));
+            return actionType;
+        }
+
+        if (isStarter) {
+            if (isStarterSent) {
+                if (documentStatus.equals(EDocumentStatus.NEW)) {
+                    actionType = ECaseActionType.NEW;
+                } else {
+                    actionType = ECaseActionType.UPDATE;
+                }
+            } else {
+                actionType = ECaseActionType.START;
+            }
+        } else {
+            if (documentStatus.equals(EDocumentStatus.NEW)) {
+                actionType = ECaseActionType.NEW;
+            } else {
+                actionType = ECaseActionType.UPDATE;
+            }
+        }
+        logger.info(
+                String.format("Resolving the action type for userMessage with id %s. Setting action type: %s", userMessageId, actionType));
+        return actionType;
+    }
 }

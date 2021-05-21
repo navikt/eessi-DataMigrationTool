@@ -84,6 +84,9 @@
 		<document type="H002"> 
 			<parameters> 
 				<parameter key="hasMultipleVersions">true</parameter> 
+				<parameter key="hasCancel">true</parameter> 
+				<parameter key="recreateAfterCancel">true</parameter> 
+				<parameter key="allowsAttachments">true</parameter> 
 			</parameters> 
 		</document> 
  
@@ -94,6 +97,8 @@
 				<!-- current BUC is multilateral --> 
 				<parameter key="hasMultipleVersions">true</parameter> 
 				<parameter key="hasCancel">true</parameter> 
+				<parameter key="recreateAfterSend">true</parameter> 
+				<parameter key="allowsAttachments">true</parameter> 
 			</parameters> 
 			<triggers> 
 				<createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_CREATE_REPLY" documentType="H121" /> 

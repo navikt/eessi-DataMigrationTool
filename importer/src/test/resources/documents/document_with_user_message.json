@@ -1,0 +1,161 @@
+{
+  "displayName": "Old age pension claim",
+  "isDummyDocument": false,
+  "mimeType": "json",
+  "type": "P2000",
+  "conversations": [
+    {
+      "versionId": "1",
+      "userMessages": [
+        {
+          "receiver": {
+            "activeSince": "2020-06-25T22:00:00Z",
+            "address": {
+              "country": "FR"
+            },
+            "acronym": "FR:FRNA11",
+            "countryCode": "FR",
+            "name": "FR:FRNA11",
+            "id": "FR:FRNA11"
+          },
+          "sender": {
+            "activeSince": "2020-06-25T22:00:00Z",
+            "address": {
+              "country": "FR"
+            },
+            "acronym": "FR:FRNA10",
+            "countryCode": "FR",
+            "name": "FR:FRNA10",
+            "id": "FR:FRNA10"
+          },
+          "isSent": true,
+          "id": "87d2d77467fa4766b9cb8407791d836b",
+          "error": {
+            "date": "2021-04-25T12:13:17.856Z",
+            "receiver": {
+              "activeSince": "2020-06-25T22:00:00Z",
+              "address": {
+                "country": "FR"
+              },
+              "acronym": "FR:FRNA11",
+              "countryCode": "FR",
+              "name": "FR:FRNA11",
+              "id": "FR:FRNA11"
+            },
+            "sender": {
+              "activeSince": "2020-06-25T22:00:00Z",
+              "address": {
+                "country": "FR"
+              },
+              "acronym": "FR:FRNA10",
+              "countryCode": "FR",
+              "name": "FR:FRNA10",
+              "id": "FR:FRNA10"
+            },
+            "description": "EBMS:0301:MissingReceipt",
+            "id": "87d2d77467fa4766b9cb8407791d836b"
+          }
+        }
+      ],
+      "id": "f0f7a5fa60774da094e8c1b55dc92856",
+      "participants": [
+        {
+          "role": "Sender",
+          "organisation": {
+            "activeSince": "2020-06-25T22:00:00.000Z",
+            "address": {
+              "country": "FR"
+            },
+            "acronym": "FR:FRNA10",
+            "countryCode": "FR",
+            "name": "FR:FRNA10",
+            "id": "FR:FRNA10"
+          }
+        },
+        {
+          "role": "Receiver",
+          "organisation": {
+            "address": {
+              "country": "FR"
+            },
+            "activeSince": "2020-06-25T22:00:00.000Z",
+            "acronym": "FR:FRNA11",
+            "countryCode": "FR",
+            "name": "FR:FRNA11",
+            "id": "FR:FRNA11"
+          }
+        }
+      ]
+    }
+  ],
+  "isSendExecuted": true,
+  "internalId": "315084_51290fca5aaf466eb5abda47443b4c27",
+  "hasMultipleVersions": true,
+  "caseId": "315084",
+  "hasBusinessValidation": false,
+  "ParentType": "P2000",
+  "id": "51290fca5aaf466eb5abda47443b4c27",
+  "hasCancel": true,
+  "validation": {
+    "status": "valid"
+  },
+  "direction": "OUT",
+  "order": 1,
+  "hasLetter": false,
+  "creator": {
+    "name": "supervisor",
+    "organisation": {
+      "activeSince": "2020-06-25T22:00:00Z",
+      "address": {
+        "country": "FR"
+      },
+      "acronym": "FR:FRNA10",
+      "countryCode": "FR",
+      "name": "FR:FRNA10",
+      "id": "FR:FRNA10"
+    },
+    "id": "supervisor",
+    "type": "User"
+  },
+  "hasReject": false,
+  "hasReplyClarify": false,
+  "starter": true,
+  "isMLC": true,
+  "selectParticipants": true,
+  "subProcessId": "315087",
+  "isAdmin": false,
+  "hasClarify": false,
+  "toSenderOnly": false,
+  "typeVersion": "4.2",
+  "allowsAttachments": true,
+  "versions": [
+    {
+      "date": "2021-04-13T13:30:33.500Z",
+      "id": "1",
+      "user": {
+        "name": "supervisor",
+        "organisation": {
+          "activeSince": "2020-06-25T22:00:00Z",
+          "address": {
+            "country": "FR"
+          },
+          "acronym": "FR:FRNA10",
+          "countryCode": "FR",
+          "name": "FR:FRNA10",
+          "id": "FR:FRNA10"
+        },
+        "id": "supervisor",
+        "type": "User"
+      }
+    }
+  ],
+  "failureReason": {
+    "code": "",
+    "description": "EBMS:0301:MissingReceipt"
+  },
+  "_id": "315084_51290fca5aaf466eb5abda47443b4c27",
+  "bulk": false,
+  "isFirstDocument": true,
+  "parentDocumentId": "",
+  "status": "sent"
+}

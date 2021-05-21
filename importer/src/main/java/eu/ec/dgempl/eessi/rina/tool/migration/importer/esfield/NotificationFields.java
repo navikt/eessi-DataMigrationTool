@@ -23,6 +23,7 @@ public class NotificationFields {
     public static final String DOCUMENT_TYPE = "document.type";
     public static final String CASE_ID = "caseId";
     public static final String RESPONSIBLE_PARTIES = "responsibleParties";
+    public static final String RESPONSIBLE_PARTY_ORGANISATION_ID = "organisation.id";
     public static final String ASSIGNMENT_REQUESTS = "assignmentRequest";
     public static final String ACTORS = "assignmentRequest.actors";
     public static final String NAME = "name";

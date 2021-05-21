@@ -5,12 +5,19 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
+import org.elasticsearch.action.bulk.BulkRequest;
+import org.elasticsearch.action.bulk.BulkResponse;
+import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.get.GetRequest;
 import org.elasticsearch.action.get.GetResponse;
+import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.search.ClearScrollRequest;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
@@ -47,7 +54,7 @@ public class EsClientService {
     @Value("${elasticsearch.batch.size:1000}")
     private int BATCH_SIZE;
 
-    @Value("${elasticsearch.scroll.keepAlive:5L}")
+    @Value("${elasticsearch.scroll.keepAlive:5}")
     private long SCROLL_KEEP_ALIVE_MINS;
 
     @Autowired
@@ -228,6 +235,110 @@ public class EsClientService {
                 .fetchSourceContext(fetchSourceContext);
 
         return client.get(request).getSourceAsMap();
+    }
+
+    public Map<String, Map<String, Integer>> getOrphanResources(String index, String[] types) throws IOException {
+        PreconditionsHelper.notEmpty(index, "index");
+        PreconditionsHelper.notNull(types, "types");
+
+        Map<String, Map<String, Integer>> results = new HashMap<>();
+
+        //@formatter:off
+        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder()
+                .query(QueryBuilders.boolQuery()
+                        .mustNot(QueryBuilders.termQuery("_type", EEsType.CASEMETADATA.value()))
+                )
+                .fetchSource(new String[] { "caseId", "id" }, Strings.EMPTY_ARRAY) 
+                .size(BATCH_SIZE);
+        //@formatter:on
+
+        Consumer<SearchHit[]> processor = hits -> {
+            //@formatter:off
+            List<String> caseIds = Arrays.stream(hits)
+                    .map(EsClientService::extractCaseId)
+                    .filter(Objects::nonNull)
+                    .distinct()
+                    .collect(Collectors.toList());
+            //@formatter:on
+
+            List<String> missingCaseIds = null;
+            try {
+                missingCaseIds = getMissingCaseIds(caseIds);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            List<String> finalMissingCaseIds = missingCaseIds;
+
+            //@formatter:off
+            Arrays.stream(hits).forEach(hit -> {
+                String caseId = extractCaseId(hit);
+                
+                if (caseId == null || finalMissingCaseIds.contains(caseId)) {
+                    //hashmap allows null keys
+                    if (results.get(caseId) == null) {
+                        results.put(caseId, new HashMap<>());
+                    }
+                    Map<String, Integer> mapTypeToNumber = results.get(caseId);
+                    Integer no = mapTypeToNumber.get(hit.getType());
+                    if (no == null) {
+                        mapTypeToNumber.put(hit.getType(), 1);
+                    } else {
+                        mapTypeToNumber.put(hit.getType(), no + 1);
+                    }
+                }
+            });
+            //@formatter:on
+        };
+
+        processAllByQuery(index, types, sourceBuilder, processor, false);
+
+        return results;
+    }
+
+    private List<String> getMissingCaseIds(List<String> caseIds) throws IOException {
+        //@formatter:off
+        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder()
+                .query(QueryBuilders
+                        .boolQuery()
+                        .must(QueryBuilders.termsQuery("id", caseIds))
+                )
+                .fetchSource(false)
+                .size(BATCH_SIZE);
+        //@formatter:on
+
+        //@formatter:off
+        SearchRequest searchRequest = new SearchRequest()
+                .indices(EEsIndex.CASES.value())
+                .types(EEsType.CASEMETADATA.value())
+                .source(sourceBuilder);
+        //@formatter:on
+
+        SearchResponse response = client.search(searchRequest);
+
+        //@formatter:off
+        List<String> found = Arrays.stream(response.getHits().getHits())
+                .map(SearchHit::getId)
+                .collect(Collectors.toList());
+        //@formatter:on
+
+        //@formatter:off
+        return caseIds.stream()
+                .filter(caseId -> !caseId.equals("0") && !found.contains(caseId))
+                .collect(Collectors.toList());
+        //@formatter:on
+    }
+
+    private static String extractCaseId(SearchHit hit) {
+        PreconditionsHelper.notNull(hit, "hit");
+
+        String fieldName;
+        if (hit.getType().equalsIgnoreCase(EEsType.CASEMETADATA.value())
+                || hit.getType().equalsIgnoreCase(EEsType.CASESTRUCTUREDMETADATA.value())) {
+            fieldName = "id";
+        } else {
+            fieldName = "caseId";
+        }
+        return (String) hit.getSourceAsMap().get(fieldName);
     }
 
     /**
@@ -445,6 +556,25 @@ public class EsClientService {
         processAllByQuery(index, types, sourceBuilder, processor, false);
     }
 
+    public void processAllFilterByTermsArray(String index, String[] types, Consumer<SearchHit[]> processor, String field, String[] values)
+            throws IOException {
+        PreconditionsHelper.notEmpty(index, "index");
+        PreconditionsHelper.notNull(types, "types");
+        PreconditionsHelper.notNull(processor, "processor");
+
+        // construct the query
+        QueryBuilder query = QueryBuilders.boolQuery();
+        ((BoolQueryBuilder) query).must(QueryBuilders.termsQuery(field, values));
+
+        //@formatter:off
+        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder()
+                .query(query)
+                .size(BATCH_SIZE);
+        //@formatter:on
+
+        processAllByQuery(index, types, sourceBuilder, processor, false);
+    }
+
     /**
      * Method for processing all documents found in a specific {@code index} and all {@code types}. A {@code sourceBuilder} must be provided
      * for filtering the elasticsearch results. The processing method is injected by the caller.
@@ -564,6 +694,26 @@ public class EsClientService {
 
         // close the scroll when finished fetching all documents
         clearScroll(scrollId);
+    }
+
+    public BulkResponse deleteBulk(EEsIndex eesIndex, EEsType eesType, List<String> ids) throws IOException {
+        // bulk-delete the ids
+        if (ids == null || ids.size() == 0) return null;
+        BulkRequest bulkRequest = new BulkRequest();
+        for (String id : ids) {
+            bulkRequest.add(new DeleteRequest().id(id).index(eesIndex.value()).type(eesType.value()));
+        }
+        return client.bulk(bulkRequest);
+    }
+
+    public BulkResponse insertBulk(EEsIndex eesIndex, EEsType eesType, Map<String, Object> documents) throws IOException {
+        // bulk-delete the ids
+        if (documents == null || documents.size() == 0) return null;
+        BulkRequest bulkRequest = new BulkRequest();
+        for (String id : documents.keySet()) {
+            bulkRequest.add(new IndexRequest().id(id).index(eesIndex.value()).type(eesType.value()).source((String)documents.get(id)));
+        }
+        return client.bulk(bulkRequest);
     }
 
     /**

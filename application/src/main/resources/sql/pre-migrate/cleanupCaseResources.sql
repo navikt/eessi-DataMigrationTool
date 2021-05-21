@@ -1,7 +1,7 @@
 delete from action_tag where fk_action_sid in (select sid from "action" where fk_case_sid in (select sid from rina_case where id=:caseId));
 delete from "action" where fk_case_sid in (select sid from rina_case where id=:caseId);
 delete from assignment_group where fk_assignment_sid in (select sid from "assignment" where fk_case_sid in (select sid from rina_case where id=:caseId));
-delete from assignment_user where fk_assignment_sid in (select sid from "assignment" where fk_case_sid in(select sid from rina_case where id=:caseId));
+delete from assignment_user where fk_assignment_sid in (select sid from "assignment" where fk_case_sid in (select sid from rina_case where id=:caseId));
 delete from "assignment" where fk_case_sid in (select sid from rina_case where id=:caseId);
 delete from case_participant where fk_case_sid in (select sid from rina_case where id=:caseId);
 delete from case_prefill where fk_case_sid in (select sid from rina_case where id=:caseId);
@@ -36,4 +36,6 @@ delete from "document" where fk_case_sid in (select sid from rina_case where id=
 delete from notification_user where fk_notification_sid in (select sid from notification where fk_case_sid in (select sid from rina_case where id=:caseId));
 delete from notification where fk_case_sid in (select sid from rina_case where id=:caseId);
 delete from notification_alarm where fk_case_sid in (select sid from rina_case where id=:caseId);
+delete from temp_document where fk_case_sid in (select sid from rina_case where id=:caseId);
+delete from temp_action where fk_case_sid in (select sid from rina_case where id=:caseId);
 delete from rina_case where id=:caseId;

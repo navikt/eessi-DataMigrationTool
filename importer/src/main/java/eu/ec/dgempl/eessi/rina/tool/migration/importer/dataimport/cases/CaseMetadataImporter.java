@@ -1,5 +1,6 @@
 package eu.ec.dgempl.eessi.rina.tool.migration.importer.dataimport.cases;
 
+import static eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.MappingContextBuilder.*;
 import static eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.RepositoryUtils.*;
 
 import org.springframework.stereotype.Component;
@@ -9,13 +10,13 @@ import eu.ec.dgempl.eessi.rina.model.jpa.exception.EntityNotFoundEessiRuntimeExc
 import eu.ec.dgempl.eessi.rina.model.jpa.exception.UniqueIdentifier;
 import eu.ec.dgempl.eessi.rina.repo.CasePrefillRepo;
 import eu.ec.dgempl.eessi.rina.repo.RinaCaseRepo;
+import eu.ec.dgempl.eessi.rina.tool.migration.common.model.fields.CaseFields;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dataimport.CaseImporter;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dataimport.ElasticTypeImporter;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dataimport._abstract.AbstractDataImporter;
-import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.report.DocumentsReport;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.EElasticType;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
-import eu.ec.dgempl.eessi.rina.tool.migration.common.model.fields.CaseFields;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.report.DocumentsReport;
 
 @Component
 @ElasticTypeImporter(type = EElasticType.CASES_CASEMETADATA)

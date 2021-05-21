@@ -1,5 +1,6 @@
 package eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper.cases.document;
 
+import static eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.MappingContextBuilder.*;
 import static eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.RepositoryUtils.*;
 
 import java.util.List;
@@ -9,6 +10,8 @@ import java.util.stream.Collectors;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -25,35 +28,36 @@ import eu.ec.dgempl.eessi.rina.model.jpa.exception.EntityNotFoundEessiRuntimeExc
 import eu.ec.dgempl.eessi.rina.model.jpa.exception.UniqueIdentifier;
 import eu.ec.dgempl.eessi.rina.repo.DocumentRepo;
 import eu.ec.dgempl.eessi.rina.repo.DocumentTypeVersionRepo;
-import eu.ec.dgempl.eessi.rina.repo.IamUserRepo;
 import eu.ec.dgempl.eessi.rina.repo.RinaCaseRepo;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.DmtEnumNotFoundException;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.DocumentFields;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper._abstract.AbstractMapToEntityMapper;
-import eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.RepositoryUtils;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.service.UserService;
 
 import ma.glasnost.orika.MappingContext;
 
 @Component
 public class MapToDocumentMapper extends AbstractMapToEntityMapper<MapHolder, Document> {
 
+    private static final Logger logger = LoggerFactory.getLogger(MapToDocumentMapper.class);
+
     private final DocumentRepo documentRepo;
     private final DocumentTypeVersionRepo documentTypeVersionRepo;
-    private final IamUserRepo iamUserRepo;
     private final RinaCaseRepo rinaCaseRepo;
     private final RinaJsonMapper rinaJsonMapper;
+    private final UserService userService;
 
-    public MapToDocumentMapper(
-            final DocumentRepo documentRepo,
+    public MapToDocumentMapper(final DocumentRepo documentRepo,
             final DocumentTypeVersionRepo documentTypeVersionRepo,
-            final IamUserRepo iamUserRepo, final RinaCaseRepo rinaCaseRepo,
-            final RinaJsonMapper rinaJsonMapper) {
+            final RinaCaseRepo rinaCaseRepo,
+            final RinaJsonMapper rinaJsonMapper,
+            final UserService userService) {
         this.documentRepo = documentRepo;
         this.documentTypeVersionRepo = documentTypeVersionRepo;
-        this.iamUserRepo = iamUserRepo;
         this.rinaCaseRepo = rinaCaseRepo;
         this.rinaJsonMapper = rinaJsonMapper;
+        this.userService = userService;
     }
 
     @Override
@@ -105,10 +109,11 @@ public class MapToDocumentMapper extends AbstractMapToEntityMapper<MapHolder, Do
     private void mapAudit(final MapHolder a, final Document b) {
         setDefaultAudit(b::setAudit);
 
-        String creatorId = a.string("creator.id", true);
-
         if (b.getStatus() != EDocumentStatus.EMPTY) {
-            IamUser creator = RepositoryUtils.findById(creatorId, iamUserRepo::findById, IamUser.class);
+
+            String creatorId = a.string(DocumentFields.CREATOR_ID, true);
+            String creatorName = a.string(DocumentFields.CREATOR_NAME, true);
+            IamUser creator = userService.resolveUser(creatorId, creatorName, b.getRinaCase());
 
             b.getAudit().setCreatedBy(creator.getId());
             b.getAudit().setUpdatedBy(creator.getId());
@@ -223,7 +228,12 @@ public class MapToDocumentMapper extends AbstractMapToEntityMapper<MapHolder, Do
         List<MapHolder> conversations = a.listToMapHolder(DocumentFields.CONVERSATIONS);
         if (CollectionUtils.isNotEmpty(conversations)) {
             conversations.stream()
-                    .map(conversation -> mapperFacade.map(conversation, DocumentConversation.class))
+                    .map(conversation -> mapperFacade.map(
+                            conversation,
+                            DocumentConversation.class,
+                            mctxb()
+                                    .addProp("doc", b)
+                                    .build()))
                     .forEach(b::addDocumentConversation);
         }
     }

@@ -7,12 +7,12 @@
     <parent>
         <groupId>eu.ec.dgempl.eessi</groupId>
         <artifactId>ES2SQL_data_migration</artifactId>
-        <version>2.1.2</version>
+        <version>2.1.3</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>application</artifactId>
-    <version>2.1.2</version>
+    <version>2.1.3</version>
 
     <dependencies>
         <dependency>
@@ -73,6 +73,8 @@
                                         <include>log4j2.xml</include>
                                         <include>Organisations.csv</include>
                                         <include>defaults.properties</include>
+                                        <include>defaultUsers.json</include>
+                                        <include>defaultUserGroups.json</include>
                                     </includes>
                                 </resource>
                             </resources>
@@ -202,6 +204,8 @@
                     <exclude>log4j2.xml</exclude>
                     <exclude>Organisations.csv</exclude>
                     <exclude>defaults.properties</exclude>
+                    <exclude>defaultUsers.json</exclude>
+                    <exclude>defaultUserGroups.json</exclude>
                 </excludes>
             </resource>
         </resources>

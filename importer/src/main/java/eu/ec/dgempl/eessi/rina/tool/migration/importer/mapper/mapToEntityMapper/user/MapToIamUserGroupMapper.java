@@ -8,25 +8,25 @@ import eu.ec.dgempl.eessi.rina.model.jpa.entity.IamUserGroup;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.Role;
 import eu.ec.dgempl.eessi.rina.model.jpa.exception.EntityNotFoundEessiRuntimeException;
 import eu.ec.dgempl.eessi.rina.model.jpa.exception.UniqueIdentifier;
-import eu.ec.dgempl.eessi.rina.repo.IamGroupRepo;
 import eu.ec.dgempl.eessi.rina.repo.RoleRepo;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.UserGroupFields;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper._abstract.AbstractMapToEntityMapper;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.service.UserGroupService;
 
 import ma.glasnost.orika.MappingContext;
 
 @Component
 public class MapToIamUserGroupMapper extends AbstractMapToEntityMapper<MapHolder, IamUserGroup> {
 
-    private final IamGroupRepo iamGroupRepo;
     private final RoleRepo roleRepo;
+    private final UserGroupService userGroupService;
 
     public MapToIamUserGroupMapper(
-            final IamGroupRepo iamGroupRepo,
-            final RoleRepo roleRepo) {
-        this.iamGroupRepo = iamGroupRepo;
+            final RoleRepo roleRepo,
+            final UserGroupService userGroupService) {
         this.roleRepo = roleRepo;
+        this.userGroupService = userGroupService;
     }
 
     @Override
@@ -40,10 +40,9 @@ public class MapToIamUserGroupMapper extends AbstractMapToEntityMapper<MapHolder
         b.setRole(role);
 
         String groupId = a.string(UserGroupFields.GROUP_ID);
-        IamGroup group = iamGroupRepo.findById(groupId);
-        if (group == null) {
-            throw new EntityNotFoundEessiRuntimeException(IamGroup.class, UniqueIdentifier.id, groupId);
-        }
+        String tenantId = (String) context.getProperty("tenantId");
+        IamGroup group = userGroupService.resolveUserGroup(groupId, tenantId);
+
         b.setIamGroup(group);
     }
 }

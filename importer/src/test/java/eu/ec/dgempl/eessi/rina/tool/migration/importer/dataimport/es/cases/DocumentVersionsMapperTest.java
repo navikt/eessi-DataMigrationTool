@@ -27,13 +27,13 @@ import eu.ec.dgempl.eessi.rina.repo.DocumentAttachmentRepo;
 import eu.ec.dgempl.eessi.rina.repo.DocumentBversionRepo;
 import eu.ec.dgempl.eessi.rina.repo.DocumentConversationRepo;
 import eu.ec.dgempl.eessi.rina.repo.DocumentRepo;
-import eu.ec.dgempl.eessi.rina.repo.IamUserRepo;
 import eu.ec.dgempl.eessi.rina.repo.UserMessageRepo;
 import eu.ec.dgempl.eessi.rina.repo.UserMessageResponseRepo;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dataimport.cases.DocumentImporter;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.BeanMapper;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper.cases.document.MapToDocumentBversionMapper;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.service.UserService;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.spring.config.ApplicationContextConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -55,7 +55,7 @@ public class DocumentVersionsMapperTest {
     @Mock
     private UserMessageRepo userMessageRepo;
     @Mock
-    private IamUserRepo iamUserRepo;
+    private UserService userService;
 
     private ObjectMapper objectMapper;
     private DocumentImporter documentImporter;
@@ -70,13 +70,13 @@ public class DocumentVersionsMapperTest {
                 documentConversationRepo, userMessageResponseRepo, userMessageRepo);
         BeanMapper beanMapper = new BeanMapper();
         beanMapper.setApplicationContext(this.context);
-        MapToDocumentBversionMapper mapToDocumentBversionMapper = new MapToDocumentBversionMapper(iamUserRepo);
+        MapToDocumentBversionMapper mapToDocumentBversionMapper = new MapToDocumentBversionMapper(userService);
         beanMapper.addMapper(mapToDocumentBversionMapper);
         documentImporter.setBeanMapper(beanMapper);
     }
 
     @Test
-    public void testFilterDistinctVersions_alldifferent() throws IOException {
+    public void testFilterDistinctVersions_allDifferent() throws IOException {
 
         // Prepare data
 
@@ -87,17 +87,8 @@ public class DocumentVersionsMapperTest {
 
         List<Map<String, Object>> versions = (List<Map<String, Object>>) holder1.getHolding().get("versions");
 
-        IamUser testUser1 = new IamUser();
-        Map<String, Object> user1 = (Map<String, Object>) versions.get(0).get("user");
-        String userId1 = (String) user1.get("id");
-        testUser1.setId(userId1);
-        Mockito.when(iamUserRepo.findById(userId1)).thenReturn(testUser1);
-
-        IamUser testUser2 = new IamUser();
-        Map<String, Object> user2 = (Map<String, Object>) versions.get(1).get("user");
-        String userId2 = (String) user2.get("id");
-        testUser2.setId(userId2);
-        Mockito.when(iamUserRepo.findById(userId2)).thenReturn(testUser2);
+        setupMockUser(versions, 0);
+        setupMockUser(versions, 1);
 
         Document document = new Document();
         document.setAudit(new Audit());
@@ -128,29 +119,10 @@ public class DocumentVersionsMapperTest {
 
         List<Map<String, Object>> versions = (List<Map<String, Object>>) holder1.getHolding().get("versions");
 
-        IamUser testUser1 = new IamUser();
-        Map<String, Object> user1 = (Map<String, Object>) versions.get(0).get("user");
-        String userId1 = (String) user1.get("id");
-        testUser1.setId(userId1);
-        Mockito.when(iamUserRepo.findById(userId1)).thenReturn(testUser1);
-
-        IamUser testUser2 = new IamUser();
-        Map<String, Object> user2 = (Map<String, Object>) versions.get(1).get("user");
-        String userId2 = (String) user2.get("id");
-        testUser2.setId(userId2);
-        Mockito.when(iamUserRepo.findById(userId2)).thenReturn(testUser2);
-
-        IamUser testUser3 = new IamUser();
-        Map<String, Object> user3 = (Map<String, Object>) versions.get(2).get("user");
-        String userId3 = (String) user3.get("id");
-        testUser3.setId(userId3);
-        Mockito.when(iamUserRepo.findById(userId3)).thenReturn(testUser3);
-
-        IamUser testUser4 = new IamUser();
-        Map<String, Object> user4 = (Map<String, Object>) versions.get(3).get("user");
-        String userId4 = (String) user4.get("id");
-        testUser4.setId(userId4);
-        Mockito.when(iamUserRepo.findById(userId4)).thenReturn(testUser4);
+        setupMockUser(versions, 0);
+        setupMockUser(versions, 1);
+        setupMockUser(versions, 2);
+        setupMockUser(versions, 3);
 
         Document document = new Document();
         document.setAudit(new Audit());
@@ -167,5 +139,14 @@ public class DocumentVersionsMapperTest {
 
         Assert.assertEquals(4, versions.size());
         Assert.assertEquals(3, document.getDocumentBversions().size());
+    }
+
+    private void setupMockUser(List<Map<String, Object>> versions, int index) {
+        IamUser testUser = new IamUser();
+        Map<String, Object> user = (Map<String, Object>) versions.get(index).get("user");
+        String userId = (String) user.get("id");
+        String username = (String) user.get("name");
+        testUser.setId(userId);
+        Mockito.when(userService.resolveUser(userId, username, null)).thenReturn(testUser);
     }
 }

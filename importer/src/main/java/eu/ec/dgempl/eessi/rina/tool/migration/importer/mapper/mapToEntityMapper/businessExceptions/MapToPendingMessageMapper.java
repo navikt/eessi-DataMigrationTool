@@ -3,7 +3,11 @@ package eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.ZonedDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -25,12 +29,15 @@ import eu.ec.dgempl.eessi.rina.model.enumtypes.EApplicationRole;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.ECaseActionType;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.ECaseStatus;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.EMimeType;
-import eu.ec.dgempl.eessi.rina.model.jpa.entity.*;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity.Organisation;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity.PendingAttachment;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity.PendingMessage;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity.ProcessDefVersion;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity.RinaCase;
 import eu.ec.dgempl.eessi.rina.model.jpa.exception.EntityWithTooManyRecordsEessiRuntimeException;
 import eu.ec.dgempl.eessi.rina.model.jpa.exception.UniqueIdentifier;
 import eu.ec.dgempl.eessi.rina.repo.ProcessDefVersionRepo;
 import eu.ec.dgempl.eessi.rina.repo.RinaCaseRepo;
-import eu.ec.dgempl.eessi.rina.tool.migration.common.util.DateResolver;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.PendingMessageFields;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper._abstract.AbstractMapToEntityMapper;
@@ -89,25 +96,25 @@ public class MapToPendingMessageMapper extends AbstractMapToEntityMapper<MapHold
     }
 
     private void mapDate(MapHolder a, PendingMessage b) {
-        String date = a.string(PendingMessageFields.DATE);
+        ZonedDateTime date = a.date(PendingMessageFields.DATE);
 
-        if (date == null || date.isEmpty()) {
+        if (date == null) {
             throw new RuntimeException("Date is missing for pending message with id " + b.getId());
         }
 
-        b.setDate(DateResolver.parse(date));
+        b.setDate(date);
     }
 
     private void mapReceiver(MapHolder a, PendingMessage b) {
         String receiverId = a.string(PendingMessageFields.RECEIVER_ID, true);
-        Organisation receiver = organisationService.getOrSaveOrganisation(receiverId);
+        Organisation receiver = organisationService.getOrSaveOrganisationWithDefault(receiverId, null);
 
         b.setReceiver(receiver);
     }
 
     private void mapSender(MapHolder a, PendingMessage b) {
         String senderId = a.string(PendingMessageFields.SENDER_ID, true);
-        Organisation sender = organisationService.getOrSaveOrganisation(senderId);
+        Organisation sender = organisationService.getOrSaveOrganisationWithDefault(senderId, null);
 
         b.setSender(sender);
     }
@@ -217,7 +224,11 @@ public class MapToPendingMessageMapper extends AbstractMapToEntityMapper<MapHold
         String sedId = a.string(PendingMessageFields.SED_ID, true);
         String sedVersion = a.string(PendingMessageFields.SED_VERSION, true);
         CaseActionType caseActionType = CaseActionType.fromValue(a.string(PendingMessageFields.ACTION_TYPE));
-        ZonedDateTime creationDate = DateResolver.parse(a.string(PendingMessageFields.SED_CREATION_DATE, true));
+        ZonedDateTime creationDate = a.date(PendingMessageFields.SED_CREATION_DATE, true);
+
+        if (creationDate == null) {
+            throw new RuntimeException(String.format("Could not create SBDH for PendingMessage with id %s: sedCreationDate is empty.", id));
+        }
 
         sbdhBuilder.withDocumentIdentification(sedType, sedTypeVersion, sedId, sedVersion, id, caseActionType,
                 Date.from(creationDate.toInstant()));

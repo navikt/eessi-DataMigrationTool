@@ -61,6 +61,9 @@
 			<parameters> 
 				<parameter key="allowsAttachments">true</parameter> <!-- default is false --> 
 			</parameters> 
+			<triggers>
+				<createActionTrigger onAction="DOC_SEND" onResult="SUCCESS" actionType="DOC_RECEIVE_REPLY" documentType="S073" /> 
+			</triggers>
 		</document> 
  
 		<!-- subprocess H_BUC_01 --> 

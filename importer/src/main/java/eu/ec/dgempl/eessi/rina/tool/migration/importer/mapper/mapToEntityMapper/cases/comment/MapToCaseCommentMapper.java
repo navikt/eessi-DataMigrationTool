@@ -5,13 +5,11 @@ import org.springframework.stereotype.Component;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.CaseComment;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.IamUser;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.RinaCase;
-import eu.ec.dgempl.eessi.rina.repo.IamUserRepo;
-import eu.ec.dgempl.eessi.rina.repo.IamUserRepoExtended;
 import eu.ec.dgempl.eessi.rina.repo.RinaCaseRepo;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.CommentFields;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper._abstract.AbstractMapToEntityMapper;
-import eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.CasesUtils;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.service.UserService;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.RepositoryUtils;
 
 import ma.glasnost.orika.MappingContext;
@@ -19,17 +17,13 @@ import ma.glasnost.orika.MappingContext;
 @Component
 public class MapToCaseCommentMapper extends AbstractMapToEntityMapper<MapHolder, CaseComment> {
 
-    private final IamUserRepo iamUserRepo;
-    private final IamUserRepoExtended iamUserRepoExtended;
     private final RinaCaseRepo rinaCaseRepo;
+    private final UserService userService;
 
-    public MapToCaseCommentMapper(
-            final IamUserRepo iamUserRepo,
-            final IamUserRepoExtended iamUserRepoExtended,
-            final RinaCaseRepo rinaCaseRepo) {
-        this.iamUserRepo = iamUserRepo;
-        this.iamUserRepoExtended = iamUserRepoExtended;
+    public MapToCaseCommentMapper(final RinaCaseRepo rinaCaseRepo,
+            final UserService userService) {
         this.rinaCaseRepo = rinaCaseRepo;
+        this.userService = userService;
     }
 
     @Override
@@ -48,7 +42,10 @@ public class MapToCaseCommentMapper extends AbstractMapToEntityMapper<MapHolder,
         mapDate(a, CommentFields.DATE, b.getAudit()::setCreatedAt);
         mapDate(a, CommentFields.DATE, b.getAudit()::setUpdatedAt);
 
-        IamUser creator = CasesUtils.Comments.getCreator(a, iamUserRepo, iamUserRepoExtended);
+        String creatorId = a.string(CommentFields.CREATOR_ID, true);
+        String creatorName = a.string(CommentFields.CREATOR_NAME, true);
+        IamUser creator = userService.resolveUser(creatorId, creatorName, b.getRinaCase());
+
         b.getAudit().setCreatedBy(creator.getId());
         b.getAudit().setUpdatedBy(creator.getId());
 

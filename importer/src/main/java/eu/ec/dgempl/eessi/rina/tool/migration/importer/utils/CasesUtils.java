@@ -3,17 +3,11 @@ package eu.ec.dgempl.eessi.rina.tool.migration.importer.utils;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.StringUtils;
-
 import eu.ec.dgempl.eessi.rina.model.enumtypes.ECasePrefillGroup;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.CasePrefill;
-import eu.ec.dgempl.eessi.rina.model.jpa.entity.IamUser;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.RinaCase;
-import eu.ec.dgempl.eessi.rina.repo.IamUserRepo;
-import eu.ec.dgempl.eessi.rina.repo.IamUserRepoExtended;
-import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
 import eu.ec.dgempl.eessi.rina.tool.migration.common.model.fields.CaseFields;
-import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.CommentFields;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
 
 public final class CasesUtils {
 
@@ -46,17 +40,5 @@ public final class CasesUtils {
     public static boolean isDefaultCase(String caseId) {
         return CaseFields.DEFAULT_CASE_ID.equalsIgnoreCase(caseId);
     }
-
-    public static class Comments {
-
-        public static IamUser getCreator(MapHolder a, IamUserRepo iamUserRepo, IamUserRepoExtended iamUserRepoExtended) {
-            String creatorId = a.string(CommentFields.CREATOR_ID, true);
-            if (StringUtils.isNotBlank(creatorId)) {
-                return RepositoryUtils.findById(creatorId, iamUserRepo::findById, IamUser.class);
-            } else {
-                String creatorName = a.string(CommentFields.CREATOR_NAME, true);
-                return RepositoryUtils.getIamUser(() -> creatorName, () -> iamUserRepoExtended);
-            }
-        }
-    }
+    
 }

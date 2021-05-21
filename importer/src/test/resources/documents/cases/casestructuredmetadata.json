@@ -1,0 +1,364 @@
+{
+  "processDefinitionName": "CP_P_BUC_01_v4.1",
+  "internationalId": "d782874954824b0d9ad5b11c88289845",
+  "sensitive": false,
+  "startDate": "2020-07-03T09:15:55Z",
+  "lastUpdate": "2020-07-03T09:16:03Z",
+  "searchMetadata": {
+    "caseId": "3294",
+    "flowType": "P_BUC_01",
+    "status": "open",
+    "surname": "o2mvhac7nk8yjskrf7o2tyl3jraneh70",
+    "name": "pi2jq9phn2inz9f7cgbw1i3uuyxpg9kg",
+    "birthday": "2000-09-01"
+  },
+  "participants": [
+    {
+      "role": "CaseOwner",
+      "organisation": {
+        "activeSince": "2020-06-25T22:00:00Z",
+        "address": {
+          "country": "FR",
+          "town": null,
+          "street": null,
+          "postalCode": null,
+          "region": null
+        },
+        "registryNumber": null,
+        "acronym": "FR:FRNA10",
+        "countryCode": "FR",
+        "name": "FR:FRNA10",
+        "contactMethods": null,
+        "location": null,
+        "id": "FR:FRNA10"
+      }
+    },
+    {
+      "role": "CounterParty",
+      "organisation": {
+        "activeSince": "2020-06-25T22:00:00Z",
+        "address": {
+          "country": "FR",
+          "town": null,
+          "street": null,
+          "postalCode": null,
+          "region": null
+        },
+        "registryNumber": null,
+        "acronym": "FR:FRNA13",
+        "countryCode": "FR",
+        "name": "FR:FRNA13",
+        "contactMethods": null,
+        "location": null,
+        "id": "FR:FRNA13"
+      }
+    }
+  ],
+  "status": "open",
+  "subject": {
+    "surname": "o2mvhac7nk8yjskrf7o2tyl3jraneh70",
+    "name": "pi2jq9phn2inz9f7cgbw1i3uuyxpg9kg",
+    "birthday": "2000-09-01",
+    "sex": "m"
+  },
+  "whoami": {
+    "activeSince": "2020-06-25T22:00:00Z",
+    "address": {
+      "country": "FR",
+      "town": null,
+      "street": null,
+      "postalCode": null,
+      "region": null
+    },
+    "registryNumber": null,
+    "acronym": "FR:FRNA13",
+    "countryCode": "FR",
+    "name": "FR:FRNA13",
+    "contactMethods": null,
+    "location": null,
+    "id": "FR:FRNA13"
+  },
+  "creator": {
+    "id": "System",
+    "name": "System",
+    "organisation": {
+      "activeSince": "2020-06-25T22:00:00Z",
+      "address": {
+        "country": "FR",
+        "town": null,
+        "street": null,
+        "postalCode": null,
+        "region": null
+      },
+      "registryNumber": null,
+      "acronym": "FR:FRNA13",
+      "countryCode": "FR",
+      "name": "FR:FRNA13",
+      "contactMethods": null,
+      "location": null,
+      "id": "FR:FRNA13"
+    }
+  },
+  "caseAssignment": {
+    "id": "3294",
+    "properties": {
+      "importance": "1",
+      "criticality": "1"
+    },
+    "actors": [
+      {
+        "id": "1303",
+        "name": "Auditor",
+        "userGroups": [
+          {
+            "id": "AXMT7GxY-JrcHd85NX7e",
+            "name": "FRNA13",
+            "type": "Group"
+          }
+        ]
+      },
+      {
+        "id": "1308",
+        "name": "Authorized",
+        "userGroups": [
+          {
+            "id": "AXMT7GxY-JrcHd85NX7e",
+            "name": "FRNA13",
+            "type": "Group"
+          }
+        ]
+      },
+      {
+        "id": "1306",
+        "name": "Medical",
+        "userGroups": [
+          {
+            "id": "AXMT7GxY-JrcHd85NX7e",
+            "name": "FRNA13",
+            "type": "Group"
+          }
+        ]
+      },
+      {
+        "id": "1302",
+        "name": "Nonauthorized",
+        "userGroups": [
+          {
+            "id": "AXMT7GxY-JrcHd85NX7e",
+            "name": "FRNA13",
+            "type": "Group"
+          }
+        ]
+      },
+      {
+        "id": "1304",
+        "name": "Supervisor",
+        "userGroups": [
+          {
+            "id": "AXMT7GxY-JrcHd85NX7e",
+            "name": "FRNA13",
+            "type": "Group"
+          }
+        ]
+      },
+      {
+        "id": "1307",
+        "name": "Viewer",
+        "userGroups": [
+          {
+            "id": "AXMT7GxY-JrcHd85NX7e",
+            "name": "FRNA13",
+            "type": "Group"
+          }
+        ]
+      },
+      {
+        "id": "1305",
+        "name": "Vip",
+        "userGroups": [
+          {
+            "id": "AXMT7GxY-JrcHd85NX7e",
+            "name": "FRNA13",
+            "type": "Group"
+          }
+        ]
+      }
+    ]
+  },
+  "businessId": "3294",
+  "sensitiveCommitted": false,
+  "id": "3294",
+  "actions": [
+    {
+      "canClose": true,
+      "template": "X009",
+      "isDocumentRelated": false,
+      "documentType": "X009",
+      "displayName": "Create Reminder",
+      "tempDocumentId": "2fb1c76988094c12a01293bb0b7a7cb0",
+      "type": "new.regular",
+      "tags": {
+        "category": "Case Actions",
+        "type": "admin"
+      },
+      "actor": "Authorized",
+      "typeVersion": "4.1",
+      "poolGroup": {
+        "Type": "X009",
+        "ParentDocId": null,
+        "DMProcessId": "3426",
+        "DocumentId": "b51a6f80d24244d893b6057160bc1806",
+        "ParentType": "X009",
+        "Operation": "Create"
+      },
+      "caseId": "3294",
+      "isCaseRelated": true,
+      "hasBusinessValidation": false,
+      "name": "Create",
+      "documentId": "b51a6f80d24244d893b6057160bc1806",
+      "id": "3294_f43cc35ef3104320b864c8cc3fccd9ce",
+      "actionGroup": {
+        "Type": "X009",
+        "ParentDocId": null,
+        "DMProcessId": "3426",
+        "DocumentId": "b51a6f80d24244d893b6057160bc1806",
+        "ParentType": "X009",
+        "Operation": "Create"
+      },
+      "isBulk": false,
+      "operation": "Create",
+      "parentDocumentId": null,
+      "status": "active"
+    }
+  ],
+  "documents": [
+    {
+      "attachments": null,
+      "displayName": "Claim for - Reimbursement - Administrative Check /Medical information",
+      "isDummyDocument": false,
+      "mimeType": "json",
+      "type": "H020",
+      "conversations": [
+        {
+          "id": "d9058280cf794bfc9954df4fdbd305b7",
+          "participants": [
+            {
+              "role": "Receiver",
+              "organisation": {
+                "activeSince": "2020-06-25T22:00:00Z",
+                "address": {
+                  "country": "FR",
+                  "town": null,
+                  "street": null,
+                  "postalCode": null,
+                  "region": null
+                },
+                "registryNumber": null,
+                "acronym": "FR:FRNA10",
+                "countryCode": "FR",
+                "name": "FR:FRNA10",
+                "contactMethods": null,
+                "location": null,
+                "id": "FR:FRNA10"
+              }
+            },
+            {
+              "role": "Sender",
+              "organisation": {
+                "activeSince": "2020-06-25T22:00:00Z",
+                "address": {
+                  "country": "FR",
+                  "town": null,
+                  "street": null,
+                  "postalCode": null,
+                  "region": null
+                },
+                "registryNumber": null,
+                "acronym": "FR:FRNA13",
+                "countryCode": "FR",
+                "name": "FR:FRNA13",
+                "contactMethods": null,
+                "location": null,
+                "id": "FR:FRNA13"
+              }
+            }
+          ]
+        }
+      ],
+      "internalId": "3294_eefd97e2c9ed48ada2dbeecb138dc5f1",
+      "hasMultipleVersions": true,
+      "caseId": "3294",
+      "hasBusinessValidation": false,
+      "ParentType": "H020",
+      "id": "eefd97e2c9ed48ada2dbeecb138dc5f1",
+      "hasCancel": false,
+      "direction": "OUT",
+      "hasLetter": false,
+      "creator": {
+        "name": "System",
+        "organisation": {
+          "activeSince": "2020-06-25T22:00:00Z",
+          "address": {
+            "country": "FR",
+            "town": null,
+            "street": null,
+            "postalCode": null,
+            "region": null
+          },
+          "registryNumber": null,
+          "acronym": "FR:FRNA10",
+          "countryCode": "FR",
+          "name": "FR:FRNA10",
+          "contactMethods": null,
+          "location": null,
+          "id": "FR:FRNA10"
+        },
+        "id": "0",
+        "type": "User"
+      },
+      "hasReject": false,
+      "hasReplyClarify": false,
+      "starter": false,
+      "isMLC": false,
+      "selectParticipants": true,
+      "subProcessId": "3420",
+      "isAdmin": false,
+      "hasClarify": false,
+      "createTemplate": null,
+      "toSenderOnly": false,
+      "typeVersion": "4.1",
+      "allowsAttachments": true,
+      "versions": [
+        {
+          "date": "2020-07-03T09:16:07Z",
+          "id": "1",
+          "user": {
+            "name": "System",
+            "organisation": {
+              "activeSince": "2020-06-25T22:00:00Z",
+              "address": {
+                "country": "FR",
+                "town": null,
+                "street": null,
+                "postalCode": null,
+                "region": null
+              },
+              "registryNumber": null,
+              "acronym": "FR:FRNA10",
+              "countryCode": "FR",
+              "name": "FR:FRNA10",
+              "contactMethods": null,
+              "location": null,
+              "id": "FR:FRNA10"
+            },
+            "id": "0",
+            "type": "User"
+          }
+        }
+      ],
+      "bulk": false,
+      "isFirstDocument": false,
+      "status": "empty"
+    }
+  ]
+}

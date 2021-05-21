@@ -38,7 +38,7 @@ public class OrganisationService {
 
     public Organisation getOrSaveOrganisation(String id) {
         if (StringUtils.isBlank(id)) {
-            return null;
+            throw new RuntimeException(String.format("Could not load and save organisation with id %s", id));
         }
 
         Organisation organisation = getOrSaveOrganisationWithDefault(id, null);
@@ -52,7 +52,7 @@ public class OrganisationService {
 
     public Organisation getOrSaveOrganisationWithDefault(String id, Organisation defaultValue) {
         if (StringUtils.isBlank(id)) {
-            return null;
+            return defaultValue;
         }
 
         Organisation organisation = RepositoryUtils.findById(id, organisationRepo::findById);

@@ -512,8 +512,7 @@
                 <parameter key="hasCancel">true</parameter> <!-- default is false -->
             </parameters>
             <triggers>
-                <createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_CREATE"
-                                     documentType="R029"/>
+                <createActionTrigger onAction="DOC_RECEIVE" onResult="SUCCESS" actionType="DOC_CREATE_REPLY" documentType="R029"/>
             </triggers>			
         </document>
 

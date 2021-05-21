@@ -69,6 +69,8 @@ public class MapToDocumentContentMapper extends AbstractMapToEntityMapper<MapHol
             } catch (JsonProcessingException | ValidationException e) {
                 throw new RuntimeException("Could not map document content for document: " + document.getId(), e);
             }
+        } else {
+            throw new RuntimeException(String.format("No content found for document with id: [%s]", b.getDocument().getId()));
         }
     }
 

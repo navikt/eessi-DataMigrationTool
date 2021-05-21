@@ -6,11 +6,8 @@ import java.util.Optional;
 import java.util.function.Consumer;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.logging.log4j.util.Strings;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
-
-import clover.org.apache.commons.lang.StringUtils;
 
 import eu.ec.dgempl.eessi.rina.model.enumtypes.EConversationParticipantRole;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.ConversationParticipant;
@@ -21,6 +18,7 @@ import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.DocumentFields;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper._abstract.AbstractMapToEntityMapper;
 
+import clover.org.apache.commons.lang.StringUtils;
 import ma.glasnost.orika.MappingContext;
 
 @Component
@@ -32,7 +30,7 @@ public class MapToDocumentConversationMapper extends AbstractMapToEntityMapper<M
         mapDate(a, DocumentFields.DATE, b::setDate);
         mapDate(a, DocumentFields.RECEIVE_DATE, b::setReceivedDate);
         mapParticipants(a, b);
-        mapUserMessages(a, b);
+        mapUserMessages(a, b, context);
     }
 
     private void mapParticipants(final MapHolder a, final DocumentConversation b) {
@@ -40,9 +38,10 @@ public class MapToDocumentConversationMapper extends AbstractMapToEntityMapper<M
         mapChildren(a, DocumentFields.PARTICIPANTS, b::addConversationParticipant, ConversationParticipant.class);
     }
 
-    private void mapUserMessages(final MapHolder a, final DocumentConversation b) {
+    private void mapUserMessages(final MapHolder a, final DocumentConversation b, final MappingContext context) {
         b.getUserMessages();
-        mapChildren(a, DocumentFields.USER_MESSAGES, b::addUserMessage, UserMessage.class);
+        context.setProperty("conversation", b);
+        mapChildren(a, DocumentFields.USER_MESSAGES, b::addUserMessage, UserMessage.class, context);
     }
 
     private <T extends PersistableWithSid> void mapChildren(
@@ -51,13 +50,28 @@ public class MapToDocumentConversationMapper extends AbstractMapToEntityMapper<M
             final Consumer<T> childConsumer,
             Class<T> childClass) {
 
+        mapChildren(a, key, childConsumer, childClass, null);
+    }
+
+    private <T extends PersistableWithSid> void mapChildren(
+            final MapHolder a,
+            final String key,
+            final Consumer<T> childConsumer,
+            Class<T> childClass,
+            MappingContext context) {
+
         List<MapHolder> children = a.listToMapHolder(key);
         if (CollectionUtils.isNotEmpty(children)) {
             if (DocumentFields.PARTICIPANTS.equals(key)) {
                 replaceRole(children);
             }
             children.stream()
-                    .map(child -> mapperFacade.map(child, childClass))
+                    .map(child -> {
+                        if (context != null) {
+                           return mapperFacade.map(child, childClass, context);
+                        }
+                        return mapperFacade.map(child, childClass);
+                    })
                     .forEach(childConsumer);
         }
     }

@@ -1,6 +1,7 @@
 package eu.ec.dgempl.eessi.rina.tool.migration.importer.dataimport.cases;
 
 import static eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.DateUtils.*;
+import static eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.MappingContextBuilder.*;
 import static eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.RepositoryUtils.*;
 
 import java.util.Comparator;
@@ -22,9 +23,9 @@ import eu.ec.dgempl.eessi.rina.repo.SubdocumentRepo;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dataimport.CaseImporter;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dataimport.ElasticTypeImporter;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dataimport._abstract.AbstractDataImporter;
-import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.report.DocumentsReport;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.EElasticType;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.report.DocumentsReport;
 
 import ma.glasnost.orika.MappingContext;
 

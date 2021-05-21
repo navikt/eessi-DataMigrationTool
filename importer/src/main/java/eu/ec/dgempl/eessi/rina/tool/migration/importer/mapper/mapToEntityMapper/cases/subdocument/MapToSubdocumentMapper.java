@@ -1,7 +1,7 @@
 package eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper.cases.subdocument;
 
-import static eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.DateUtils.getIntervalIndex;
-import static eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.DateUtils.getIntervalsMap;
+import static eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.DateUtils.*;
+import static eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.MappingContextBuilder.*;
 
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -17,15 +17,21 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import eu.ec.dgempl.eessi.rina.commons.date.ZonedDateTimePeriod;
 import eu.ec.dgempl.eessi.rina.commons.transformation.RinaJsonMapper;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.ESubdocPrefillGroup;
-import eu.ec.dgempl.eessi.rina.model.jpa.entity.*;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity.Document;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity.IamUser;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity.RinaCase;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity.Subdocument;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity.SubdocumentAttachment;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity.SubdocumentBversion;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity.SubdocumentPrefill;
 import eu.ec.dgempl.eessi.rina.model.jpa.exception.EntityNotFoundEessiRuntimeException;
 import eu.ec.dgempl.eessi.rina.model.jpa.exception.UniqueIdentifier;
 import eu.ec.dgempl.eessi.rina.repo.DocumentRepo;
-import eu.ec.dgempl.eessi.rina.repo.IamUserRepo;
 import eu.ec.dgempl.eessi.rina.repo.RinaCaseRepo;
-import eu.ec.dgempl.eessi.rina.tool.migration.common.util.DateResolver;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.SubdocumentFields;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper._abstract.AbstractMapToEntityMapper;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.service.UserService;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.RepositoryUtils;
 
 import ma.glasnost.orika.MappingContext;
@@ -34,16 +40,16 @@ import ma.glasnost.orika.MappingContext;
 public class MapToSubdocumentMapper extends AbstractMapToEntityMapper<MapHolder, Subdocument> {
 
     private final DocumentRepo documentRepo;
-    private final IamUserRepo iamUserRepo;
     private final RinaCaseRepo rinaCaseRepo;
     private final RinaJsonMapper rinaJsonMapper;
+    private final UserService userService;
 
-    public MapToSubdocumentMapper(final DocumentRepo documentRepo, final IamUserRepo iamUserRepo, final RinaCaseRepo rinaCaseRepo,
-            final RinaJsonMapper rinaJsonMapper) {
+    public MapToSubdocumentMapper(final DocumentRepo documentRepo, final RinaCaseRepo rinaCaseRepo,
+            final RinaJsonMapper rinaJsonMapper, final UserService userService) {
         this.documentRepo = documentRepo;
-        this.iamUserRepo = iamUserRepo;
         this.rinaCaseRepo = rinaCaseRepo;
         this.rinaJsonMapper = rinaJsonMapper;
+        this.userService = userService;
     }
 
     @Override
@@ -54,9 +60,9 @@ public class MapToSubdocumentMapper extends AbstractMapToEntityMapper<MapHolder,
         mapRinaCase(caseId, b);
         mapParentDocument(a, b);
 
-        b.setId(a.string("id"));
+        b.setId(a.string(SubdocumentFields.ID));
         b.setNo(no);
-        b.setBusinessReference(a.string("referenceId"));
+        b.setBusinessReference(a.string(SubdocumentFields.REFERENCE_ID));
 
         mapValidationErrors(a, b);
         mapIsValid(a, b);
@@ -73,7 +79,7 @@ public class MapToSubdocumentMapper extends AbstractMapToEntityMapper<MapHolder,
     }
 
     private void mapAttachments(final MapHolder a, final Subdocument b) {
-        List<MapHolder> attachmentMapHolders = a.listToMapHolder("attachments");
+        List<MapHolder> attachmentMapHolders = a.listToMapHolder(SubdocumentFields.ATTACHMENTS);
         if (CollectionUtils.isNotEmpty(attachmentMapHolders)) {
             attachmentMapHolders.stream().map(subdocument -> mapSubdocumentAttachment(subdocument, b)).forEach(b::addSubdocumentAttachment);
         }
@@ -82,12 +88,20 @@ public class MapToSubdocumentMapper extends AbstractMapToEntityMapper<MapHolder,
     private SubdocumentAttachment mapSubdocumentAttachment(final MapHolder a, final Subdocument b) {
         SubdocumentAttachment subdocumentAttachment = mapperFacade.map(a, SubdocumentAttachment.class);
         List<SubdocumentBversion> subdocumentBversions = b.getSubdocumentBversions();
-        List<MapHolder> versions = a.listToMapHolder("versions");
+        List<MapHolder> versions = a.listToMapHolder(SubdocumentFields.VERSIONS);
         if (CollectionUtils.isNotEmpty(versions)) {
             Map<ZonedDateTimePeriod, Integer> intervalPairs = getIntervalsMap(subdocumentBversions);
 
             versions.forEach(version -> {
-                ZonedDateTime creationDate = DateResolver.parse(version.string("date"));
+                ZonedDateTime creationDate = version.date(SubdocumentFields.DATE);
+
+                if (creationDate == null) {
+                    throw new RuntimeException(String.format(
+                            "Could not link subDocumentAttachment with id %s to the version of subDocument with id %s.",
+                            subdocumentAttachment.getId(),
+                            b.getId()));
+                }
+
                 int intervalIndex = getIntervalIndex(intervalPairs, creationDate);
                 if (intervalIndex > -1) {
                     for (int idx = intervalIndex; idx < subdocumentBversions.size(); idx++) {
@@ -103,14 +117,19 @@ public class MapToSubdocumentMapper extends AbstractMapToEntityMapper<MapHolder,
     }
 
     private void mapBVersions(final MapHolder a, final Subdocument b) {
-        List<MapHolder> versions = a.listToMapHolder("versions");
+        List<MapHolder> versions = a.listToMapHolder(SubdocumentFields.VERSIONS);
         if (CollectionUtils.isNotEmpty(versions)) {
-            versions.stream().map(version -> mapperFacade.map(version, SubdocumentBversion.class)).forEach(b::addSubdocumentBversion);
+            versions.stream().map(version -> mapperFacade.map(version,
+                    SubdocumentBversion.class,
+                    mctxb()
+                            .addProp("rinaCase", b.getRinaCase())
+                            .build()))
+                    .forEach(b::addSubdocumentBversion);
         }
     }
 
     private void mapParentDocument(final MapHolder a, final Subdocument b) {
-        String parentDocumentId = a.string("parentDocumentId");
+        String parentDocumentId = a.string(SubdocumentFields.PARENT_DOCUMENT_ID);
 
         Document document = documentRepo.findByIdAndRinaCase(parentDocumentId, b.getRinaCase());
         if (document == null) {
@@ -127,8 +146,10 @@ public class MapToSubdocumentMapper extends AbstractMapToEntityMapper<MapHolder,
         mapDate(a, "creationDate", b.getAudit()::setCreatedAt);
         mapDate(a, "lastUpdate", b.getAudit()::setUpdatedAt);
 
-        String userId = a.string("creator.id", true);
-        IamUser iamUser = RepositoryUtils.findById(userId, iamUserRepo::findById);
+        String userId = a.string(SubdocumentFields.CREATOR_ID, true);
+        String username = a.string(SubdocumentFields.CREATOR_NAME, true);
+        // In this case we don't want to use the fallback of the default user
+        IamUser iamUser = userService.resolveUser(userId, username, null, true);
 
         if (iamUser != null) {
             b.getAudit().setCreatedBy(iamUser.getId());
@@ -137,18 +158,17 @@ public class MapToSubdocumentMapper extends AbstractMapToEntityMapper<MapHolder,
             b.getAudit().setCreatedBy(b.getDocument().getAudit().getCreatedBy());
             b.getAudit().setUpdatedBy(b.getDocument().getAudit().getUpdatedBy());
         }
-
     }
 
     private void mapIsValid(final MapHolder a, final Subdocument b) {
-        String valid = a.string("validation.status", true);
+        String valid = a.string(SubdocumentFields.VALIDATION_STATUS, true);
         if (StringUtils.isNotBlank(valid)) {
             b.setIsValid(valid.equalsIgnoreCase("valid"));
         }
     }
 
     private void mapValidationErrors(final MapHolder a, final Subdocument b) {
-        List<MapHolder> validationMessages = a.listToMapHolder("validation.messages", true);
+        List<MapHolder> validationMessages = a.listToMapHolder(SubdocumentFields.VALIDATION_MESSAGES, true);
         if (CollectionUtils.isNotEmpty(validationMessages)) {
             try {
                 List<Map<String, Object>> messages = validationMessages.stream().map(MapHolder::getHolding).collect(Collectors.toList());

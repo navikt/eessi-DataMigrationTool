@@ -6,21 +6,20 @@ import eu.ec.dgempl.eessi.rina.model.enumtypes.EDocumentStatus;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.Document;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.DocumentBversion;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.IamUser;
-import eu.ec.dgempl.eessi.rina.repo.IamUserRepo;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.DocumentFields;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper._abstract.AbstractMapToEntityMapper;
-import eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.RepositoryUtils;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.service.UserService;
 
 import ma.glasnost.orika.MappingContext;
 
 @Component
 public class MapToDocumentBversionMapper extends AbstractMapToEntityMapper<MapHolder, DocumentBversion> {
 
-    private final IamUserRepo iamUserRepo;
+    private final UserService userService;
 
-    public MapToDocumentBversionMapper(final IamUserRepo iamUserRepo) {
-        this.iamUserRepo = iamUserRepo;
+    public MapToDocumentBversionMapper(final UserService userService) {
+        this.userService = userService;
     }
 
     @Override
@@ -38,9 +37,12 @@ public class MapToDocumentBversionMapper extends AbstractMapToEntityMapper<MapHo
         mapDate(a, DocumentFields.DATE, b.getAudit()::setCreatedAt);
         mapDate(a, DocumentFields.DATE, b.getAudit()::setUpdatedAt);
 
-        String userId = a.string(DocumentFields.USER_ID, true);
         if (doc.getStatus() != EDocumentStatus.EMPTY) {
-            IamUser iamUser = RepositoryUtils.findById(userId, iamUserRepo::findById, IamUser.class);
+
+            String userId = a.string(DocumentFields.USER_ID, true);
+            String userName = a.string(DocumentFields.USER_NAME, true);
+            IamUser iamUser = userService.resolveUser(userId, userName, doc.getRinaCase());
+
             b.getAudit().setCreatedBy(iamUser.getId());
             b.getAudit().setUpdatedBy(iamUser.getId());
         }

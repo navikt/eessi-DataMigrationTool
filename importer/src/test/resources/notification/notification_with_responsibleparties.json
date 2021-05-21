@@ -1,0 +1,94 @@
+{
+  "severity": "error",
+  "creator": {
+    "name": "supervisor",
+    "organisation": {
+      "activeSince": "2020-06-25T22:00:00Z",
+      "address": {
+        "country": "FR"
+      },
+      "acronym": "FR:FRNA10",
+      "countryCode": "FR",
+      "name": "FR:FRNA10",
+      "id": "FR:FRNA10"
+    },
+    "id": "supervisor",
+    "type": "User"
+  },
+  "dueDate": "2021-04-28T12:13:30.575Z",
+  "document": {
+    "receiver": {
+      "activeSince": "2020-06-25T22:00:00Z",
+      "address": {
+        "country": "FR"
+      },
+      "acronym": "FR:FRNA11",
+      "countryCode": "FR",
+      "name": "FR:FRNA11",
+      "id": "FR:FRNA11"
+    },
+    "name": "Old age pension claim",
+    "type": "P2000"
+  },
+  "isRead": "false",
+  "creationDate": "2021-04-25T12:13:30.575Z",
+  "type": "delivery_error",
+  "responsibleParties": [
+    {
+      "name": "ddjKAQxB",
+      "organisation": {
+        "activeSince": "2020-06-25T22:00:00Z",
+        "address": {
+          "country": "FR"
+        },
+        "acronym": "FR:FRNA10",
+        "countryCode": "FR",
+        "name": "FR:FRNA10",
+        "id": "FR:FRNA10"
+      },
+      "id": "AXUhGCuC5TcFptbEg2LT",
+      "type": "User"
+    },
+    {
+      "name": "Fldulzil",
+      "organisation": {
+        "activeSince": "2020-06-25T22:00:00Z",
+        "address": {
+          "country": "FR"
+        },
+        "acronym": "FR:FRNA10",
+        "countryCode": "FR",
+        "name": "FR:FRNA10",
+        "id": "FR:FRNA10"
+      },
+      "id": "AXUgjz-75TcFptbEgte0",
+      "type": "User"
+    },
+    {
+      "name": "hSLgjYXh",
+      "organisation": {
+        "activeSince": "2020-06-25T22:00:00Z",
+        "address": {
+          "country": "FR"
+        },
+        "acronym": "FR:FRNA10",
+        "countryCode": "FR",
+        "name": "FR:FRNA10",
+        "id": "FR:FRNA10"
+      },
+      "id": "AXUhExnk5TcFptbEg1yU",
+      "type": "User"
+    }
+  ],
+  "sourceType": "business",
+  "lastUpdate": "2021-04-25T12:13:30.575Z",
+  "caseId": "315084",
+  "failureReason": {
+    "code": "",
+    "description": "EBMS:0301:MissingReceipt"
+  },
+  "id": "fc3ecba95e3a47b98fbf019f12724a75",
+  "_id": "fc3ecba95e3a47b98fbf019f12724a75",
+  "category": "buss",
+  "status": "active"
+}

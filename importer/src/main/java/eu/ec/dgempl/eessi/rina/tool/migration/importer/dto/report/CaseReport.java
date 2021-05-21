@@ -74,7 +74,7 @@ public class CaseReport {
     }
 
     @NotNull
-    private String getKey(final String index, final String type) {
+    public static String getKey(final String index, final String type) {
         return index + "_" + type;
     }
 }

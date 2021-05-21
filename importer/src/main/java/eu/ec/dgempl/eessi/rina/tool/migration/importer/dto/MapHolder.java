@@ -1,5 +1,6 @@
 package eu.ec.dgempl.eessi.rina.tool.migration.importer.dto;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -12,6 +13,8 @@ import java.util.stream.IntStream;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.Assert;
+
+import eu.ec.dgempl.eessi.rina.tool.migration.common.util.DateResolver;
 
 public class MapHolder {
 
@@ -91,6 +94,38 @@ public class MapHolder {
         }
 
         return (String) value;
+    }
+
+    public ZonedDateTime date(String key) {
+        ZonedDateTime o = date(key, false);
+        visit(key);
+        return o;
+    }
+
+    public ZonedDateTime date(String key, boolean deep) {
+        Object value;
+        if (deep) {
+            value = getDeep(key);
+        } else {
+            value = holding.get(key);
+        }
+
+        visit(key);
+
+        if (value == null) {
+            return null;
+        }
+
+        if (value instanceof String) {
+            // empty strings will cause an exception
+            return DateResolver.parse((String) value);
+        }
+
+        if (value instanceof Number) {
+            return DateResolver.parse(String.valueOf(value));
+        }
+
+        throw new RuntimeException("Could not map date " + value + " for key: " + key);
     }
 
     public Boolean bool(String key) {

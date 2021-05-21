@@ -1,7 +1,6 @@
 package eu.ec.dgempl.eessi.rina.tool.migration.exporter.cache;
 
-import java.util.Iterator;
-import java.util.Map;
+import java.util.Arrays;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 
@@ -40,17 +39,27 @@ public class Cache {
 
     /**
      * Method for deleting entries from cache according to specific rules injected through the {@code predicate}
-     * 
+     *
      * @param predicate
      */
     public void deleteEntries(Predicate<CacheEntry> predicate) {
-        Iterator<Map.Entry<String, CacheEntry>> iterator = cache.entrySet().iterator();
+        cache.entrySet().removeIf(entry -> predicate.test(entry.getValue()));
+    }
 
-        while (iterator.hasNext()) {
-            Map.Entry<String, CacheEntry> entry = iterator.next();
-            if (predicate.test(entry.getValue())) {
-                iterator.remove();
-            }
+    /**
+     * Method for deleting entries from cache by a given set of keys
+     *
+     * @param keys
+     */
+    public void deleteEntries(String... keys) {
+        PreconditionsHelper.notNull(keys, "keys");
+
+        if (keys.length == 0) {
+            return;
+        } else if (keys.length == 1) {
+            cache.remove(keys[0]);
+        } else {
+            Arrays.stream(keys).forEach(cache::remove);
         }
     }
 }

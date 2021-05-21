@@ -13,7 +13,6 @@ import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.EElasticType;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.report.DocumentsReport;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.BeanMapper;
-import eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.MappingContextBuilder;
 
 public abstract class AbstractDataImporter {
 
@@ -83,10 +82,6 @@ public abstract class AbstractDataImporter {
 
     protected String getId(MapHolder doc) {
         return doc.string("_id");
-    }
-
-    protected MappingContextBuilder mctxb() {
-        return MappingContextBuilder.instance();
     }
 
     @Autowired

@@ -10,9 +10,9 @@ import eu.ec.dgempl.eessi.rina.repo.VocabularyTypeRepo;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dataimport.ElasticTypeImporter;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dataimport.PreCaseImporter;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dataimport._abstract.AbstractDataImporter;
-import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.report.DocumentsReport;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.EElasticType;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.report.DocumentsReport;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.VocabularyFields;
 
 @Component
@@ -35,6 +35,12 @@ public class VocabulariesConceptImporter extends AbstractDataImporter implements
     private void processVocabulariesData(final MapHolder doc) {
         String vocabularyTypeString = doc.string(VocabularyFields.VOCABULARY);
         EVocabularyType eVocabularyType = EVocabularyType.lookupIgnoreCase(vocabularyTypeString);
+
+        // TIMEZONES vocabularies will not be migrated. They are populated by the pre-migration scripts!
+        if (EVocabularyType.TIMEZONES == eVocabularyType) {
+            return;
+        }
+
         VocabularyType vocabularyType = vocabularyTypeRepo.findByType(eVocabularyType);
 
         if (vocabularyType == null) {
