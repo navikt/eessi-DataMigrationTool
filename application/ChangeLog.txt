@@ -1,5 +1,14 @@
 EESSI-RINA-DATA-MIGRATION
 
+v2.1.4
+--------------------------------------
+Validator:
+- improved exception handling for taskmetadata invalid document references in orphan actions from multi-starter cases
+Importer:
+- improved exception handling for taskmetadata invalid document references in orphan actions from multi-starter cases
+- cases signatures are now linked to the proper user messages
+- improved logs and error reporting
+
 v2.1.3
 --------------------------------------
 Validator:

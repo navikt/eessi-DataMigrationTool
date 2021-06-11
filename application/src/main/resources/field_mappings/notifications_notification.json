@@ -349,7 +349,6 @@
   {
     "esPath": "responsibleParties.id",
     "esType": "string",
-    "required": true,
     "sqlPath": "notification.iamUsers.id",
     "sqlType": "VARCHAR(255)",
     "value": "reference(identity,user)",

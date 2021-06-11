@@ -7,7 +7,9 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,6 +61,11 @@ public class ValidationApp implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+
+        List<String> arguments = Arrays.stream(args).collect(Collectors.toList());
+        logger.info("Started DMT with the following command: java -jar EESSI-RINA-DATA-MIGRATION-{} {}",
+                ValidationApp.class.getPackage().getImplementationVersion(),
+                String.join(" ", arguments));
 
         // Only possible args so far:
         //

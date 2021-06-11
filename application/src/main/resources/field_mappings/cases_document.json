@@ -28,6 +28,12 @@
     "sqlType": "TIMESTAMP WITH TIME ZONE"
   },
   {
+    "esPath": "attachments.creator",
+    "esType": "object",
+    "required": true,
+    "sqlType": ""
+  },
+  {
     "esPath": "attachments.creator.id",
     "esType": "string",
     "required": true,
@@ -605,6 +611,12 @@
     "sqlType": ""
   },
   {
+    "esPath": "conversations.userMessages.receiver",
+    "esType": "object",
+    "required": true,
+    "sqlType": ""
+  },
+  {
     "esPath": "conversations.userMessages.receiver.id",
     "esType": "string",
     "required": true,
@@ -639,6 +651,12 @@
     "esType": "object",
     "ignorePath": true,
     "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "conversations.userMessages.sender",
+    "esType": "object",
+    "required": true,
     "sqlType": ""
   },
   {

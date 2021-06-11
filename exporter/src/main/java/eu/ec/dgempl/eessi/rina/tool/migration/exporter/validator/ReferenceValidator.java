@@ -177,34 +177,31 @@ public class ReferenceValidator extends AbstractValidator {
             if (cacheEntry == null) {
                 try {
                     if (elasticClient.exists(index, type, id)) {
-                        CacheEntry entry = new CacheEntry(true, index, type, id);
-                        cacheService.add(entry);
-                        results.add(ValidationResult.ok(path, obj));
+                        cacheEntry = new CacheEntry(true, index, type, id);
                     } else {
-                        CacheEntry entry = new CacheEntry(false, index, type, id);
-                        cacheService.add(entry);
-
-                        if (EEsIndex.CASES.value().equalsIgnoreCase(context.getDocument().getIndex())
-                                && EEsType.TASKMETADATA.value().equalsIgnoreCase(documentType)) {
-                            if (!isTaskMetadataInvalidReferenceException(obj, index, type, document)) {
-                                String details = String.format("Invalid reference id [index=%s,type=%s,id=%s]", index, type, id);
-                                results.add(ValidationResult.error(path, obj, EValidationResult.INVALID_REFERENCE, details));
-                            } else {
-                                results.add(ValidationResult.ok(path, obj));
-                            }
-                        } else {
-                            String details = String.format("Invalid reference id [index=%s,type=%s,id=%s]", index, type, id);
-                            results.add(ValidationResult.error(path, obj, EValidationResult.INVALID_REFERENCE, details));
-                        }
+                        cacheEntry = new CacheEntry(false, index, type, id);
                     }
+                    cacheService.add(cacheEntry);
                 } catch (IOException e) {
                     throw new IllegalStateException(e);
                 }
-            } else if (cacheEntry.isExists() == true) {
+            }
+
+            if (cacheEntry.isExists() == true) {
                 results.add(ValidationResult.ok(path, obj));
             } else {
-                String details = String.format("Invalid reference id [index=%s,type=%s,id=%s]", index, type, id);
-                results.add(ValidationResult.error(path, obj, EValidationResult.INVALID_REFERENCE, details));
+                if (EEsIndex.CASES.value().equalsIgnoreCase(context.getDocument().getIndex())
+                        && EEsType.TASKMETADATA.value().equalsIgnoreCase(documentType)) {
+                    if (!isTaskMetadataInvalidReferenceException(obj, index, type, document)) {
+                        String details = String.format("Invalid reference id [index=%s,type=%s,id=%s]", index, type, id);
+                        results.add(ValidationResult.error(path, obj, EValidationResult.INVALID_REFERENCE, details));
+                    } else {
+                        results.add(ValidationResult.ok(path, obj));
+                    }
+                } else {
+                    String details = String.format("Invalid reference id [index=%s,type=%s,id=%s]", index, type, id);
+                    results.add(ValidationResult.error(path, obj, EValidationResult.INVALID_REFERENCE, details));
+                }
             }
         } else if (obj instanceof Integer) {
             // add a special handler for user.id=0 and user.id=-1 (a.k.a. system user)
@@ -232,20 +229,20 @@ public class ReferenceValidator extends AbstractValidator {
         if (EEsIndex.CASES.value().equalsIgnoreCase(index) && EEsType.DOCUMENT.value().equalsIgnoreCase(type)) {
             try {
                 // get object from elasticsearch
-                Map<String, Object> _obj = elasticClient.get(index, EEsType.CASEMETADATA.value(), (String) document.get("caseId"));
-                if (_obj != null) {
+                Map<String, Object> caseMetadata = elasticClient.get(index, EEsType.CASEMETADATA.value(), (String) document.get("caseId"));
+                if (caseMetadata != null) {
 
                     String role = "";
-                    Object _processDefinitionName = _obj.get(CaseFields.PROCESS_DEFINITION_NAME);
+                    Object _processDefinitionName = caseMetadata.get(CaseFields.PROCESS_DEFINITION_NAME);
                     if (_processDefinitionName instanceof String && ((String) _processDefinitionName).length() > 2) {
                         role = ((String) _processDefinitionName).substring(0, 2);
                     }
 
                     Map<String, Object> params = Map.of(EsDocumentHelper.APPLICATION_ROLE, role,
-                            EsDocumentHelper.IS_MULTI_STARTER, _obj.get(CaseFields.IS_MULTI_STARTER),
-                            EsDocumentHelper.STARTER_TYPE, _obj.get(CaseFields.STARTER_TYPE),
-                            EsDocumentHelper.IS_STARTER_SENT, _obj.get(CaseFields.IS_STARTER_SENT),
-                            EsDocumentHelper.DOCTYPE, document.get("documentType"));
+                            EsDocumentHelper.IS_MULTI_STARTER, caseMetadata.get(CaseFields.IS_MULTI_STARTER),
+                            EsDocumentHelper.STARTER_TYPE, caseMetadata.get(CaseFields.STARTER_TYPE),
+                            EsDocumentHelper.IS_STARTER_SENT, caseMetadata.get(CaseFields.IS_STARTER_SENT),
+                            EsDocumentHelper.DOCTYPE, getDocumentType(document));
 
                     if (EsDocumentHelper.isTaskMetadataInvalidReferenceException(params)) {
                         logger.info(String.format(
@@ -261,6 +258,35 @@ public class ReferenceValidator extends AbstractValidator {
             }
         }
         return false;
+    }
+
+    private String getDocumentType(Map<String, Object> document) {
+        String type = null;
+
+        if (document.get("documentType") instanceof String) {
+            type = (String) document.get("documentType");
+        }
+
+        if (type == null && document.get("actionGroup") instanceof Map) {
+            Map<String, Object> actionGroup = (Map<String, Object>) document.get("actionGroup");
+            if (actionGroup.get("Type") instanceof String) {
+                type = (String) actionGroup.get("Type");
+            }
+        }
+
+        if (type == null && document.get("poolGroup") instanceof Map) {
+            Map<String, Object> poolGroup = (Map<String, Object>) document.get("poolGroup");
+            if (poolGroup.get("Type") instanceof String) {
+                type = (String) poolGroup.get("Type");
+            }
+        }
+
+        if (type == null) {
+            throw new IllegalStateException(
+                    String.format("Could not extract the referenced document type [taskmetadata.id=%s]", document.get("id")));
+        }
+
+        return type;
     }
 
     /**
@@ -286,4 +312,5 @@ public class ReferenceValidator extends AbstractValidator {
             return false;
         }
     }
+
 }

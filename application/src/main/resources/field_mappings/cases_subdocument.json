@@ -50,6 +50,12 @@
     "sqlType": "TIMESTAMP WITH TIME ZONE"
   },
   {
+    "esPath": "subdocuments.attachments.creator",
+    "esType": "object",
+    "required": true,
+    "sqlType": ""
+  },
+  {
     "esPath": "subdocuments.attachments.creator.id",
     "esType": "string",
     "required": true,
@@ -153,7 +159,6 @@
   {
     "esPath": "subdocuments.attachments.versions.user.id",
     "esType": "string",
-    "required": true,
     "sqlPath": "iamUser.id",
     "sqlType": "VARCHAR(255)",
     "value": "reference(identity,user)",
@@ -357,6 +362,12 @@
     "required": true,
     "sqlPath": "subdocument.subdocumentBversion.id",
     "sqlType": "INT4"
+  },
+  {
+    "esPath": "subdocuments.versions.user",
+    "esType": "object",
+    "required": true,
+    "sqlType": ""
   },
   {
     "esPath": "subdocuments.versions.user.id",

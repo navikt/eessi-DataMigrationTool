@@ -35,6 +35,12 @@
     "importIgnore": true
   },
   {
+    "esPath": "message",
+    "esType": "object",
+    "required": true,
+    "sqlType": ""
+  },
+  {
     "esPath": "message.action",
     "esType": "string",
     "required": true,
@@ -123,6 +129,12 @@
     "sqlPath": "auditEvent.auditParticipants.participantType",
     "sqlType": "TEXT",
     "value": "enum(EParticipantType)"
+  },
+  {
+    "esPath": "message.source",
+    "esType": "object",
+    "required": true,
+    "sqlType": ""
   },
   {
     "esPath": "message.source.categoryType",

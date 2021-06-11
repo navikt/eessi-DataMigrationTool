@@ -182,7 +182,13 @@ public class MapToUserMessageMapper extends AbstractMapToEntityMapper<MapHolder,
     }
 
     private Organisation findOrganisation(final MapHolder a, String key) {
-        String orgId = a.string(key + ".id", true);
+        String orgKey = key + ".id";
+        String orgId = a.string(orgKey, true);
+
+        if (StringUtils.isBlank(orgId)) {
+            throw new RuntimeException(String.format("Could not load organisation [id=%s], [key=%s]", orgId, orgKey));
+        }
+
         return organisationService.getOrSaveOrganisation(orgId);
     }
 

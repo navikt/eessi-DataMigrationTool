@@ -15,6 +15,12 @@
     "sqlType": "TEXT"
   },
   {
+    "esPath": "creator",
+    "esType": "object",
+    "required": true,
+    "sqlType": ""
+  },
+  {
     "esPath": "creator.id",
     "esType": "string",
     "sqlPath": "iamUser.id",

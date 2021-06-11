@@ -27,11 +27,16 @@ public class MapToBusinessExceptionMapper extends AbstractMapToEntityMapper<MapH
 
     @Override
     public void mapAtoB(final MapHolder a, final BusinessException b, final MappingContext context) {
-
         b.setId(a.string(BusinessExceptionFields.ID));
 
-        b.setReason(a.string(BusinessExceptionFields.REASON));
+        mapDocument(a, b);
+        mapPendingMessage(a, b);
 
+        b.setReason(a.string(BusinessExceptionFields.REASON));
+        mapDate(a, BusinessExceptionFields.DATE, b::setDate);
+    }
+
+    private void mapDocument(MapHolder a, BusinessException b) {
         String documentId = a.string(BusinessExceptionFields.DOCUMENT_ID, true);
 
         Document document = documentRepo.findByIdAndRinaCaseId(documentId, DEFAULT_BUSINESS_EXCEPTION_CASE_ID);
@@ -47,6 +52,12 @@ public class MapToBusinessExceptionMapper extends AbstractMapToEntityMapper<MapH
         }
 
         b.setDocument(document);
+    }
+
+    private void mapPendingMessage(MapHolder a, BusinessException b) {
+        if (!a.containsKey(BusinessExceptionFields.SOURCE)) {
+            throw new RuntimeException(String.format("Null pending message for business exception with id:[%s]", b.getId()));
+        }
 
         MapHolder pendingMessageHolder = a.getMapHolder(BusinessExceptionFields.SOURCE);
 
@@ -54,7 +65,5 @@ public class MapToBusinessExceptionMapper extends AbstractMapToEntityMapper<MapH
 
         pendingMessage.setIsProcessed(true);
         b.setPendingMessage(pendingMessage);
-
-        mapDate(a, BusinessExceptionFields.DATE, b::setDate);
     }
 }

@@ -164,10 +164,18 @@ public class MapToDocumentMapper extends AbstractMapToEntityMapper<MapHolder, Do
 
     private void mapParent(final MapHolder a, final Document b) {
         String parentDocumentId = a.string(DocumentFields.PARENT_DOCUMENT_ID);
-        String rinaCaseId = a.string(DocumentFields.CASE_ID);
-        Document parent = documentRepo.findByIdAndRinaCaseId(parentDocumentId, rinaCaseId);
 
-        if (parent != null) {
+        if (StringUtils.isNotBlank(parentDocumentId)) {
+            String rinaCaseId = a.string(DocumentFields.CASE_ID);
+            Document parent = documentRepo.findByIdAndRinaCaseId(parentDocumentId, rinaCaseId);
+
+            if (parent == null) {
+                throw new EntityNotFoundEessiRuntimeException(
+                        Document.class,
+                        UniqueIdentifier.id, parentDocumentId,
+                        UniqueIdentifier.caseId, rinaCaseId);
+            }
+
             b.setParent(parent);
         }
     }

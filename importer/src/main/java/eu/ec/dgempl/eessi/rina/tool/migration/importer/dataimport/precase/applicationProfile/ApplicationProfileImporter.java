@@ -4,6 +4,7 @@ import static eu.ec.dgempl.eessi.rina.model.enumtypes.EGlobalParam.*;
 import static eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.ApplicationProfileFields.*;
 import static eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.nie.NieSubscriptionUtils.*;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
@@ -44,6 +46,7 @@ import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.EElasticType;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.NieSubscriptionDto;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.report.DocumentsReport;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.report.ReportError;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.ProgrammaticTransactionUtil;
 
 @Component
@@ -67,6 +70,8 @@ public class ApplicationProfileImporter extends AbstractApplicationProfileImport
             "tenant.message.settings.organisation.countryCode",
             "tenant.message.settings.organisation.id",
             "tenant.message.settings.organisation.name");
+
+    private List<ReportError> errors = new ArrayList();
 
     public ApplicationProfileImporter(
             final ArchivingPolicyRepo archivingPolicyRepo,
@@ -93,7 +98,16 @@ public class ApplicationProfileImporter extends AbstractApplicationProfileImport
 
     @Override
     public DocumentsReport importData() {
-        return run(this::processApplicationProfile, false);
+
+        DocumentsReport applicationProfileReport = run(this::processApplicationProfile, false);
+
+        if (CollectionUtils.isEmpty(applicationProfileReport.getErrors())) {
+            applicationProfileReport.setErrors(errors);
+        } else {
+            applicationProfileReport.getErrors().addAll(errors);
+        }
+
+        return applicationProfileReport;
     }
 
     private void processApplicationProfile(MapHolder doc) {
@@ -120,6 +134,7 @@ public class ApplicationProfileImporter extends AbstractApplicationProfileImport
                     this.getId(doc),
                     "Could not import Global Data from application profile",
                     e);
+            addReportError(doc, e);
         }
     }
 
@@ -144,6 +159,7 @@ public class ApplicationProfileImporter extends AbstractApplicationProfileImport
                     this.getId(doc),
                     "Could not import DefaultUserProfile from application profile",
                     e);
+            addReportError(doc, e);
         }
     }
 
@@ -169,6 +185,7 @@ public class ApplicationProfileImporter extends AbstractApplicationProfileImport
                     this.getId(doc),
                     "Could not import CaseRetentionPolicies from application profile",
                     e);
+            addReportError(doc, e);
         }
     }
 
@@ -185,6 +202,7 @@ public class ApplicationProfileImporter extends AbstractApplicationProfileImport
                     this.getId(doc),
                     "Could not import MessageRetentionPolicies from application profile",
                     e);
+            addReportError(doc, e);
         }
     }
 
@@ -203,6 +221,7 @@ public class ApplicationProfileImporter extends AbstractApplicationProfileImport
                     this.getId(doc),
                     "Could not import ArchivingRepositoryPolicies from application profile",
                     e);
+            addReportError(doc, e);
         }
 
     }
@@ -228,6 +247,7 @@ public class ApplicationProfileImporter extends AbstractApplicationProfileImport
                     this.getId(doc),
                     "Could not import ArchivingRepositories from application profile",
                     e);
+            addReportError(doc, e);
         }
     }
 
@@ -252,6 +272,7 @@ public class ApplicationProfileImporter extends AbstractApplicationProfileImport
                     this.getId(doc),
                     "Could not import ArchivingPolicies from application profile",
                     e);
+            addReportError(doc, e);
         }
     }
 
@@ -290,6 +311,7 @@ public class ApplicationProfileImporter extends AbstractApplicationProfileImport
                     this.getId(doc),
                     "Could not import NieSubscriptions from application profile",
                     e);
+            addReportError(doc, e);
         }
     }
 
@@ -322,6 +344,7 @@ public class ApplicationProfileImporter extends AbstractApplicationProfileImport
                     this.getId(doc),
                     "Could not import tenants from application profile",
                     e);
+            addReportError(doc, e);
         }
     }
 
@@ -390,5 +413,15 @@ public class ApplicationProfileImporter extends AbstractApplicationProfileImport
 
     private boolean excludeFields(String field) {
         return excludedFields.contains(field);
+    }
+
+    private void addReportError(final MapHolder doc, final Exception e) {
+        ReportError reportError = new ReportError(
+                this.inferElasticType().getIndex(),
+                this.inferElasticType().getType(),
+                this.getId(doc),
+                EElasticType.APPLICATION_PROFILE.name(),
+                ExceptionUtils.getStackTrace(e));
+        errors.add(reportError);
     }
 }

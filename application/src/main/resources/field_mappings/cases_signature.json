@@ -46,7 +46,6 @@
     "esType": "string",
     "required": true,
     "sqlPath": "signature.userMessage.documentConversation.documentBversion.version",
-    "sqlType": "INT4",
-    "importIgnore": true
+    "sqlType": "INT4"
   }
 ]

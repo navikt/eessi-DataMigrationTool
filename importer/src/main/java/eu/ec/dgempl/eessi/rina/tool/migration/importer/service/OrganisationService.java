@@ -38,7 +38,7 @@ public class OrganisationService {
 
     public Organisation getOrSaveOrganisation(String id) {
         if (StringUtils.isBlank(id)) {
-            throw new RuntimeException(String.format("Could not load and save organisation with id %s", id));
+            throw new RuntimeException("Could not load or save organisation without id");
         }
 
         Organisation organisation = getOrSaveOrganisationWithDefault(id, null);

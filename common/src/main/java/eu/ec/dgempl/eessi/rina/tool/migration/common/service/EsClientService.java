@@ -66,12 +66,9 @@ public class EsClientService {
     /**
      * Method for getting an elasticsearch document by {@code index}, {@code type} and {@code documentId}
      *
-     * @param index
-     *            the elasticsearch index
-     * @param type
-     *            the elasticsearch type
-     * @param documentId
-     *            the elasticsearch internal id of the document
+     * @param index      the elasticsearch index
+     * @param type       the elasticsearch type
+     * @param documentId the elasticsearch internal id of the document
      * @return Map containing the document
      * @throws IOException
      */
@@ -88,12 +85,9 @@ public class EsClientService {
     /**
      * Method for checking if a document exists in elasticsearch
      *
-     * @param index
-     *            the elasticsearch index
-     * @param type
-     *            the elasticsearch type
-     * @param documentId
-     *            the elasticsearch internal id of the document
+     * @param index      the elasticsearch index
+     * @param type       the elasticsearch type
+     * @param documentId the elasticsearch internal id of the document
      * @return Boolean flag indicating whether the document exists in elasticsearch
      * @throws IOException
      */
@@ -110,10 +104,8 @@ public class EsClientService {
     /**
      * Method that retrieves the number of documents found in {@code index}, filtered by {@code types}
      *
-     * @param index
-     *            the elasticsearch index
-     * @param types
-     *            the elasticsearch type
+     * @param index the elasticsearch index
+     * @param types the elasticsearch type
      * @return the number of documents
      * @throws IOException
      */
@@ -142,12 +134,9 @@ public class EsClientService {
     /**
      * Method that retrieves the number of documents found in {@code index} by caseId and filtered by {@code types}
      *
-     * @param caseId
-     *            the case id
-     * @param index
-     *            the elastic index
-     * @param types
-     *            the elastic type
+     * @param caseId the case id
+     * @param index  the elastic index
+     * @param types  the elastic type
      * @return the number of documents
      * @throws IOException
      */
@@ -219,8 +208,7 @@ public class EsClientService {
     /**
      * Method for fetching the tenant id that is responsible for the case identified by {@code caseId}
      *
-     * @param caseId
-     *            the case id
+     * @param caseId the case id
      * @return
      * @throws IOException
      */
@@ -345,12 +333,9 @@ public class EsClientService {
      * Method for processing all documents found in a specific {@code index} and all {@code types}. The processing method is injected by the
      * caller
      *
-     * @param index
-     *            the elasticsearch index
-     * @param types
-     *            the list of elasticsearch types
-     * @param processor
-     *            the processing method that will be called on all the query results
+     * @param index     the elasticsearch index
+     * @param types     the list of elasticsearch types
+     * @param processor the processing method that will be called on all the query results
      * @throws IOException
      */
     public void processAll(String index, String[] types, Consumer<SearchHit[]> processor) throws IOException {
@@ -371,10 +356,8 @@ public class EsClientService {
      * Method for processing all documents belonging to a specific case identified by {@code caseId}. This method does not handle
      * CASEMETADATA and CASESTRUCTUREDMETADATA objects
      *
-     * @param caseId
-     *            the case id
-     * @param processor
-     *            the processing method that will be called on all the query results
+     * @param caseId    the case id
+     * @param processor the processing method that will be called on all the query results
      */
     public void processAll(String caseId, Consumer<SearchHit[]> processor) throws IOException {
         PreconditionsHelper.notEmpty(caseId, "caseId");
@@ -418,15 +401,11 @@ public class EsClientService {
     /**
      * Method for processing elasticsearch documents that have a certain type (i.e. R017)
      *
-     * @param caseId
-     *            the case id
-     * @param processor
-     *            the processing method that will be called on all the query results
-     * @param documentType
-     *            the type of the documents that need to be processed
+     * @param caseId    the case id
+     * @param processor the processing method that will be called on all the query results
      * @throws IOException
      */
-    public void processDocumentsWithType(String caseId, Consumer<SearchHit[]> processor, String documentType) throws IOException {
+    public void processDocuments(String caseId, Consumer<SearchHit[]> processor) throws IOException {
         PreconditionsHelper.notEmpty(caseId, "caseId");
         PreconditionsHelper.notNull(processor, "processor");
 
@@ -434,36 +413,7 @@ public class EsClientService {
         SearchSourceBuilder sourceBuilder = new SearchSourceBuilder()
                 .query(QueryBuilders.boolQuery()
                         .must(QueryBuilders.termQuery("caseId", caseId))
-                        .must(QueryBuilders.termQuery("type", documentType.toLowerCase()))
                 )
-                .size(BATCH_SIZE);
-        //@formatter:on
-
-        String[] types = new String[] { EEsType.DOCUMENT.value() };
-
-        processAllByQuery(EEsIndex.CASES.value(), types, sourceBuilder, processor, false);
-    }
-
-    /**
-     * Method for processing elasticsearch documents that have a different type than the one provided (i.e. R017)
-     *
-     * @param caseId
-     *            the case id
-     * @param processor
-     *            the processing method that will be called on all the query results
-     * @param documentType
-     *            the type of the documents that need to be skipped from processing
-     * @throws IOException
-     */
-    public void processDocumentsWithTypeNot(String caseId, Consumer<SearchHit[]> processor, String documentType) throws IOException {
-        PreconditionsHelper.notEmpty(caseId, "caseId");
-        PreconditionsHelper.notNull(processor, "processor");
-
-        //@formatter:off
-        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder()
-                .query(QueryBuilders.boolQuery()
-                        .must(QueryBuilders.termQuery("caseId", caseId))
-                        .mustNot(QueryBuilders.termQuery("type", documentType.toLowerCase())))
                 .size(BATCH_SIZE);
         //@formatter:on
 
@@ -475,8 +425,7 @@ public class EsClientService {
     /**
      * Method for processing BUC assignment_policies that don't have child policies
      *
-     * @param processor
-     *            the processing method that will be called on all the query results
+     * @param processor the processing method that will be called on all the query results
      * @throws IOException
      */
     public void processAssignmentPoliciesWithoutChildren(Consumer<SearchHit[]> processor) throws IOException {
@@ -497,8 +446,7 @@ public class EsClientService {
     /**
      * Method for processing BUC assignment_policies that have child policies
      *
-     * @param processor
-     *            the processing method that will be called on all the query results
+     * @param processor the processing method that will be called on all the query results
      * @throws IOException
      */
     public void processAssignmentPoliciesWithChildren(Consumer<SearchHit[]> processor) throws IOException {
@@ -520,14 +468,10 @@ public class EsClientService {
      * Method for processing all documents found in a specific {@code index} and all {@code types} and filtered by a term query composed
      * form {@code terms}. The processing method is injected by the caller.
      *
-     * @param index
-     *            the elasticsearch index
-     * @param types
-     *            the list of elasticsearch types
-     * @param processor
-     *            the processing method that will be called on all the query results
-     * @param terms
-     *            the list of query terms to be applied for filtering the elasticsearch results
+     * @param index     the elasticsearch index
+     * @param types     the list of elasticsearch types
+     * @param processor the processing method that will be called on all the query results
+     * @param terms     the list of query terms to be applied for filtering the elasticsearch results
      * @throws IOException
      */
     public void processAllFilterByTerms(String index, String[] types, Consumer<SearchHit[]> processor, EsSearchQueryTerm... terms)
@@ -579,16 +523,11 @@ public class EsClientService {
      * Method for processing all documents found in a specific {@code index} and all {@code types}. A {@code sourceBuilder} must be provided
      * for filtering the elasticsearch results. The processing method is injected by the caller.
      *
-     * @param index
-     *            the elasticsearch index
-     * @param types
-     *            the list of elasticsearch types
-     * @param sourceBuilder
-     *            a SourceBuilder instance to be injected into the query
-     * @param processor
-     *            the processing method that will be called on all the query results
-     * @param withStats
-     *            boolean flag that enables time stats
+     * @param index         the elasticsearch index
+     * @param types         the list of elasticsearch types
+     * @param sourceBuilder a SourceBuilder instance to be injected into the query
+     * @param processor     the processing method that will be called on all the query results
+     * @param withStats     boolean flag that enables time stats
      * @throws IOException
      */
     private void processAllByQuery(String index, String[] types, SearchSourceBuilder sourceBuilder, Consumer<SearchHit[]> processor,
@@ -711,7 +650,7 @@ public class EsClientService {
         if (documents == null || documents.size() == 0) return null;
         BulkRequest bulkRequest = new BulkRequest();
         for (String id : documents.keySet()) {
-            bulkRequest.add(new IndexRequest().id(id).index(eesIndex.value()).type(eesType.value()).source((String)documents.get(id)));
+            bulkRequest.add(new IndexRequest().id(id).index(eesIndex.value()).type(eesType.value()).source((String) documents.get(id)));
         }
         return client.bulk(bulkRequest);
     }
@@ -719,8 +658,7 @@ public class EsClientService {
     /**
      * Method for closing an elasticsearch scroll
      *
-     * @param scrollId
-     *            the id of the elasticsearch scroll
+     * @param scrollId the id of the elasticsearch scroll
      * @return
      * @throws IOException
      */

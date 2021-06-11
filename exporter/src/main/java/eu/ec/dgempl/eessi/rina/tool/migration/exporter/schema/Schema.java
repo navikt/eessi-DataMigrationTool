@@ -115,15 +115,15 @@ public class Schema {
 
         for (String requiredPath : requiredPaths) {
             if (requiredPath.startsWith(esFieldPath)) {
-                String field;
+                String field = null;
 
                 if (esFieldPath.equals("")) {
                     field = requiredPath;
-                } else {
+                } else if (requiredPath.length() > esFieldPath.length() + 1){
                     field = requiredPath.substring(esFieldPath.length() + 1);
                 }
 
-                if (field.contains(".") == false) {
+                if (field != null && !field.contains(".")) {
                     fields.add(field);
                 }
             }

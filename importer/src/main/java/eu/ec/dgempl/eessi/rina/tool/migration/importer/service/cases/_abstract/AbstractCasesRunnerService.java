@@ -174,6 +174,10 @@ public abstract class AbstractCasesRunnerService {
                                 index = eElasticType.getIndex();
                                 type = eElasticType.getType();
                             }
+                            DocumentsReport documentsReport = ((GenericImporterException) e.getCause()).getDocumentsReport();
+                            if (documentsReport != null) {
+                                caseReport.swallow(documentsReport);
+                            }
                         }
 
                         errors.add(new ReportError(

@@ -23,7 +23,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 
 import eu.ec.dgempl.eessi.rina.commons.transformation.RinaJsonMapper;
-import eu.ec.dgempl.eessi.rina.tool.migration.application.Application;
 import eu.ec.dgempl.eessi.rina.tool.migration.common.service.EsClientService;
 import eu.ec.dgempl.eessi.rina.tool.migration.common.util.GsonWrapper;
 import eu.ec.dgempl.eessi.rina.tool.migration.exporter.service.ValidationService;
@@ -60,7 +59,7 @@ public class FullApp implements CommandLineRunner, ApplicationContextAware {
     private final static String ARG_IMPORT_CASE = "-import-case";
     private final static String ARG_IMPORT_CASES_BULK = "-import-cases-bulk";
 
-    private final Logger logger = LoggerFactory.getLogger(Application.class);
+    private final Logger logger = LoggerFactory.getLogger(FullApp.class);
 
     public FullApp(final EsClientService elasticsearchService, final ValidationService validationService,
             final KeystoreService keystoreService,
@@ -73,6 +72,11 @@ public class FullApp implements CommandLineRunner, ApplicationContextAware {
 
     @Override
     public void run(String... args) throws Exception {
+
+        List<String> arguments = Arrays.stream(args).collect(Collectors.toList());
+        logger.info("Started DMT with the following command: java -jar EESSI-RINA-DATA-MIGRATION-{} {}",
+                FullApp.class.getPackage().getImplementationVersion(),
+                String.join(" ", arguments));
 
         SUMMARY_REPORT_PATH = reportingFolder.concat("/importer/SummaryReport.json");
 
@@ -90,7 +94,6 @@ public class FullApp implements CommandLineRunner, ApplicationContextAware {
                 break;
             }
             case 1: {
-                List<String> arguments = Arrays.stream(args).collect(Collectors.toList());
                 if (arguments.contains(ARG_VALIDATE_AND_IMPORT)) {
                     runValidationAndImport(null);
                 } else {
@@ -99,7 +102,6 @@ public class FullApp implements CommandLineRunner, ApplicationContextAware {
                 break;
             }
             case 2: {
-                List<String> arguments = Arrays.stream(args).collect(Collectors.toList());
                 switch (arguments.get(0)) {
                     case ARG_VALIDATE_AND_IMPORT:
                         runValidationAndImport(arguments.get(1));
@@ -172,7 +174,7 @@ public class FullApp implements CommandLineRunner, ApplicationContextAware {
         exitWithSuccess(elasticsearchService);
     }
 
-    private void runImportCaseBulk(final String inputFile) throws Exception {
+    private void runImportCaseBulk(final String inputFile) {
         if (!Files.exists(new File(inputFile).toPath())) {
             logger.error("Could not find specified import file.");
             exitWithError(elasticsearchService);

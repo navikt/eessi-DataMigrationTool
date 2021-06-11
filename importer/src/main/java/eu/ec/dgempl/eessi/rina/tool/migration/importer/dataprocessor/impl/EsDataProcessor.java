@@ -2,10 +2,15 @@ package eu.ec.dgempl.eessi.rina.tool.migration.importer.dataprocessor.impl;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -27,6 +32,7 @@ import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.GenericImporterExcept
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.report.DocumentsReport;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.report.ReportError;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.DocumentFields;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.ListSortUtils;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.ProgrammaticTransactionUtil;
 
@@ -92,8 +98,7 @@ public class EsDataProcessor implements DataProcessor {
         Consumer<SearchHit[]> hitsConsumer = getHitsConsumer(docProcessor, () -> documentsReport, transactional, eElasticType);
 
         if (eElasticType == EElasticType.CASES_DOCUMENT) {
-            esClientService.processDocumentsWithType(caseId, hitsConsumer, EDocumentType.R_017.value());
-            esClientService.processDocumentsWithTypeNot(caseId, hitsConsumer, EDocumentType.R_017.value());
+            esClientService.processDocuments(caseId, hitsConsumer);
         } else {
             EsSearchQueryTerm queryTerm;
             if (eElasticType == EElasticType.CASES_CASESTRUCTUREDMETADATA || eElasticType == EElasticType.CASES_CASEMETADATA) {
@@ -144,6 +149,12 @@ public class EsDataProcessor implements DataProcessor {
                 hits = sortHits(hits, parentDocIdFieldName);
             }
 
+            if (eElasticType == EElasticType.CASES_DOCUMENT) {
+                // process documents of certain type first
+                List<String> types = List.of(EDocumentType.R_017.value());
+                hits = reorderHits(hits, types);
+            }
+
             for (SearchHit searchHit : hits) {
                 Map<String, Object> doc = searchHit.getSourceAsMap();
                 doc.put("_id", searchHit.getId());
@@ -184,7 +195,7 @@ public class EsDataProcessor implements DataProcessor {
                         // eElasticType,
                         // docHolder.getVisitedFields())));
                     } catch (Exception e) {
-                        throw new GenericImporterException(e, eElasticType, docHolder.string("_id"));
+                        throw new GenericImporterException(e, eElasticType, docHolder.string("_id"), reportSupplier.get());
                     }
                 }
             }
@@ -213,6 +224,26 @@ public class EsDataProcessor implements DataProcessor {
         );
 
         return sortedHits.toArray(new SearchHit[] {});
+    }
+
+    private SearchHit[] reorderHits(SearchHit[] hits, List<String> types) {
+        return Arrays.stream(hits)
+                .sorted((o1, o2) -> {
+                    String o1Type = (String) o1.getSourceAsMap().get(DocumentFields.TYPE);
+                    String o2Type = (String) o2.getSourceAsMap().get(DocumentFields.TYPE);
+                    if (!types.contains(o1Type) && !types.contains(o2Type)) {
+                        return 0;
+                    }
+                    if (!types.contains(o1Type)) {
+                        return 1;
+                    }
+                    if (!types.contains(o2Type)) {
+                        return -1;
+                    }
+                    return Integer.compare(types.indexOf(o1Type), types.indexOf(o2Type));
+                })
+                .collect(Collectors.toList())
+                .toArray(new SearchHit[] {});
     }
 
     private void setDefaultParentIdIfMissing(SearchHit[] hits, String parentDocIdFieldName) {

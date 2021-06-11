@@ -44,7 +44,8 @@ public class MapToActionMapper extends AbstractMapToEntityMapper<MapHolder, Acti
             final DocumentTypeVersionRepo documentTypeVersionRepo, final RinaCaseRepo rinaCaseRepo) {
         this.documentRepo = documentRepo;
         this.documentTypeVersionRepo = documentTypeVersionRepo;
-        this.rinaCaseRepo = rinaCaseRepo; }
+        this.rinaCaseRepo = rinaCaseRepo;
+    }
 
     @Override
     public void mapAtoB(final MapHolder a, final Action b, final MappingContext context) {
@@ -108,7 +109,7 @@ public class MapToActionMapper extends AbstractMapToEntityMapper<MapHolder, Acti
             } else {
                 if (!isTaskMetadataInvalidReferenceException(a, caseId, documentId)) {
                     throw new RuntimeException(String.format("Invalid document reference with id %s", documentId));
-                }   else {
+                } else {
                     logger.info(String.format(
                             "Invalid document reference %s in taskmetadata in document with id %s. This document belongs to a multi-starter case and is a draft that should have been previously removed by Bonita. Ignoring document reference.",
                             documentId, a.getHolding().get("id")));
@@ -179,7 +180,11 @@ public class MapToActionMapper extends AbstractMapToEntityMapper<MapHolder, Acti
                         starterType = documentType.getType();
                     }
                     boolean isStarterSent = rinaCase.isStarterSent();
-                    Object docType = a.string("documentType");
+                    Object docType = getDocType(a);
+
+                    if (docType == null) {
+                        return false;
+                    }
 
                     Map<String, Object> params = Map.of(EsDocumentHelper.APPLICATION_ROLE, applicationRole.name(),
                             EsDocumentHelper.IS_MULTI_STARTER, isMultiStarter,
@@ -196,6 +201,21 @@ public class MapToActionMapper extends AbstractMapToEntityMapper<MapHolder, Acti
                         documentId));
             }
         }
+
         return false;
+    }
+
+    private Object getDocType(MapHolder a) {
+        Object docType = a.string("documentType");
+
+        if (docType == null) {
+            docType = a.string("actionGroup.Type", true);
+        }
+
+        if (docType == null) {
+            docType = a.string("poolGroup.Type", true);
+        }
+
+        return docType;
     }
 }

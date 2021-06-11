@@ -117,6 +117,12 @@
     "sqlType": "INT4"
   },
   {
+    "esPath": "creator",
+    "esType": "object",
+    "required": true,
+    "sqlType": ""
+  },
+  {
     "esPath": "creator.id",
     "esType": "string",
     "required": true,
@@ -360,6 +366,12 @@
     "esType": "object",
     "ignorePath": true,
     "sqlPath": "",
+    "sqlType": ""
+  },
+  {
+    "esPath": "whoami",
+    "esType": "object",
+    "required": true,
     "sqlType": ""
   },
   {

@@ -13,6 +13,12 @@
     "sqlType": "TIMESTAMP WITH TIME ZONE"
   },
   {
+    "esPath": "document",
+    "esType": "object",
+    "required": true,
+    "sqlType": ""
+  },
+  {
     "esPath": "document.id",
     "esType": "string",
     "required": true,
@@ -62,6 +68,12 @@
     "esType": "string",
     "sqlPath": "businessException.reason",
     "sqlType": "VARCHAR(255)"
+  },
+  {
+    "esPath": "source",
+    "esType": "object",
+    "required": true,
+    "sqlType": ""
   },
   {
     "esPath": "source.actionType",
