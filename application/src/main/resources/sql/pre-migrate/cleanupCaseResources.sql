@@ -38,4 +38,5 @@ delete from notification where fk_case_sid in (select sid from rina_case where i
 delete from notification_alarm where fk_case_sid in (select sid from rina_case where id=:caseId);
 delete from temp_document where fk_case_sid in (select sid from rina_case where id=:caseId);
 delete from temp_action where fk_case_sid in (select sid from rina_case where id=:caseId);
+delete from temp_attachment where fk_case_sid in (select sid from rina_case where id=:caseId);
 delete from rina_case where id=:caseId;

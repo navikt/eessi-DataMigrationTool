@@ -15,12 +15,6 @@
     "sqlType": "TEXT"
   },
   {
-    "esPath": "creator",
-    "esType": "object",
-    "required": true,
-    "sqlType": ""
-  },
-  {
     "esPath": "creator.id",
     "esType": "string",
     "sqlPath": "iamUser.id",
@@ -44,13 +38,10 @@
     "sqlType": ""
   },
   {
-    "comment": "should be user",
     "esPath": "creator.type",
     "esType": "string",
-    "required": true,
     "sqlPath": "",
-    "sqlType": "VARCHAR(12)",
-    "value": "regex((User|ROLE_REGULAR))",
+    "sqlType": "TEXT",
     "importIgnore": true
   },
   {

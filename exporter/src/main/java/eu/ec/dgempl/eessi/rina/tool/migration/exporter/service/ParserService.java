@@ -39,14 +39,10 @@ public class ParserService {
      * leaf of the document and uses {@link Aggregator#accumulate(Object, Object)} for aggregating and propagating the results to the
      * document level
      *
-     * @param document
-     *            the elasticsearch document
-     * @param parent
-     *            the parent of {@code document}
-     * @param aggregator
-     *            {@link Aggregator} instance that provides methods for processing fields and aggregating results
-     * @param <T>
-     *            generic type of objects handled by {@code aggregator}
+     * @param document   the elasticsearch document
+     * @param parent     the parent of {@code document}
+     * @param aggregator {@link Aggregator} instance that provides methods for processing fields and aggregating results
+     * @param <T>        generic type of objects handled by {@code aggregator}
      * @return
      */
     public <T> T parse(EsDocument document, EsDocument parent, Aggregator<T> aggregator) {
@@ -80,14 +76,10 @@ public class ParserService {
      * {@link Aggregator#accumulate(Object, Object)}. The result of the processing can be anything (e.g. boolean for simple validation, or
      * aggregated stats for data analysis)
      *
-     * @param esFieldPath
-     *            current path in the json object
-     * @param obj
-     *            the json object
-     * @param aggregator
-     *            {@link Aggregator} instance that provides methods for processing fields and aggregating results
-     * @param context
-     *            the validation context
+     * @param esFieldPath current path in the json object
+     * @param obj         the json object
+     * @param aggregator  {@link Aggregator} instance that provides methods for processing fields and aggregating results
+     * @param context     the validation context
      * @return
      */
     private <T> T walk(String esFieldPath, @Nullable Object obj, Aggregator<T> aggregator, ValidationContext context) {
@@ -125,12 +117,14 @@ public class ParserService {
                     .reduce(aggregator.identity(), aggregator::accumulate);
             // @formatter:on
 
-            List<String> requiredFields = context.getSchema().getRequiredFields(normalisedPath);
+            if (((Map<String, Object>) obj).isEmpty() == false) {
+                List<String> requiredFields = context.getSchema().getRequiredFields(normalisedPath);
 
-            for (String requiredField : requiredFields) {
-                if (((Map<String, Object>) obj).containsKey(requiredField) == false) {
-                    // force the processing of required fields, even if they don't exist in Elasticsearch
-                    results = aggregator.accumulate(results, aggregator.process(updatedPath + requiredField, null, context));
+                for (String requiredField : requiredFields) {
+                    if (((Map<String, Object>) obj).containsKey(requiredField) == false) {
+                        // force the processing of required fields, even if they don't exist in Elasticsearch
+                        results = aggregator.accumulate(results, aggregator.process(updatedPath + requiredField, null, context));
+                    }
                 }
             }
 

@@ -59,6 +59,7 @@ DELETE FROM case_comment;
 DELETE FROM case_property;
 DELETE FROM temp_document;
 DELETE FROM temp_action;
+DELETE FROM temp_attachment;
 DELETE FROM rina_case;
 
 alter table DOCUMENT add constraint FK_DOC__DOC_BVERSION foreign key (FK_DOC_BVERSION_SID) references DOCUMENT_BVERSION (SID) on delete restrict on update restrict;;

@@ -439,5 +439,12 @@
     "ignorePath": true,
     "sqlPath": "",
     "sqlType": ""
+  },
+  {
+    "esPath": "attachments",
+    "esType": "object",
+    "ignorePath": true,
+    "sqlPath": "",
+    "sqlType": ""
   }
 ]

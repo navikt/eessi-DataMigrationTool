@@ -81,7 +81,7 @@ public class ScriptExecutionService {
     public void cleanupPostCaseResources() throws Exception {
         ProgrammaticTransactionUtil.processSuccessfulTransaction(transactionManager, () -> {
 
-            logger.info("Cleaning up database!");
+            logger.info("Cleaning up database: post-case resources (pendingMessages, businessExceptions, pendingSignatures, activities!");
 
             jdbcTemplate.execute("SET search_path TO rina;");
 
@@ -90,6 +90,24 @@ public class ScriptExecutionService {
             rdp.setSqlScriptEncoding(StandardCharsets.UTF_8.name());
 
             rdp.addScript(resourceLoader.getResource("file:" + scriptsPath + "/pre-migrate/cleanupPostCaseResources.sql"));
+            DatabasePopulatorUtils.execute(rdp, dataSource);
+
+            jdbcTemplate.execute("SET search_path TO rina;");
+        });
+    }
+
+    public void cleanupCasePrefill() throws Exception {
+        ProgrammaticTransactionUtil.processSuccessfulTransaction(transactionManager, () -> {
+
+            logger.info("Cleaning up database: case prefills!");
+
+            jdbcTemplate.execute("SET search_path TO rina;");
+
+            final ResourceLoader resourceLoader = new DefaultResourceLoader();
+            final ResourceDatabasePopulator rdp = new ResourceDatabasePopulator();
+            rdp.setSqlScriptEncoding(StandardCharsets.UTF_8.name());
+
+            rdp.addScript(resourceLoader.getResource("file:" + scriptsPath + "/post-migrate/cleanupCasePrefill.sql"));
             DatabasePopulatorUtils.execute(rdp, dataSource);
 
             jdbcTemplate.execute("SET search_path TO rina;");

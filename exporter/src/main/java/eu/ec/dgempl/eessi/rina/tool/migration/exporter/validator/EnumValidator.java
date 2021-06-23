@@ -66,7 +66,7 @@ public class EnumValidator extends AbstractValidator {
                     return results;
                 }
                 // add exception for cases_document
-                // conversations.participants.role = 'CounterParty' and conversations.participants.organisation.id AT:*
+                // conversations.participants.role = 'CounterParty' and conversations.participants.organisation.id AT:* or DE:*
                 exceptionIndex = context.getDocument().getIndex().equalsIgnoreCase(EEsIndex.CASES.value());
                 exceptionType = context.getDocument().getType().equalsIgnoreCase(EEsType.DOCUMENT.value());
                 exceptionPath = JsonPathHelper.normalisePath(path).equals("conversations.participants.role");
@@ -75,9 +75,9 @@ public class EnumValidator extends AbstractValidator {
                     Object orgId = getOrganisationId(path, context.getDocument().getObject());
                     if (orgId instanceof String) {
                         String organisationId = (String) orgId;
-                        if (organisationId.startsWith("AT:")) {
+                        if (organisationId.startsWith("AT:") || organisationId.startsWith("DE:")) {
                             logger.info(String.format(
-                                    "Encountered conversations.participants.role with value CounterParty and country code AT in document with id %s. Skipping this validation. This value will be replaced by Receiver",
+                                    "Encountered conversations.participants.role with value CounterParty and country code AT or DE in document with id %s. Skipping this validation. This value will be replaced by Receiver",
                                     context.getDocument().getObjectId()));
                             results.add(ValidationResult.ok(path, obj));
                             return results;

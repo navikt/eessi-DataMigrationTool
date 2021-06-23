@@ -1,7 +1,5 @@
 package eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper.cases;
 
-import static eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.RepositoryUtils.*;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -18,6 +16,7 @@ import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.DmtEnumNotFoundExcept
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.DocumentFields;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper._abstract.AbstractMapToEntityMapper;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.RepositoryUtils;
 
 import ma.glasnost.orika.MappingContext;
 
@@ -66,9 +65,10 @@ public class MapToTempDocumentMapper extends AbstractMapToEntityMapper<MapHolder
     private void mapCaseId(final MapHolder a, final TempDocument b) {
         String caseId = a.string(DocumentFields.CASE_ID);
 
-        RinaCase rinaCase = findById(caseId, rinaCaseRepo::findById, RinaCase.class);
-
-        b.setRinaCase(rinaCase);
+        RinaCase rinaCase = RepositoryUtils.findById(caseId, rinaCaseRepo::findById);
+        if (rinaCase != null) {
+            b.setRinaCase(rinaCase);
+        }
     }
 
     private void mapJson(MapHolder a, TempDocument b) {

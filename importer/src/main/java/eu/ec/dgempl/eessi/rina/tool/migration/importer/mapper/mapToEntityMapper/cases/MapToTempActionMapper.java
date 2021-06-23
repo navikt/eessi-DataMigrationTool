@@ -48,8 +48,10 @@ public class MapToTempActionMapper extends AbstractMapToEntityMapper<MapHolder, 
     private void mapRinaCase(final MapHolder a, final TempAction b) {
         String caseId = a.string(ActionFields.CASE_ID);
 
-        RinaCase rinaCase = RepositoryUtils.findById(caseId, rinaCaseRepo::findById, RinaCase.class);
-        b.setRinaCase(rinaCase);
+        RinaCase rinaCase = RepositoryUtils.findById(caseId, rinaCaseRepo::findById);
+        if (rinaCase != null) {
+            b.setRinaCase(rinaCase);
+        }
     }
 
     private void mapStatus(final MapHolder a, final TempAction b) {

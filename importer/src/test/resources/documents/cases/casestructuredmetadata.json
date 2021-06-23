@@ -59,7 +59,11 @@
     "surname": "o2mvhac7nk8yjskrf7o2tyl3jraneh70",
     "name": "pi2jq9phn2inz9f7cgbw1i3uuyxpg9kg",
     "birthday": "2000-09-01",
-    "sex": "m"
+    "sex": "m",
+    "address": {
+      "street": "testStreet",
+      "city": "testCity"
+    }
   },
   "whoami": {
     "activeSince": "2020-06-25T22:00:00Z",
@@ -359,6 +363,128 @@
       "bulk": false,
       "isFirstDocument": false,
       "status": "empty"
+    }
+  ],
+  "attachments": [
+    {
+      "internalId": "341308_4279a0d6584e46efa754140dea023366",
+      "fileName": "duplicateCase.xlsx",
+      "creator": {
+        "name": "supervisor",
+        "organisation": {
+          "activeSince": "2020-06-25T22:00:00Z",
+          "address": {
+            "country": "FR",
+            "town": null,
+            "street": null,
+            "postalCode": null,
+            "region": null
+          },
+          "registryNumber": null,
+          "acronym": "FR:FRNA10",
+          "countryCode": "FR",
+          "name": "FR:FRNA10",
+          "contactMethods": null,
+          "location": null,
+          "id": "FR:FRNA10"
+        },
+        "id": "supervisor",
+        "type": "User"
+      },
+      "versions": [
+        {
+          "date": "2021-06-16T09:26:32Z",
+          "id": "1",
+          "user": {
+            "name": "supervisor",
+            "organisation": {
+              "activeSince": "2020-06-25T22:00:00Z",
+              "address": {
+                "country": "FR",
+                "town": null,
+                "street": null,
+                "postalCode": null,
+                "region": null
+              },
+              "registryNumber": null,
+              "acronym": "FR:FRNA10",
+              "countryCode": "FR",
+              "name": "FR:FRNA10",
+              "contactMethods": null,
+              "location": null,
+              "id": "FR:FRNA10"
+            },
+            "id": "supervisor",
+            "type": "User"
+          }
+        }
+      ],
+      "lastUpdate": "2021-06-16T09:26:32Z",
+      "caseId": "3294",
+      "name": "duplicateCase.xlsx",
+      "id": "4279a0d6584e46efa754140dea023366",
+      "mimeType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "creationDate": "2021-06-16T09:26:32Z"
+    },
+    {
+      "internalId": "caseIdThatIsNotFound_4279a0d6584e46efa754140dea023366",
+      "fileName": "duplicateCase.xlsx",
+      "creator": {
+        "name": "supervisor",
+        "organisation": {
+          "activeSince": "2020-06-25T22:00:00Z",
+          "address": {
+            "country": "FR",
+            "town": null,
+            "street": null,
+            "postalCode": null,
+            "region": null
+          },
+          "registryNumber": null,
+          "acronym": "FR:FRNA10",
+          "countryCode": "FR",
+          "name": "FR:FRNA10",
+          "contactMethods": null,
+          "location": null,
+          "id": "FR:FRNA10"
+        },
+        "id": "supervisor",
+        "type": "User"
+      },
+      "versions": [
+        {
+          "date": "2021-06-16T09:26:32Z",
+          "id": "1",
+          "user": {
+            "name": "supervisor",
+            "organisation": {
+              "activeSince": "2020-06-25T22:00:00Z",
+              "address": {
+                "country": "FR",
+                "town": null,
+                "street": null,
+                "postalCode": null,
+                "region": null
+              },
+              "registryNumber": null,
+              "acronym": "FR:FRNA10",
+              "countryCode": "FR",
+              "name": "FR:FRNA10",
+              "contactMethods": null,
+              "location": null,
+              "id": "FR:FRNA10"
+            },
+            "id": "supervisor",
+            "type": "User"
+          }
+        }
+      ],
+      "lastUpdate": "2021-06-16T09:26:32Z",
+      "caseId": "caseIdThatIsNotFound",
+      "name": "duplicateCase.xlsx",
+      "id": "4279a0d6584e46efa754140dea023366",
+      "mimeType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "creationDate": "2021-06-16T09:26:32Z"
     }
   ]
 }

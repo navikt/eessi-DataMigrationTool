@@ -1,7 +1,10 @@
 package eu.ec.dgempl.eessi.rina.tool.migration.importer.utils;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
 
 import eu.ec.dgempl.eessi.rina.model.enumtypes.ECasePrefillGroup;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.CasePrefill;
@@ -13,24 +16,35 @@ public final class CasesUtils {
 
     public static void addCasePrefills(MapHolder a, String prefillKey, RinaCase b, ECasePrefillGroup eCasePrefillGroup) {
         MapHolder prefills = a.getMapHolder(prefillKey);
-        getPrefills(prefills, eCasePrefillGroup)
+        getPrefills(prefills, eCasePrefillGroup, "")
                 .forEach(b::addCasePrefill);
     }
 
-    private static List<CasePrefill> getPrefills(final MapHolder prefill, final ECasePrefillGroup prefillGroup) {
-        return prefill.fields()
+    private static List<CasePrefill> getPrefills(final MapHolder prefill, final ECasePrefillGroup prefillGroup, String path) {
+        List<CasePrefill> casePrefills = new ArrayList<>();
+        prefill.fields()
                 .stream()
                 .filter(key -> prefill.get(key, true) != null)
-                .map(key -> {
+                .forEach(key -> {
                     Object value = prefill.get(key, true);
 
-                    CasePrefill casePrefill = new CasePrefill();
-                    casePrefill.setKey(key);
-                    casePrefill.setValue(value != null ? String.valueOf(value) : null);
-                    casePrefill.setPrefillGroup(prefillGroup);
-                    return casePrefill;
-                })
-                .collect(Collectors.toList());
+                    if (value instanceof String) {
+                        CasePrefill casePrefill = new CasePrefill();
+                        casePrefill.setKey(addPath(path, key));
+                        casePrefill.setValue(String.valueOf(value));
+                        casePrefill.setPrefillGroup(prefillGroup);
+                        casePrefills.add(casePrefill);
+                    }
+
+                    if (value instanceof Map) {
+                        casePrefills.addAll(getPrefills(
+                                new MapHolder((Map<String, Object>) value, prefill.getVisitedFields(), prefill.addPath(key)),
+                                prefillGroup,
+                                addPath(path, key)));
+                    }
+                });
+
+        return casePrefills;
     }
 
     public static String getCaseId(String caseId) {
@@ -40,5 +54,9 @@ public final class CasesUtils {
     public static boolean isDefaultCase(String caseId) {
         return CaseFields.DEFAULT_CASE_ID.equalsIgnoreCase(caseId);
     }
-    
+
+    private static String addPath(String path, String currentKey) {
+        return StringUtils.isNotBlank(path) ? path + "." + currentKey : currentKey;
+    }
+
 }

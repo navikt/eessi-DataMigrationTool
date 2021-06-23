@@ -112,7 +112,8 @@ public class DocumentImporter extends AbstractDataImporter implements CaseImport
     }
 
     private void mapParentIfR018(Document document) {
-        if (EDocumentType.R_018.value().equalsIgnoreCase(document.getDocumentTypeVersion().getDocumentType().getType())) {
+        if (EDocumentType.R_018.value().equalsIgnoreCase(document.getDocumentTypeVersion().getDocumentType().getType()) &&
+                document.getParent() == null) {
             String rinaCaseId = document.getRinaCase().getId();
 
             List<Document> documentsWithTypeR017 = documentRepo.findByRinaCaseIdAndDocumentTypeVersionDocumentTypeType(rinaCaseId,

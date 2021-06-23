@@ -1,5 +1,21 @@
 EESSI-RINA-DATA-MIGRATION
 
+v2.1.5
+--------------------------------------
+Validator:
+- updated field_mappings: cases_comment creator is no longer required
+- updated field_mappings: cases_comment creator.type is no longer required and the value has no enum constraint
+- updated conversation.participants EnumValidator: CounterParty is now replaced with RECEIVER for other institutions too
+- updated field_mapping cases_casestructuredmetadata: ignore attachments
+Importer:
+- updated conversation.participants mapper: CounterParty is now replaced with RECEIVER for DE also
+- for R018, if the parent is already set, do not lookup for the correct R017
+- attachments in casestructuredmetadata are now saved in temp tables
+- fix receive-udpate actions
+- fix case_prefill subject: address is now correctly imported
+Other:
+- added cleanup script for specific fields of case_prefill
+
 v2.1.4
 --------------------------------------
 Validator:

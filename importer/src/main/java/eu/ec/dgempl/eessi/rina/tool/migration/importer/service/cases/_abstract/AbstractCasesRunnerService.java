@@ -95,6 +95,8 @@ public abstract class AbstractCasesRunnerService {
             }
         }
 
+        scriptExecutionService.cleanupCasePrefill();
+
         if (cases.contains(CaseFields.DEFAULT_CASE_ID)) {
             handleCaseZero(casesSummaryReport, shouldCleanupPostCaseResource());
         }
@@ -221,6 +223,12 @@ public abstract class AbstractCasesRunnerService {
         DocumentsReport documentsReport = getDocumentReport(caseReport, EElasticType.CASES_DOCUMENT);
         DocumentsReport documentContentsReport = getDocumentReport(caseReport, EElasticType.CASES_DOCUMENTCONTENT);
 
+        logger.info(
+                "Started import for caseId {} with {} documents and {} documentContents",
+                CaseFields.DEFAULT_CASE_ID,
+                documentsReport.getTotal(),
+                documentContentsReport.getTotal());
+
         Consumer<Map<String, Pair<MapHolder, List<MapHolder>>>> docsAndDocContentsConsumer = createDocsAndDocContentsConsumer(
                 documentImporter,
                 documentContentImporter,
@@ -235,6 +243,7 @@ public abstract class AbstractCasesRunnerService {
         DocumentsReport notificationsReport = notificationImporter.importDataWithoutTransaction(CaseFields.DEFAULT_CASE_ID);
         caseReport.swallow(notificationsReport);
 
+        logger.info("Imported case {}: {}", CaseFields.DEFAULT_CASE_ID, rinaJsonMapper.objToJson(caseReport));
         casesSummaryReport.swallow(caseReport);
     }
 
@@ -284,12 +293,11 @@ public abstract class AbstractCasesRunnerService {
                             .collect(Collectors.toList());
 
                     try {
-                        esClientService.processAllFilterByTermsArray(
-                                EEsIndex.CASES.value(),
-                                new String[] { EEsType.DOCUMENTCONTENT.value() },
-                                createDocContentsConsumer(docsAndContentsMap),
-                                DocumentContentFields.ID,
-                                docIds.toArray(new String[] {}));
+                        esClientService.processDocumentContentsByCaseIdAndIds(
+                                CaseFields.DEFAULT_CASE_ID,
+                                docIds.toArray(new String[] {}),
+                                createDocContentsConsumer(docsAndContentsMap)
+                        );
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -297,7 +305,7 @@ public abstract class AbstractCasesRunnerService {
                     docsAndContentsMapConsumer.accept(docsAndContentsMap);
                 },
                 queryTerm
-                );
+        );
     }
 
     @NotNull

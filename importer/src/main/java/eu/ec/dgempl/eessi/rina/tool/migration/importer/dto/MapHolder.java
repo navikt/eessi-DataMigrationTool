@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.Assert;
 
@@ -312,6 +313,10 @@ public class MapHolder {
 
     public void put(String key, Object value) {
         this.holding.put(key, value);
+    }
+
+    public boolean isEmpty() {
+        return MapUtils.isEmpty(this.holding);
     }
 
     public void visitAll() {

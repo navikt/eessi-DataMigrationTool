@@ -5,12 +5,12 @@
     <parent>
         <groupId>eu.ec.dgempl.eessi</groupId>
         <artifactId>ES2SQL_data_migration</artifactId>
-        <version>2.1.4</version>
+        <version>2.1.5</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>importer</artifactId>
-    <version>2.1.4</version>
+    <version>2.1.5</version>
 
     <properties>
         <main.basedir>${project.basedir}</main.basedir>

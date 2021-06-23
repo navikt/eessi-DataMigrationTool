@@ -519,6 +519,26 @@ public class EsClientService {
         processAllByQuery(index, types, sourceBuilder, processor, false);
     }
 
+    public void processDocumentContentsByCaseIdAndIds(String caseId, String[] values, Consumer<SearchHit[]> processor) throws IOException {
+
+        PreconditionsHelper.notEmpty(caseId, "caseId");
+        PreconditionsHelper.notNull(values, "values");
+        PreconditionsHelper.notNull(processor, "processor");
+
+        // construct the query
+        QueryBuilder query = QueryBuilders.boolQuery();
+        ((BoolQueryBuilder) query).must(QueryBuilders.termsQuery("id", values));
+        ((BoolQueryBuilder) query).must(QueryBuilders.termQuery("caseId", caseId));
+
+        //@formatter:off
+        SearchSourceBuilder sourceBuilder = new SearchSourceBuilder()
+                .query(query)
+                .size(BATCH_SIZE);
+        //@formatter:on
+
+        processAllByQuery(EEsIndex.CASES.value(), new String[] { EEsType.DOCUMENTCONTENT.value() }, sourceBuilder, processor, false);
+    }
+
     /**
      * Method for processing all documents found in a specific {@code index} and all {@code types}. A {@code sourceBuilder} must be provided
      * for filtering the elasticsearch results. The processing method is injected by the caller.

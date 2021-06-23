@@ -147,7 +147,7 @@ public class ReceiveUpdateActionProducer implements ReceiveActionProducer {
         logger.debug("Creating RECEIVE_UPDATE action for [caseId={}, docType={}, docId={}]", caseId, document.getType(),
                 dbDocument.getId());
 
-        ActionDO actionDO = ReceiveActionsHelper.createDefaultReceiveAction(caseId, document.getType());
+        ActionDO actionDO = ReceiveActionsHelper.createDefaultReceiveUpdateAction(caseId, document.getType());
         actionDO.setDocumentId(dbDocument.getId());
 
         // set parent document

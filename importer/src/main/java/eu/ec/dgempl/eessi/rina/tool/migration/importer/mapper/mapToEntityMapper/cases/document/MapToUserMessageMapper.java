@@ -65,8 +65,8 @@ public class MapToUserMessageMapper extends AbstractMapToEntityMapper<MapHolder,
         mapOrganisation(a, DocumentFields.RECEIVER, b::setReceiver);
         mapSbdh(a, b, context);
         mapAction(a, b);
-        mapStatus(a, b);
         mapResponse(a, b);
+        mapStatus(a, b);
     }
 
     private void mapSbdh(final MapHolder a, final UserMessage b, final MappingContext context) {
@@ -142,15 +142,30 @@ public class MapToUserMessageMapper extends AbstractMapToEntityMapper<MapHolder,
             b.setStatus(eUserMessageStatus);
         }
 
-        Boolean isSent = a.bool(DocumentFields.IS_SENT, Boolean.FALSE);
-        if (isSent) {
-            b.setStatus(EUserMessageStatus.SENT);
+        if (b.getStatus() == null) {
+            UserMessageResponse userMessageResponse = b.getUserMessageResponse();
+            if (userMessageResponse != null) {
+                if (userMessageResponse.getType().equals(ERINAMessageType.ERROR)) {
+                    b.setStatus(EUserMessageStatus.ERROR);
+                } else {
+                    if (userMessageResponse.getType().equals(ERINAMessageType.ACK)) {
+                        b.setStatus(EUserMessageStatus.DELIVERED);
+                    }
+                }
+            }
+        }
+
+        if (b.getStatus() == null) {
+            Boolean isSent = a.bool(DocumentFields.IS_SENT, Boolean.FALSE);
+            if (isSent) {
+                b.setStatus(EUserMessageStatus.SENT);
+            }
         }
     }
 
     private void mapAction(final MapHolder a, final UserMessage b) {
         MapHolder sbdhHolder = a.getMapHolder(DocumentFields.SBDH);
-        if (sbdhHolder != null && sbdhHolder.getHolding() != null) {
+        if (sbdhHolder != null && !sbdhHolder.isEmpty()) {
             String action = sbdhHolder.string(DocumentFields.DOCUMENT_IDENTIFICATION_ACTION, true);
             ECaseActionType eCaseActionType = ECaseActionType.fromString(action);
             b.setAction(eCaseActionType);
@@ -159,10 +174,16 @@ public class MapToUserMessageMapper extends AbstractMapToEntityMapper<MapHolder,
 
     private void mapResponse(final MapHolder a, final UserMessage b) {
         if (a.containsKey(DocumentFields.ACK)) {
-            mapUserMessageResponse(a.getMapHolder(DocumentFields.ACK), b, ERINAMessageType.ACK);
+            MapHolder ack = a.getMapHolder(DocumentFields.ACK);
+            if (!ack.isEmpty()) {
+                mapUserMessageResponse(ack, b, ERINAMessageType.ACK);
+            }
         } else {
             if (a.containsKey(DocumentFields.ERROR)) {
-                mapUserMessageResponse(a.getMapHolder(DocumentFields.ERROR), b, ERINAMessageType.ERROR);
+                MapHolder err = a.getMapHolder(DocumentFields.ERROR);
+                if (!err.isEmpty()) {
+                    mapUserMessageResponse(err, b, ERINAMessageType.ERROR);
+                }
             }
         }
     }
@@ -285,9 +306,9 @@ public class MapToUserMessageMapper extends AbstractMapToEntityMapper<MapHolder,
 
         EDocumentStatus documentStatus = document.getStatus();
         if (documentStatus == null) {
-            logger.info(
-                    String.format("Could not resolve the action type for userMessage with id %s because document status is null",
-                            userMessageId));
+            logger.info(String.format(
+                    "Could not resolve the action type for userMessage with id %s because document status is null",
+                    userMessageId));
             return actionType;
         }
 
@@ -308,8 +329,10 @@ public class MapToUserMessageMapper extends AbstractMapToEntityMapper<MapHolder,
                 actionType = ECaseActionType.UPDATE;
             }
         }
-        logger.info(
-                String.format("Resolving the action type for userMessage with id %s. Setting action type: %s", userMessageId, actionType));
+        logger.info(String.format(
+                "Resolving the action type for userMessage with id %s. Setting action type: %s",
+                userMessageId,
+                actionType));
         return actionType;
     }
 }

@@ -1,4 +1,5 @@
 CREATE SEQUENCE IF NOT EXISTS TEMP_ACTION_SEQ;
+CREATE SEQUENCE IF NOT EXISTS TEMP_ATTACHMENT_SEQ;
 CREATE SEQUENCE IF NOT EXISTS TEMP_DOCUMENT_SEQ;
 
 CREATE TABLE IF NOT EXISTS TEMP_ACTION (
@@ -14,6 +15,17 @@ CREATE TABLE IF NOT EXISTS TEMP_ACTION (
     JSON                 TEXT                 null
 );
 
+CREATE TABLE IF NOT EXISTS TEMP_ATTACHMENT (
+    SID                  INT8                 not null default nextval('TEMP_ATTACHMENT_SEQ'),
+    FK_CASE_SID          INT8                 null,
+    ID                   VARCHAR(255)         not null,
+    NAME                 VARCHAR(255)         null,
+    FILENAME             VARCHAR(255)         null,
+    PATHNAME             VARCHAR(255)         null,
+    CREATED_BY           VARCHAR(255)         null,
+    JSON                 TEXT                 null
+);
+
 CREATE TABLE IF NOT EXISTS TEMP_DOCUMENT (
    SID                  INT8                 not null default nextval('TEMP_DOCUMENT_SEQ'),
    FK_CASE_SID          INT8                 not null,
@@ -26,11 +38,19 @@ CREATE TABLE IF NOT EXISTS TEMP_DOCUMENT (
    JSON                 TEXT                 null
 );
 
+ALTER TABLE TEMP_DOCUMENT ALTER COLUMN FK_CASE_SID DROP NOT NULL;
+
 ALTER TABLE TEMP_ACTION DROP CONSTRAINT IF EXISTS FK_TEMP_ACTION__CASE;
+ALTER TABLE TEMP_ATTACHMENT DROP CONSTRAINT IF EXISTS FK_TEMP_ATTACHMENT__CASE;
 ALTER TABLE TEMP_DOCUMENT DROP CONSTRAINT IF EXISTS FK_TEMP_DOCUMENT__CASE;
 
 alter table TEMP_ACTION
     add constraint FK_TEMP_ACTION__CASE foreign key (FK_CASE_SID)
+        references RINA_CASE (SID)
+        on delete restrict on update restrict;
+
+alter table TEMP_ATTACHMENT
+    add constraint FK_TEMP_ATTACHMENT__CASE foreign key (FK_CASE_SID)
         references RINA_CASE (SID)
         on delete restrict on update restrict;
 

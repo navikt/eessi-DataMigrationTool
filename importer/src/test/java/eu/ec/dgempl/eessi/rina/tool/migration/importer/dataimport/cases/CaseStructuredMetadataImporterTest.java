@@ -7,7 +7,6 @@ import static org.mockito.Mockito.*;
 
 import java.util.List;
 
-import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,21 +21,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import eu.ec.dgempl.eessi.rina.commons.transformation.RinaJsonMapper;
 import eu.ec.dgempl.eessi.rina.model.common.BucProcessDefinition;
-import eu.ec.dgempl.eessi.rina.model.enumtypes.ECountryCode;
-import eu.ec.dgempl.eessi.rina.model.enumtypes.ERole;
-import eu.ec.dgempl.eessi.rina.model.enumtypes.ESector;
-import eu.ec.dgempl.eessi.rina.model.jpa.entity.IamGroup;
-import eu.ec.dgempl.eessi.rina.model.jpa.entity.IamOrigin;
-import eu.ec.dgempl.eessi.rina.model.jpa.entity.IamUser;
-import eu.ec.dgempl.eessi.rina.model.jpa.entity.Organisation;
-import eu.ec.dgempl.eessi.rina.model.jpa.entity.ProcessDef;
-import eu.ec.dgempl.eessi.rina.model.jpa.entity.ProcessDefVersion;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.RinaCase;
-import eu.ec.dgempl.eessi.rina.model.jpa.entity.Role;
-import eu.ec.dgempl.eessi.rina.model.jpa.entity.Sector;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.TempAction;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity.TempAttachment;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.TempDocument;
-import eu.ec.dgempl.eessi.rina.model.jpa.entity.Tenant;
 import eu.ec.dgempl.eessi.rina.repo.AssignmentRepo;
 import eu.ec.dgempl.eessi.rina.repo.CaseParticipantRepo;
 import eu.ec.dgempl.eessi.rina.repo.CasePrefillRepo;
@@ -47,16 +35,19 @@ import eu.ec.dgempl.eessi.rina.repo.ProcessDefVersionRepo;
 import eu.ec.dgempl.eessi.rina.repo.RinaCaseRepo;
 import eu.ec.dgempl.eessi.rina.repo.RoleRepo;
 import eu.ec.dgempl.eessi.rina.repo.TempActionRepo;
+import eu.ec.dgempl.eessi.rina.repo.TempAttachmentRepo;
 import eu.ec.dgempl.eessi.rina.repo.TempDocumentRepo;
 import eu.ec.dgempl.eessi.rina.repo.TenantRepo;
 import eu.ec.dgempl.eessi.rina.service.tx.util.ProcessDefUtil;
 import eu.ec.dgempl.eessi.rina.tool.migration.common.model.fields.CaseFields;
 import eu.ec.dgempl.eessi.rina.tool.migration.common.service.DefaultValuesService;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.helper.AttachmentsHelper;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.BeanMapper;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper.cases.MapToAssignmentMapper;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper.cases.MapToRinaCaseMapper;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper.cases.MapToTempActionMapper;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper.cases.MapToTempAttachmentMapper;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper.cases.MapToTempDocumentMapper;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.service.OrganisationService;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.service.UserService;
@@ -65,10 +56,6 @@ import eu.ec.dgempl.eessi.rina.tool.migration.importer.spring.config.Application
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = ApplicationContextConfiguration.class)
 public class CaseStructuredMetadataImporterTest {
-
-    private static final int RANDOM_STRING_SIZE = 255;
-    private static final String NULL_UTF8_CHAR = "\u0000";
-    private static final String SPACE = "";
 
     @Autowired
     ApplicationContext context;
@@ -104,6 +91,9 @@ public class CaseStructuredMetadataImporterTest {
     private TempActionRepo tempActionRepo;
 
     @Mock
+    private TempAttachmentRepo tempAttachmentRepo;
+
+    @Mock
     private TempDocumentRepo tempDocumentRepo;
 
     @Mock
@@ -118,19 +108,20 @@ public class CaseStructuredMetadataImporterTest {
     @Mock
     private UserService userService;
 
-    private ObjectMapper objectMapper;
+    @Mock
+    private AttachmentsHelper attachmentsHelper;
+
     private CaseStructuredMetadataImporter caseStructuredMetadataImporter;
 
     @Before
     public void setUp() {
-        objectMapper = new ObjectMapper();
-
         caseStructuredMetadataImporter = new CaseStructuredMetadataImporter(
                 assignmentRepo,
                 casePrefillRepo,
                 caseParticipantRepo,
                 rinaCaseRepo,
                 tempActionRepo,
+                tempAttachmentRepo,
                 tempDocumentRepo);
 
         BeanMapper beanMapper = new BeanMapper();
@@ -146,10 +137,16 @@ public class CaseStructuredMetadataImporterTest {
 
         beanMapper.addMapper(mapToRinaCaseMapper);
 
-        RinaJsonMapper rinaJsonMapper = new RinaJsonMapper(objectMapper);
+        RinaJsonMapper rinaJsonMapper = new RinaJsonMapper(new ObjectMapper());
 
         MapToTempActionMapper mapToTempActionMapper = new MapToTempActionMapper(rinaCaseRepo, rinaJsonMapper);
         beanMapper.addMapper(mapToTempActionMapper);
+
+        MapToTempAttachmentMapper mapToTempAttachmentMapper = new MapToTempAttachmentMapper(
+                attachmentsHelper,
+                rinaCaseRepo,
+                rinaJsonMapper);
+        beanMapper.addMapper(mapToTempAttachmentMapper);
 
         MapToTempDocumentMapper mapToTempDocumentMapper = new MapToTempDocumentMapper(rinaCaseRepo, rinaJsonMapper);
         beanMapper.addMapper(mapToTempDocumentMapper);
@@ -168,7 +165,6 @@ public class CaseStructuredMetadataImporterTest {
                 "documents/cases/casestructuredmetadata.json");
 
         String caseId = caseStructuredMetadataHolder.string(CaseFields.ID);
-
         RinaCase rinaCase = createRinaCase(caseId);
         when(rinaCaseRepo.saveAndFlush(any())).thenReturn(rinaCase);
         when(rinaCaseRepo.findById(caseId)).thenReturn(rinaCase);
@@ -188,29 +184,38 @@ public class CaseStructuredMetadataImporterTest {
         when(defaultsService.getDefaultValue(any())).thenReturn("1");
 
         String creatorId = caseStructuredMetadataHolder.string("creator.id", true);
-        creatorId = "system".equalsIgnoreCase(creatorId) ? "0" : creatorId;
-
-        when(iamUserRepo.findById(creatorId)).thenReturn(createRandomIamUser());
+        when(userService.resolveUser(eq(creatorId), any(), any())).thenReturn(createRandomIamUser());
 
         when(roleRepo.findByName(any())).thenReturn(createRandomRole());
-
         when(iamGroupRepo.findBySimpleNaturalId(any())).thenReturn(createRandomIamGroup());
+        when(attachmentsHelper.getAttachmentPathname(any(), any())).thenReturn("defaultFileName.json");
 
         List<TempAction> tempActions = Whitebox.invokeMethod(
                 caseStructuredMetadataImporter,
                 "getTempDocuments",
                 caseStructuredMetadataHolder,
-                CaseFields.ACTIONS,
+                ACTIONS,
                 TempAction.class);
 
         assertNotNull(tempActions);
         assertEquals(1, tempActions.size());
 
+        List<TempAttachment> tempAttachments = Whitebox.invokeMethod(
+                caseStructuredMetadataImporter,
+                "getTempDocuments",
+                caseStructuredMetadataHolder,
+                ATTACHMENTS,
+                TempAttachment.class);
+
+        assertNotNull(tempAttachments);
+        assertEquals(2, tempAttachments.size());
+        assertTrue(tempAttachments.stream().anyMatch(tempAttachment -> tempAttachment.getRinaCase() == null));
+
         List<TempDocument> tempDocuments = Whitebox.invokeMethod(
                 caseStructuredMetadataImporter,
                 "getTempDocuments",
                 caseStructuredMetadataHolder,
-                CaseFields.DOCUMENTS,
+                DOCUMENTS,
                 TempDocument.class);
 
         assertNotNull(tempDocuments);
@@ -222,53 +227,4 @@ public class CaseStructuredMetadataImporterTest {
         verify(tempDocumentRepo, times(1)).saveAll(tempDocuments);
 
     }
-
-    private RinaCase createRinaCase(String caseId) {
-        ProcessDefVersion processDefVersion = createRandomProcessDefVersion();
-        Tenant tenant = createRandomTenant();
-
-        return new RinaCase(tenant, processDefVersion, caseId);
-    }
-
-    private Organisation createRandomOrg() {
-        return new Organisation(randomString(), ECountryCode.BE);
-    }
-
-    private Tenant createRandomTenant() {
-        return new Tenant(createRandomOrg(), randomString());
-    }
-
-    private Sector createRandomSector() {
-        return new Sector(ESector.PENSION);
-    }
-
-    private ProcessDef createRandomProcessDef() {
-        return new ProcessDef(randomString(), createRandomSector(), randomString());
-    }
-
-    private ProcessDefVersion createRandomProcessDefVersion() {
-        return new ProcessDefVersion(createRandomProcessDef(), randomString());
-    }
-
-    private IamUser createRandomIamUser() {
-        return new IamUser(createRandomTenant(), createRandomIamOrigin(), randomString(), randomString());
-    }
-
-    private IamGroup createRandomIamGroup() {
-        return new IamGroup(createRandomTenant(), randomString(), randomString());
-    }
-
-    private IamOrigin createRandomIamOrigin() {
-        return new IamOrigin(randomString());
-    }
-
-    private Role createRandomRole() {
-        return new Role(ERole.SUPERVISOR);
-    }
-
-    private static String randomString() {
-        final String s = RandomStringUtils.random(RANDOM_STRING_SIZE);
-        return s.replaceAll(NULL_UTF8_CHAR, SPACE);
-    }
-
 }

@@ -1,7 +1,6 @@
 package eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper.cases.document;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -68,7 +67,7 @@ public class MapToDocumentConversationMapper extends AbstractMapToEntityMapper<M
             children.stream()
                     .map(child -> {
                         if (context != null) {
-                           return mapperFacade.map(child, childClass, context);
+                            return mapperFacade.map(child, childClass, context);
                         }
                         return mapperFacade.map(child, childClass);
                     })
@@ -77,22 +76,16 @@ public class MapToDocumentConversationMapper extends AbstractMapToEntityMapper<M
     }
 
     private void replaceRole(final List<MapHolder> children) {
-        // If there is already an EconversationParticipantRole.SENDER participant AND any role is "CounterParty" AND countryId is AT:*,
+        // If there is already an EconversationParticipantRole.SENDER participant AND any role is "CounterParty" AND countryId is AT:* or DE:*,
         // change "CounterParty" role to EconversationParticipantRole.RECEIVER
         Optional<MapHolder> sender = getSenderParticipant(children);
         if (sender.isPresent()) {
             children.forEach(child -> {
-                Map<String, Object> holding = child.getHolding();
-                if (holding != null && holding.containsKey(DocumentFields.ROLE)) {
-                    if ("CounterParty".equalsIgnoreCase((String)holding.get(DocumentFields.ROLE))) {
-                        if (holding.containsKey("organisation")) {
-                            Map<String, Object> organisation = (Map<String, Object>) holding.get("organisation");
-                            if (organisation.containsKey(DocumentFields.ID)) {
-                                String organisationId = (String) organisation.get(DocumentFields.ID);
-                                if (organisationId.startsWith("AT:")) {
-                                    child.getHolding().put(DocumentFields.ROLE, EConversationParticipantRole.RECEIVER.value());
-                                }
-                            }
+                if (child.containsKey(DocumentFields.ROLE)) {
+                    if ("CounterParty".equalsIgnoreCase(child.string(DocumentFields.ROLE))) {
+                        String orgId = child.string("organisation.id", true);
+                        if (StringUtils.isNotBlank(orgId) && (orgId.startsWith("AT:") || orgId.startsWith("DE:"))) {
+                            child.put(DocumentFields.ROLE, EConversationParticipantRole.RECEIVER.value());
                         }
                     }
                 }

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.RinaCase;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.TempAction;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity.TempAttachment;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.TempDocument;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity._abstraction.PersistableWithSid;
 import eu.ec.dgempl.eessi.rina.repo.AssignmentRepo;
@@ -19,6 +20,7 @@ import eu.ec.dgempl.eessi.rina.repo.CaseParticipantRepo;
 import eu.ec.dgempl.eessi.rina.repo.CasePrefillRepo;
 import eu.ec.dgempl.eessi.rina.repo.RinaCaseRepo;
 import eu.ec.dgempl.eessi.rina.repo.TempActionRepo;
+import eu.ec.dgempl.eessi.rina.repo.TempAttachmentRepo;
 import eu.ec.dgempl.eessi.rina.repo.TempDocumentRepo;
 import eu.ec.dgempl.eessi.rina.tool.migration.common.model.fields.CaseFields;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dataimport.CaseImporter;
@@ -37,6 +39,7 @@ public class CaseStructuredMetadataImporter extends AbstractDataImporter impleme
     private final CaseParticipantRepo caseParticipantRepo;
     private final RinaCaseRepo rinaCaseRepo;
     private final TempActionRepo tempActionRepo;
+    private final TempAttachmentRepo tempAttachmentRepo;
     private final TempDocumentRepo tempDocumentRepo;
 
     public CaseStructuredMetadataImporter(
@@ -45,12 +48,14 @@ public class CaseStructuredMetadataImporter extends AbstractDataImporter impleme
             final CaseParticipantRepo caseParticipantRepo,
             final RinaCaseRepo rinaCaseRepo,
             final TempActionRepo tempActionRepo,
+            final TempAttachmentRepo tempAttachmentRepo,
             final TempDocumentRepo tempDocumentRepo) {
         this.assignmentRepo = assignmentRepo;
         this.casePrefillRepo = casePrefillRepo;
         this.caseParticipantRepo = caseParticipantRepo;
         this.rinaCaseRepo = rinaCaseRepo;
         this.tempActionRepo = tempActionRepo;
+        this.tempAttachmentRepo = tempAttachmentRepo;
         this.tempDocumentRepo = tempDocumentRepo;
     }
 
@@ -71,8 +76,9 @@ public class CaseStructuredMetadataImporter extends AbstractDataImporter impleme
         saveInBulk(rinaCase::getParticipants, () -> caseParticipantRepo);
         saveInBulk(rinaCase::getAssignments, () -> assignmentRepo);
 
-        saveInBulk(() -> this.getTempDocuments(doc, CaseFields.DOCUMENTS, TempDocument.class), () -> tempDocumentRepo);
         saveInBulk(() -> this.getTempDocuments(doc, CaseFields.ACTIONS, TempAction.class), () -> tempActionRepo);
+        saveInBulk(() -> this.getTempDocuments(doc, CaseFields.ATTACHMENTS, TempAttachment.class), () -> tempAttachmentRepo);
+        saveInBulk(() -> this.getTempDocuments(doc, CaseFields.DOCUMENTS, TempDocument.class), () -> tempDocumentRepo);
     }
 
     private <T extends PersistableWithSid> List<T> getTempDocuments(MapHolder doc, String key, Class<T> clazz) {

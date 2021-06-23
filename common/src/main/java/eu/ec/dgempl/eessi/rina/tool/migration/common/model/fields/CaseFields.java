@@ -29,6 +29,7 @@ public class CaseFields {
     public static final String STATUS = "status";
 
     public static final String ACTIONS = "actions";
+    public static final String ATTACHMENTS = "attachments";
     public static final String DOCUMENTS = "documents";
 
     public static final String DEFAULT_CASE_ID = "0";

@@ -158,6 +158,23 @@ public class EnumValidatorTest {
     }
 
     @Test
+    public void check_conversationsParticipantsRole_CounterParty_fromDE() {
+
+        setUpValidationContextWithFiles("CaseDocumentWithConversationsParticipantsRoleCounterParty_fromDE.json");
+        path = "conversations[1].participants[1].role";
+        Object object = "CounterParty";
+        String enumType = "EConversationParticipantRole";
+        enumValidator = new EnumValidator(enumService, enumType);
+
+        ValidationResult expectedResult = ValidationResult.ok(path, object, null);
+
+        List<ValidationResult> result = enumValidator.validate(path, object, validationContext);
+
+        assertEquals(1, result.size());
+        Assertions.assertThat(result.get(0)).isEqualToComparingFieldByField(expectedResult);
+    }
+
+    @Test
     public void check_conversationsParticipantsRole_CounterParty_notFromAT() {
 
         setUpValidationContextWithFiles("CaseDocumentWithConversationsParticipantsRoleCounterParty.json");
