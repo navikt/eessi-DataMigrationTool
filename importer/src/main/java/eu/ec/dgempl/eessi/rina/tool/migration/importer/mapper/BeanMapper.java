@@ -3,8 +3,10 @@ package eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper;
 import java.util.Map;
 
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.doToEntityMapper._abstract.DoToEntityMapper;
@@ -17,6 +19,7 @@ import ma.glasnost.orika.impl.ConfigurableMapper;
 import ma.glasnost.orika.metadata.ClassMapBuilder;
 
 @Component
+@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class BeanMapper extends ConfigurableMapper implements ApplicationContextAware {
 
     private MapperFactory factory;

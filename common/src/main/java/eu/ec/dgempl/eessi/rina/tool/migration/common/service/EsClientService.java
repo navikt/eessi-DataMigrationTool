@@ -36,6 +36,8 @@ import org.elasticsearch.search.fetch.subphase.FetchSourceContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import eu.ec.dgempl.eessi.rina.tool.migration.common.model.EEsIndex;
@@ -47,6 +49,7 @@ import eu.ec.dgempl.eessi.rina.tool.migration.common.util.PreconditionsHelper;
  * Service for retrieving data from Elasticsearch
  */
 @Service
+@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class EsClientService {
     private final RestHighLevelClient client;
     private final RestClient lowLevelClient;

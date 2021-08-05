@@ -3,6 +3,8 @@ package eu.ec.dgempl.eessi.rina.tool.migration.importer.dataimport.cases;
 import static eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.MappingContextBuilder.*;
 import static eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.RepositoryUtils.*;
 
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.RinaCase;
@@ -19,6 +21,7 @@ import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.report.DocumentsReport;
 
 @Component
+@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @ElasticTypeImporter(type = EElasticType.CASES_CASEMETADATA)
 public class CaseMetadataImporter extends AbstractDataImporter implements CaseImporter {
 

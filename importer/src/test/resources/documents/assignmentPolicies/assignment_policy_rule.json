@@ -1,0 +1,23 @@
+{
+  "userGroups": [
+    {
+      "id": "AXMT7Eug-JrcHd85NX65",
+      "type": "Group",
+      "name": "FRNA14"
+    }
+  ],
+  "actors": [
+    "Creator"
+  ],
+  "condition": {
+    "sector": [
+      null,
+      "null",
+      "RECOVERY"
+    ],
+    "process": [
+
+    ],
+    "appRole": "PO"
+  }
+}

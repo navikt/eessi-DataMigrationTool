@@ -126,6 +126,11 @@ public class MapToActionMapper extends AbstractMapToEntityMapper<MapHolder, Acti
 
         if (documentTypeVersion != null) {
             b.setDocumentTypeVersion(documentTypeVersion);
+        } else {
+            Document actionDocument = b.getDocument();
+            if (actionDocument != null) {
+                b.setDocumentTypeVersion(actionDocument.getDocumentTypeVersion());
+            }
         }
     }
 

@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.Action;
@@ -17,6 +19,7 @@ import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.report.DocumentsRepor
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.ActionFields;
 
 @Component
+@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @ElasticTypeImporter(type = EElasticType.CASES_TASKMETADATA)
 public class TaskMetadataImporter extends AbstractDataImporter implements CaseImporter {
 

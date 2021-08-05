@@ -8,6 +8,8 @@ import java.util.stream.Collectors;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import eu.ec.dgempl.eessi.rina.model.enumtypes.EDocumentStatus;
@@ -31,6 +33,7 @@ import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.report.DocumentsRepor
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.CaseSignatureFields;
 
 @Component
+@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @ElasticTypeImporter(type = EElasticType.CASES_SIGNATURE)
 public class CasesSignatureImporter extends AbstractDataImporter implements CaseImporter {
 

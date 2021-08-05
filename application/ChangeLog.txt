@@ -1,5 +1,21 @@
 EESSI-RINA-DATA-MIGRATION
 
+v2.1.6
+--------------------------------------
+Validator:
+-
+Importer:
+- handle null values for field sector in assignment policy rules
+- fixed generation of timed actions X001
+- fixed documents versions ordering
+- fixed X001 timed actions
+- added missing action.documentTypeVersion
+- fixed processing of case_prefills
+- fixed issue related to date intervals for attachments & versions
+Other:
+- added params for configuring Elasticsearch socket/connection timeout
+- added support for multi-threading
+
 v2.1.5
 --------------------------------------
 Validator:

@@ -1,0 +1,77 @@
+{
+  "id": "34400",
+  "processDefinitionName": "PO_P_BUC_01_v4.2",
+  "participants": [],
+  "preFill": {
+    "PIN": "",
+    "FamilyName": "",
+    "Forename": "",
+    "BirthDate": null,
+    "Sex": "",
+    "FamilyNameAtBirth": "",
+    "ForenameAtBirth": "",
+    "TownOfBirth": "",
+    "RegionOfBirth": "",
+    "CountryOfBirth": "",
+    "FatherFamilyNameAtBirth": "",
+    "ForenameOfFather": "",
+    "MotherFamilyNameAtBirth": "",
+    "ForenameOfMother": "",
+    "IdentityProtected": "",
+    "Nationality": "",
+    "PreviousFamilyName": "",
+    "PreviousForename": "",
+    "Street": "",
+    "Town": "",
+    "PostalCode": "",
+    "Region": "",
+    "Country": "",
+    "TelephoneNumber": "",
+    "Email": "",
+    "InsuredPersonPersonIdentificationPersonalDetailsFamilyNames": "tv9ox8kgmchod7h3us61dsxdg1bcbhpw",
+    "InsuredPersonPersonIdentificationPersonalDetailsForenames": "c8psnoobswwgnwtdblbw53ike4lca2so",
+    "InsuredPersonPersonIdentificationPersonalDetailsBirthDate": "2000-09-01",
+    "InsuredPersonPersonIdentificationPersonalDetailsSex": {
+      "value": [
+        "01"
+      ]
+    },
+    "xPleaseFillIn": {},
+    "CaseContext": {
+      "PersonContext": {
+        "forename": "c8psnoobswwgnwtdblbw53ike4lca2so",
+        "familyName": "tv9ox8kgmchod7h3us61dsxdg1bcbhpw",
+        "sex": {
+          "value": [
+            "01"
+          ]
+        },
+        "dateBirth": "2000-09-01"
+      }
+    }
+  },
+  "messages": {},
+  "starterType": "P2000",
+  "hasValidStarter": true,
+  "isMultiStarter": false,
+  "diagramVersions": {
+    "AddRemoveForward": "AddRemoveForward_v4.2",
+    "Common": "Common_v4.2",
+    "DocumentManager": "DOCUMENT_MANAGER_v4.2",
+    "ReadAdminHelper": "ReadAdminHelper_v4.2",
+    "Reminder": "Reminder_v4.2",
+    "Reopen": "Reopen_v4.2",
+    "SUBPROCESS_H_BUC_01": "SUBPROCESS_H_BUC_01_v4.2",
+    "SUBPROCESS_1_H_BUC_02abc": "SUBPROCESS_1_H_BUC_02abc_v4.2",
+    "SUBPROCESS_2_H_BUC_02abc": "SUBPROCESS_2_H_BUC_02abc_v4.2",
+    "SUBPROCESS_H_BUC_03a": "SUBPROCESS_H_BUC_03a_v4.2",
+    "SUBPROCESS_H_BUC_03b": "SUBPROCESS_H_BUC_03b_v4.2",
+    "SUBPROCESS_H_BUC_04": "SUBPROCESS_H_BUC_04_v4.2",
+    "SUBPROCESS_H_BUC_05": "SUBPROCESS_H_BUC_05_v4.2",
+    "SUBPROCESS_H_BUC_06": "SUBPROCESS_H_BUC_06_v4.2",
+    "SUBPROCESS_H_BUC_07": "SUBPROCESS_H_BUC_07_v4.2",
+    "SUBPROCESS_H_BUC_08_09": "SUBPROCESS_H_BUC_08_09_v4.2",
+    "SUBPROCESS_H_BUC_10": "SUBPROCESS_H_BUC_10_v4.2"
+  },
+  "isStarterSent": true
+}

@@ -1,12 +1,10 @@
 package eu.ec.dgempl.eessi.rina.tool.migration.importer.dataimport.es.cases;
 
+import static eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.TestUtils.*;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -54,11 +52,8 @@ public class MapToActionMapperTest {
     public void testIgnoreInvalidDocumentReferences_conditionsMet() throws IOException {
 
         // Prepare data
+        MapHolder holder = loadFromResource(this.getClass().getClassLoader(), "documents/action_document_with_invalid_reference.json");
 
-        File actionDocumentFile = new File(MapToActionMapperTest.class.getClassLoader()
-                .getResource("documents/action_document_with_invalid_reference.json").getFile());
-        Map<String, Object> actionDocument = objectMapper.readValue(actionDocumentFile, Map.class);
-        MapHolder holder = new MapHolder(actionDocument, new ConcurrentHashMap<>(), "");
         Action action = new Action();
 
         // Set values
@@ -96,10 +91,7 @@ public class MapToActionMapperTest {
 
         // Prepare data
 
-        File actionDocumentFile = new File(MapToActionMapperTest.class.getClassLoader()
-                .getResource("documents/action_document_with_invalid_reference.json").getFile());
-        Map<String, Object> actionDocument = objectMapper.readValue(actionDocumentFile, Map.class);
-        MapHolder holder = new MapHolder(actionDocument, new ConcurrentHashMap<>(), "");
+        MapHolder holder = loadFromResource(this.getClass().getClassLoader(), "documents/action_document_with_invalid_reference.json");
         Action action = new Action();
 
         // Set values
@@ -129,11 +121,7 @@ public class MapToActionMapperTest {
     public void testIgnoreInvalidDocumentReferences_notMultiStarter_throwException() throws Exception {
 
         // Prepare data
-
-        File actionDocumentFile = new File(MapToActionMapperTest.class.getClassLoader()
-                .getResource("documents/action_document_with_invalid_reference.json").getFile());
-        Map<String, Object> actionDocument = objectMapper.readValue(actionDocumentFile, Map.class);
-        MapHolder holder = new MapHolder(actionDocument, new ConcurrentHashMap<>(), "");
+        MapHolder holder = loadFromResource(this.getClass().getClassLoader(), "documents/action_document_with_invalid_reference.json");
         Action action = new Action();
 
         // Set values
@@ -163,11 +151,7 @@ public class MapToActionMapperTest {
     public void testIgnoreInvalidDocumentReferences_notStarterFromMultiStarterBUC_throwException() throws Exception {
 
         // Prepare data
-
-        File actionDocumentFile = new File(MapToActionMapperTest.class.getClassLoader()
-                .getResource("documents/action_document_with_invalid_reference.json").getFile());
-        Map<String, Object> actionDocument = objectMapper.readValue(actionDocumentFile, Map.class);
-        MapHolder holder = new MapHolder(actionDocument, new ConcurrentHashMap<>(), "");
+        MapHolder holder = loadFromResource(this.getClass().getClassLoader(), "documents/action_document_with_invalid_reference.json");
         Action action = new Action();
 
         // Set values
@@ -197,11 +181,7 @@ public class MapToActionMapperTest {
     public void testIgnoreInvalidDocumentReferences_validReference() throws IOException {
 
         // Prepare data
-
-        File actionDocumentFile = new File(
-                MapToActionMapperTest.class.getClassLoader().getResource("documents/action_document.json").getFile());
-        Map<String, Object> actionDocument = objectMapper.readValue(actionDocumentFile, Map.class);
-        MapHolder holder = new MapHolder(actionDocument, new ConcurrentHashMap<>(), "");
+        MapHolder holder = loadFromResource(this.getClass().getClassLoader(), "documents/action_document.json");
         Action action = new Action();
 
         // Set values
@@ -225,4 +205,40 @@ public class MapToActionMapperTest {
         Assert.assertNotNull(action.getDocument());
         Assert.assertEquals("testId", action.getDocument().getId());
     }
+
+
+    @Test
+    public void testDocumentTypeFromDocument() throws IOException {
+
+        // Prepare data
+        MapHolder holder = loadFromResource(this.getClass().getClassLoader(), "documents/action_document.json");
+        Action action = new Action();
+
+        // Set values
+
+        Document document = createRandomDocument();
+        when(documentRepo.findByIdAndRinaCaseId(anyString(), anyString())).thenReturn(document);
+
+        // Call method
+
+        try {
+            Whitebox.invokeMethod(mapToActionMapper, "mapDocument", holder, action);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        try {
+            Whitebox.invokeMethod(mapToActionMapper, "mapDocumentTypeVersion", holder, action);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // Check results
+
+        Assert.assertNotNull(action.getDocument());
+        Assert.assertEquals(document.getId(), action.getDocument().getId());
+        Assert.assertEquals(document.getDocumentTypeVersion(), action.getDocumentTypeVersion());
+    }
+
 }

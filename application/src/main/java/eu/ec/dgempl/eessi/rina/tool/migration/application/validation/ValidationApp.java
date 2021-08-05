@@ -1,5 +1,6 @@
 package eu.ec.dgempl.eessi.rina.tool.migration.application.validation;
 
+import static eu.ec.dgempl.eessi.rina.tool.migration.application.Application.*;
 import static eu.ec.dgempl.eessi.rina.tool.migration.application.common.ApplicationHelper.*;
 
 import java.io.File;
@@ -23,6 +24,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.FilterType;
 
+import eu.ec.dgempl.eessi.rina.tool.migration.common.config.RunConfiguration;
 import eu.ec.dgempl.eessi.rina.tool.migration.common.service.EsClientService;
 import eu.ec.dgempl.eessi.rina.tool.migration.exporter.service.ValidationService;
 
@@ -45,18 +47,17 @@ public class ValidationApp implements CommandLineRunner {
 
     private final EsClientService elasticsearchService;
     private final ValidationService validationService;
+    private final RunConfiguration runConfiguration;
 
     @Value("${reporting.folder}")
     private String reportingFolder;
 
-    private final static String ARG_VALIDATE_ALL = "-validate-all";
-    private final static String ARG_VALIDATE_CASE = "-validate-case";
-    private final static String ARG_VALIDATE_CASES_BULK = "-validate-cases-bulk";
-
     public ValidationApp(EsClientService elasticsearchService,
-            ValidationService validationService) {
+            ValidationService validationService,
+            RunConfiguration runConfiguration) {
         this.elasticsearchService = elasticsearchService;
         this.validationService = validationService;
+        this.runConfiguration = runConfiguration;
     }
 
     @Override
@@ -85,17 +86,37 @@ public class ValidationApp implements CommandLineRunner {
                 break;
             }
             case 2: {
-                if (args[0].equalsIgnoreCase(ARG_VALIDATE_CASE)) {
+                if (args[0].equalsIgnoreCase(ARG_VALIDATE_ALL)) {
+                    runConfiguration.setThreadsNumber(Integer.valueOf(args[1].substring(ARG_THREADS.length())));
+                    runValidation();
+                } else if (args[0].equalsIgnoreCase(ARG_VALIDATE_CASE)) {
                     runValidationCaseId(args[1]);
                 } else if (args[0].equalsIgnoreCase(ARG_VALIDATE_CASES_BULK)) {
                     runValidationCaseBulk(args[1]);
                 }
                 break;
             }
+            case 3: {
+                String argument1 = arguments.get(1);
+                String argument2 = arguments.get(2);
+                String argument;
+                int threadsNumber;
+                if (argument1.contains(ARG_THREADS)) {
+                    threadsNumber = Integer.valueOf(argument1.substring(ARG_THREADS.length()));
+                    argument = argument2;
+                } else  {
+                    threadsNumber = Integer.valueOf(argument2.substring(ARG_THREADS.length()));
+                    argument = argument1;
+                }
+                runConfiguration.setThreadsNumber(threadsNumber);
+                if (ARG_VALIDATE_CASES_BULK.equals(arguments.get(0))) {
+                    runValidationCaseBulk(argument);
+                }
+                break;
+            }
             default:
                 break;
         }
-
     }
 
     private void runValidation() {

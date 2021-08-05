@@ -3,13 +3,19 @@ package eu.ec.dgempl.eessi.rina.tool.migration.exporter.service;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
 import org.elasticsearch.search.SearchHit;
@@ -19,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import eu.ec.dgempl.eessi.rina.tool.migration.common.config.RunConfiguration;
 import eu.ec.dgempl.eessi.rina.tool.migration.common.model.EEsIndex;
 import eu.ec.dgempl.eessi.rina.tool.migration.common.model.EEsType;
 import eu.ec.dgempl.eessi.rina.tool.migration.common.service.EsClientService;
@@ -47,14 +54,22 @@ public class ValidationService {
     private final EsClientService elasticsearchService;
     private final ParserService parser;
     private final CacheService cacheService;
+    private final RunConfiguration runConfiguration;
 
     private Instant globalStart = Instant.now();
 
+    private static final List<EEsIndex> MULTI_THREAD_INDICES = List.of(
+            EEsIndex.AUDIT,
+            EEsIndex.ENTITIES
+    );
+
     @Autowired
-    public ValidationService(EsClientService elasticsearchService, ParserService parser, CacheService cacheService) {
+    public ValidationService(EsClientService elasticsearchService, ParserService parser, CacheService cacheService,
+            RunConfiguration runConfiguration) {
         this.elasticsearchService = elasticsearchService;
         this.parser = parser;
         this.cacheService = cacheService;
+        this.runConfiguration = runConfiguration;
     }
 
     /**
@@ -66,19 +81,24 @@ public class ValidationService {
         globalStart = Instant.now();
         int numberOfErrors = 0;
 
-        numberOfErrors += validateAllInIndex(EEsIndex.ADMIN.value());
-        numberOfErrors += validateAllInIndex(EEsIndex.AUDIT.value());
-        numberOfErrors += validateAllInIndex(EEsIndex.BUSINESSEXCEPTIONS.value());
-        numberOfErrors += validateAllInIndex(EEsIndex.CHECKS.value());
-        numberOfErrors += validateAllInIndex(EEsIndex.CONFIGURATIONS.value());
-        numberOfErrors += validateAllInIndex(EEsIndex.ENTITIES.value());
-        numberOfErrors += validateAllInIndex(EEsIndex.GLOBALCONFIGURATIONS.value());
-        numberOfErrors += validateAllInIndex(EEsIndex.IDENTITY.value());
-        numberOfErrors += validateAllInIndex(EEsIndex.RESOURCES.value());
-        numberOfErrors += validateAllInIndex(EEsIndex.VOCABULARIES.value());
-        numberOfErrors += validateAllCases();
+        int threadsNumber = runConfiguration.getThreadsNumber();
+        ExecutorService executor = Executors.newFixedThreadPool(threadsNumber);
+
+        numberOfErrors += validateAllInIndex(EEsIndex.ADMIN.value(), executor);
+        numberOfErrors += validateAllInIndex(EEsIndex.AUDIT.value(), executor);
+        numberOfErrors += validateAllInIndex(EEsIndex.BUSINESSEXCEPTIONS.value(), executor);
+        numberOfErrors += validateAllInIndex(EEsIndex.CHECKS.value(), executor);
+        numberOfErrors += validateAllInIndex(EEsIndex.CONFIGURATIONS.value(), executor);
+        numberOfErrors += validateAllInIndex(EEsIndex.ENTITIES.value(), executor);
+        numberOfErrors += validateAllInIndex(EEsIndex.GLOBALCONFIGURATIONS.value(), executor);
+        numberOfErrors += validateAllInIndex(EEsIndex.IDENTITY.value(), executor);
+        numberOfErrors += validateAllInIndex(EEsIndex.RESOURCES.value(), executor);
+        numberOfErrors += validateAllInIndex(EEsIndex.VOCABULARIES.value(), executor);
+        numberOfErrors += validateAllCases(executor);
 
         reportIgnoredDocuments();
+
+        executor.shutdown();
 
         System.out.println("Validation has finished.");
 
@@ -91,7 +111,7 @@ public class ValidationService {
      * @param index the elasticsearch index
      * @throws IOException
      */
-    public int validateAllInIndex(String index) throws IOException {
+    public int validateAllInIndex(String index, ExecutorService executorService) throws IOException {
         PreconditionsHelper.notEmpty(index, "index");
 
         // initialize stats variables
@@ -116,22 +136,20 @@ public class ValidationService {
             // define a processor that will be applied to all the SearchHit results
             Consumer<SearchHit[]> processor = hits -> {
                 Instant batchStart = Instant.now();
+                final List<Future<Void>> results = new ArrayList<>();
 
                 for (SearchHit hit : hits) {
-                    Map<String, Object> internalObj = hit.getSourceAsMap();
-                    EsDocument internalDocument = new EsDocument(hit.getIndex(), hit.getType(), hit.getId());
-                    internalDocument.setObject(internalObj);
-                    EsDocument internalParent = new EsDocument(hit.getIndex(), hit.getType(), hit.getId());
-
-                    // validate the document
-                    DocumentValidationReport internalReport = validateSingleDocument(internalDocument, internalParent);
-
-                    // update the total number of errors
-                    numberOfErrors.addAndGet(internalReport.getErrors().size());
-
-                    // aggregate results at the index level
-                    report.swallow(internalReport);
+                    if (MULTI_THREAD_INDICES.contains(EEsIndex.fromValue(index))) {
+                        results.add(executorService.submit(() -> {
+                            processSingleSearchHit(report, numberOfErrors, hit);
+                            return null;
+                        }));
+                    } else {
+                        processSingleSearchHit(report, numberOfErrors, hit);
+                    }
                 }
+
+                getFutureResults(results);
 
                 Instant now = Instant.now();
                 processedCount.addAndGet(hits.length);
@@ -154,12 +172,28 @@ public class ValidationService {
         return numberOfErrors.get();
     }
 
+    private void processSingleSearchHit(final ContextValidationReport report, final AtomicInteger numberOfErrors, final SearchHit hit) {
+        Map<String, Object> internalObj = hit.getSourceAsMap();
+        EsDocument internalDocument = new EsDocument(hit.getIndex(), hit.getType(), hit.getId());
+        internalDocument.setObject(internalObj);
+        EsDocument internalParent = new EsDocument(hit.getIndex(), hit.getType(), hit.getId());
+
+        // validate the document
+        DocumentValidationReport internalReport = validateSingleDocument(internalDocument, internalParent);
+
+        // update the total number of errors
+        numberOfErrors.addAndGet(internalReport.getErrors().size());
+
+        // aggregate results at the index level
+        report.swallow(internalReport);
+    }
+
     /**
      * Method for validating all the resources contained in all known cases
      *
      * @throws IOException
      */
-    public int validateAllCases() throws IOException {
+    public int validateAllCases(final ExecutorService executorService) throws IOException {
         int batchSize = 50;
 
         // get the list of caseIds
@@ -171,7 +205,7 @@ public class ValidationService {
         // add the special value "tempcaseid"
         // caseIds.add("tempcaseid");
 
-        return processCases(caseIds, batchSize);
+        return processCases(caseIds, batchSize, executorService);
     }
 
     /**
@@ -182,7 +216,14 @@ public class ValidationService {
     public int validateBulkCases(final List<String> caseIds) throws IOException {
         int batchSize = 10;
 
-        return processCases(caseIds, batchSize);
+        int threadsNumber = runConfiguration.getThreadsNumber();
+        ExecutorService executor = Executors.newFixedThreadPool(threadsNumber);
+
+        int numberOfErrors = processCases(caseIds, batchSize, executor);
+
+        executor.shutdown();
+
+        return numberOfErrors;
     }
 
     public int validateCase(String caseId) throws IOException {
@@ -336,45 +377,71 @@ public class ValidationService {
         return caseReport;
     }
 
-    private int processCases(final List<String> caseIds, final int batchSize) throws IOException {
+    private int processCases(final List<String> caseIds, final int batchSize, final ExecutorService executor) throws IOException {
         ContextValidationReport report = new ContextValidationReport();
-        int numberOfErrors = 0;
+        final AtomicInteger numberOfErrors = new AtomicInteger();
+        final AtomicInteger processed = new AtomicInteger(0);
         String index = EEsIndex.CASES.value();
         int casesCount = caseIds.size();
         int part = -1;
 
         Instant indexStart = Instant.now();
-        Instant batchStart = Instant.now();
+        final AtomicReference<Instant> batchStart = new AtomicReference<>(Instant.now());
 
         logStartValidation(index, casesCount);
 
+        List<Future<Void>> results = new ArrayList<>();
+
         for (int i = 0; i < casesCount; i++) {
-            int processed = i + 1;
 
-            String caseId = caseIds.get(i);
+            final String caseId = caseIds.get(i);
 
-            logger.info("Start validating case with id {}", caseId);
+            results.add(executor.submit(() -> {
 
-            // generate validation report
-            CaseValidationReport caseReport = validateSingleCase(caseId);
+                logger.info("Start validating case with id {}", caseId);
+                try {
+                    // generate validation report
+                    CaseValidationReport caseReport = validateSingleCase(caseId);
 
-            // propagate the report upward
-            report.swallow(caseReport);
+                    // propagate the report upward
+                    report.swallow(caseReport);
 
-            // update the total number of errors
-            numberOfErrors += caseReport.getErrors().size();
+                    // update the total number of errors
+                    numberOfErrors.addAndGet(caseReport.getErrors().size());
 
-            if (finishedProcessingBatch(processed, batchSize, casesCount)) {
-                logBatchStats(index, processed, casesCount, batchStart, indexStart);
-                batchStart = Instant.now();
-            }
+                    synchronized (processed) {
+                        processed.getAndIncrement();
+
+                        if (finishedProcessingBatch(processed.get(), batchSize, casesCount)) {
+                            logBatchStats(index, processed.get(), casesCount, batchStart.get(), indexStart);
+                            batchStart.set(Instant.now());
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }));
+
         }
+
+        getFutureResults(results);
 
         logFinishedValidation(index, report);
 
         writeReport(report, index, part);
 
-        return numberOfErrors;
+        return numberOfErrors.get();
+    }
+
+    private void getFutureResults(final List<Future<Void>> results) {
+        try {
+            for (Future<Void> result : results) {
+                result.get();
+            }
+        } catch (InterruptedException | ExecutionException ex) {
+            logger.info("ERROR getting future results: " + ex.getMessage());
+        }
     }
 
     /**

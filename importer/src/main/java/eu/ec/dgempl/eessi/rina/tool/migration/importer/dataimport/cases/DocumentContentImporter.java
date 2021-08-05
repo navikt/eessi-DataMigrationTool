@@ -1,6 +1,8 @@
 package eu.ec.dgempl.eessi.rina.tool.migration.importer.dataimport.cases;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.Document;
@@ -24,6 +26,7 @@ import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.report.DocumentsRepor
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.DocumentContentFields;
 
 @Component
+@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @ElasticTypeImporter(type = EElasticType.CASES_DOCUMENTCONTENT)
 public class DocumentContentImporter extends AbstractDataImporter implements CaseImporter {
 

@@ -15,11 +15,17 @@ public class ElasticsearchConfig {
     @Value("${elasticsearch.port}")
     private int esPort;
 
+    @Value("${elasticsearch.connection.timeout}")
+    private int connectionTimeout;
+
+    @Value("${elasticsearch.socket.timeout}")
+    private int socketTimeout;
+
     @Bean
     public RestClient lowLevelClient() {
         //@formatter:off
         return RestClient.builder(new HttpHost(esHost, esPort, "http"))
-                .setRequestConfigCallback(builder -> builder.setConnectTimeout(5000).setSocketTimeout(10000))
+                .setRequestConfigCallback(builder -> builder.setConnectTimeout(connectionTimeout).setSocketTimeout(socketTimeout))
                 .setFailureListener(new RestClient.FailureListener() {
                     @Override
                     public void onFailure(HttpHost host) {
