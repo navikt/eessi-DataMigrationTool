@@ -13,6 +13,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.ECountryCode;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.ERole;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.ESector;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity.AssignmentPolicy;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity.Document;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity.DocumentType;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity.DocumentTypeVersion;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.IamGroup;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.IamOrigin;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.IamUser;
@@ -22,6 +26,8 @@ import eu.ec.dgempl.eessi.rina.model.jpa.entity.ProcessDefVersion;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.RinaCase;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.Role;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.Sector;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity.Subdocument;
+import eu.ec.dgempl.eessi.rina.model.jpa.entity.SubdocumentBversion;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.Tenant;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
 
@@ -84,9 +90,33 @@ public class TestUtils {
         return new Role(ERole.SUPERVISOR);
     }
 
+    public static AssignmentPolicy createRandomAssignmentPolicy() {
+        return new AssignmentPolicy(createRandomTenant(), randomString(), randomString());
+    }
+
+    public static DocumentType createRandomDocumentType() {
+        return new DocumentType(createRandomProcessDefVersion(), randomString());
+    }
+
+    public static DocumentTypeVersion createRandomDocumentTypeVersion() {
+        return new DocumentTypeVersion(createRandomDocumentType(), randomString());
+    }
+
+    public static Document createRandomDocument() {
+        return new Document(createRandomDocumentTypeVersion(), randomString());
+    }
+
+    public static Subdocument createRandomSubdocument() {
+        return new Subdocument(createRandomDocument(), randomString());
+    }
+
+    public static SubdocumentBversion createRandomSubdocumentBversion() {
+        return new SubdocumentBversion(createRandomSubdocument());
+
+    }
+
     public static String randomString() {
         final String s = RandomStringUtils.random(RANDOM_STRING_SIZE);
         return s.replaceAll(NULL_UTF8_CHAR, SPACE);
     }
-
 }

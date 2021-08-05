@@ -34,7 +34,7 @@ public class ContextValidationReport {
      * @param caseReport
      *            the case-level report
      */
-    public void swallow(CaseValidationReport caseReport) {
+    public synchronized void swallow(CaseValidationReport caseReport) {
         PreconditionsHelper.notNull(caseReport, "caseReport");
 
         // handle documents stats
@@ -67,7 +67,7 @@ public class ContextValidationReport {
      * @param documentReport
      *            the document-level report
      */
-    public void swallow(DocumentValidationReport documentReport) {
+    public synchronized void swallow(DocumentValidationReport documentReport) {
         PreconditionsHelper.notNull(documentReport, "documentReport");
 
         EEsIndexType indexType = EEsIndexType.fromValue(documentReport.getIndex() + "_" + documentReport.getType());

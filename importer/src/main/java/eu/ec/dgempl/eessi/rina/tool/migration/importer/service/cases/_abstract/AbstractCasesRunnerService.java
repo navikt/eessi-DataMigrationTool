@@ -7,6 +7,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -24,6 +30,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import eu.ec.dgempl.eessi.rina.commons.transformation.RinaJsonMapper;
+import eu.ec.dgempl.eessi.rina.tool.migration.common.config.RunConfiguration;
 import eu.ec.dgempl.eessi.rina.tool.migration.common.model.EEsIndex;
 import eu.ec.dgempl.eessi.rina.tool.migration.common.model.EEsType;
 import eu.ec.dgempl.eessi.rina.tool.migration.common.model.EsSearchQueryTerm;
@@ -48,6 +55,7 @@ import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.DocumentFields;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.service.ScriptExecutionService;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.service.SequenceUpdateService;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.ImporterUtils;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.LogUtils;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.ProgrammaticTransactionUtil;
 
 public abstract class AbstractCasesRunnerService {
@@ -58,16 +66,20 @@ public abstract class AbstractCasesRunnerService {
     private PlatformTransactionManager transactionManager;
     private RinaJsonMapper rinaJsonMapper;
     private ScriptExecutionService scriptExecutionService;
+    private RunConfiguration runConfiguration;
     protected EsClientService esClientService;
 
     public SummaryReport importData() throws Exception {
-        List<CaseImporter> importers = initializeImporters();
 
         List<String> esCases = esClientService.getCaseIds();
         List<String> cases = getCases();
         Instant batchStart = Instant.now();
 
-        System.out.println("\nStart processing for " + cases.size() + " CASES");
+        int threadsNumber = runConfiguration.getThreadsNumber();
+        String logSuffix = threadsNumber > 1 ? " using " + threadsNumber + " threads" : "";
+
+        System.out.println("\nStart processing for " + cases.size() + " CASES" + logSuffix);
+        logger.info("Start processing for " + cases.size() + " CASES" + logSuffix);
 
         if (shouldCleanupPostCaseResource()) {
             scriptExecutionService.cleanupPostCaseResources();
@@ -75,30 +87,36 @@ public abstract class AbstractCasesRunnerService {
 
         CasesSummaryReport casesSummaryReport = new CasesSummaryReport();
 
+        ExecutorService executor = Executors.newFixedThreadPool(threadsNumber);
+
+        Map<Long, List<CaseImporter>> importersMap = new ConcurrentHashMap<>();
+
+        List<Future<Void>> results = new ArrayList<>();
+
         for (int i = 0; i < cases.size(); i++) {
+
             String caseId = cases.get(i);
+            if (isValidCase(esCases, caseId)) {
+                final int idx = i;
 
-            if (!esCases.contains(caseId)) {
+                results.add(executor.submit(() -> {
+                    List<CaseImporter> importers = assignImportersToThread(importersMap);
+                    processSingleCase(cases, casesSummaryReport, caseId, idx, importers);
 
-                if (!CaseFields.DEFAULT_CASE_ID.equalsIgnoreCase(caseId)) {
-                    logger.error("Could not find caseId {} in ES", caseId);
-                }
+                    return null;
+                }));
 
-                continue;
-            }
-
-            CaseReport caseReport = startImportersForCase(importers, caseId);
-            casesSummaryReport.swallow(caseReport);
-
-            if (i != 0 && (i % 100) == 0) {
-                System.out.println("Cases processed: " + i + ". Pending to process: " + (cases.size() - i));
             }
         }
+
+        getFutureResults(results);
+
+        executor.shutdown();
 
         scriptExecutionService.cleanupCasePrefill();
 
         if (cases.contains(CaseFields.DEFAULT_CASE_ID)) {
-            handleCaseZero(casesSummaryReport, shouldCleanupPostCaseResource());
+            handleCaseZero(casesSummaryReport, shouldCleanupPostCaseResource(), threadsNumber);
         }
 
         List<IndexReport> postCaseImportersReports = null;
@@ -120,6 +138,36 @@ public abstract class AbstractCasesRunnerService {
         summaryReport.swallow(postCaseImportersReports);
 
         return summaryReport;
+    }
+
+    private void processSingleCase(
+            final List<String> cases,
+            final CasesSummaryReport casesSummaryReport,
+            final String caseId,
+            final int idx,
+            final List<CaseImporter> importers) {
+
+        CaseReport caseReport = startImportersForCase(importers, caseId);
+        casesSummaryReport.swallow(caseReport);
+
+        if (idx != 0 && (idx % 100) == 0) {
+            System.out.println("Cases processed: " + idx + ". Pending to process: " + (cases.size() - idx));
+        }
+    }
+
+    private boolean isValidCase(List<String> esCases, String caseId) {
+        if (!esCases.contains(caseId)) {
+            if (!CaseFields.DEFAULT_CASE_ID.equalsIgnoreCase(caseId)) {
+                logger.error("Could not find caseId {} in ES", caseId);
+            }
+            return false;
+        }
+        return true;
+    }
+
+    private synchronized List<CaseImporter> assignImportersToThread(final Map<Long, List<CaseImporter>> importersMap) {
+        final Long threadId = Thread.currentThread().getId();
+        return importersMap.computeIfAbsent(threadId, key -> initializeImporters());
     }
 
     protected abstract List<String> getCases();
@@ -210,7 +258,11 @@ public abstract class AbstractCasesRunnerService {
         return ImporterUtils.getCaseImporters(applicationContext);
     }
 
-    private void handleCaseZero(CasesSummaryReport casesSummaryReport, boolean cleanupCaseResources) throws Exception {
+    private void handleCaseZero(
+            final CasesSummaryReport casesSummaryReport,
+            final boolean cleanupCaseResources,
+            final int threadsNumber) throws Exception {
+
         if (cleanupCaseResources) {
             scriptExecutionService.cleanupCaseResources(CaseFields.DEFAULT_CASE_ID);
         }
@@ -228,14 +280,20 @@ public abstract class AbstractCasesRunnerService {
                 CaseFields.DEFAULT_CASE_ID,
                 documentsReport.getTotal(),
                 documentContentsReport.getTotal());
+        System.out.println("Started import for special case " + CaseFields.DEFAULT_CASE_ID +
+                (threadsNumber > 1 ? " using " + threadsNumber + " threads" : ""));
 
+        ExecutorService executor = Executors.newFixedThreadPool(threadsNumber);
         Consumer<Map<String, Pair<MapHolder, List<MapHolder>>>> docsAndDocContentsConsumer = createDocsAndDocContentsConsumer(
                 documentImporter,
                 documentContentImporter,
                 documentsReport,
-                documentContentsReport);
+                documentContentsReport,
+                executor);
 
         handleDocsAndDocContentsMap(docsAndDocContentsConsumer);
+
+        executor.shutdown();
 
         caseReport.swallow(documentsReport);
         caseReport.swallow(documentContentsReport);
@@ -244,34 +302,71 @@ public abstract class AbstractCasesRunnerService {
         caseReport.swallow(notificationsReport);
 
         logger.info("Imported case {}: {}", CaseFields.DEFAULT_CASE_ID, rinaJsonMapper.objToJson(caseReport));
+        System.out.println("Imported special case " + CaseFields.DEFAULT_CASE_ID);
         casesSummaryReport.swallow(caseReport);
     }
 
     private Consumer<Map<String, Pair<MapHolder, List<MapHolder>>>> createDocsAndDocContentsConsumer(
-            DocumentImporter documentImporter,
-            DocumentContentImporter documentContentImporter,
-            DocumentsReport documentsReport,
-            DocumentsReport documentContentsReport) {
+            final DocumentImporter documentImporter,
+            final DocumentContentImporter documentContentImporter,
+            final DocumentsReport documentsReport,
+            final DocumentsReport documentContentsReport,
+            final ExecutorService executor) {
 
-        return docsAndContentsMap ->
-                docsAndContentsMap.values().forEach(pair -> {
-                    try {
-                        ProgrammaticTransactionUtil.processSuccessfulTransaction(transactionManager, () -> {
-                            processDoc(documentImporter, documentsReport, pair.getFirst());
+        final AtomicInteger globalCounter = new AtomicInteger(0);
+        final AtomicLong processedDocs = new AtomicLong(0);
+        final Instant batchStart = Instant.now();
 
-                            List<MapHolder> docContents = pair.getSecond();
-                            docContents.forEach(content ->
-                                    processDoc(documentContentImporter, documentContentsReport, content)
-                            );
-                        });
-                    } catch (Exception e) {
-                        // ignore exception since the transactionality is done on document and documentContent pairs
-                    }
-                });
+        return docsAndContentsMap -> {
+            final Instant batchTimeStart = Instant.now();
+            final List<Future<Void>> results = new ArrayList<>();
+
+            docsAndContentsMap.values().forEach(pair -> results.add(executor.submit(() -> {
+                processDocAndContentPair(
+                        documentImporter,
+                        documentContentImporter,
+                        documentsReport,
+                        documentContentsReport,
+                        pair);
+
+                return null;
+            })));
+
+            getFutureResults(results);
+
+            LogUtils.printImportProcess(
+                    documentsReport.getTotal(),
+                    globalCounter,
+                    processedDocs,
+                    batchStart,
+                    batchTimeStart,
+                    logger);
+        };
     }
 
-    private void handleDocsAndDocContentsMap(
-            Consumer<Map<String, Pair<MapHolder, List<MapHolder>>>> docsAndContentsMapConsumer) throws IOException {
+    private void processDocAndContentPair(
+            final DocumentImporter documentImporter,
+            final DocumentContentImporter documentContentImporter,
+            final DocumentsReport documentsReport,
+            final DocumentsReport documentContentsReport,
+            final Pair<MapHolder, List<MapHolder>> pair) {
+
+        try {
+            ProgrammaticTransactionUtil.processSuccessfulTransaction(transactionManager, () -> {
+                processDoc(documentImporter, documentsReport, pair.getFirst());
+
+                List<MapHolder> docContents = pair.getSecond();
+                docContents.forEach(content ->
+                        processDoc(documentContentImporter, documentContentsReport, content)
+                );
+            });
+        } catch (Exception e) {
+            // ignore exception since the transactionality is done on document and documentContent pairs
+        }
+    }
+
+    private void handleDocsAndDocContentsMap(Consumer<Map<String, Pair<MapHolder, List<MapHolder>>>> docsAndContentsMapConsumer)
+            throws IOException {
 
         EsSearchQueryTerm queryTerm = new EsSearchQueryTerm("caseId", CaseFields.DEFAULT_CASE_ID);
 
@@ -296,8 +391,7 @@ public abstract class AbstractCasesRunnerService {
                         esClientService.processDocumentContentsByCaseIdAndIds(
                                 CaseFields.DEFAULT_CASE_ID,
                                 docIds.toArray(new String[] {}),
-                                createDocContentsConsumer(docsAndContentsMap)
-                        );
+                                createDocContentsConsumer(docsAndContentsMap));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -306,6 +400,16 @@ public abstract class AbstractCasesRunnerService {
                 },
                 queryTerm
         );
+    }
+
+    private void getFutureResults(final List<Future<Void>> results) {
+        try {
+            for (Future<Void> result : results) {
+                result.get();
+            }
+        } catch (InterruptedException | ExecutionException ex) {
+            logger.info("ERROR getting future results: " + ex.getMessage());
+        }
     }
 
     @NotNull
@@ -392,6 +496,11 @@ public abstract class AbstractCasesRunnerService {
     @Autowired
     public void setRinaJsonMapper(final RinaJsonMapper rinaJsonMapper) {
         this.rinaJsonMapper = rinaJsonMapper;
+    }
+
+    @Autowired
+    public void setRunConfiguration(final RunConfiguration runConfiguration) {
+        this.runConfiguration = runConfiguration;
     }
 
     @Autowired

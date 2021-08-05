@@ -16,10 +16,10 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.powermock.reflect.Whitebox;
 
+import eu.ec.dgempl.eessi.rina.tool.migration.common.config.RunConfiguration;
 import eu.ec.dgempl.eessi.rina.tool.migration.common.service.EsClientService;
 import eu.ec.dgempl.eessi.rina.tool.migration.common.service.OrganisationLoaderService;
 import eu.ec.dgempl.eessi.rina.tool.migration.common.util.GsonWrapper;
-import eu.ec.dgempl.eessi.rina.tool.migration.exporter.model.EValidationResult;
 import eu.ec.dgempl.eessi.rina.tool.migration.exporter.model.EsDocument;
 import eu.ec.dgempl.eessi.rina.tool.migration.exporter.report.DocumentValidationReport;
 import eu.ec.dgempl.eessi.rina.tool.migration.exporter.report.ValidationResult;
@@ -47,13 +47,14 @@ public class NotNullValidatorTest {
         try {
             EnumService enumService = new EnumService();
             CacheService cacheService = new CacheService();
+            RunConfiguration runConfiguration = new RunConfiguration();
             OrganisationLoaderService organisationLoaderService = new OrganisationLoaderService();
             ValidatorProviderService validatorProviderService = new ValidatorProviderService(elasticClient, cacheService, enumService,
                     organisationLoaderService);
             SchemaProviderService schemaProviderService = new SchemaProviderService(validatorProviderService,
                     "src/test/resources/field_mappings");
             ParserService parserService = new ParserService(schemaProviderService);
-            validationService = new ValidationService(elasticClient, parserService, cacheService);
+            validationService = new ValidationService(elasticClient, parserService, cacheService, runConfiguration);
         } catch (IOException e) {
             e.printStackTrace();
         }

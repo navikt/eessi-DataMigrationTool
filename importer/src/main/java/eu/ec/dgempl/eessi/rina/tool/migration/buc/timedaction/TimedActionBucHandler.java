@@ -32,6 +32,7 @@ import eu.ec.dgempl.eessi.rina.model.jpa.entity.RinaCase;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.UserMessage;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.UserMessageResponse;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity._abstraction.Audit;
+import eu.ec.dgempl.eessi.rina.repo.ActionRepo;
 import eu.ec.dgempl.eessi.rina.repo.DocumentConversationRepo;
 import eu.ec.dgempl.eessi.rina.repo.DocumentRepo;
 import eu.ec.dgempl.eessi.rina.repo.DocumentRepoExtended;
@@ -55,6 +56,7 @@ public class TimedActionBucHandler implements BucHandler {
     private final DocumentConversationRepo documentConversationRepo;
     private final RinaCaseRepo rinaCaseRepo;
     private final DocumentTypeVersionRepo documentTypeVersionRepo;
+    private final ActionRepo actionRepo;
     private final ActionService actionService;
 
     private final Map<String, TimedActionDefinition> ACTION_DEFS = Stream
@@ -67,12 +69,14 @@ public class TimedActionBucHandler implements BucHandler {
 
     public TimedActionBucHandler(final DocumentRepo documentRepo, final DocumentRepoExtended documentRepoExtended,
             final DocumentConversationRepo documentConversationRepo, final RinaCaseRepo rinaCaseRepo,
-            final DocumentTypeVersionRepo documentTypeVersionRepo, final ActionService actionService) {
+            final DocumentTypeVersionRepo documentTypeVersionRepo, ActionRepo actionRepo,
+            final ActionService actionService) {
         this.documentRepo = documentRepo;
         this.documentRepoExtended = documentRepoExtended;
         this.documentConversationRepo = documentConversationRepo;
         this.rinaCaseRepo = rinaCaseRepo;
         this.documentTypeVersionRepo = documentTypeVersionRepo;
+        this.actionRepo = actionRepo;
         this.actionService = actionService;
     }
 
@@ -137,11 +141,16 @@ public class TimedActionBucHandler implements BucHandler {
             // create the X001 empty document
             Document x001 = createEmptyX001Document(rinaCase);
 
-            // create action
-            ActionDO action = createTimedAction(rinaCase.getId(), x001.getId(), Date.from(delayedTime.toInstant()));
-            actionService.saveAction(action);
-        }
+            // create actionDO
+            ActionDO actionDO = createTimedAction(rinaCase.getId(), x001.getId(), Date.from(delayedTime.toInstant()));
 
+            actionService.saveActionAndTag(
+                    actionDO,
+                    "Close Case",
+                    "new.regular",
+                    EDocumentType.X_001.value(),
+                    x001.getDocumentTypeVersion().getBusinessVersion());
+        }
     }
 
     /**
@@ -321,7 +330,7 @@ public class TimedActionBucHandler implements BucHandler {
      */
     protected boolean hasX001Action(final RinaCase rinaCase) {
 
-        return rinaCase.getActions().stream().anyMatch(a -> a.getDocument() != null
+        return actionRepo.findByRinaCaseId(rinaCase.getId()).stream().anyMatch(a -> a.getDocument() != null
                 && EDocumentType.X_001.value().equals(a.getDocument().getDocumentTypeVersion().getDocumentType().getType()));
 
     }

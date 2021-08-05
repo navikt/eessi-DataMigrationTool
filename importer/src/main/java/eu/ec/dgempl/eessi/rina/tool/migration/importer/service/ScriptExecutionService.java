@@ -126,6 +126,10 @@ public class ScriptExecutionService {
             for (String statement : DELETE_CASE_RESOURCES_STATEMENTS) {
                 boolean withCaseIdParam = true;
 
+                if (statement.startsWith("alter")) {
+                    withCaseIdParam = false;
+                }
+
                 if (statement.contains("fk_case_sid") && CaseFields.DEFAULT_CASE_ID.equalsIgnoreCase(caseId)) {
                     statement = statement.replace("fk_case_sid in (select sid from rina_case where id=:caseId)", "fk_case_sid IS NULL");
                     withCaseIdParam = false;

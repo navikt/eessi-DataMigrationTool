@@ -2,6 +2,8 @@ package eu.ec.dgempl.eessi.rina.tool.migration.exporter.service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import org.springframework.stereotype.Service;
 
@@ -13,7 +15,7 @@ import eu.ec.dgempl.eessi.rina.tool.migration.exporter.model.EnumWrapper;
  */
 @Service
 public class EnumService {
-    private final Map<String, EnumWrapper> enums;
+    private final ConcurrentMap<String, EnumWrapper> enums;
 
     // @formatter:off
     private static final String[] KNOWN_ENUM_PACKAGES = new String[] {
@@ -24,7 +26,7 @@ public class EnumService {
     // @formatter:on
 
     public EnumService() {
-        enums = new HashMap<>();
+        enums = new ConcurrentHashMap<>();
     }
 
     /**
@@ -64,7 +66,7 @@ public class EnumService {
         return enumWrapper.validValues().toString();
     }
 
-    private EnumWrapper getEnumWrapper(final String enumName) throws IllegalAccessException {
+    private synchronized EnumWrapper getEnumWrapper(final String enumName) throws IllegalAccessException {
 
         EnumWrapper enumWrapper = enums.get(enumName);
 

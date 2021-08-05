@@ -43,6 +43,7 @@ import eu.ec.dgempl.eessi.rina.tool.migration.common.model.fields.CaseFields;
 import eu.ec.dgempl.eessi.rina.tool.migration.common.service.DefaultValuesService;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.helper.AttachmentsHelper;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.helper.CasePrefillsHelper;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.BeanMapper;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper.cases.MapToAssignmentMapper;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper.cases.MapToRinaCaseMapper;
@@ -111,6 +112,9 @@ public class CaseStructuredMetadataImporterTest {
     @Mock
     private AttachmentsHelper attachmentsHelper;
 
+    @Mock
+    private CasePrefillsHelper casePrefillsHelper;
+
     private CaseStructuredMetadataImporter caseStructuredMetadataImporter;
 
     @Before
@@ -131,6 +135,7 @@ public class CaseStructuredMetadataImporterTest {
                 documentTypeRepo,
                 processDefVersionRepo,
                 tenantRepo,
+                casePrefillsHelper,
                 defaultsService,
                 organisationService,
                 userService);

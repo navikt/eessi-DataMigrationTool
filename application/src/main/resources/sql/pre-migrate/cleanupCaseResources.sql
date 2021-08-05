@@ -12,6 +12,7 @@ delete from case_subject_org where fk_case_sid in (select sid from rina_case whe
 update subdocument_bversion set fk_subdoc_content_sid=null where fk_subdoc_sid in (select sid from "subdocument" where fk_case_sid in (select sid from rina_case where id=:caseId));
 delete from subdocument_content where fk_subdoc_sid in (select sid from "subdocument" where fk_case_sid in (select sid from rina_case where id=:caseId));
 update "subdocument" set fk_subdoc_bversion_sid=null where fk_case_sid in (select sid from rina_case where id=:caseId);
+delete from doc_bversion_subdoc_bversion where fk_subdoc_bversion_sid in (select sid from subdocument_bversion where fk_subdoc_sid in (select sid from "subdocument" where fk_case_sid in (select sid from rina_case where id=:caseId)));
 delete from subdoc_bversion_attachment where fk_subdoc_bversion_sid in (SELECT sid from subdocument_bversion where fk_subdoc_sid in (select sid from "subdocument" where fk_case_sid in (select sid from rina_case where id=:caseId)));
 delete from subdocument_bversion where fk_subdoc_sid in (select sid from "subdocument" where fk_case_sid in (select sid from rina_case where id=:caseId));
 delete from subdocument_attachment where fk_subdoc_sid in (select sid from "subdocument" where fk_case_sid in (select sid from rina_case where id=:caseId));

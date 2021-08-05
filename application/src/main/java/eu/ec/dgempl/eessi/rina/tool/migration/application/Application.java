@@ -17,13 +17,14 @@ import eu.ec.dgempl.eessi.rina.tool.migration.application.validation.ValidationA
 
 public class Application {
 
-    private final static String ARG_VALIDATE_ALL = "-validate-all";
-    private final static String ARG_VALIDATE_CASE = "-validate-case";
-    private final static String ARG_VALIDATE_CASES_BULK = "-validate-cases-bulk";
-    private final static String ARG_VALIDATE_AND_IMPORT = "-validate-import";
-    private final static String ARG_IMPORT_ALL = "-import-all";
-    private final static String ARG_IMPORT_CASE = "-import-case";
-    private final static String ARG_IMPORT_CASES_BULK = "-import-cases-bulk";
+    public final static String ARG_VALIDATE_ALL = "-validate-all";
+    public final static String ARG_VALIDATE_CASE = "-validate-case";
+    public final static String ARG_VALIDATE_CASES_BULK = "-validate-cases-bulk";
+    public final static String ARG_VALIDATE_AND_IMPORT = "-validate-import";
+    public final static String ARG_IMPORT_ALL = "-import-all";
+    public final static String ARG_IMPORT_CASE = "-import-case";
+    public final static String ARG_IMPORT_CASES_BULK = "-import-cases-bulk";
+    public final static String ARG_THREADS = "-threads=";
     private final static String ARG_HELP_LONG = "-help";
     private final static String ARG_HELP_SHORT = "-h";
 
@@ -33,10 +34,10 @@ public class Application {
         // -validate-all (default)
         // -validate-case case
         // -validate-cases-bulk filename
-        // -validate-import [importer_name]
-        // -import-all [importer_name]
+        // -validate-import [importer_name] [threads_number]
+        // -import-all [importer_name] [threads_number]
         // -import-case case
-        // -import-cases-bulk filename
+        // -import-cases-bulk filename [threads_number]
         // -help, -h
 
         List<String> arguments = Arrays.stream(args).collect(Collectors.toList());
@@ -60,12 +61,26 @@ public class Application {
             }
             case 2: {
                 String importOption = arguments.get(0);
-                if (!importOption.equals(ARG_VALIDATE_CASE) &&
+                if ((!importOption.equals(ARG_VALIDATE_ALL) &&
+                        !importOption.equals(ARG_VALIDATE_CASE) &&
                         !importOption.equals(ARG_VALIDATE_CASES_BULK) &&
                         !importOption.equals(ARG_IMPORT_CASE) &&
                         !importOption.equals(ARG_VALIDATE_AND_IMPORT) &&
                         !importOption.equals(ARG_IMPORT_ALL) &&
-                        !importOption.equals(ARG_IMPORT_CASES_BULK)) {
+                        !importOption.equals(ARG_IMPORT_CASES_BULK))
+                        || !areValidParams(arguments)) {
+                    showHelp();
+                    proceed = false;
+                }
+                break;
+            }
+            case 3: {
+                String importOption = arguments.get(0);
+                if ((!importOption.equals(ARG_VALIDATE_AND_IMPORT)
+                        && !importOption.equals(ARG_IMPORT_ALL)
+                        && !importOption.equals(ARG_IMPORT_CASES_BULK)
+                        && !importOption.equals(ARG_VALIDATE_CASES_BULK))
+                    || !areValidParams(arguments)) {
                     showHelp();
                     proceed = false;
                 }
@@ -90,6 +105,54 @@ public class Application {
                 SpringApplication.run(FullApp.class, args);
             }
         }
+    }
+
+    private static boolean areValidParams(List<String> args) {
+        switch (args.size()) {
+            case 2: {
+                String option = args.get(0);
+                String argument = args.get(1);
+                if ((ARG_VALIDATE_CASES_BULK.equals(option)
+                        || ARG_IMPORT_CASES_BULK.equals(option)
+                        || ARG_VALIDATE_CASE.equals(option)
+                        || ARG_IMPORT_CASE.equals(option))
+                    && argument.contains(ARG_THREADS)) {
+                    return false;
+                }
+                else if (argument.contains(ARG_THREADS)) {
+                    try {
+                        Integer.valueOf(argument.substring(ARG_THREADS.length()));
+                    } catch (NumberFormatException ex) {
+                        System.out.println("\nIncorrect value. Expected a numeric value for " + ARG_THREADS + " parameter");
+                        return false;
+                    }
+                }
+                break;
+            }
+            case 3: {
+                String argument1 = args.get(1);
+                String argument2 = args.get(2);
+                String threadsArg;
+                if (argument1.contains(ARG_THREADS)) {
+                    threadsArg = argument1.substring(ARG_THREADS.length());
+                } else if (argument2.contains(ARG_THREADS)) {
+                    threadsArg = argument2.substring(ARG_THREADS.length());
+                } else {
+                    return false;
+                }
+                try {
+                    Integer.valueOf(threadsArg);
+                } catch (NumberFormatException ex) {
+                    System.out.println("\nIncorrect value. Expected a numeric value for " + ARG_THREADS + " parameter");
+                    return false;
+                }
+                break;
+            }
+            default: {
+                return false;
+            }
+        }
+        return true;
     }
 
     private static void showHelp() {

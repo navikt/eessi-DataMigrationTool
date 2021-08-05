@@ -7,9 +7,9 @@ import org.springframework.util.CollectionUtils;
 
 public class CasesSummaryReport {
 
-    private AtomicLong casesSuccess = new AtomicLong();
-    private AtomicLong casesWithError = new AtomicLong();
-    private CasesSummaryReportError errors;
+    private final AtomicLong casesSuccess = new AtomicLong();
+    private final AtomicLong casesWithError = new AtomicLong();
+    private final CasesSummaryReportError errors;
 
     public CasesSummaryReport() {
         errors = new CasesSummaryReportError();
@@ -27,7 +27,7 @@ public class CasesSummaryReport {
         return errors;
     }
 
-    public void swallow(CaseReport caseReport) {
+    public synchronized void swallow(CaseReport caseReport) {
         List<ReportError> caseReportErrors = caseReport.getErrors();
         if (CollectionUtils.isEmpty(caseReportErrors)) {
             casesSuccess.incrementAndGet();

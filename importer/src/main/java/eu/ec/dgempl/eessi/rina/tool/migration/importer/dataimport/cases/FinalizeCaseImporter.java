@@ -1,5 +1,16 @@
 package eu.ec.dgempl.eessi.rina.tool.migration.importer.dataimport.cases;
 
+import static eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.CasePrefillFields.*;
+
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
+
+import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
 import eu.ec.dgempl.eessi.rina.model.enumtypes.ECasePrefillGroup;
 import eu.ec.dgempl.eessi.rina.model.enumtypes.EDocumentStatus;
 import eu.ec.dgempl.eessi.rina.model.jpa.entity.CasePrefill;
@@ -15,16 +26,9 @@ import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.EElasticType;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.GenericImporterException;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.report.DocumentsReport;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.RepositoryUtils;
-import org.jetbrains.annotations.NotNull;
-import org.springframework.stereotype.Component;
-
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
-
-import static eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.CasePrefillFields.LAST_PROCESSED_X001_DOCUMENT_ID;
 
 @Component
+@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @ElasticTypeImporter(type = EElasticType.NONE, order = 8889)
 public class FinalizeCaseImporter extends AbstractDataImporter implements CaseImporter {
 

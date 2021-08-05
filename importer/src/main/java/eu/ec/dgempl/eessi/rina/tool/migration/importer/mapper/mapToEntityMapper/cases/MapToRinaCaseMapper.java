@@ -38,6 +38,7 @@ import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.DmtEnumNotFoundExcept
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.EElasticType;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.MapHolder;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.esfield.AssignmentFields;
+import eu.ec.dgempl.eessi.rina.tool.migration.importer.helper.CasePrefillsHelper;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.mapper.mapToEntityMapper._abstract.AbstractMapToEntityMapper;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.service.OrganisationService;
 import eu.ec.dgempl.eessi.rina.tool.migration.importer.service.UserService;
@@ -52,6 +53,7 @@ public class MapToRinaCaseMapper extends AbstractMapToEntityMapper<MapHolder, Ri
     private final DocumentTypeRepo documentTypeRepo;
     private final ProcessDefVersionRepo processDefVersionRepo;
     private final TenantRepo tenantRepo;
+    private final CasePrefillsHelper casePrefillsHelper;
     private final DefaultValuesService defaultsService;
     private final OrganisationService organisationService;
     private final UserService userService;
@@ -60,12 +62,14 @@ public class MapToRinaCaseMapper extends AbstractMapToEntityMapper<MapHolder, Ri
             final DocumentTypeRepo documentTypeRepo,
             final ProcessDefVersionRepo processDefVersionRepo,
             final TenantRepo tenantRepo,
+            final CasePrefillsHelper casePrefillsHelper,
             final DefaultValuesService defaultsService,
             final OrganisationService organisationService,
             final UserService userService) {
         this.documentTypeRepo = documentTypeRepo;
         this.processDefVersionRepo = processDefVersionRepo;
         this.tenantRepo = tenantRepo;
+        this.casePrefillsHelper = casePrefillsHelper;
         this.defaultsService = defaultsService;
         this.organisationService = organisationService;
         this.userService = userService;
@@ -141,15 +145,15 @@ public class MapToRinaCaseMapper extends AbstractMapToEntityMapper<MapHolder, Ri
     }
 
     private void mapPrefill(final MapHolder a, final RinaCase b) {
-        addCasePrefills(a, PRE_FILL, b, ECasePrefillGroup.PREFILL);
+        casePrefillsHelper.addCasePrefills(a, PRE_FILL, b, ECasePrefillGroup.PREFILL);
     }
 
     private void mapSubject(final MapHolder a, final RinaCase b) {
-        addCasePrefills(a, SUBJECT, b, ECasePrefillGroup.SUBJECT);
+        casePrefillsHelper.addCasePrefills(a, SUBJECT, b, ECasePrefillGroup.SUBJECT);
     }
 
     private void mapSearchMetadata(final MapHolder a, final RinaCase b) {
-        addCasePrefills(a, SEARCH_METADATA, b, ECasePrefillGroup.SEARCH_METADATA);
+        casePrefillsHelper.addCasePrefills(a, SEARCH_METADATA, b, ECasePrefillGroup.SEARCH_METADATA);
     }
 
     private void mapParticipants(final MapHolder a, final RinaCase b) {

@@ -2,7 +2,6 @@
   "canClose": true,
   "template": "S008",
   "isDocumentRelated": true,
-  "documentType": "S008",
   "displayName": "Edit draft",
   "tempDocumentId": "032addfceed8484ca900436e53a5e124",
   "type": "existing.regular",

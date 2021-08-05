@@ -52,20 +52,21 @@ public class MapToAssignmentPolicyRuleMapper extends AbstractMapToEntityMapper<M
     private final ProcessDefRepo processDefRepo;
     private final RoleRepo roleRepo;
     private final SectorRepo sectorRepo;
-
-    @Autowired
-    private OrganisationService organisationService;
+    private final OrganisationService organisationService;
 
     public MapToAssignmentPolicyRuleMapper(
             final IamUserRepo iamUserRepo,
             final IamGroupRepo iamGroupRepo,
             final ProcessDefRepo processDefRepo,
-            final RoleRepo roleRepo, final SectorRepo sectorRepo) {
+            final RoleRepo roleRepo,
+            final SectorRepo sectorRepo,
+            final OrganisationService organisationService) {
         this.iamUserRepo = iamUserRepo;
         this.iamGroupRepo = iamGroupRepo;
         this.processDefRepo = processDefRepo;
         this.roleRepo = roleRepo;
         this.sectorRepo = sectorRepo;
+        this.organisationService = organisationService;
     }
 
     @Override
@@ -122,6 +123,7 @@ public class MapToAssignmentPolicyRuleMapper extends AbstractMapToEntityMapper<M
         if (CollectionUtils.isNotEmpty(sectors)) {
             sectors.stream()
                     .map(this::getSector)
+                    .filter(Objects::nonNull)
                     .map(sectorRepo::findByName)
                     .filter(Objects::nonNull)
                     .forEach(b::addSector);
@@ -254,11 +256,14 @@ public class MapToAssignmentPolicyRuleMapper extends AbstractMapToEntityMapper<M
     }
 
     private ESector getSector(String sectorId) {
-        return Arrays.stream(ESector.values())
-                .filter(sector -> sector.getCode().equalsIgnoreCase(sectorId)
-                        || sector.getDisplayName().equalsIgnoreCase(sectorId)
-                        || sector.name().equalsIgnoreCase(sectorId))
-                .findFirst()
-                .orElseThrow(() -> new DmtEnumNotFoundException(ESector.class, AssignmentPolicyFields.SECTOR, sectorId));
+        if (StringUtils.isNotBlank(sectorId) && !sectorId.equalsIgnoreCase("null"))
+            return Arrays.stream(ESector.values())
+                    .filter(sector -> sector.getCode().equalsIgnoreCase(sectorId)
+                            || sector.getDisplayName().equalsIgnoreCase(sectorId)
+                            || sector.name().equalsIgnoreCase(sectorId))
+                    .findFirst()
+                    .orElseThrow(() -> new DmtEnumNotFoundException(ESector.class, AssignmentPolicyFields.SECTOR, sectorId));
+
+        return null;
     }
 }

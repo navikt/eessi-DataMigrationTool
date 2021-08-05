@@ -2,11 +2,11 @@ package eu.ec.dgempl.eessi.rina.tool.migration.importer.dto.report;
 
 public class ReportError {
 
-    private String elasticIndex;
-    private String elasticType;
-    private String elasticId;
-    private String importerName;
-    private String stacktrace;
+    private final String elasticIndex;
+    private final String elasticType;
+    private final String elasticId;
+    private final String importerName;
+    private final String stacktrace;
 
     public ReportError(
             final String elasticIndex,

@@ -24,6 +24,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import com.google.gson.Gson;
 
+import eu.ec.dgempl.eessi.rina.tool.migration.common.config.RunConfiguration;
 import eu.ec.dgempl.eessi.rina.tool.migration.common.model.EEsIndex;
 import eu.ec.dgempl.eessi.rina.tool.migration.common.model.EEsType;
 import eu.ec.dgempl.eessi.rina.tool.migration.common.service.EsClientService;
@@ -1094,6 +1095,7 @@ public class ReferenceValidatorTest {
 
         EnumService enumService = new EnumService();
         CacheService cacheService = new CacheService();
+        RunConfiguration runConfiguration = new RunConfiguration();
         OrganisationLoaderService organisationLoaderService = new OrganisationLoaderService();
         ValidatorProviderService validatorProviderService = new ValidatorProviderService(elasticClient, cacheService, enumService,
                 organisationLoaderService);
@@ -1103,7 +1105,7 @@ public class ReferenceValidatorTest {
         SchemaProviderService schemaProviderService = new SchemaProviderService(validatorProviderService,
                 "src/test/resources/field_mappings");
         ParserService parserService = new ParserService(schemaProviderService);
-        ValidationService validationService = new ValidationService(elasticClient, parserService, cacheService);
+        ValidationService validationService = new ValidationService(elasticClient, parserService, cacheService, runConfiguration);
 
         String folderPath = "/src/test/resources/";
         String filePath = new File("").getAbsolutePath().concat(folderPath);
@@ -1155,6 +1157,7 @@ public class ReferenceValidatorTest {
 
         EnumService enumService = new EnumService();
         CacheService cacheService = new CacheService();
+        RunConfiguration runConfiguration = new RunConfiguration();
         OrganisationLoaderService organisationLoaderService = new OrganisationLoaderService();
         ValidatorProviderService validatorProviderService = new ValidatorProviderService(elasticClient, cacheService, enumService,
                 organisationLoaderService);
@@ -1164,7 +1167,7 @@ public class ReferenceValidatorTest {
         SchemaProviderService schemaProviderService = new SchemaProviderService(validatorProviderService,
                 "src/test/resources/field_mappings");
         ParserService parserService = new ParserService(schemaProviderService);
-        ValidationService validationService = new ValidationService(elasticClient, parserService, cacheService);
+        ValidationService validationService = new ValidationService(elasticClient, parserService, cacheService, runConfiguration);
 
         String folderPath = "/src/test/resources/";
         String filePath = new File("").getAbsolutePath().concat(folderPath);
@@ -1214,6 +1217,7 @@ public class ReferenceValidatorTest {
 
         EnumService enumService = new EnumService();
         CacheService cacheService = new CacheService();
+        RunConfiguration runConfiguration = new RunConfiguration();
         OrganisationLoaderService organisationLoaderService = new OrganisationLoaderService();
         ValidatorProviderService validatorProviderService = new ValidatorProviderService(elasticClient, cacheService, enumService,
                 organisationLoaderService);
@@ -1221,7 +1225,7 @@ public class ReferenceValidatorTest {
         SchemaProviderService schemaProviderService = new SchemaProviderService(validatorProviderService,
                 "src/test/resources/field_mappings");
         ParserService parserService = new ParserService(schemaProviderService);
-        ValidationService validationService = new ValidationService(elasticClient, parserService, cacheService);
+        ValidationService validationService = new ValidationService(elasticClient, parserService, cacheService, runConfiguration);
 
         String folderPath = "/src/test/resources/";
         String filePath = new File("").getAbsolutePath().concat(folderPath);
@@ -1269,6 +1273,7 @@ public class ReferenceValidatorTest {
 
         EnumService enumService = new EnumService();
         CacheService cacheService = new CacheService();
+        RunConfiguration runConfiguration = new RunConfiguration();
         OrganisationLoaderService organisationLoaderService = new OrganisationLoaderService();
         ValidatorProviderService validatorProviderService = new ValidatorProviderService(elasticClient, cacheService, enumService,
                 organisationLoaderService);
@@ -1276,7 +1281,7 @@ public class ReferenceValidatorTest {
         SchemaProviderService schemaProviderService = new SchemaProviderService(validatorProviderService,
                 "src/test/resources/field_mappings");
         ParserService parserService = new ParserService(schemaProviderService);
-        ValidationService validationService = new ValidationService(elasticClient, parserService, cacheService);
+        ValidationService validationService = new ValidationService(elasticClient, parserService, cacheService, runConfiguration);
 
         String folderPath = "/src/test/resources/";
         String filePath = new File("").getAbsolutePath().concat(folderPath);
@@ -1331,6 +1336,7 @@ public class ReferenceValidatorTest {
 
         EnumService enumService = new EnumService();
         CacheService cacheService = new CacheService();
+        RunConfiguration runConfiguration = new RunConfiguration();
         OrganisationLoaderService organisationLoaderService = new OrganisationLoaderService();
         ValidatorProviderService validatorProviderService = new ValidatorProviderService(elasticClient, cacheService, enumService,
                 organisationLoaderService);
@@ -1338,7 +1344,7 @@ public class ReferenceValidatorTest {
         SchemaProviderService schemaProviderService = new SchemaProviderService(validatorProviderService,
                 "src/test/resources/field_mappings");
         ParserService parserService = new ParserService(schemaProviderService);
-        ValidationService validationService = new ValidationService(elasticClient, parserService, cacheService);
+        ValidationService validationService = new ValidationService(elasticClient, parserService, cacheService, runConfiguration);
 
         String folderPath = "/src/test/resources/";
         String filePath = new File("").getAbsolutePath().concat(folderPath);

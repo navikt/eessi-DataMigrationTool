@@ -1,5 +1,6 @@
 package eu.ec.dgempl.eessi.rina.tool.migration.application.full;
 
+import static eu.ec.dgempl.eessi.rina.tool.migration.application.Application.*;
 import static eu.ec.dgempl.eessi.rina.tool.migration.application.common.ApplicationHelper.*;
 import static eu.ec.dgempl.eessi.rina.tool.migration.importer.utils.ImporterUtils.*;
 
@@ -23,6 +24,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 
 import eu.ec.dgempl.eessi.rina.commons.transformation.RinaJsonMapper;
+import eu.ec.dgempl.eessi.rina.tool.migration.common.config.RunConfiguration;
 import eu.ec.dgempl.eessi.rina.tool.migration.common.service.EsClientService;
 import eu.ec.dgempl.eessi.rina.tool.migration.common.util.GsonWrapper;
 import eu.ec.dgempl.eessi.rina.tool.migration.exporter.service.ValidationService;
@@ -49,25 +51,24 @@ public class FullApp implements CommandLineRunner, ApplicationContextAware {
     private final KeystoreService keystoreService;
     private final RinaJsonMapper rinaJsonMapper;
     private ApplicationContext applicationContext;
+    private RunConfiguration runConfiguration;
 
     @Value("${reporting.folder}")
     private String reportingFolder;
     private String SUMMARY_REPORT_PATH;
 
-    private final static String ARG_VALIDATE_AND_IMPORT = "-validate-import";
-    private final static String ARG_IMPORT_ALL = "-import-all";
-    private final static String ARG_IMPORT_CASE = "-import-case";
-    private final static String ARG_IMPORT_CASES_BULK = "-import-cases-bulk";
-
     private final Logger logger = LoggerFactory.getLogger(FullApp.class);
 
-    public FullApp(final EsClientService elasticsearchService, final ValidationService validationService,
+    public FullApp(final EsClientService elasticsearchService,
+            final ValidationService validationService,
             final KeystoreService keystoreService,
-            final RinaJsonMapper rinaJsonMapper) {
+            final RinaJsonMapper rinaJsonMapper,
+            final RunConfiguration runConfiguration) {
         this.elasticsearchService = elasticsearchService;
         this.validationService = validationService;
         this.keystoreService = keystoreService;
         this.rinaJsonMapper = rinaJsonMapper;
+        this.runConfiguration = runConfiguration;
     }
 
     @Override
@@ -82,11 +83,9 @@ public class FullApp implements CommandLineRunner, ApplicationContextAware {
 
         // Only possible args so far:
         //
-        // -validate-all (default)
-        // -validate-case case
-        // -validate-import [importer_name]
-        // -import-all [importer_name]
-        // -import-case-bulk caseFile.txt
+        // -validate-import [importer_name] [threads_number]
+        // -import-all [importer_name] [threads_number]
+        // -import-case-bulk filename [threads_number]
         // -import-case case
 
         switch (args.length) {
@@ -102,28 +101,61 @@ public class FullApp implements CommandLineRunner, ApplicationContextAware {
                 break;
             }
             case 2: {
+                String option = arguments.get(0);
+                String argument1 = arguments.get(1);
+                if ((ARG_VALIDATE_AND_IMPORT.equals(option)
+                        || ARG_IMPORT_ALL.equals(option))
+                        && argument1.contains(ARG_THREADS)) {
+                    runConfiguration.setThreadsNumber(Integer.valueOf(argument1.substring(ARG_THREADS.length())));
+                    argument1 = null;
+                }
                 switch (arguments.get(0)) {
                     case ARG_VALIDATE_AND_IMPORT:
-                        runValidationAndImport(arguments.get(1));
+                        runValidationAndImport(argument1);
                         break;
                     case ARG_IMPORT_CASE:
-                        runImportCaseId(arguments.get(1));
+                        runImportCaseId(argument1);
                         break;
                     case ARG_IMPORT_CASES_BULK:
-                        runImportCaseBulk(arguments.get(1));
+                        runImportCaseBulk(argument1);
                         break;
                     case ARG_IMPORT_ALL:
-                        runImport(arguments.get(1));
-                }
+                        runImport(argument1);
+                    }
                 break;
             }
-            default:
+            case 3: {
+                String argument1 = arguments.get(1);
+                String argument2 = arguments.get(2);
+                String argument;
+                int threadsNumber;
+                if (argument1.contains(ARG_THREADS)) {
+                    threadsNumber = Integer.valueOf(argument1.substring(ARG_THREADS.length()));
+                    argument = argument2;
+                } else  {
+                    threadsNumber = Integer.valueOf(argument2.substring(ARG_THREADS.length()));
+                    argument = argument1;
+                }
+                runConfiguration.setThreadsNumber(threadsNumber);
+                switch (arguments.get(0)) {
+                    case ARG_VALIDATE_AND_IMPORT:
+                        runValidationAndImport(argument);
+                        break;
+                    case ARG_IMPORT_CASES_BULK:
+                        runImportCaseBulk(argument);
+                        break;
+                    case ARG_IMPORT_ALL:
+                        runImport(argument);
+                    }
                 break;
+            }
+        default:
+            break;
         }
 
     }
 
-    private void runValidationAndImport(String importerName) throws Exception {
+    private void runValidationAndImport(final String importerName) throws Exception {
         // call the validator
         int numberOfErrors = validationService.validateAll();
 
@@ -137,7 +169,7 @@ public class FullApp implements CommandLineRunner, ApplicationContextAware {
         }
     }
 
-    private void runImport(String importerName) {
+    private void runImport(final String importerName) {
         try {
             if (StringUtils.isEmpty(importerName)) {
                 ScriptExecutionService scriptExecutionService = applicationContext.getBean(ScriptExecutionService.class);
